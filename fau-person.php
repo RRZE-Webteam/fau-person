@@ -3,7 +3,7 @@
 /**
  * Plugin Name: FAU Person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 0.3
+ * Version: 0.3.1
  * Author: Karin Kimpan
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -32,7 +32,7 @@ register_deactivation_hook(__FILE__, array('FAU_Person', 'deactivation'));
 
 class FAU_Person {
 
-    const version = '0.3';
+    const version = '0.3.1';
     const option_name = '_fau_person';
     const version_option_name = '_fau_person_version';
     const textdomain = 'fau-person';
@@ -65,38 +65,37 @@ class FAU_Person {
         define('FAU_PERSON_URL', plugins_url('/', __FILE__));
         define('FAU_PERSON_TEXTDOMAIN', self::textdomain);
         
-        require_once('posttypes/fau-person-posttype.php');
-        
         load_plugin_textdomain(self::textdomain, false, sprintf('%s/languages/', dirname(plugin_basename(__FILE__))));
         
         self::$options = (object) $this->get_options();
         
         add_action('init', array($this, 'update_version'));
-        add_action( 'init', array($this, 'person_post_type'), 0 );
+        add_action('init', array ($this, 'person_post_type'));
         add_action('add_meta_boxes_person', array($this, 'adding_meta_boxes_person'));
         add_action('save_post', array($this, 'save_postdata'));
-        add_action( 'restrict_manage_posts', array($this, 'person_restrict_manage_posts') );
+        //add_action( 'restrict_manage_posts', array($this, 'person_restrict_manage_posts') );
         add_action( 'init', array($this, 'persons_taxonomy') );
+        add_filter('single_template', array($this, 'include_template_function'));
         
-        add_filter('pre_get_posts', array($this, 'person_post_types_admin_order'));
+        //add_filter('pre_get_posts', array($this, 'person_post_types_admin_order'));
         
         //self::register_post_types();
         self::register_widgets();
         self::add_shortcodes();
-        self::$person_fields = $person_fields;
-        self::$person_args = $person_args;
+
         
 
     }
 
     public static function activation() {
+
         self::version_compare();
         update_option(self::version_option_name, self::version);
         
-        //self::register_post_types();    
-        //$this->person_post_type();
+        self::person_post_type();    
+
         flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind
-        
+
         // CPT-Capabilities für die Administrator-Rolle zuweisen
         /*
         foreach(self::$post_types as $cap_type) {
@@ -108,7 +107,6 @@ class FAU_Person {
     }
     
     public static function deactivation() {
-        flush_rewrite_rules(); 
         // CPT-Capabilities aus der Administrator-Rolle entfernen
         /*
         foreach(self::$post_types as $cap_type) {
@@ -367,7 +365,10 @@ class FAU_Person {
     }
 
     // Register Custom Post Type
-    public function person_post_type() {
+    public static function person_post_type() {
+        require_once('posttypes/fau-person-posttype.php');
+        self::$person_fields = $person_fields;
+        self::$person_args = $person_args;
         $args = self::$person_args;
         register_post_type('person', $args);
     }
@@ -404,8 +405,21 @@ class FAU_Person {
         }
     }
 
-    
-    
+    public function include_template_function($template_path) {
+        if (get_post_type() == 'person') {
+            if (is_single()) {
+                // checks if the file exists in the theme first,
+                // otherwise serve the file from the plugin
+                if ($theme_file = locate_template(array('single-person.php'))) {
+                    $template_path = $theme_file;
+                } else {
+                    $template_path = FAU_PERSON_ROOT . '/single-person.php';
+                }
+            }
+        }
+        return $template_path;
+    }
+
     /*
      * Hilfereiche Funktionen für die Custom Fields
      */
