@@ -3,7 +3,7 @@
 /**
  * Plugin Name: FAU Person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 0.3.1
+ * Version: 0.4
  * Author: Karin Kimpan
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -32,7 +32,7 @@ register_deactivation_hook(__FILE__, array('FAU_Person', 'deactivation'));
 
 class FAU_Person {
 
-    const version = '0.3.1';
+    const version = '0.4';
     const option_name = '_fau_person';
     const version_option_name = '_fau_person_version';
     const textdomain = 'fau-person';
@@ -197,10 +197,10 @@ class FAU_Person {
     }
     
     private static function add_shortcodes() {
-    /*
-        require_once('shortcodes/events-shortcode.php');
+    
+        //require_once('shortcodes/events-shortcode.php');
         require_once('shortcodes/shortcodes.php');    
-     */    
+         
     }
 
     /* Create one or more meta boxes to be displayed on the post editor screen. */
@@ -221,6 +221,38 @@ class FAU_Person {
 		'normal',					// Context
 		'default'					// Priority
 	);        
+        add_meta_box(
+		'fau_person_orga',			// Unique ID
+		__( 'Zuordnung', FAU_PERSON_TEXTDOMAIN ),		// Title
+		array($this, 'new_meta_boxes_person_orga'),		// Callback function
+		'person',					// Admin page (or post type)
+		'normal',					// Context
+		'default'					// Priority
+	);
+        add_meta_box(
+		'fau_person_typ',			// Unique ID
+		__( 'Typ des Eintrags', FAU_PERSON_TEXTDOMAIN ),		// Title
+		array($this, 'new_meta_boxes_person_typ'),		// Callback function
+		'person',					// Admin page (or post type)
+		'normal',					// Context
+		'default'					// Priority
+	);      
+        add_meta_box(
+		'fau_person_adds',			// Unique ID
+		__( 'Weitere Informationen', FAU_PERSON_TEXTDOMAIN ),		// Title
+		array($this, 'new_meta_boxes_person_adds'),		// Callback function
+		'person',					// Admin page (or post type)
+		'normal',					// Context
+		'default'					// Priority
+	);   
+    }
+    
+    public function new_meta_boxes_person_typ() {
+        $this->new_meta_boxes('person', 'fau_person_typ');
+    }
+    
+    public function new_meta_boxes_person_orga() {
+        $this->new_meta_boxes('person', 'fau_person_orga');
     }
     
     public function new_meta_boxes_person_info() {
@@ -230,6 +262,10 @@ class FAU_Person {
     public function new_meta_boxes_person_social_media() {
         $this->new_meta_boxes('person', 'fau_person_social_media');
     }
+    
+    public function new_meta_boxes_person_adds() {
+        $this->new_meta_boxes('person', 'fau_person_adds');
+    }  
     
     // Ausgabe der Custom Fields
     public function new_meta_boxes( $type, $meta_box ) {
@@ -545,4 +581,7 @@ class FAU_Person {
         return filter_var(trim($s), FILTER_SANITIZE_STRING);
     }
 
+    
+    
+    
 }

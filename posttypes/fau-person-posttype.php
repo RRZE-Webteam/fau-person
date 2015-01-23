@@ -62,20 +62,30 @@ $person_args = array(
 
 /* möglich bei type: text, textarea, checkbox, select, image, title, headline (für Zwischenüberschriften) */
 $person_fields = array(
-    '_person_titel' => array(
+    // Typ des Eintrags - fau_person_typ
+    '_person_typ' => array(
         'default' => 'false',
-        'title' => __('Titel (Präfix)', self::textdomain),
+        'title' => __('Typ des Eintrags', self::textdomain),
         'description' => '',
         'type' => 'text',
-        'meta_box' => 'fau_person_info',
+        'meta_box' => 'fau_person_typ',
+        'location' => 'person'),
+    // Zuordnung - fau_person_orga
+    '_person_position' => array(
+        'default' => 'false',
+        'title' => __('Position/Funktion', self::textdomain),
+        'description' => '',
+        'type' => 'text',
+        'meta_box' => 'fau_person_orga',
         'location' => 'person'),
     '_person_institution' => array(
         'default' => 'false',
         'title' => __('Institution/Abteilung', self::textdomain),
         'description' => 'Geben Sie hier die Institution ein.',
         'type' => 'text',
-        'meta_box' => 'fau_person_info',
+        'meta_box' => 'fau_person_orga',
         'location' => 'person'),
+    // Kontaktinformation - fau_person_info
     '_person_abschluss' => array(
         'default' => 'false',
         'title' => __('Abschluss (Suffix)', self::textdomain),
@@ -97,9 +107,16 @@ $person_fields = array(
         'type' => 'text',
         'meta_box' => 'fau_person_info',
         'location' => 'person'),
-    '_person_position' => array(
+    '_person_pseudo' => array(
         'default' => 'false',
-        'title' => __('Position/Funktion', self::textdomain),
+        'title' => __('Bezeichnung (oder Pseudonym)', self::textdomain),
+        'description' => '',
+        'type' => 'text',
+        'meta_box' => 'fau_person_info',
+        'location' => 'person'),
+    '_person_titel' => array(
+        'default' => 'false',
+        'title' => __('Titel (Präfix)', self::textdomain),
         'description' => '',
         'type' => 'text',
         'meta_box' => 'fau_person_info',
@@ -118,20 +135,6 @@ $person_fields = array(
         'type' => 'text',
         'meta_box' => 'fau_person_info',
         'location' => 'person'),
-    '_person_email' => array(
-        'default' => 'false',
-        'title' => __('E-Mail', self::textdomain),
-        'description' => '',
-        'type' => 'text',
-        'meta_box' => 'fau_person_social_media',
-        'location' => 'person'),
-    '_person_url' => array(
-        'default' => 'false',
-        'title' => __('Webseite', self::textdomain),
-        'description' => '',
-        'type' => 'text',
-        'meta_box' => 'fau_person_social_media',
-        'location' => 'person'),
     '_person_adresse' => array(
         'default' => 'false',
         'title' => __('Adresse', self::textdomain),
@@ -146,13 +149,45 @@ $person_fields = array(
         'type' => 'text',
         'meta_box' => 'fau_person_info',
         'location' => 'person'),
-    '_person_link' => array(
+    // Social Media - fau_person_social_media
+    '_person_email' => array(
         'default' => 'false',
-        'title' => __('Link', self::textdomain),
+        'title' => __('E-Mail', self::textdomain),
         'description' => '',
         'type' => 'text',
         'meta_box' => 'fau_person_social_media',
+        'location' => 'person'),
+    '_person_url' => array(
+        'default' => 'false',
+        'title' => __('Webseite', self::textdomain),
+        'description' => '',
+        'type' => 'text',
+        'meta_box' => 'fau_person_social_media',
+        'location' => 'person'),
+    // Weitere Informationen - fau_person_adds
+    '_person_freitext' => array(
+        'default' => 'false',
+        'title' => __('Freitext', self::textdomain),
+        'description' => '',
+        'type' => 'textarea',
+        'meta_box' => 'fau_person_adds',
+        'location' => 'person'),
+    '_person_sprechzeiten' => array(
+        'default' => 'false',
+        'title' => __('Sprechzeiten', self::textdomain),
+        'description' => '',
+        'type' => 'text',
+        'meta_box' => 'fau_person_adds',
+        'location' => 'person'),
+    '_person_pubs' => array(
+        'default' => 'false',
+        'title' => __('Publikationen', self::textdomain),
+        'description' => '',
+        'type' => 'text',
+        'meta_box' => 'fau_person_adds',
         'location' => 'person')
+    // Synchronisierung mit externen Daten - fau_person_sync ab hier
+
 );
 
 
