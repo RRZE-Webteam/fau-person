@@ -3,7 +3,7 @@
 /**
  * Plugin Name: FAU Person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 0.4
+ * Version: 0.4.1
  * Author: Karin Kimpan
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -32,7 +32,7 @@ register_deactivation_hook(__FILE__, array('FAU_Person', 'deactivation'));
 
 class FAU_Person {
 
-    const version = '0.4';
+    const version = '0.4.1';
     const option_name = '_fau_person';
     const version_option_name = '_fau_person_version';
     const textdomain = 'fau-person';
@@ -197,7 +197,6 @@ class FAU_Person {
     }
     
     private static function add_shortcodes() {
-    
         //require_once('shortcodes/events-shortcode.php');
         require_once('shortcodes/shortcodes.php');    
          
