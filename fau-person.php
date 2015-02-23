@@ -3,7 +3,7 @@
 /**
  * Plugin Name: FAU Person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 0.4.1
+ * Version: 0.5
  * Author: Karin Kimpan
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -32,7 +32,7 @@ register_deactivation_hook(__FILE__, array('FAU_Person', 'deactivation'));
 
 class FAU_Person {
 
-    const version = '0.4.1';
+    const version = '0.5';
     const option_name = '_fau_person';
     const version_option_name = '_fau_person_version';
     const textdomain = 'fau-person';
@@ -204,6 +204,23 @@ class FAU_Person {
 
     /* Create one or more meta boxes to be displayed on the post editor screen. */
     public function adding_meta_boxes_person() {
+
+        add_meta_box(
+		'fau_person_typ',			// Unique ID
+		__( 'Typ des Eintrags', FAU_PERSON_TEXTDOMAIN ),		// Title
+		array($this, 'new_meta_boxes_person_typ'),		// Callback function
+		'person',					// Admin page (or post type)
+		'normal',					// Context
+		'default'					// Priority
+	);   
+        add_meta_box(
+		'fau_person_orga',			// Unique ID
+		__( 'Zuordnung', FAU_PERSON_TEXTDOMAIN ),		// Title
+		array($this, 'new_meta_boxes_person_orga'),		// Callback function
+		'person',					// Admin page (or post type)
+		'normal',					// Context
+		'default'					// Priority
+	);
         add_meta_box(
 		'fau_person_info',			// Unique ID
 		__( 'Kontaktinformationen', FAU_PERSON_TEXTDOMAIN ),		// Title
@@ -219,23 +236,7 @@ class FAU_Person {
 		'person',					// Admin page (or post type)
 		'normal',					// Context
 		'default'					// Priority
-	);        
-        add_meta_box(
-		'fau_person_orga',			// Unique ID
-		__( 'Zuordnung', FAU_PERSON_TEXTDOMAIN ),		// Title
-		array($this, 'new_meta_boxes_person_orga'),		// Callback function
-		'person',					// Admin page (or post type)
-		'normal',					// Context
-		'default'					// Priority
-	);
-        add_meta_box(
-		'fau_person_typ',			// Unique ID
-		__( 'Typ des Eintrags', FAU_PERSON_TEXTDOMAIN ),		// Title
-		array($this, 'new_meta_boxes_person_typ'),		// Callback function
-		'person',					// Admin page (or post type)
-		'normal',					// Context
-		'default'					// Priority
-	);      
+	);       
         add_meta_box(
 		'fau_person_adds',			// Unique ID
 		__( 'Weitere Informationen', FAU_PERSON_TEXTDOMAIN ),		// Title
@@ -275,61 +276,41 @@ class FAU_Person {
         }
 
         echo '<div class="form-wrap">';
+        echo "\n";
         foreach($new_meta_boxes as $field => $value) {
             if($value['meta_box'] == $meta_box) {
                 if ($value['type'] == 'title') {
                     echo '<p style="font-size: 18px; font-weight: bold; font-style: normal; color: #e5e5e5; text-shadow: 0 1px 0 #111; line-height: 40px; background-color: #464646; border: 1px solid #111; padding: 0 10px; -moz-border-radius: 6px;">' . $value['title'] . '</p>';
                 } else {
                     echo '<div class="form-field form-required">';
-                    echo '<label for="' . $field . '"><strong>' . $value['title'] . '</strong></label>';
+                    echo "\n";
                     switch ($value['type']) {
                         case 'text':
-                            echo '<input type="text" name="' . $field . '" id="' . $field . '" value="' . esc_attr(get_post_meta($post->ID, $field, true)) . '" size="15" />';
-                            //echo '<input class="widefat" type="text" name="'.$field.'" id="'.$field.'" value="'.esc_attr( get_post_meta( $post->ID, $field, true ) ).'" size="15" />';
+                            $this->fau_form_text($field, esc_attr(get_post_meta($post->ID, $field, true)), $value['title'], $value['description']);
                             break;
                         case 'textarea':
-                            echo '<textarea name="' . $field . '" id="' . $field . '" cols="60" rows="5" />' . esc_attr(get_post_meta($post->ID, $field, true)) . '</textarea>';
-                            break;
-                        case 'email':
-                            echo '<input type="text" name="' . $field . '" id="' . $field . '" value="' . esc_attr(get_post_meta($post->ID, $field, true)) . '" size="10" />';
+                            $this->fau_form_textarea($field, esc_attr(get_post_meta($post->ID, $field, true)), $value['title'], $value['description'], '', '60', '5');
                             break;
                         case 'url':
-                            echo '<input type="text" name="' . $field . '" id="' . $field . '" value="' . esc_attr(get_post_meta($post->ID, $field, true)) . '" size="15" />';
-                            break;
-                        case 'intval':
-                            echo '<input type="text" name="' . $field . '" id="' . $field . '" value="' . esc_attr(get_post_meta($post->ID, $field, true)) . '" size="5" />';
+                            $this->fau_form_url($field, esc_attr(get_post_meta($post->ID, $field, true)), $value['title'], $value['description']);
                             break;
                         case 'checkbox':
-                            if ($meta_box_value == '1') {
-                                $checked = "checked=\"checked\"";
-                            } else {
-                                $checked = "";
-                            }
-                            echo '<label for="' . $field . '"><strong>' . $value['title'] . '</strong>&nbsp;<input style="width: 20px;" type="checkbox" id="' . $value['name'] . '" name="' . $value['name'] . '" value="1" ' . $checked . ' /></label>';
+                            $this->fau_form_checkbox($field, esc_attr(get_post_meta($post->ID, $field, true)), $value['title'], $value['description']);
                             break;
                         case 'select':
-                            echo '<select name="' . $field . '">';
-                            foreach ($value['options'] as $option) {
-                                if (is_array($option)) {
-                                    echo '<option ' . ( $meta_box_value == $option['value'] ? 'selected="selected"' : '' ) . ' value="' . $option['value'] . '">' . $option['text'] . '</option>';
-                                } else {
-                                    echo '<option ' . ( $meta_box_value == $option ? 'selected="selected"' : '' ) . ' value="' . $option['value'] . '">' . $option['text'] . '</option>';
-                                }
-                            }
-                            echo '</select>';
+                            $this->fau_form_select($field, $value['options'], esc_attr(get_post_meta($post->ID, $field, true)), $value['title'], $value['description']);                           
                             break;
                         case 'image':
                             echo '<input type="text" name="' . $field . '" id="' . $value['name'] . '" value="' . htmlspecialchars($meta_box_value) . '" style="width: 400px; border-color: #ccc;" />';
                             echo '<input type="button" id="button' . $field . '" value="Browse" style="width: 60px;" class="button button-upload" rel="' . $post->ID . '" />';
                             echo '&nbsp;<a href="#" style="color: red;" class="remove-upload">remove</a>';
                             break;
-                    } //end switch
-                    echo '<p>' . $value['description'] . '</p>';
-                    echo '</div>';
+                    } 
+                    echo "</div>\n";
                 }
             }
         }
-        echo '</div>';
+        echo "</div>\n";
     }
 
     public function save_postdata( $post_id ) {
@@ -459,14 +440,14 @@ class FAU_Person {
      * Hilfereiche Funktionen für die Custom Fields
      */
 
-    function fau_form_text($name = '', $prevalue = '', $labeltext = '', $howtotext = '', $placeholder = '', $size = 0) {
-        $name = fau_san($name);
-        $labeltext = fau_san($labeltext);
+    public function fau_form_text($name = '', $prevalue = '', $labeltext = '', $howtotext = '', $placeholder = '', $size = 0) {
+        $name = $this->fau_san($name);
+        $labeltext = $this->fau_san($labeltext);
         if (isset($name) && isset($labeltext)) {
-            echo "<p>\n";
-            echo '	<label for="' . $name . '">';
+            //echo "<p>\n";
+            echo '	<label for="' . $name . '"><strong>';
             echo $labeltext;
-            echo "</label><br />\n";
+            echo "</strong></label>\n";
             echo '	<input type="text" class="large-text" name="' . $name . '" id="' . $name . '" value="' . $prevalue . '"';
             if (strlen(trim($placeholder))) {
                 echo ' placeholder="' . $placeholder . '"';
@@ -475,25 +456,57 @@ class FAU_Person {
                 echo ' length="' . $size . '"';
             }
             echo " />\n";
-            echo "</p>\n";
+            //echo "</p>\n";
             if (strlen(trim($howtotext))) {
                 echo '<p class="howto">';
                 echo $howtotext;
                 echo "</p>\n";
             }
         } else {
-            echo _('Ungültiger Aufruf von fau_form_text() - Name oder Label fehlt.', 'fau');
+            echo _('Ungültiger Aufruf von fau_form_text() - Name oder Label fehlt.', self::textdomain);
+        }
+    }
+    
+    public function fau_form_textarea($name = '', $prevalue = '', $labeltext = '', $howtotext = '', $placeholder = '', $cols = 0, $rows = 0) {
+        $name = $this->fau_san($name);
+        $labeltext = $this->fau_san($labeltext);
+        if (isset($name) && isset($labeltext)) {
+            //echo "<p>\n";
+            echo '	<label for="' . $name . '"><strong>';
+            echo $labeltext;
+            echo "</strong></label>\n";
+            echo '	<textarea class="large-text" name="' . $name . '" id="' . $name . '"';
+            if (strlen(trim($placeholder))) {
+                echo ' placeholder="' . $placeholder . '"';
+            }
+            if (intval($cols) > 0) {
+                echo ' cols="' . $cols . '"';
+            }
+            if (intval($rows) > 0) {
+                echo ' rows="' . $rows . '"';
+            }
+            echo ">";
+            echo $prevalue;
+            echo "</textarea>\n";
+            //echo "</p>\n";
+            if (strlen(trim($howtotext))) {
+                echo '<p class="howto">';
+                echo $howtotext;
+                echo "</p>\n";
+            }
+        } else {
+            echo _('Ungültiger Aufruf von fau_form_textarea() - Name oder Label fehlt.', self::textdomain);
         }
     }
 
-    function fau_form_url($name = '', $prevalue = '', $labeltext = '', $howtotext = '', $placeholder = 'http://', $size = 0) {
-        $name = fau_san($name);
-        $labeltext = fau_san($labeltext);
+    public function fau_form_url($name = '', $prevalue = '', $labeltext = '', $howtotext = '', $placeholder = 'http://', $size = 0) {
+        $name = $this->fau_san($name);
+        $labeltext = $this->fau_san($labeltext);
         if (isset($name) && isset($labeltext)) {
-            echo "<p>\n";
-            echo '	<label for="' . $name . '">';
+            //echo "<p>\n";
+            echo '	<label for="' . $name . '"><strong>';
             echo $labeltext;
-            echo "</label><br />\n";
+            echo "</strong></label>\n";
             echo '	<input type="url" class="large-text" name="' . $name . '" id="' . $name . '" value="' . $prevalue . '"';
             if (strlen(trim($placeholder))) {
                 echo ' placeholder="' . $placeholder . '"';
@@ -502,30 +515,49 @@ class FAU_Person {
                 echo ' length="' . $size . '"';
             }
             echo " />\n";
-            echo "</p>\n";
+            //echo "</p>\n";
             if (strlen(trim($howtotext))) {
                 echo '<p class="howto">';
                 echo $howtotext;
                 echo "</p>\n";
             }
         } else {
-            echo _('Ungültiger Aufruf von fau_form_url() - Name oder Label fehlt.', 'fau');
+            echo _('Ungültiger Aufruf von fau_form_url() - Name oder Label fehlt.', self::textdomain);
         }
     }
 
-    function fau_form_onoff($name = '', $prevalue = 0, $labeltext = '', $howtotext = '') {
-        $name = fau_san($name);
-        $labeltext = fau_san($labeltext);
+    
+    public function fau_form_checkbox($name = '', $prevalue = 0, $labeltext = '', $howtotext = '') {
+        $name = $this->fau_san($name);
+        $labeltext = $this->fau_san($labeltext);
         if (isset($name) && isset($labeltext)) {
-?>
+            echo '  <label for="' . $name . '"><input type="checkbox" name="' . $name . '" id="' . $name . '" value="1" ';
+            checked($prevalue, 1);
+            echo ' />' . $labeltext;              
+            echo "</label>\n";
+            if (strlen(trim($howtotext))) {
+                echo '<p class="howto">';
+                echo $howtotext;
+                echo "</p>\n";
+            }
+        } else {
+            echo _('Ungültiger Aufruf von fau_form_checkbox() - Name oder Label fehlt.', self::textdomain);
+        }
+    }
+    
+    public function fau_form_onoff($name = '', $prevalue = 0, $labeltext = '', $howtotext = '') {
+        $name = $this->fau_san($name);
+        $labeltext = $this->fau_san($labeltext);
+        if (isset($name) && isset($labeltext)) {
+            ?>
             <div class="schalter">
             <select class="onoff" name="<?php echo $name; ?>" id="<?php echo $name; ?>">
             <option value="0" <?php selected(0, $prevalue); ?>>Aus</option>
             <option value="1" <?php selected(1, $prevalue); ?>>An</option>
             </select>
-            <label for="<?php echo $name; ?>">
+            <label for="<?php echo $name; ?>"><strong>
             <?php echo $labeltext; ?>
-            </label>
+            </strong></label>
             </div>
             <?php
             if (strlen(trim($howtotext))) {
@@ -534,20 +566,20 @@ class FAU_Person {
                 echo "</p>\n";
             }
         } else {
-            echo _('Ungültiger Aufruf von fau_form_onoff() - Name oder Label fehlt.', 'fau');
+            echo _('Ungültiger Aufruf von fau_form_onoff() - Name oder Label fehlt.', self::textdomain);
         }
     }
 
-    function fau_form_select($name = '', $liste = array(), $prevalue, $labeltext = '', $howtotext = '', $showempty = 1, $emptytext = '') {
-        $name = fau_san($name);
-        $labeltext = fau_san($labeltext);
-        $emptytext = fau_san($emptytext);
+    public function fau_form_select($name = '', $liste = array(), $prevalue, $labeltext = '', $howtotext = '', $showempty = 1, $emptytext = '') {
+        $name = $this->fau_san($name);
+        $labeltext = $this->fau_san($labeltext);
+        $emptytext = $this->fau_san($emptytext);
         if (is_array($liste) && isset($name) && isset($labeltext)) {
             ?>
             <div class="liste">
-            <p><label for="<?php echo $name; ?>">
+            <label for="<?php echo $name; ?>"><strong>
             <?php echo $labeltext; ?>
-            </label></p>
+            </strong></label>
             <select name="<?php echo $name; ?>" id="<?php echo $name; ?>">
             <?php
             if ($showempty == 1) {
@@ -555,7 +587,7 @@ class FAU_Person {
                 if (!empty($emptytext)) {
                     echo $emptytext;
                 } else {
-                    _e('Keine Auswahl', 'fau');
+                    _e('Keine Auswahl', self::textdomain);
                 }
                 echo '</option>';
             }
@@ -572,11 +604,11 @@ class FAU_Person {
                 echo "</p>\n";
             }
         } else {
-            echo _('Ungültiger Aufruf von fau_form_select() - Array, Name oder Label fehlt.', 'fau');
+            echo _('Ungültiger Aufruf von fau_form_select() - Array, Name oder Label fehlt.', self::textdomain);
         }
     }
                     
-    function fau_san($s) {
+    private function fau_san($s) {
         return filter_var(trim($s), FILTER_SANITIZE_STRING);
     }
 
