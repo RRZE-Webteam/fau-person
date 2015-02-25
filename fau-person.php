@@ -41,6 +41,8 @@ class FAU_Person {
 
     protected static $post_types = 'person';
     
+   // public static $person_titel_options;
+    
     public static $options;
     
     public static $person_fields;
@@ -205,14 +207,14 @@ class FAU_Person {
     /* Create one or more meta boxes to be displayed on the post editor screen. */
     public function adding_meta_boxes_person() {
 
-        add_meta_box(
-		'fau_person_typ',			// Unique ID
+        /*add_meta_box(
+		'fau_person_link',			// Unique ID
 		__( 'Typ des Eintrags', FAU_PERSON_TEXTDOMAIN ),		// Title
 		array($this, 'new_meta_boxes_person_typ'),		// Callback function
 		'person',					// Admin page (or post type)
 		'normal',					// Context
 		'default'					// Priority
-	);   
+	);   */
         add_meta_box(
 		'fau_person_orga',			// Unique ID
 		__( 'Zuordnung', FAU_PERSON_TEXTDOMAIN ),		// Title
