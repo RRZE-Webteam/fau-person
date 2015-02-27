@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RRZE-Mathjax\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-18 15:11+0100\n"
+"POT-Creation-Date: 2015-02-27 15:31+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -18,16 +18,264 @@ msgstr ""
 "X-Generator: Poedit 1.6.5\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../rrze-mathjax.php:71
+#: ../fau-person.php:126
 #, php-format
 msgid ""
 "Ihre PHP-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die "
 "PHP-Version %s."
 msgstr ""
 
-#: ../rrze-mathjax.php:75
+#: ../fau-person.php:130
 #, php-format
 msgid ""
 "Ihre Wordpress-Version %s ist veraltet. Bitte aktualisieren Sie mindestens "
 "auf die Wordpress-Version %s."
+msgstr ""
+
+#: ../fau-person.php:220
+msgid "Zuordnung"
+msgstr ""
+
+#: ../fau-person.php:228
+msgid "Kontaktinformationen"
+msgstr ""
+
+#: ../fau-person.php:236
+msgid "Social Media"
+msgstr ""
+
+#: ../fau-person.php:244
+msgid "Weitere Informationen"
+msgstr ""
+
+#: ../fau-person.php:375
+msgid "Personen-Kategorien"
+msgstr ""
+
+#: ../fau-person.php:401
+#, php-format
+msgid "Alle %s anzeigen"
+msgstr ""
+
+#: ../fau-person.php:468
+msgid "Ungültiger Aufruf von fau_form_text() - Name oder Label fehlt."
+msgstr ""
+
+#: ../fau-person.php:500
+msgid "Ungültiger Aufruf von fau_form_textarea() - Name oder Label fehlt."
+msgstr ""
+
+#: ../fau-person.php:527
+msgid "Ungültiger Aufruf von fau_form_url() - Name oder Label fehlt."
+msgstr ""
+
+#: ../fau-person.php:546
+msgid "Ungültiger Aufruf von fau_form_checkbox() - Name oder Label fehlt."
+msgstr ""
+
+#: ../fau-person.php:571
+msgid "Ungültiger Aufruf von fau_form_onoff() - Name oder Label fehlt."
+msgstr ""
+
+#: ../fau-person.php:592
+msgid "Keine Auswahl"
+msgstr ""
+
+#: ../fau-person.php:609
+msgid "Ungültiger Aufruf von fau_form_select() - Array, Name oder Label fehlt."
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:4
+msgctxt "Post Type General Name"
+msgid "Personen"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:5
+msgctxt "Post Type Singular Name"
+msgid "Person"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:6
+msgid "Personen"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:7
+msgid "Übergeordnete Person"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:8
+msgid "Alle Personen"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:9
+msgid "Person ansehen"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:10
+msgid "Person hinzufügen"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:11
+msgid "Neue Person"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:12
+msgid "Person bearbeiten"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:13
+msgid "Person aktualisieren"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:14
+msgid "Personen suchen"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:15
+msgid "Keine Personen gefunden"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:16
+msgid "Keine Personen in Papierkorb gefunden"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:25
+msgid "person"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:26
+msgid "Personeninformationen"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:74
+msgid "Position/Funktion"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:81
+msgid "Institution/Abteilung"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:82
+msgid "Geben Sie hier die Institution ein."
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:88
+msgid "\"Mehr\"-Link führt zur Seite ..."
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:89
+msgid "Bitte vollständigen Permalink der Zielseite angeben"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:96
+msgid "Typ des Eintrags"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:97
+msgid ""
+"Je nach Auswahl wird Vorname und Nachname oder (bei Einrichtungen und "
+"Pseudonymen) die Bezeichnung angezeigt ."
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:99
+msgid "Geschlechtsneutrale Person"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:100
+msgid "Männliche Person"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:101
+msgid "Weibliche Person"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:102
+msgid "Pseudonym"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:103
+msgid "Einrichtung"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:109
+msgid "Titel (Präfix)"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:117
+msgid "Vorname"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:124
+msgid "Nachname"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:131
+msgid "Bezeichnung (oder Pseudonym)"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:138
+msgid "Abschluss (Suffix)"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:145
+msgid "Straße und Hausnummer"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:152
+msgid "Postleitzahl"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:159
+msgid "Ort"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:166
+msgid "Land"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:173 ../search-person.php:101
+#: ../shortcodes/shortcodes.php:136 ../single-person.php:60
+msgid "Raum"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:180
+msgid "Telefon"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:187
+msgid "Telefax"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:195
+msgid "E-Mail"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:202
+msgid "Webseite"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:210
+msgid "Freitext"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:217
+msgid "Sprechzeiten"
+msgstr ""
+
+#: ../posttypes/fau-person-posttype.php:224
+msgid "Publikationen"
+msgstr ""
+
+#: ../shortcodes/shortcodes.php:54
+#, php-format
+msgid ""
+"Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden."
+msgstr ""
+
+#: ../shortcodes/shortcodes.php:145
+msgid "Mehr"
+msgstr ""
+
+#: ../single-person.php:67
+msgid "Es konnte kein Kontakteintrag gefunden werden."
 msgstr ""
