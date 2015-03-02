@@ -42,6 +42,14 @@ add_shortcode( 'kontakt', 'rrze_dlp_kontakt_shortcode' );
                     "showaddress" => FALSE,
                     "showroom" => FALSE,
                     "showdescription" => FALSE,
+                    "showthumb" => FALSE,
+                    "showpubs" => FALSE,
+                    "showoffice" => FALSE,
+                    "showtitle" => TRUE,
+                    "showsuffix" => TRUE,
+                    "showposition" => TRUE,
+                    "showinstitution" => TRUE,
+                    "showmail" => TRUE,
                     "extended" => FALSE,
                     ), $atts));
 
@@ -49,7 +57,7 @@ add_shortcode( 'kontakt', 'rrze_dlp_kontakt_shortcode' );
             if ($posts) {
                 $post = $posts[0];
                 $id = $post->ID;		    
-                return fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription);
+                return fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showmail);
             } else {
                 return sprintf(__('Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $slug);
             }
@@ -64,6 +72,14 @@ add_shortcode( 'kontakt', 'rrze_dlp_kontakt_shortcode' );
                     "showaddress" => FALSE,
                     "showroom" => FALSE,
                     "showdescription" => FALSE,
+                    "showthumb" => FALSE,
+                    "showpubs" => FALSE,
+                    "showoffice" => FALSE,
+                    "showtitle" => TRUE,
+                    "showsuffix" => TRUE,
+                    "showposition" => TRUE,
+                    "showinstitution" => TRUE,
+                    "showmail" => TRUE,
                     "extended" => FALSE
                     ), $atts));
 
@@ -81,19 +97,19 @@ add_shortcode( 'kontakt', 'rrze_dlp_kontakt_shortcode' );
 
             foreach($posts as $post)
             {
-                    $content .= fau_person_markup($post->ID, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription);
+                    $content .= fau_person_markup($post->ID, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showmail);
             }
 
             return $content;
     }
 
-    function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription)
+    function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showmail)
     {
 
             $content = '<div class="person content-person">';			
                     $content .= '<div class="row">';
 
-                            if(has_post_thumbnail($id))
+                            if(has_post_thumbnail($id) && $showthumb)
                             {
                                     $content .= '<div class="span1 span-small">';
                                             $content .= get_the_post_thumbnail($id, 'person-thumb-bigger');
@@ -102,16 +118,16 @@ add_shortcode( 'kontakt', 'rrze_dlp_kontakt_shortcode' );
 
                             $content .= '<div class="span3">';
                                     $content .= '<h3>';
-                                            if(get_post_meta($id, 'fau_person_titel', true)) 	$content .= get_post_meta($id, 'fau_person_titel', true) . ' ';
+                                            if($showtitle && get_post_meta($id, 'fau_person_titel', true)) 	$content .= get_post_meta($id, 'fau_person_titel', true) . ' ';
                                             $content .= get_the_title($id);
-                                            if(get_post_meta($id, 'fau_person_abschluss', true)) 	$content .= ' '.get_post_meta($id, 'fau_person_abschluss', true);
+                                            if($showsuffix && get_post_meta($id, 'fau_person_abschluss', true)) 	$content .= ' '.get_post_meta($id, 'fau_person_abschluss', true);
                                     $content .= '</h3>';
                                     $content .= '<ul class="person-info">';
-                                            if(get_post_meta($id, 'fau_person_position', true)) 				$content .= '<li class="person-info person-info-position"><strong>'.get_post_meta($id, 'fau_person_position', true).'</strong></li>';
-                                            if(get_post_meta($id, 'fau_person_institution', true))			$content .= '<li class="person-info person-info-institution">'.get_post_meta($id, 'fau_person_institution', true).'</li>';
-                                            if(get_post_meta($id, 'fau_person_telefon', true))					$content .= '<li class="person-info person-info-phone">'.get_post_meta($id, 'fau_person_telefon', true).'</li>';
+                                            if($showposition && get_post_meta($id, 'fau_person_position', true)) 				$content .= '<li class="person-info person-info-position"><strong>'.get_post_meta($id, 'fau_person_position', true).'</strong></li>';
+                                            if($showinstitution && get_post_meta($id, 'fau_person_institution', true))			$content .= '<li class="person-info person-info-institution">'.get_post_meta($id, 'fau_person_institution', true).'</li>';
+                                            if($showtelefon && get_post_meta($id, 'fau_person_telefon', true))					$content .= '<li class="person-info person-info-phone">'.get_post_meta($id, 'fau_person_telefon', true).'</li>';
                                             if(($extended || $showfax) && get_post_meta($id, 'fau_person_telefax', true))		$content .= '<li class="person-info person-info-fax">'.get_post_meta($id, 'fau_person_telefax', true).'</li>';
-                                            if(get_post_meta($id, 'fau_person_email', true))					$content .= '<li class="person-info person-info-email"><a href="mailto:'.get_post_meta($id, 'fau_person_email', true).'">'.strtolower(get_post_meta($id, 'fau_person_email', true)).'</a></li>';
+                                            if($showmail && get_post_meta($id, 'fau_person_email', true))					$content .= '<li class="person-info person-info-email"><a href="mailto:'.strtolower(get_post_meta($id, 'fau_person_email', true)).'">'.strtolower(get_post_meta($id, 'fau_person_email', true)).'</a></li>';
                                             if(($extended || $showwebsite) && get_post_meta($id, 'fau_person_url', true))	$content .= '<li class="person-info person-info-www"><a href="'.get_post_meta($id, 'fau_person_url', true).'">'.get_post_meta($id, 'fau_person_url', true).'</a></li>';
                                             if(($extended || $showaddress)) {
                                                 //ACHTUNG: vorher css person-info-address (war Textarea)!!!
@@ -126,7 +142,9 @@ add_shortcode( 'kontakt', 'rrze_dlp_kontakt_shortcode' );
                                                 
                                             }
                                             if(($extended || $showroom) && get_post_meta($id, 'fau_person_raum', true))		$content .= '<li class="person-info person-info-room">' . __('Raum', FAU_PERSON_TEXTDOMAIN) .' '.get_post_meta($id, 'fau_person_raum', true).'</li>';
-                                    $content .= '</ul>';
+                                            if($showoffice && get_post_meta($id, 'fau_person_sprechzeiten', true))		$content .= '<li class="person-info person-info-office">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) .': '.get_post_meta($id, 'fau_person_sprechzeiten', true).'</li>';
+                                            if($showpubs && get_post_meta($id, 'fau_person_pubs', true))		$content .= '<li class="person-info person-info-pubs">' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) .': '.get_post_meta($id, 'fau_person_Publikationen', true).'</li>';                                            
+                                            $content .= '</ul>';
 
                             $content .= '</div>';
                             $content .= '<div class="span3">';

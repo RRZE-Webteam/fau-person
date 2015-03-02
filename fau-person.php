@@ -3,7 +3,7 @@
 /**
  * Plugin Name: FAU Person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 0.9
+ * Version: 1.0
  * Author: Karin Kimpan
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -32,7 +32,7 @@ register_deactivation_hook(__FILE__, array('FAU_Person', 'deactivation'));
 
 class FAU_Person {
 
-    const version = '0.9';
+    const version = '1.0';
     const option_name = '_fau_person';
     const version_option_name = '_fau_person_version';
     const textdomain = 'fau-person';
@@ -284,17 +284,20 @@ class FAU_Person {
                 if ($value['type'] == 'title') {
                     echo '<p style="font-size: 18px; font-weight: bold; font-style: normal; color: #e5e5e5; text-shadow: 0 1px 0 #111; line-height: 40px; background-color: #464646; border: 1px solid #111; padding: 0 10px; -moz-border-radius: 6px;">' . $value['title'] . '</p>';
                 } else {
-                    echo '<div class="form-field form-required">';
+                    echo '<div class="form-field form-required">';  
                     echo "\n";
                     switch ($value['type']) {
                         case 'text':
-                            $this->fau_form_text($field, esc_attr(get_post_meta($post->ID, $field, true)), $value['title'], $value['description']);
+                            $this->fau_form_text($field, sanitize_text_field(get_post_meta($post->ID, $field, true)), $value['title'], $value['description']);
                             break;
                         case 'textarea':
-                            $this->fau_form_textarea($field, esc_attr(get_post_meta($post->ID, $field, true)), $value['title'], $value['description'], '', '60', '5');
+                            $this->fau_form_textarea($field, esc_textarea(get_post_meta($post->ID, $field, true)), $value['title'], $value['description'], '', '60', '5');
                             break;
+                        case 'email':
+                            $this->fau_form_text($field, sanitize_text_field(get_post_meta($post->ID, $field, true)), $value['title'], $value['description']);
+                            break;                        
                         case 'url':
-                            $this->fau_form_url($field, esc_attr(get_post_meta($post->ID, $field, true)), $value['title'], $value['description']);
+                            $this->fau_form_url($field, esc_url(get_post_meta($post->ID, $field, true)), $value['title'], $value['description']);
                             break;
                         case 'checkbox':
                             $this->fau_form_checkbox($field, esc_attr(get_post_meta($post->ID, $field, true)), $value['title'], $value['description']);
@@ -338,24 +341,52 @@ class FAU_Person {
                 } else {
                     if ( !current_user_can( 'edit_post', $post_id ))
                         return $post_id;
+                }   
+
+                
+                $data = !isset($_POST[$field]) ? $_POST[$field] : "";
+             
+                switch($value['type']) {
+                    case 'text':
+                        $data = trim(sanitize_text_field($data));
+                        break;
+                    case 'textarea':
+                        $data = esc_textarea($data);
+                        break;
+                    case 'email':
+                        $data = trim(sanitize_text_field($data));
+                        if(!is_email($data)) {
+                            //todo;
+                        }
+                        break;                        
+                    case 'url':
+                        $data = trim(esc_url($data));
+                        // todo Validierung
+                        break;
+                    case 'checkbox':
+                        if(!empty($data)) {
+                            $data = 1;
+                        }
+                        break;
+                    //case 'multicheck':
+                      //  $data = esc_attr($data);
+                      //  break;
+                    case 'select':
+                        $data = esc_attr($data);                           
+                        break;
+                    //case 'image':
                 }
+                
+       
+                $oldval = get_post_meta($post_id, $field, true);
 
-                if ( is_array($_POST[$field]) ) {
-
-                    foreach($_POST[$field] as $cat){
-                        $cats .= $cat . ",";
-                    }
-                    $data = substr($cats, 0, -1);
-                } else { 
-                    $data = $_POST[$field];                     
-                }        
-
-                if(get_post_meta($post_id, $field) == "")
-                    add_post_meta($post_id, $field, $data, true);
-                elseif($data != get_post_meta($post_id, $field, true))
-                    update_post_meta($post_id, $field, $data);
-                elseif($data == "")
-                    delete_post_meta($post_id, $field, get_post_meta($post_id, $field, true));   
+                if(!empty($data)){
+                    if ($oldval != $data) {
+                        update_post_meta($post_id, $field, $data);
+                    } 
+                } elseif ($oldval) {
+                    delete_post_meta($post_id, $field, $oldval);   
+                }
             }
         }
     } 

@@ -46,7 +46,7 @@ get_header(); ?>
                             if(get_post_meta($id, 'fau_person_institution', true)) $content .= '<li class="person-info person-info-institution">'.get_post_meta($id, 'fau_person_institution', true).'</li>';
                             if(get_post_meta($id, 'fau_person_telefon', true)) $content .= '<li class="person-info person-info-phone">'.get_post_meta($id, 'fau_person_telefon', true).'</li>';
                             if(get_post_meta($id, 'fau_person_telefax', true)) $content .= '<li class="person-info person-info-fax">'.get_post_meta($id, 'fau_person_telefax', true).'</li>';
-                            if(get_post_meta($id, 'fau_person_email', true)) $content .= '<li class="person-info person-info-email"><a href="mailto:'.get_post_meta($id, 'fau_person_email', true).'">'.get_post_meta($id, 'fau_person_email', true).'</a></li>';
+                            if(get_post_meta($id, 'fau_person_email', true)) $content .= '<li class="person-info person-info-email"><a href="mailto:'.strtolower(get_post_meta($id, 'fau_person_email', true)).'">'.strtolower(get_post_meta($id, 'fau_person_email', true)).'</a></li>';
                             if(get_post_meta($id, 'fau_person_url', true)) $content .= '<li class="person-info person-info-www"><a href="'.get_post_meta($id, 'fau_person_url', true).'">'.get_post_meta($id, 'fau_person_url', true).'</a></li>';
                             if(get_post_meta($id, 'fau_person_strasse', true))  $content .= '<li class="person-info person-info-street">'.get_post_meta($id, 'fau_person_strasse', true).'</li>';
                             if(get_post_meta($id, 'fau_person_plz', true) || get_post_meta($id, 'fau_person_ort', true)) {
@@ -55,7 +55,7 @@ get_header(); ?>
                                                     if(get_post_meta($id, 'fau_person_ort', true))	$content .= get_post_meta($id, 'fau_person_ort', true);
                                                     $content .= '</li>';
                                                 }
-                                                if(get_post_meta($id, 'fau_person_land', true))	$content .= '<li class="person-info person-info-country">'.get_post_meta($id, 'fau_person_land', true).'</li>';
+                            if(get_post_meta($id, 'fau_person_land', true))	$content .= '<li class="person-info person-info-country">'.get_post_meta($id, 'fau_person_land', true).'</li>';
                                                 
                             if(get_post_meta($id, 'fau_person_raum', true)) $content .= '<li class="person-info person-info-room">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' '.get_post_meta($id, 'fau_person_raum', true).'</li>';
                             if(get_post_meta($id, 'fau_person_sprechzeiten', true)) $content .= '<li class="person-info person-info-room">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': ' .get_post_meta($id, 'fau_person_sprechzeiten', true).'</li>';
