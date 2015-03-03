@@ -67,18 +67,22 @@ class FAU_Person {
         define('FAU_PERSON_URL', plugins_url('/', __FILE__));
         define('FAU_PERSON_TEXTDOMAIN', self::textdomain);
         
+        include_once(plugin_dir_path(__FILE__) . 'metabox/metaboxes.php');
+        
         load_plugin_textdomain(self::textdomain, false, sprintf('%s/languages/', dirname(plugin_basename(__FILE__))));
         
         self::$options = (object) $this->get_options();
         
         add_action('init', array($this, 'update_version'));
         add_action('init', array ($this, 'person_post_type'));
-        add_action('add_meta_boxes_person', array($this, 'adding_meta_boxes_person'));
-        add_action('save_post', array($this, 'save_postdata'));
+        //add_action('add_meta_boxes_person', array($this, 'adding_meta_boxes_person'));
+        //add_action('save_post', array($this, 'save_postdata'));
         //add_action( 'restrict_manage_posts', array($this, 'person_restrict_manage_posts') );
         add_action( 'init', array($this, 'persons_taxonomy') );
         add_filter('single_template', array($this, 'include_template_function'));
-        
+
+        add_action( 'init', array($this, 'be_initialize_cmb_meta_boxes'), 9999 );
+
         //add_filter('pre_get_posts', array($this, 'person_post_types_admin_order'));
         
         //self::register_post_types();
@@ -204,6 +208,12 @@ class FAU_Person {
          
     }
 
+    public function be_initialize_cmb_meta_boxes() {
+        if ( !class_exists( 'cmb_Meta_Box' ) ) {
+            require_once( 'metabox/init.php' );
+        }
+    }
+    
     /* Create one or more meta boxes to be displayed on the post editor screen. */
     public function adding_meta_boxes_person() {
 

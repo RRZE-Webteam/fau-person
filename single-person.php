@@ -26,39 +26,39 @@ get_header(); ?>
 
                     $content .= '<div class="person-info">';
                         $content .= '<h1>';
-                            if(get_post_meta($id, 'fau_person_titel', true)) $content .= get_post_meta($id, 'fau_person_titel', true).' ';
+                            if(get_post_meta($id, 'fau_person_honorificPrefix', true)) $content .= get_post_meta($id, 'fau_person_honorificPrefix', true).' ';
                             $content .= get_the_title($id);
-                            if(get_post_meta($id, 'fau_person_abschluss', true)) $content .= ' '.get_post_meta($id, 'fau_person_abschluss', true);
+                            if(get_post_meta($id, 'fau_person_honorificSuffix', true)) $content .= ' '.get_post_meta($id, 'fau_person_honorificSuffix', true);
                             $content .= '</h1>';
 
-                            if(get_post_meta($id, 'fau_person_vorname', true) || get_post_meta($id, 'fau_person_nachname', true) || get_post_meta($id, 'fau_person_pseudo', true) ) {
+                            if(get_post_meta($id, 'fau_person_givenName', true) || get_post_meta($id, 'fau_person_familyName', true) || get_post_meta($id, 'fau_person_alternateName', true) ) {
                                 $content .= '<h2>';
                                 if((get_post_meta($id, 'fau_person_typ', true)=='pseudo') || (get_post_meta($id, 'fau_person_typ', true)=='einrichtung')) {
-                                    if(get_post_meta($id, 'fau_person_pseudo', true)) $content .= get_post_meta($id, 'fau_person_pseudo', true);   
+                                    if(get_post_meta($id, 'fau_person_alternateName', true)) $content .= get_post_meta($id, 'fau_person_alternateName', true);   
                                 } else {
-                                    if(get_post_meta($id, 'fau_person_vorname', true)) $content .= get_post_meta($id, 'fau_person_vorname', true).' ';      
-                                    if(get_post_meta($id, 'fau_person_nachname', true)) $content .= get_post_meta($id, 'fau_person_nachname', true);  
+                                    if(get_post_meta($id, 'fau_person_givenName', true)) $content .= get_post_meta($id, 'fau_person_givenName', true).' ';      
+                                    if(get_post_meta($id, 'fau_person_familyName', true)) $content .= get_post_meta($id, 'fau_person_familyName', true);  
                                 }
                                 $content .= '</h2>';
                             }
                             $content .= '<ul class="person-info">';
-                            if(get_post_meta($id, 'fau_person_position', true)) $content .= '<li class="person-info person-info-position"><strong>'.get_post_meta($id, 'fau_person_position', true).'</strong></li>';
-                            if(get_post_meta($id, 'fau_person_institution', true)) $content .= '<li class="person-info person-info-institution">'.get_post_meta($id, 'fau_person_institution', true).'</li>';
-                            if(get_post_meta($id, 'fau_person_telefon', true)) $content .= '<li class="person-info person-info-phone">'.get_post_meta($id, 'fau_person_telefon', true).'</li>';
-                            if(get_post_meta($id, 'fau_person_telefax', true)) $content .= '<li class="person-info person-info-fax">'.get_post_meta($id, 'fau_person_telefax', true).'</li>';
+                            if(get_post_meta($id, 'fau_person_jobTitle', true)) $content .= '<li class="person-info person-info-position"><strong>'.get_post_meta($id, 'fau_person_jobTitle', true).'</strong></li>';
+                            if(get_post_meta($id, 'fau_person_worksFor', true)) $content .= '<li class="person-info person-info-institution">'.get_post_meta($id, 'fau_person_worksFor', true).'</li>';
+                            if(get_post_meta($id, 'fau_person_telephone', true)) $content .= '<li class="person-info person-info-phone">'.get_post_meta($id, 'fau_person_telephone', true).'</li>';
+                            if(get_post_meta($id, 'fau_person_faxNumber', true)) $content .= '<li class="person-info person-info-fax">'.get_post_meta($id, 'fau_person_faxNumber', true).'</li>';
                             if(get_post_meta($id, 'fau_person_email', true)) $content .= '<li class="person-info person-info-email"><a href="mailto:'.strtolower(get_post_meta($id, 'fau_person_email', true)).'">'.strtolower(get_post_meta($id, 'fau_person_email', true)).'</a></li>';
                             if(get_post_meta($id, 'fau_person_url', true)) $content .= '<li class="person-info person-info-www"><a href="'.get_post_meta($id, 'fau_person_url', true).'">'.get_post_meta($id, 'fau_person_url', true).'</a></li>';
-                            if(get_post_meta($id, 'fau_person_strasse', true))  $content .= '<li class="person-info person-info-street">'.get_post_meta($id, 'fau_person_strasse', true).'</li>';
-                            if(get_post_meta($id, 'fau_person_plz', true) || get_post_meta($id, 'fau_person_ort', true)) {
+                            if(get_post_meta($id, 'fau_person_streetAddress', true))  $content .= '<li class="person-info person-info-street">'.get_post_meta($id, 'fau_person_streetAddress', true).'</li>';
+                            if(get_post_meta($id, 'fau_person_postalCode', true) || get_post_meta($id, 'fau_person_addressLocality', true)) {
                                                     $content .= '<li class="person-info person-info-city">';
-                                                    if(get_post_meta($id, 'fau_person_plz', true))	$content .= get_post_meta($id, 'fau_person_plz', true).' ';  
-                                                    if(get_post_meta($id, 'fau_person_ort', true))	$content .= get_post_meta($id, 'fau_person_ort', true);
+                                                    if(get_post_meta($id, 'fau_person_postalCode', true))	$content .= get_post_meta($id, 'fau_person_postalCode', true).' ';  
+                                                    if(get_post_meta($id, 'fau_person_addressLocality', true))	$content .= get_post_meta($id, 'fau_person_addressLocality', true);
                                                     $content .= '</li>';
                                                 }
-                            if(get_post_meta($id, 'fau_person_land', true))	$content .= '<li class="person-info person-info-country">'.get_post_meta($id, 'fau_person_land', true).'</li>';
+                            if(get_post_meta($id, 'fau_person_addressCountry', true))	$content .= '<li class="person-info person-info-country">'.get_post_meta($id, 'fau_person_addressCountry', true).'</li>';
                                                 
-                            if(get_post_meta($id, 'fau_person_raum', true)) $content .= '<li class="person-info person-info-room">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' '.get_post_meta($id, 'fau_person_raum', true).'</li>';
-                            if(get_post_meta($id, 'fau_person_sprechzeiten', true)) $content .= '<li class="person-info person-info-room">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': ' .get_post_meta($id, 'fau_person_sprechzeiten', true).'</li>';
+                            if(get_post_meta($id, 'fau_person_workLocation', true)) $content .= '<li class="person-info person-info-room">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' '.get_post_meta($id, 'fau_person_workLocation', true).'</li>';
+                            if(get_post_meta($id, 'fau_person_hoursAvailable', true)) $content .= '<li class="person-info person-info-room">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': ' .get_post_meta($id, 'fau_person_hoursAvailable', true).'</li>';
                             if(get_post_meta($id, 'fau_person_pubs', true)) $content .= '<li class="person-info person-info-pubs">' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) . ': '.get_post_meta($id, 'fau_person_pubs', true).'</li>';
                             $content .= '</ul>';
                             if(get_post_meta($id, 'fau_person_freitext', true)) $content .= '<div class="person-info person-info-description">'.get_post_meta($id, 'fau_person_freitext', true).'</div>';
