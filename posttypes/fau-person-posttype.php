@@ -1,19 +1,19 @@
 <?php
 
 $person_labels = array(
-    'name' => _x('Personen', 'Post Type General Name', FAU_PERSON_TEXTDOMAIN),
-    'singular_name' => _x('Person', 'Post Type Singular Name', FAU_PERSON_TEXTDOMAIN),
-    'menu_name' => __('Personen', FAU_PERSON_TEXTDOMAIN),
-    'parent_item_colon' => __('Übergeordnete Person', FAU_PERSON_TEXTDOMAIN),
-    'all_items' => __('Alle Personen', FAU_PERSON_TEXTDOMAIN),
-    'view_item' => __('Person ansehen', FAU_PERSON_TEXTDOMAIN),
-    'add_new_item' => __('Person hinzufügen', FAU_PERSON_TEXTDOMAIN),
-    'add_new' => __('Neue Person', FAU_PERSON_TEXTDOMAIN),
-    'edit_item' => __('Person bearbeiten', FAU_PERSON_TEXTDOMAIN),
-    'update_item' => __('Person aktualisieren', FAU_PERSON_TEXTDOMAIN),
-    'search_items' => __('Personen suchen', FAU_PERSON_TEXTDOMAIN),
-    'not_found' => __('Keine Personen gefunden', FAU_PERSON_TEXTDOMAIN),
-    'not_found_in_trash' => __('Keine Personen in Papierkorb gefunden', FAU_PERSON_TEXTDOMAIN),
+    'name' => _x('Personen', 'Post Type General Name', self::textdomain),
+    'singular_name' => _x('Person', 'Post Type Singular Name', self::textdomain),
+    'menu_name' => __('Personen', self::textdomain),
+    'parent_item_colon' => __('Übergeordnete Person', self::textdomain),
+    'all_items' => __('Alle Personen', self::textdomain),
+    'view_item' => __('Person ansehen', self::textdomain),
+    'add_new_item' => __('Person hinzufügen', self::textdomain),
+    'add_new' => __('Neue Person', self::textdomain),
+    'edit_item' => __('Person bearbeiten', self::textdomain),
+    'update_item' => __('Person aktualisieren', self::textdomain),
+    'search_items' => __('Personen suchen', self::textdomain),
+    'not_found' => __('Keine Personen gefunden', self::textdomain),
+    'not_found_in_trash' => __('Keine Personen in Papierkorb gefunden', self::textdomain),
 );
 $person_rewrite = array(
     'slug' => 'person',
@@ -22,8 +22,8 @@ $person_rewrite = array(
     'feeds' => true,
 );
 $person_args = array(
-    'label' => __('person', FAU_PERSON_TEXTDOMAIN),
-    'description' => __('Personeninformationen', FAU_PERSON_TEXTDOMAIN),
+    'label' => __('person', self::textdomain),
+    'description' => __('Personeninformationen', self::textdomain),
     'labels' => $person_labels,
     'supports' => array('title', 'thumbnail'),
     'taxonomies' => array('persons_category'),

@@ -67,7 +67,7 @@ class FAU_Person {
         self::$options = (object) $this->get_options();
         
         add_action('init', array($this, 'update_version'));
-        add_action('init', array ($this, 'person_post_type'));
+        add_action('init', array (__CLASS__, 'person_post_type'));
         add_action( 'init', array($this, 'persons_taxonomy') );
         add_action( 'init', array($this, 'be_initialize_cmb_meta_boxes'), 9999 );
         //add_action( 'restrict_manage_posts', array($this, 'person_restrict_manage_posts') );
@@ -84,6 +84,7 @@ class FAU_Person {
         self::version_compare();
         update_option(self::version_option_name, self::version);
         
+        self::person_post_type();
         flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind
 
         // CPT-Capabilities für die Administrator-Rolle zuweisen
@@ -95,7 +96,7 @@ class FAU_Person {
          */    
     }
     
-    public static function deactivation() {
+    public static function deactivation() {       
         // CPT-Capabilities aus der Administrator-Rolle entfernen
         /*
         foreach(self::$post_types as $cap_type) {
