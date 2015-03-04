@@ -1,19 +1,19 @@
 <?php
 
 $person_labels = array(
-    'name' => _x('Personen', 'Post Type General Name', FAU_PERSON_TEXTDOMAIN),
-    'singular_name' => _x('Person', 'Post Type Singular Name', FAU_PERSON_TEXTDOMAIN),
-    'menu_name' => __('Personen', FAU_PERSON_TEXTDOMAIN),
-    'parent_item_colon' => __('Übergeordnete Person', FAU_PERSON_TEXTDOMAIN),
-    'all_items' => __('Alle Personen', FAU_PERSON_TEXTDOMAIN),
-    'view_item' => __('Person ansehen', FAU_PERSON_TEXTDOMAIN),
-    'add_new_item' => __('Person hinzufügen', FAU_PERSON_TEXTDOMAIN),
-    'add_new' => __('Neue Person', FAU_PERSON_TEXTDOMAIN),
-    'edit_item' => __('Person bearbeiten', FAU_PERSON_TEXTDOMAIN),
-    'update_item' => __('Person aktualisieren', FAU_PERSON_TEXTDOMAIN),
-    'search_items' => __('Personen suchen', FAU_PERSON_TEXTDOMAIN),
-    'not_found' => __('Keine Personen gefunden', FAU_PERSON_TEXTDOMAIN),
-    'not_found_in_trash' => __('Keine Personen in Papierkorb gefunden', FAU_PERSON_TEXTDOMAIN),
+    'name' => _x('Personen', 'Post Type General Name', self::textdomain),
+    'singular_name' => _x('Person', 'Post Type Singular Name', self::textdomain),
+    'menu_name' => __('Personen', self::textdomain),
+    'parent_item_colon' => __('Übergeordnete Person', self::textdomain),
+    'all_items' => __('Alle Personen', self::textdomain),
+    'view_item' => __('Person ansehen', self::textdomain),
+    'add_new_item' => __('Person hinzufügen', self::textdomain),
+    'add_new' => __('Neue Person', self::textdomain),
+    'edit_item' => __('Person bearbeiten', self::textdomain),
+    'update_item' => __('Person aktualisieren', self::textdomain),
+    'search_items' => __('Personen suchen', self::textdomain),
+    'not_found' => __('Keine Personen gefunden', self::textdomain),
+    'not_found_in_trash' => __('Keine Personen in Papierkorb gefunden', self::textdomain),
 );
 $person_rewrite = array(
     'slug' => 'person',
@@ -22,8 +22,8 @@ $person_rewrite = array(
     'feeds' => true,
 );
 $person_args = array(
-    'label' => __('person', FAU_PERSON_TEXTDOMAIN),
-    'description' => __('Personeninformationen', FAU_PERSON_TEXTDOMAIN),
+    'label' => __('person', self::textdomain),
+    'description' => __('Personeninformationen', self::textdomain),
     'labels' => $person_labels,
     'supports' => array('title', 'thumbnail'),
     'taxonomies' => array('persons_category'),
@@ -60,175 +60,6 @@ $person_args = array(
     'map_meta_cap' => true
 );
 
-$person_titel_options = array(
-    'Dr.' => 'Doktor',
-    'Prof.' => 'Professor',
-    'Prof. Dr.' => 'Professor Doktor'
-);
-
-/* möglich bei type: text, textarea, checkbox, select, image, title, headline (für Zwischenüberschriften) */
-$person_fields = array(
-    // Zuordnung - fau_person_orga
-    'fau_person_position' => array(
-        'default' => 'false',
-        'title' => __('Position/Funktion', FAU_PERSON_TEXTDOMAIN),
-        'description' => '',
-        'type' => 'text',
-        'meta_box' => 'fau_person_orga',
-        'location' => 'person'),
-    'fau_person_institution' => array(
-        'default' => 'false',
-        'title' => __('Institution/Abteilung', FAU_PERSON_TEXTDOMAIN),
-        'description' => __('Geben Sie hier die Institution ein.', FAU_PERSON_TEXTDOMAIN),
-        'type' => 'text',
-        'meta_box' => 'fau_person_orga',
-        'location' => 'person'),
-    'fau_person_link' => array(
-        'default' => 'false',
-        'title' => __('"Mehr"-Link führt zur Seite ...', FAU_PERSON_TEXTDOMAIN),
-        'description' => __('Bitte vollständigen Permalink der Zielseite angeben', FAU_PERSON_TEXTDOMAIN),
-        'type' => 'text',
-        'meta_box' => 'fau_person_orga',
-        'location' => 'person'),
-    // Kontaktinformation - fau_person_info
-    'fau_person_typ' => array(
-        'default' => 'false',
-        'title' => __('Typ des Eintrags', FAU_PERSON_TEXTDOMAIN),
-        'description' => __('Bei Einrichtungen und Pseudonymen wird die Bezeichnung angezeigt, ansonsten Vor- und Nachname.', FAU_PERSON_TEXTDOMAIN),
-        'type' => 'select',
-        'options' => array( 'realperson' => __('Geschlechtsneutrale Person', FAU_PERSON_TEXTDOMAIN),
-            'realmale' => __('Männliche Person', FAU_PERSON_TEXTDOMAIN),
-            'realfemale' => __('Weibliche Person', FAU_PERSON_TEXTDOMAIN),
-            'pseudo' => __('Pseudonym', FAU_PERSON_TEXTDOMAIN),
-            'einrichtung' => __('Einrichtung', FAU_PERSON_TEXTDOMAIN)
-            ),
-        'meta_box' => 'fau_person_info',
-        'location' => 'person'),
-    'fau_person_titel' => array(
-        'default' => 'false',
-        'title' => __('Titel (Präfix)', FAU_PERSON_TEXTDOMAIN),
-        'description' => '',
-        'type' => 'select',
-        'options' => $person_titel_options,
-        'meta_box' => 'fau_person_info',
-        'location' => 'person'),
-    'fau_person_vorname' => array(
-        'default' => 'false',
-        'title' => __('Vorname', FAU_PERSON_TEXTDOMAIN),
-        'description' => '',
-        'type' => 'text',
-        'meta_box' => 'fau_person_info',
-        'location' => 'person'),
-    'fau_person_nachname' => array(
-        'default' => 'false',
-        'title' => __('Nachname', FAU_PERSON_TEXTDOMAIN),
-        'description' => '',
-        'type' => 'text',
-        'meta_box' => 'fau_person_info',
-        'location' => 'person'),
-    'fau_person_pseudo' => array(
-        'default' => 'false',
-        'title' => __('Bezeichnung (oder Pseudonym)', FAU_PERSON_TEXTDOMAIN),
-        'description' => '',
-        'type' => 'text',
-        'meta_box' => 'fau_person_info',
-        'location' => 'person'),
-    'fau_person_abschluss' => array(
-        'default' => 'false',
-        'title' => __('Abschluss (Suffix)', FAU_PERSON_TEXTDOMAIN),
-        'description' => '',
-        'type' => 'text',
-        'meta_box' => 'fau_person_info',
-        'location' => 'person'),
-    'fau_person_strasse' => array(
-        'default' => 'false',
-        'title' => __('Straße und Hausnummer', FAU_PERSON_TEXTDOMAIN),
-        'description' => '',
-        'type' => 'text',
-        'meta_box' => 'fau_person_info',
-        'location' => 'person'),
-    'fau_person_plz' => array(
-        'default' => 'false',
-        'title' => __('Postleitzahl', FAU_PERSON_TEXTDOMAIN),
-        'description' => '',
-        'type' => 'text',
-        'meta_box' => 'fau_person_info',
-        'location' => 'person'),
-    'fau_person_ort' => array(
-        'default' => 'false',
-        'title' => __('Ort', FAU_PERSON_TEXTDOMAIN),
-        'description' => '',
-        'type' => 'text',
-        'meta_box' => 'fau_person_info',
-        'location' => 'person'),
-    'fau_person_land' => array(
-        'default' => 'false',
-        'title' => __('Land', FAU_PERSON_TEXTDOMAIN),
-        'description' => '',
-        'type' => 'text',
-        'meta_box' => 'fau_person_info',
-        'location' => 'person'),
-    'fau_person_raum' => array(
-        'default' => 'false',
-        'title' => __('Raum', FAU_PERSON_TEXTDOMAIN),
-        'description' => '',
-        'type' => 'text',
-        'meta_box' => 'fau_person_info',
-        'location' => 'person'),
-    'fau_person_telefon' => array(
-        'default' => 'false',
-        'title' => __('Telefon', FAU_PERSON_TEXTDOMAIN),
-        'description' => '',
-        'type' => 'text',
-        'meta_box' => 'fau_person_info',
-        'location' => 'person'),
-    'fau_person_telefax' => array(
-        'default' => 'false',
-        'title' => __('Telefax', FAU_PERSON_TEXTDOMAIN),
-        'description' => '',
-        'type' => 'text',
-        'meta_box' => 'fau_person_info',
-        'location' => 'person'),
-    // Social Media - fau_person_social_media
-    'fau_person_email' => array(
-        'default' => 'false',
-        'title' => __('E-Mail', FAU_PERSON_TEXTDOMAIN),
-        'description' => '',
-        'type' => 'text',
-        'meta_box' => 'fau_person_social_media',
-        'location' => 'person'),
-    'fau_person_url' => array(
-        'default' => 'false',
-        'title' => __('Webseite', FAU_PERSON_TEXTDOMAIN),
-        'description' => '',
-        'type' => 'url',
-        'meta_box' => 'fau_person_social_media',
-        'location' => 'person'),
-    // Weitere Informationen - fau_person_adds
-    'fau_person_freitext' => array(
-        'default' => 'false',
-        'title' => __('Freitext', FAU_PERSON_TEXTDOMAIN),
-        'description' => '',
-        'type' => 'textarea',
-        'meta_box' => 'fau_person_adds',
-        'location' => 'person'),
-    'fau_person_sprechzeiten' => array(
-        'default' => 'false',
-        'title' => __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN),
-        'description' => '',
-        'type' => 'text',
-        'meta_box' => 'fau_person_adds',
-        'location' => 'person'),
-    'fau_person_pubs' => array(
-        'default' => 'false',
-        'title' => __('Publikationen', FAU_PERSON_TEXTDOMAIN),
-        'description' => '',
-        'type' => 'text',
-        'meta_box' => 'fau_person_adds',
-        'location' => 'person')
-    // Synchronisierung mit externen Daten - fau_person_sync ab hier
-
-);
 
 
 
