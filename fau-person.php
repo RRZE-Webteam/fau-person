@@ -3,7 +3,7 @@
 /**
  * Plugin Name: FAU Person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 1.0
+ * Version: 1.0.0
  * Author: Karin Kimpan
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -32,7 +32,7 @@ register_deactivation_hook(__FILE__, array('FAU_Person', 'deactivation'));
 
 class FAU_Person {
 
-    const version = '1.0';
+    const version = '1.0.0';
     const option_name = '_fau_person';
     const version_option_name = '_fau_person_version';
     const textdomain = 'fau-person';
@@ -41,14 +41,8 @@ class FAU_Person {
 
     protected static $post_types = 'person';
     
-   // public static $person_titel_options;
-    
     public static $options;
-    
-    public static $person_fields;
-    
-    public static $person_args;
-    
+
     protected static $instance = null;
 
     public static function instance() {
@@ -66,8 +60,7 @@ class FAU_Person {
         define('FAU_PERSON_FILE_PATH', FAU_PERSON_ROOT . '/' . basename(__FILE__));
         define('FAU_PERSON_URL', plugins_url('/', __FILE__));
         define('FAU_PERSON_TEXTDOMAIN', self::textdomain);
-        
-        include_once(plugin_dir_path(__FILE__) . 'metabox/metaboxes.php');
+        require_once('metaboxes/fau-person-metaboxes.php');
         
         load_plugin_textdomain(self::textdomain, false, sprintf('%s/languages/', dirname(plugin_basename(__FILE__))));
         
@@ -75,22 +68,15 @@ class FAU_Person {
         
         add_action('init', array($this, 'update_version'));
         add_action('init', array ($this, 'person_post_type'));
-        //add_action('add_meta_boxes_person', array($this, 'adding_meta_boxes_person'));
-        //add_action('save_post', array($this, 'save_postdata'));
-        //add_action( 'restrict_manage_posts', array($this, 'person_restrict_manage_posts') );
         add_action( 'init', array($this, 'persons_taxonomy') );
-        add_filter('single_template', array($this, 'include_template_function'));
-
         add_action( 'init', array($this, 'be_initialize_cmb_meta_boxes'), 9999 );
-
+        //add_action( 'restrict_manage_posts', array($this, 'person_restrict_manage_posts') );
+        
+        add_filter('single_template', array($this, 'include_template_function'));
         //add_filter('pre_get_posts', array($this, 'person_post_types_admin_order'));
-        
-        //self::register_post_types();
+
         self::register_widgets();
-        self::add_shortcodes();
-
-        
-
+        self::add_shortcodes();        
     }
 
     public static function activation() {
@@ -98,8 +84,6 @@ class FAU_Person {
         self::version_compare();
         update_option(self::version_option_name, self::version);
         
-        self::person_post_type();    
-
         flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind
 
         // CPT-Capabilities für die Administrator-Rolle zuweisen
@@ -108,7 +92,6 @@ class FAU_Person {
             $caps = self::get_caps($cap_type);
             self::add_caps('administrator', $caps);
         }    
-         * 
          */    
     }
     
@@ -119,7 +102,6 @@ class FAU_Person {
             $caps = self::get_caps($cap_type);
             self::remove_caps('administrator', $caps);
         }
-         * 
          */
     }
 
@@ -193,220 +175,19 @@ class FAU_Person {
         }        
     }    
     
-    private static function register_post_types() {
-        require_once('posttypes/fau-person-posttype.php');
-    }
- 
     private static function register_widgets() {
-        //require_once('widgets/fau-person-widget.php');
-        //require_once('widgets/fau-event-widget.php');       
+        //require_once('widgets/fau-person-widget.php');    
     }
     
     private static function add_shortcodes() {
-        //require_once('shortcodes/events-shortcode.php');
-        require_once('shortcodes/shortcodes.php');    
-         
+        require_once('shortcodes/fau-person-shortcodes.php');            
     }
 
-    public function be_initialize_cmb_meta_boxes() {
-        if ( !class_exists( 'cmb_Meta_Box' ) ) {
-            require_once( 'metabox/init.php' );
-        }
-    }
-    
-    /* Create one or more meta boxes to be displayed on the post editor screen. */
-    public function adding_meta_boxes_person() {
-
-        /*add_meta_box(
-		'fau_person_link',			// Unique ID
-		__( 'Typ des Eintrags', FAU_PERSON_TEXTDOMAIN ),		// Title
-		array($this, 'new_meta_boxes_person_typ'),		// Callback function
-		'person',					// Admin page (or post type)
-		'normal',					// Context
-		'default'					// Priority
-	);   */
-        add_meta_box(
-		'fau_person_orga',			// Unique ID
-		__( 'Zuordnung', FAU_PERSON_TEXTDOMAIN ),		// Title
-		array($this, 'new_meta_boxes_person_orga'),		// Callback function
-		'person',					// Admin page (or post type)
-		'normal',					// Context
-		'default'					// Priority
-	);
-        add_meta_box(
-		'fau_person_info',			// Unique ID
-		__( 'Kontaktinformationen', FAU_PERSON_TEXTDOMAIN ),		// Title
-		array($this, 'new_meta_boxes_person_info'),		// Callback function
-		'person',					// Admin page (or post type)
-		'normal',					// Context
-		'default'					// Priority
-	);
-        add_meta_box(
-		'fau_person_social_media',			// Unique ID
-		__( 'Social Media', FAU_PERSON_TEXTDOMAIN ),		// Title
-		array($this, 'new_meta_boxes_person_social_media'),		// Callback function
-		'person',					// Admin page (or post type)
-		'normal',					// Context
-		'default'					// Priority
-	);       
-        add_meta_box(
-		'fau_person_adds',			// Unique ID
-		__( 'Weitere Informationen', FAU_PERSON_TEXTDOMAIN ),		// Title
-		array($this, 'new_meta_boxes_person_adds'),		// Callback function
-		'person',					// Admin page (or post type)
-		'normal',					// Context
-		'default'					// Priority
-	);   
-    }
-    
-    public function new_meta_boxes_person_typ() {
-        $this->new_meta_boxes('person', 'fau_person_typ');
-    }
-    
-    public function new_meta_boxes_person_orga() {
-        $this->new_meta_boxes('person', 'fau_person_orga');
-    }
-    
-    public function new_meta_boxes_person_info() {
-        $this->new_meta_boxes('person', 'fau_person_info');
-    }
-    
-    public function new_meta_boxes_person_social_media() {
-        $this->new_meta_boxes('person', 'fau_person_social_media');
-    }
-    
-    public function new_meta_boxes_person_adds() {
-        $this->new_meta_boxes('person', 'fau_person_adds');
-    }  
-    
-    // Ausgabe der Custom Fields
-    public function new_meta_boxes( $type, $meta_box ) {
-        global $post;
-        if($type == 'person') {
-            $new_meta_boxes = self::$person_fields; 
-            wp_nonce_field('person_meta_box', 'person_meta_box_nonce');
-        }
-
-        echo '<div class="form-wrap">';
-        echo "\n";
-        foreach($new_meta_boxes as $field => $value) {
-            if($value['meta_box'] == $meta_box) {
-                if ($value['type'] == 'title') {
-                    echo '<p style="font-size: 18px; font-weight: bold; font-style: normal; color: #e5e5e5; text-shadow: 0 1px 0 #111; line-height: 40px; background-color: #464646; border: 1px solid #111; padding: 0 10px; -moz-border-radius: 6px;">' . $value['title'] . '</p>';
-                } else {
-                    echo '<div class="form-field form-required">';  
-                    echo "\n";
-                    switch ($value['type']) {
-                        case 'text':
-                            $this->fau_form_text($field, sanitize_text_field(get_post_meta($post->ID, $field, true)), $value['title'], $value['description']);
-                            break;
-                        case 'textarea':
-                            $this->fau_form_textarea($field, esc_textarea(get_post_meta($post->ID, $field, true)), $value['title'], $value['description'], '', '60', '5');
-                            break;
-                        case 'email':
-                            $this->fau_form_text($field, sanitize_text_field(get_post_meta($post->ID, $field, true)), $value['title'], $value['description']);
-                            break;                        
-                        case 'url':
-                            $this->fau_form_url($field, esc_url(get_post_meta($post->ID, $field, true)), $value['title'], $value['description']);
-                            break;
-                        case 'checkbox':
-                            $this->fau_form_checkbox($field, esc_attr(get_post_meta($post->ID, $field, true)), $value['title'], $value['description']);
-                            break;
-                        case 'select':
-                            $this->fau_form_select($field, $value['options'], esc_attr(get_post_meta($post->ID, $field, true)), $value['title'], $value['description']);                           
-                            break;
-                        case 'image':
-                            echo '<input type="text" name="' . $field . '" id="' . $value['name'] . '" value="' . htmlspecialchars($meta_box_value) . '" style="width: 400px; border-color: #ccc;" />';
-                            echo '<input type="button" id="button' . $field . '" value="Browse" style="width: 60px;" class="button button-upload" rel="' . $post->ID . '" />';
-                            echo '&nbsp;<a href="#" style="color: red;" class="remove-upload">remove</a>';
-                            break;
-                    } 
-                    echo "</div>\n";
-                }
-            }
-        }
-        echo "</div>\n";
+    public static function person_post_type() {
+        require_once('posttypes/fau-person-posttype.php');
+        register_post_type('person', $person_args);
     }
 
-    public function save_postdata( $post_id ) {
-        if ( ! isset( $_POST['person_meta_box_nonce'] ) ) {
-                return;
-        }
-        if ( !wp_verify_nonce( $_POST['person_meta_box_nonce'], 'person_meta_box') ) {
-            return $post_id;
-        }
-
-        if ( wp_is_post_revision( $post_id ) or wp_is_post_autosave( $post_id ) )
-            return $post_id;
-
-        global $post;
-        $new_meta_boxes = self::$person_fields;
-
-        foreach($new_meta_boxes as $field => $value) {
-            if ( $value['type'] != 'title' ) {
-
-                if ( 'page' == $_POST['post_type'] ) {
-                    if ( !current_user_can( 'edit_page', $post_id ))
-                        return $post_id;
-                } else {
-                    if ( !current_user_can( 'edit_post', $post_id ))
-                        return $post_id;
-                }   
-
-                
-                $data = !isset($_POST[$field]) ? $_POST[$field] : "";
-             
-                switch($value['type']) {
-                    case 'text':
-                        $data = trim(sanitize_text_field($data));
-                        break;
-                    case 'textarea':
-                        $data = esc_textarea($data);
-                        break;
-                    case 'email':
-                        $data = trim(sanitize_text_field($data));
-                        if(!is_email($data)) {
-                            //todo;
-                        }
-                        break;                        
-                    case 'url':
-                        $data = trim(esc_url($data));
-                        // todo Validierung
-                        break;
-                    case 'checkbox':
-                        if(!empty($data)) {
-                            $data = 1;
-                        }
-                        break;
-                    //case 'multicheck':
-                      //  $data = esc_attr($data);
-                      //  break;
-                    case 'select':
-                        $data = esc_attr($data);                           
-                        break;
-                    //case 'image':
-                }
-                
-       
-                $oldval = get_post_meta($post_id, $field, true);
-
-                if(!empty($data)){
-                    if ($oldval != $data) {
-                        update_post_meta($post_id, $field, $data);
-                    } 
-                } elseif ($oldval) {
-                    delete_post_meta($post_id, $field, $oldval);   
-                }
-            }
-        }
-    } 
-    
-    public function person_fields() {
-        $person_fields = self::$person_fields;
-        return apply_filters( '_fau_person_fields', $person_fields );
-    }
-    
-    
     public function persons_taxonomy() {
         register_taxonomy(
                 'persons_category', //The name of the taxonomy. Name should be in slug form (must not contain capital letters or spaces).
@@ -422,15 +203,12 @@ class FAU_Person {
                 )
         );
     }
-
-    // Register Custom Post Type
-    public static function person_post_type() {
-        require_once('posttypes/fau-person-posttype.php');
-        self::$person_fields = $person_fields;
-        self::$person_args = $person_args;
-        $args = self::$person_args;
-        register_post_type('person', $args);
-    }
+    
+    public function be_initialize_cmb_meta_boxes() {
+        if ( !class_exists( 'cmb_Meta_Box' ) ) {
+            require_once('cmb/init.php' );
+        }
+    }    
 
     public function person_restrict_manage_posts() {
         global $typenow;
@@ -451,6 +229,23 @@ class FAU_Person {
             }
         }
     }
+    
+    
+    public function include_template_function($template_path) {
+        global $post;
+        if ($post->post_type == 'person') {
+            //if (is_single()) {
+                // checks if the file exists in the theme first,
+                // otherwise serve the file from the plugin
+                if ($theme_file = locate_template(array('single-person.php'))) {
+                    $template_path = $theme_file;
+                } else {
+                    $template_path = FAU_PERSON_ROOT . '/templates/single-person.php';                    
+                }
+            //}
+        }
+        return $template_path;
+    }
 
     public function person_post_types_admin_order($wp_query) {
         if (is_admin()) {
@@ -462,200 +257,5 @@ class FAU_Person {
                 }
             }
         }
-    }
-
-    public function include_template_function($template_path) {
-        if (get_post_type() == 'person') {
-            if (is_single()) {
-                // checks if the file exists in the theme first,
-                // otherwise serve the file from the plugin
-                if ($theme_file = locate_template(array('single-person.php'))) {
-                    $template_path = $theme_file;
-                } else {
-                    $template_path = FAU_PERSON_ROOT . '/single-person.php';
-                }
-            }
-        }
-        return $template_path;
-    }
-
-    /*
-     * Hilfereiche Funktionen für die Custom Fields
-     */
-
-    public function fau_form_text($name = '', $prevalue = '', $labeltext = '', $howtotext = '', $placeholder = '', $size = 0) {
-        $name = $this->fau_san($name);
-        $labeltext = $this->fau_san($labeltext);
-        if (isset($name) && isset($labeltext)) {
-            //echo "<p>\n";
-            echo '	<label for="' . $name . '"><strong>';
-            echo $labeltext;
-            echo "</strong></label>\n";
-            echo '	<input type="text" class="large-text" name="' . $name . '" id="' . $name . '" value="' . $prevalue . '"';
-            if (strlen(trim($placeholder))) {
-                echo ' placeholder="' . $placeholder . '"';
-            }
-            if (intval($size) > 0) {
-                echo ' length="' . $size . '"';
-            }
-            echo " />\n";
-            //echo "</p>\n";
-            if (strlen(trim($howtotext))) {
-                echo '<p class="howto">';
-                echo $howtotext;
-                echo "</p>\n";
-            }
-        } else {
-            echo _('Ungültiger Aufruf von fau_form_text() - Name oder Label fehlt.', self::textdomain);
-        }
-    }
-    
-    public function fau_form_textarea($name = '', $prevalue = '', $labeltext = '', $howtotext = '', $placeholder = '', $cols = 0, $rows = 0) {
-        $name = $this->fau_san($name);
-        $labeltext = $this->fau_san($labeltext);
-        if (isset($name) && isset($labeltext)) {
-            //echo "<p>\n";
-            echo '	<label for="' . $name . '"><strong>';
-            echo $labeltext;
-            echo "</strong></label>\n";
-            echo '	<textarea class="large-text" name="' . $name . '" id="' . $name . '"';
-            if (strlen(trim($placeholder))) {
-                echo ' placeholder="' . $placeholder . '"';
-            }
-            if (intval($cols) > 0) {
-                echo ' cols="' . $cols . '"';
-            }
-            if (intval($rows) > 0) {
-                echo ' rows="' . $rows . '"';
-            }
-            echo ">";
-            echo $prevalue;
-            echo "</textarea>\n";
-            //echo "</p>\n";
-            if (strlen(trim($howtotext))) {
-                echo '<p class="howto">';
-                echo $howtotext;
-                echo "</p>\n";
-            }
-        } else {
-            echo _('Ungültiger Aufruf von fau_form_textarea() - Name oder Label fehlt.', self::textdomain);
-        }
-    }
-
-    public function fau_form_url($name = '', $prevalue = '', $labeltext = '', $howtotext = '', $placeholder = 'http://', $size = 0) {
-        $name = $this->fau_san($name);
-        $labeltext = $this->fau_san($labeltext);
-        if (isset($name) && isset($labeltext)) {
-            //echo "<p>\n";
-            echo '	<label for="' . $name . '"><strong>';
-            echo $labeltext;
-            echo "</strong></label>\n";
-            echo '	<input type="url" class="large-text" name="' . $name . '" id="' . $name . '" value="' . $prevalue . '"';
-            if (strlen(trim($placeholder))) {
-                echo ' placeholder="' . $placeholder . '"';
-            }
-            if (intval($size) > 0) {
-                echo ' length="' . $size . '"';
-            }
-            echo " />\n";
-            //echo "</p>\n";
-            if (strlen(trim($howtotext))) {
-                echo '<p class="howto">';
-                echo $howtotext;
-                echo "</p>\n";
-            }
-        } else {
-            echo _('Ungültiger Aufruf von fau_form_url() - Name oder Label fehlt.', self::textdomain);
-        }
-    }
-
-    
-    public function fau_form_checkbox($name = '', $prevalue = 0, $labeltext = '', $howtotext = '') {
-        $name = $this->fau_san($name);
-        $labeltext = $this->fau_san($labeltext);
-        if (isset($name) && isset($labeltext)) {
-            echo '  <label for="' . $name . '"><input type="checkbox" name="' . $name . '" id="' . $name . '" value="1" ';
-            checked($prevalue, 1);
-            echo ' />' . $labeltext;              
-            echo "</label>\n";
-            if (strlen(trim($howtotext))) {
-                echo '<p class="howto">';
-                echo $howtotext;
-                echo "</p>\n";
-            }
-        } else {
-            echo _('Ungültiger Aufruf von fau_form_checkbox() - Name oder Label fehlt.', self::textdomain);
-        }
-    }
-    
-    public function fau_form_onoff($name = '', $prevalue = 0, $labeltext = '', $howtotext = '') {
-        $name = $this->fau_san($name);
-        $labeltext = $this->fau_san($labeltext);
-        if (isset($name) && isset($labeltext)) {
-            ?>
-            <div class="schalter">
-            <select class="onoff" name="<?php echo $name; ?>" id="<?php echo $name; ?>">
-            <option value="0" <?php selected(0, $prevalue); ?>>Aus</option>
-            <option value="1" <?php selected(1, $prevalue); ?>>An</option>
-            </select>
-            <label for="<?php echo $name; ?>"><strong>
-            <?php echo $labeltext; ?>
-            </strong></label>
-            </div>
-            <?php
-            if (strlen(trim($howtotext))) {
-                echo '<p class="howto">';
-                echo $howtotext;
-                echo "</p>\n";
-            }
-        } else {
-            echo _('Ungültiger Aufruf von fau_form_onoff() - Name oder Label fehlt.', self::textdomain);
-        }
-    }
-
-    public function fau_form_select($name = '', $liste = array(), $prevalue, $labeltext = '', $howtotext = '', $showempty = 1, $emptytext = '') {
-        $name = $this->fau_san($name);
-        $labeltext = $this->fau_san($labeltext);
-        $emptytext = $this->fau_san($emptytext);
-        if (is_array($liste) && isset($name) && isset($labeltext)) {
-            ?>
-            <div class="liste">
-            <label for="<?php echo $name; ?>"><strong>
-            <?php echo $labeltext; ?>
-            </strong></label>
-            <select name="<?php echo $name; ?>" id="<?php echo $name; ?>">
-            <?php
-            if ($showempty == 1) {
-                echo '<option value="">';
-                if (!empty($emptytext)) {
-                    echo $emptytext;
-                } else {
-                    _e('Keine Auswahl', self::textdomain);
-                }
-                echo '</option>';
-            }
-            foreach ($liste as $entry => $value) {
-            ?>
-                <option value="<?php echo $entry; ?>" <?php selected($entry, $prevalue); ?>><?php echo $value; ?></option>
-            <?php } ?>	
-            </select>
-            </div>
-            <?php
-            if (strlen(trim($howtotext))) {
-                echo '<p class="howto">';
-                echo $howtotext;
-                echo "</p>\n";
-            }
-        } else {
-            echo _('Ungültiger Aufruf von fau_form_select() - Array, Name oder Label fehlt.', self::textdomain);
-        }
-    }
-                    
-    private function fau_san($s) {
-        return filter_var(trim($s), FILTER_SANITIZE_STRING);
-    }
-
-    
-    
-    
+    }    
 }

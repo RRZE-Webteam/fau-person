@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: RRZE-Mathjax\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-27 15:31+0100\n"
+"POT-Creation-Date: 2015-03-04 12:33+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -18,71 +18,251 @@ msgstr ""
 "X-Generator: Poedit 1.6.5\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../fau-person.php:126
+#: ../cmb/helpers/cmb_Meta_Box_ajax.php:47
+msgid "Please Try Again"
+msgstr ""
+
+#: ../cmb/helpers/cmb_Meta_Box_ajax.php:131
+msgid "Remove Embed"
+msgstr ""
+
+#: ../cmb/helpers/cmb_Meta_Box_ajax.php:134
+#, php-format
+msgid "No oEmbed Results Found for %s. View more info at"
+msgstr ""
+
+#: ../cmb/helpers/cmb_Meta_Box_field.php:459
+msgid "Add Group"
+msgstr ""
+
+#: ../cmb/helpers/cmb_Meta_Box_field.php:460
+msgid "Remove Group"
+msgstr ""
+
+#: ../cmb/helpers/cmb_Meta_Box_types.php:250
+msgid "Add Row"
+msgstr ""
+
+#: ../cmb/helpers/cmb_Meta_Box_types.php:306
+#: ../cmb/helpers/cmb_Meta_Box_types.php:706
+#: ../cmb/helpers/cmb_Meta_Box_types.php:768
+msgid "Remove"
+msgstr ""
+
+#: ../cmb/helpers/cmb_Meta_Box_types.php:601
+#: ../cmb/helpers/cmb_Meta_Box_types.php:635
+msgid "No terms"
+msgstr ""
+
+#: ../cmb/helpers/cmb_Meta_Box_types.php:674
+#: ../cmb/helpers/cmb_Meta_Box_types.php:728
+msgid "Add or Upload File"
+msgstr ""
+
+#: ../cmb/helpers/cmb_Meta_Box_types.php:695
+#: ../cmb/helpers/cmb_Meta_Box_types.php:760
+msgid "Remove Image"
+msgstr ""
+
+#: ../cmb/helpers/cmb_Meta_Box_types.php:706
+#: ../cmb/helpers/cmb_Meta_Box_types.php:768
+msgid "File:"
+msgstr ""
+
+#: ../cmb/helpers/cmb_Meta_Box_types.php:706
+#: ../cmb/helpers/cmb_Meta_Box_types.php:768
+msgid "Download"
+msgstr ""
+
+#: ../cmb/init.php:258
+msgid "Clear"
+msgstr ""
+
+#: ../cmb/init.php:259
+msgid "Default"
+msgstr ""
+
+#: ../cmb/init.php:260
+msgid "Select Color"
+msgstr ""
+
+#: ../cmb/init.php:261
+msgid "Current Color"
+msgstr ""
+
+#: ../cmb/init.php:288
+msgid "Select / Deselect All"
+msgstr ""
+
+#: ../cmb/init.php:1179
+msgid "Save"
+msgstr ""
+
+#: ../fau-person.php:113
 #, php-format
 msgid ""
 "Ihre PHP-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die "
 "PHP-Version %s."
 msgstr ""
+"Your server is running PHP version %s. Please upgrade at least to PHP "
+"version %s."
 
-#: ../fau-person.php:130
+#: ../fau-person.php:117
 #, php-format
 msgid ""
 "Ihre Wordpress-Version %s ist veraltet. Bitte aktualisieren Sie mindestens "
 "auf die Wordpress-Version %s."
 msgstr ""
+"Your Wordpress version is %s. Please upgrade at least to Wordpress version "
+"%s."
 
-#: ../fau-person.php:220
-msgid "Zuordnung"
-msgstr ""
-
-#: ../fau-person.php:228
-msgid "Kontaktinformationen"
-msgstr ""
-
-#: ../fau-person.php:236
-msgid "Social Media"
-msgstr ""
-
-#: ../fau-person.php:244
-msgid "Weitere Informationen"
-msgstr ""
-
-#: ../fau-person.php:375
+#: ../fau-person.php:198
 msgid "Personen-Kategorien"
-msgstr ""
+msgstr "Person categories"
 
-#: ../fau-person.php:401
+#: ../fau-person.php:221
 #, php-format
 msgid "Alle %s anzeigen"
 msgstr ""
 
-#: ../fau-person.php:468
-msgid "Ungültiger Aufruf von fau_form_text() - Name oder Label fehlt."
+#: ../metaboxes/fau-person-metaboxes.php:13
+msgid "Zuordnung"
 msgstr ""
 
-#: ../fau-person.php:500
-msgid "Ungültiger Aufruf von fau_form_textarea() - Name oder Label fehlt."
+#: ../metaboxes/fau-person-metaboxes.php:20
+msgid "Position/Funktion"
 msgstr ""
 
-#: ../fau-person.php:527
-msgid "Ungültiger Aufruf von fau_form_url() - Name oder Label fehlt."
+#: ../metaboxes/fau-person-metaboxes.php:26
+msgid "Institution/Abteilung"
 msgstr ""
 
-#: ../fau-person.php:546
-msgid "Ungültiger Aufruf von fau_form_checkbox() - Name oder Label fehlt."
+#: ../metaboxes/fau-person-metaboxes.php:27
+msgid "Geben Sie hier die Institution ein."
 msgstr ""
 
-#: ../fau-person.php:571
-msgid "Ungültiger Aufruf von fau_form_onoff() - Name oder Label fehlt."
+#: ../metaboxes/fau-person-metaboxes.php:32
+msgid "\"Mehr\"-Link führt zur Seite ..."
 msgstr ""
 
-#: ../fau-person.php:592
-msgid "Keine Auswahl"
+#: ../metaboxes/fau-person-metaboxes.php:33
+msgid "Bitte vollständigen Permalink der Zielseite angeben"
 msgstr ""
 
-#: ../fau-person.php:609
-msgid "Ungültiger Aufruf von fau_form_select() - Array, Name oder Label fehlt."
+#: ../metaboxes/fau-person-metaboxes.php:42
+msgid "Kontaktinformationen"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:49
+msgid "Typ des Eintrags"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:50
+msgid ""
+"Bei Einrichtungen und Pseudonymen wird die Bezeichnung angezeigt, ansonsten "
+"Vor- und Nachname."
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:52
+msgid "Person (geschlechtsneutral)"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:53
+msgid "Männliche Person"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:54
+msgid "Weibliche Person"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:55
+msgid "Pseudonym"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:56
+msgid "Einrichtung"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:61
+msgid "Titel (Präfix)"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:73
+msgid "Vorname"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:79
+msgid "Nachname"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:85
+msgid "Bezeichnung (oder Pseudonym)"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:91
+msgid "Abschluss (Suffix)"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:97
+msgid "Straße und Hausnummer"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:103
+msgid "Postleitzahl"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:109
+msgid "Ort"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:115
+msgid "Land"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:121
+#: ../shortcodes/fau-person-shortcodes.php:116
+#: ../templates/search-person.php:101 ../templates/single-person.php:60
+msgid "Raum"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:127
+msgid "Telefon"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:133
+msgid "Telefax"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:143
+msgid "Social Media"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:150
+msgid "E-Mail"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:156
+msgid "Webseite"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:166
+msgid "Weitere Informationen"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:173
+msgid "Freitext"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:179
+#: ../shortcodes/fau-person-shortcodes.php:117
+#: ../templates/single-person.php:61
+msgid "Sprechzeiten"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:185
+#: ../shortcodes/fau-person-shortcodes.php:118
+#: ../templates/single-person.php:62
+msgid "Publikationen"
 msgstr ""
 
 #: ../posttypes/fau-person-posttype.php:4
@@ -147,135 +327,17 @@ msgstr ""
 msgid "Personeninformationen"
 msgstr ""
 
-#: ../posttypes/fau-person-posttype.php:74
-msgid "Position/Funktion"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:81
-msgid "Institution/Abteilung"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:82
-msgid "Geben Sie hier die Institution ein."
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:88
-msgid "\"Mehr\"-Link führt zur Seite ..."
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:89
-msgid "Bitte vollständigen Permalink der Zielseite angeben"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:96
-msgid "Typ des Eintrags"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:97
-msgid ""
-"Je nach Auswahl wird Vorname und Nachname oder (bei Einrichtungen und "
-"Pseudonymen) die Bezeichnung angezeigt ."
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:99
-msgid "Geschlechtsneutrale Person"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:100
-msgid "Männliche Person"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:101
-msgid "Weibliche Person"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:102
-msgid "Pseudonym"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:103
-msgid "Einrichtung"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:109
-msgid "Titel (Präfix)"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:117
-msgid "Vorname"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:124
-msgid "Nachname"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:131
-msgid "Bezeichnung (oder Pseudonym)"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:138
-msgid "Abschluss (Suffix)"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:145
-msgid "Straße und Hausnummer"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:152
-msgid "Postleitzahl"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:159
-msgid "Ort"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:166
-msgid "Land"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:173 ../search-person.php:101
-#: ../shortcodes/shortcodes.php:136 ../single-person.php:60
-msgid "Raum"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:180
-msgid "Telefon"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:187
-msgid "Telefax"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:195
-msgid "E-Mail"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:202
-msgid "Webseite"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:210
-msgid "Freitext"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:217
-msgid "Sprechzeiten"
-msgstr ""
-
-#: ../posttypes/fau-person-posttype.php:224
-msgid "Publikationen"
-msgstr ""
-
-#: ../shortcodes/shortcodes.php:54
+#: ../shortcodes/fau-person-shortcodes.php:33
 #, php-format
 msgid ""
 "Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden."
 msgstr ""
 
-#: ../shortcodes/shortcodes.php:145
+#: ../shortcodes/fau-person-shortcodes.php:126
+#: ../templates/single-person.php:65
 msgid "Mehr"
 msgstr ""
 
-#: ../single-person.php:67
+#: ../templates/single-person.php:70
 msgid "Es konnte kein Kontakteintrag gefunden werden."
 msgstr ""

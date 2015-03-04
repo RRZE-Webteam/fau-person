@@ -1,5 +1,7 @@
 <?php
 
+// In dieser Datei werden alle Metaboxen und Felder für den Custom Post Type person definiert
+// Basis dafür Custom Metaboxes and Fields for WordPress, siehe auch fau-person/metabox/readme.md
 
 add_filter( 'cmb_meta_boxes', 'fau_person_metaboxes' );
 

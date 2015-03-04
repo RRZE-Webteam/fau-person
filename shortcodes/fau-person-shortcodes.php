@@ -2,36 +2,6 @@
 
     add_shortcode('person', 'fau_person' );
     add_shortcode('persons', 'fau_persons');
-/*
-function rrze_dlp_kontakt_shortcode( $atts ) {
-    global $options;
-
-	extract( shortcode_atts( array(
-		'id'	=> '',
-	
-	), $atts ) );
-	$out = '';
-	if ((isset($id)) && ( strlen(trim($id))>0)) {
-		$args = array(
-			'post_type' => 'kontakt',
-			'p' => $id
-		);
-		
-		$person = new WP_Query( $args );
-		if( $person->have_posts() ) { 
-		    while ($person->have_posts() ) {
-			    $person->the_post();	   
-			    $post_id = $person->post->ID;
-			    $out .= rrze_dlp_display_kontakt($post_id);
-			 
-		    }
-		}  
-		wp_reset_query();
-	}
-	return $out;
-}
-add_shortcode( 'kontakt', 'rrze_dlp_kontakt_shortcode' );
-*/    
     
     function fau_person( $atts, $content = null) {
             extract(shortcode_atts(array(
