@@ -66,9 +66,9 @@ class FAU_Person {
         
         self::$options = (object) $this->get_options();
         
-        add_action('init', array($this, 'update_version'));
-        add_action('init', array (__CLASS__, 'person_post_type'));
-        add_action( 'init', array($this, 'persons_taxonomy') );
+        add_action('init', array(__CLASS__, 'update_version'));
+        add_action('init', array (__CLASS__, 'register_person_post_type'));
+        add_action( 'init', array($this, 'register_persons_taxonomy') );
         add_action( 'init', array($this, 'be_initialize_cmb_meta_boxes'), 9999 );
         //add_action( 'restrict_manage_posts', array($this, 'person_restrict_manage_posts') );
         
@@ -84,7 +84,7 @@ class FAU_Person {
         self::version_compare();
         update_option(self::version_option_name, self::version);
         
-        self::person_post_type();
+        self::register_person_post_type();
         flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind
 
         // CPT-Capabilities für die Administrator-Rolle zuweisen
@@ -184,12 +184,12 @@ class FAU_Person {
         require_once('shortcodes/fau-person-shortcodes.php');            
     }
 
-    public static function person_post_type() {
+    public static function register_person_post_type() {
         require_once('posttypes/fau-person-posttype.php');
         register_post_type('person', $person_args);
     }
 
-    public function persons_taxonomy() {
+    public function register_persons_taxonomy() {
         register_taxonomy(
                 'persons_category', //The name of the taxonomy. Name should be in slug form (must not contain capital letters or spaces).
                 'person', //post type name
