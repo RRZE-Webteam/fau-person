@@ -3,8 +3,8 @@
 /**
  * Plugin Name: FAU Person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 1.0.0
- * Author: Karin Kimpan
+ * Version: 1.0.1
+ * Author: RRZE-Webteam (Karin Kimpan)
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
  */
@@ -30,9 +30,13 @@ add_action('plugins_loaded', array('FAU_Person', 'instance'));
 register_activation_hook(__FILE__, array('FAU_Person', 'activation'));
 register_deactivation_hook(__FILE__, array('FAU_Person', 'deactivation'));
 
+require_once('shortcodes/fau-person-shortcodes.php');     
+require_once('metaboxes/fau-person-metaboxes.php');
+
+
 class FAU_Person {
 
-    const version = '1.0.0';
+    const version = '1.0.1';
     const option_name = '_fau_person';
     const version_option_name = '_fau_person_version';
     const textdomain = 'fau-person';
@@ -60,7 +64,7 @@ class FAU_Person {
         define('FAU_PERSON_FILE_PATH', FAU_PERSON_ROOT . '/' . basename(__FILE__));
         define('FAU_PERSON_URL', plugins_url('/', __FILE__));
         define('FAU_PERSON_TEXTDOMAIN', self::textdomain);
-        require_once('metaboxes/fau-person-metaboxes.php');
+
         
         load_plugin_textdomain(self::textdomain, false, sprintf('%s/languages/', dirname(plugin_basename(__FILE__))));
         
@@ -71,7 +75,7 @@ class FAU_Person {
         add_action( 'init', array($this, 'register_persons_taxonomy') );
         add_action( 'init', array($this, 'be_initialize_cmb_meta_boxes'), 9999 );
         //add_action( 'restrict_manage_posts', array($this, 'person_restrict_manage_posts') );
-        
+        add_filter( 'cmb_meta_boxes', 'fau_person_metaboxes' );
         add_filter('single_template', array($this, 'include_template_function'));
         //add_filter('pre_get_posts', array($this, 'person_post_types_admin_order'));
 
@@ -180,8 +184,9 @@ class FAU_Person {
         //require_once('widgets/fau-person-widget.php');    
     }
     
-    private static function add_shortcodes() {
-        require_once('shortcodes/fau-person-shortcodes.php');            
+    private static function add_shortcodes() {        
+        add_shortcode('person', 'fau_person_shortcode' );
+        add_shortcode('persons', 'fau_persons_shortcode');
     }
 
     public static function register_person_post_type() {

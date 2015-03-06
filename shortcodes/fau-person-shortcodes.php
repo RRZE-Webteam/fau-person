@@ -1,8 +1,7 @@
 <?php
 
-    add_shortcode('person', 'fau_person' );
-    add_shortcode('persons', 'fau_persons');
-    
+
+ if(!function_exists('fau_person')) {   
     function fau_person( $atts, $content = null) {
             extract(shortcode_atts(array(
                     "slug" => 'slug',
@@ -33,7 +32,9 @@
                 return sprintf(__('Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $slug);
             }
     }
+ }
 
+ if(!function_exists('fau_persons')) {
     function fau_persons( $atts, $content = null) {
             extract(shortcode_atts(array(
                     "category" => 'category',
@@ -74,7 +75,9 @@
 
             return $content;
     }
+ }
 
+ if(!function_exists('fau_person_markup')) {
     function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showmail, $showtelefon)
     {
 
@@ -133,5 +136,7 @@
 
             return $content;
     }
+ }
+
    
 ?>
