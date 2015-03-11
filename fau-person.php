@@ -3,7 +3,7 @@
 /**
  * Plugin Name: FAU Person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: RRZE-Webteam (Karin Kimpan)
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -34,16 +34,16 @@ require_once('shortcodes/fau-person-shortcodes.php');
 require_once('metaboxes/fau-person-metaboxes.php');
 
 
+
+
 class FAU_Person {
 
-    const version = '1.0.1';
+    const version = '1.0.2';
     const option_name = '_fau_person';
     const version_option_name = '_fau_person_version';
     const textdomain = 'fau-person';
     const php_version = '5.3'; // Minimal erforderliche PHP-Version
     const wp_version = '4.0'; // Minimal erforderliche WordPress-Version
-
-    protected static $post_types = 'person';
     
     public static $options;
 
@@ -74,7 +74,7 @@ class FAU_Person {
         add_action('init', array (__CLASS__, 'register_person_post_type'));
         add_action( 'init', array($this, 'register_persons_taxonomy') );
         add_action( 'init', array($this, 'be_initialize_cmb_meta_boxes'), 9999 );
-        //add_action( 'restrict_manage_posts', array($this, 'person_restrict_manage_posts') );
+        add_action( 'restrict_manage_posts', array($this, 'person_restrict_manage_posts') );
         add_filter( 'cmb_meta_boxes', 'fau_person_metaboxes' );
         add_filter('single_template', array($this, 'include_template_function'));
         //add_filter('pre_get_posts', array($this, 'person_post_types_admin_order'));
@@ -92,22 +92,19 @@ class FAU_Person {
         flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind
 
         // CPT-Capabilities für die Administrator-Rolle zuweisen
-        /*
-        foreach(self::$post_types as $cap_type) {
-            $caps = self::get_caps($cap_type);
-            self::add_caps('administrator', $caps);
-        }    
-         */    
+        // 
+        $caps = self::get_caps('person');
+        self::add_caps('administrator', $caps);
+        //self::add_caps('editor', $caps);
+           
     }
     
     public static function deactivation() {       
         // CPT-Capabilities aus der Administrator-Rolle entfernen
-        /*
-        foreach(self::$post_types as $cap_type) {
-            $caps = self::get_caps($cap_type);
+            $caps = self::get_caps('person');
             self::remove_caps('administrator', $caps);
-        }
-         */
+            //self::remove_caps('editor', $caps);
+         
     }
 
     private static function version_compare() {
