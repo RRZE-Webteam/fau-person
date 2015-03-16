@@ -4,23 +4,27 @@
 
 class FAUPersonWidget extends WP_Widget
 {
-	function FAUPersonWidget()
-	{
-		$widget_ops = array('classname' => 'FAUPersonWidget', 'description' => __('Personen-Visitenkarte anzeigen', 'fau') );
-		$this->WP_Widget('FAUPersonWidget', 'Personen-Visitenkarte', $widget_ops);
+	public function __construct() {
+            parent::__construct(
+                    'FAUPersonWidget',
+                    __('Personen-Visitenkarte', FAU_PERSON_TEXTDOMAIN),
+                    array('description' => __('Personen-Visitenkarte anzeigen', FAU_PERSON_TEXTDOMAIN), 'class' => 'FAUPersonWidget')
+            );
 	}
 
-	function form($instance)
+	public function form($instance)
 	{
-		$instance = wp_parse_args( (array) $instance, array( 'id' => -1, 'title' => '' ) );
+            
+            $default = array(
+                'title' => '',
+                'id' => '',
+            );
+		$instance = wp_parse_args( (array) $instance, $default );
 		$id = $instance['id'];
 		$title = $instance['title'];
 		
-		//$persons = query_posts('post_type=person');
-		$persons = get_posts(array('post_type' => 'person', 'posts_per_page' => 9999));
-                
-                
-		
+                $persons = new WP_Query(array('post_type' => 'person', 'posts_per_page' => -1));
+					           		
 		if(!empty($persons->post_title)) {
 			$name = $persons->post_title;
 		}
@@ -28,18 +32,20 @@ class FAUPersonWidget extends WP_Widget
 		{
 			$name = $this->get_field_id('firstname').' '.$this->get_field_id('lastname');
 		}
-		
 		echo '<p>';
-			echo '<label for="'.$this->get_field_id('title').'">'. __('Titel', 'fau'). ': ';
+			echo '<label for="'.$this->get_field_id('title').'">'. __('Titel', FAU_PERSON_TEXTDOMAIN). ': ';
 				echo '<input type="text" id="'.$this->get_field_id('title').'" name="'.$this->get_field_name('title').'" value="'.esc_attr($title).'" />';
 			echo '</label>';
 		echo '</p>';
-		
+
 		echo '<p>';
-			echo '<label for="'.$this->get_field_id('id').'">' . __('Person', 'fau'). ': ';
-				echo '<select id="'.$this->get_field_id('id').'" name="'.$this->get_field_name('id').'">';
-					foreach($persons as $item)
+			echo '<label for="'.$this->get_field_id('id').'">' . __('Person', FAU_PERSON_TEXTDOMAIN). ': ';
+
+                        echo '<select id="'.$this->get_field_id('id').'" name="'.$this->get_field_name('id').'">';
+		
+                                foreach($persons->posts as $item)
 					{
+                                      
 						echo '<option value="'.$item->ID.'"';
 							if($item->ID == esc_attr($id)) echo ' selected';
 						echo '>'.$item->post_title.'</option>';
@@ -49,7 +55,7 @@ class FAUPersonWidget extends WP_Widget
 		echo '</p>';     
 	}
 
-	function update($new_instance, $old_instance)
+	public function update($new_instance, $old_instance)
 	{
 		$instance = $old_instance;
 		$instance['id'] = $new_instance['id'];
@@ -57,7 +63,7 @@ class FAUPersonWidget extends WP_Widget
 		return $instance;
 	}
 
-	function widget($args, $instance)
+	public function widget($args, $instance)
 	{
 		extract($args, EXTR_SKIP);
 
@@ -97,7 +103,7 @@ class FAUPersonWidget extends WP_Widget
 							if(get_post_meta($id, 'fau_person_email', true))			$content .= '<li class="person-info person-info-email"><a href="mailto:'.get_post_meta($id, 'fau_person_email', true).'">'.get_post_meta($id, 'email', true).'</a></li>';
 							if(get_post_meta($id, 'fau_person_url', true))		$content .= '<li class="person-info person-info-www"><a href="http://'.get_post_meta($id, 'fau_person_url', true).'">'.get_post_meta($id, 'fau_person_url', true).'</a></li>';
 							if(get_post_meta($id, 'fau_person_contactPoint', true))		$content .= '<li class="person-info person-info-address">'.get_post_meta($id, 'fau_person_contactPoint', true).'</li>';
-							if(get_post_meta($id, 'fau_person_workLocation', true))			$content .= '<li class="person-info person-info-room">' . __('Raum', 'fau') . ' '.get_post_meta($id, 'fau_person_workLocation', true).'</li>';
+							if(get_post_meta($id, 'fau_person_workLocation', true))			$content .= '<li class="person-info person-info-room">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' '.get_post_meta($id, 'fau_person_workLocation', true).'</li>';
 							//	if(get_post_meta($id, 'fau_person_description', true))		$content .= '<div class="person-info person-info-description">'.get_post_meta($id, 'fau_person_description', true).'</div>';
 						$content .= '</ul>';
 					$content .= '</div>';

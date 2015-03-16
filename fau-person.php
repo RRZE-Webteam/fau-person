@@ -32,7 +32,7 @@ register_deactivation_hook(__FILE__, array('FAU_Person', 'deactivation'));
 
 require_once('shortcodes/fau-person-shortcodes.php');     
 require_once('metaboxes/fau-person-metaboxes.php');
-//require_once('widgets/fau-person-widget.php');    
+require_once('widgets/fau-person-widget.php');    
 
 
 
@@ -77,7 +77,7 @@ class FAU_Person {
         add_action( 'init', array($this, 'be_initialize_cmb_meta_boxes'), 9999 );
         add_action( 'restrict_manage_posts', array($this, 'person_restrict_manage_posts') );
         add_action('admin_menu', array($this, 'add_help_tabs'));
-        //add_action('widgets_init', array(__CLASS__, 'register_widgets'));
+        add_action('widgets_init', array(__CLASS__, 'register_widgets'));
         add_filter( 'cmb_meta_boxes', 'fau_person_metaboxes' );
         add_filter('single_template', array($this, 'include_template_function'));
         //add_filter('pre_get_posts', array($this, 'person_post_types_admin_order'));
