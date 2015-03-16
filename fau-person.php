@@ -3,7 +3,7 @@
 /**
  * Plugin Name: FAU Person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 1.0.2
+ * Version: 1.0.3
  * Author: RRZE-Webteam (Karin Kimpan)
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -32,13 +32,14 @@ register_deactivation_hook(__FILE__, array('FAU_Person', 'deactivation'));
 
 require_once('shortcodes/fau-person-shortcodes.php');     
 require_once('metaboxes/fau-person-metaboxes.php');
+//require_once('widgets/fau-person-widget.php');    
 
 
 
 
 class FAU_Person {
 
-    const version = '1.0.2';
+    const version = '1.0.3';
     const option_name = '_fau_person';
     const version_option_name = '_fau_person_version';
     const textdomain = 'fau-person';
@@ -75,11 +76,13 @@ class FAU_Person {
         add_action( 'init', array($this, 'register_persons_taxonomy') );
         add_action( 'init', array($this, 'be_initialize_cmb_meta_boxes'), 9999 );
         add_action( 'restrict_manage_posts', array($this, 'person_restrict_manage_posts') );
+        add_action('admin_menu', array($this, 'add_help_tabs'));
+        //add_action('widgets_init', array(__CLASS__, 'register_widgets'));
         add_filter( 'cmb_meta_boxes', 'fau_person_metaboxes' );
         add_filter('single_template', array($this, 'include_template_function'));
         //add_filter('pre_get_posts', array($this, 'person_post_types_admin_order'));
 
-        self::register_widgets();
+        //self::register_widgets();
         self::add_shortcodes();        
     }
 
@@ -111,11 +114,11 @@ class FAU_Person {
         $error = '';
 
         if (version_compare(PHP_VERSION, self::php_version, '<')) {
-            $error = sprintf(__('Ihre PHP-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die PHP-Version %s.', self::textdomain), PHP_VERSION, self::php_version);
+            $error = sprintf(__('Ihre PHP-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die PHP-Version %s.', FAU_PERSON_TEXTDOMAIN), PHP_VERSION, self::php_version);
         }
 
         if (version_compare($GLOBALS['wp_version'], self::wp_version, '<')) {
-            $error = sprintf(__('Ihre Wordpress-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die Wordpress-Version %s.', self::textdomain), $GLOBALS['wp_version'], self::wp_version);
+            $error = sprintf(__('Ihre Wordpress-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die Wordpress-Version %s.', FAU_PERSON_TEXTDOMAIN), $GLOBALS['wp_version'], self::wp_version);
         }
 
         if (!empty($error)) {
@@ -177,13 +180,126 @@ class FAU_Person {
         }        
     }    
     
-    private static function register_widgets() {
-        //require_once('widgets/fau-person-widget.php');    
+    public function add_help_tabs() {
+        add_action('load-post-new.php', array($this, 'help_menu_new_person'));
+        add_action('load-post.php', array($this, 'help_menu_new_person'));
+        add_action('load-edit.php', array($this, 'help_menu_person'));
+        add_action('load-edit-tags.php', array($this, 'help_menu_persons_category'));
     }
     
-    private static function add_shortcodes() {        
-        add_shortcode('person', 'fau_person_shortcode' );
-        add_shortcode('persons', 'fau_persons_shortcode');
+    public function help_menu_new_person() {
+
+        $content_overview = array(
+            '<p>' . __('Geben Sie auf dieser Seite alle gewünschten Daten zu einer Person ein. Die Einbindung der Personendaten erfolgt dann in den Beiträgen oder Seiten über einen Shortcode oder ein Widget.', FAU_PERSON_TEXTDOMAIN) . '</p>'
+        );
+
+        $help_tab_overview = array(
+            'id' => 'overview',
+            'title' => __('Personen eingeben', FAU_PERSON_TEXTDOMAIN),
+            'content' => implode(PHP_EOL, $content_overview),
+        );
+
+        $help_sidebar = __('<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', FAU_PERSON_TEXTDOMAIN);
+
+        $screen = get_current_screen();
+
+        if ($screen->id != 'person') {
+            return;
+        }
+
+        $screen->add_help_tab($help_tab_overview);
+
+        $screen->set_help_sidebar($help_sidebar);
+    }
+    
+    public function help_menu_person() {
+
+        $content_overview = array(
+            '<p><strong>' . __('Einbindung der Personen-Visitenkarte über Shortcode', FAU_PERSON_TEXTDOMAIN) . '</strong></p>',
+            '<p>' . __('Binden Sie die gewünschten Personendaten mit dem Shortcode [person] mit folgenden Parametern auf Ihren Seiten oder Beiträgen ein:', FAU_PERSON_TEXTDOMAIN) . '</p>',
+            '<ol>',
+            '<li>' . __('zwingend:', FAU_PERSON_TEXTDOMAIN),
+            '<ul>',
+            '<li>' . __('slug: Titel des Personenbeitrags', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '</ul>', 
+            '</li>',
+            '<li>' . __('optional, wird standardmäßig angezeigt (wenn keine Anzeige gewünscht ist, Parameter=0 eingeben):', FAU_PERSON_TEXTDOMAIN),           
+            '<ul>',
+            '<li>' . __('showtelefon: Telefonnummer', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>' . __('showtitle: Titel (Präfix)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>' . __('showsuffix: Abschluss (Suffix)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>' . __('showposition: Position/Funktion', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>' . __('showinstitution: Institution/Abteilung', FAU_PERSON_TEXTDOMAIN) . '</li>',      
+            '<li>' . __('showmail: E-Mail', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '</ul>',
+            '</li>',
+            '<li>' . __('optional, wird standardmäßig nicht angezeigt (wenn Anzeige gewünscht ist, Parameter=1 eingeben):', FAU_PERSON_TEXTDOMAIN),           
+            '<ul>',
+            '<li>' . __('showfax: Faxnummer', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>' . __('showwebsite: URL', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>' . __('showaddress: Adressangaben', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>' . __('showroom: Zimmernummer', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>' . __('showdescription: Feld Freitext', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>' . __('extended: alle vorherigen Angaben', FAU_PERSON_TEXTDOMAIN) . '</li>',  
+            '<li>' . __('showthumb: Personenbild', FAU_PERSON_TEXTDOMAIN) . '</li>',            
+            '<li>' . __('showpubs: Publikationen', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>' . __('showoffice: Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . '</li>', 
+            '</ul>',
+            '</li>',            
+            '</ol>',
+        );
+
+        $help_tab_overview = array(
+            'id' => 'overview',
+            'title' => __('Übersicht', FAU_PERSON_TEXTDOMAIN),
+            'content' => implode(PHP_EOL, $content_overview),
+        );
+
+        $help_sidebar = __('<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', FAU_PERSON_TEXTDOMAIN);
+
+        $screen = get_current_screen();
+
+        if ($screen->id != 'edit-person') {
+            return;
+        }
+
+        $screen->add_help_tab($help_tab_overview);
+
+        $screen->set_help_sidebar($help_sidebar);
+    }    
+    
+    public function help_menu_persons_category() {
+
+        $content_overview = array(
+            '<p><strong>' . __('Zuordnung von Personen zu verschiedenen Kategorien', FAU_PERSON_TEXTDOMAIN) . '</strong></p>',
+        );
+
+        $help_tab_overview = array(
+            'id' => 'overview',
+            'title' => __('Übersicht', FAU_PERSON_TEXTDOMAIN),
+            'content' => implode(PHP_EOL, $content_overview),
+        );
+
+        $help_sidebar = __('<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', FAU_PERSON_TEXTDOMAIN);
+
+        $screen = get_current_screen();
+
+        if ($screen->id != 'edit-persons_category') {
+            return;
+        }
+
+        $screen->add_help_tab($help_tab_overview);
+
+        $screen->set_help_sidebar($help_sidebar);
+    }    
+    
+    public static function register_widgets() {
+            register_widget( 'FAUPersonWidget' );
+    }
+    
+    private static function add_shortcodes() {     
+        add_shortcode('person', 'fau_person' );
+        add_shortcode('persons', 'fau_persons');
     }
 
     public static function register_person_post_type() {
