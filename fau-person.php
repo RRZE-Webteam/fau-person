@@ -3,7 +3,7 @@
 /**
  * Plugin Name: FAU Person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 1.0.3
+ * Version: 1.0.4
  * Author: RRZE-Webteam (Karin Kimpan)
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -31,7 +31,7 @@ register_activation_hook(__FILE__, array('FAU_Person', 'activation'));
 register_deactivation_hook(__FILE__, array('FAU_Person', 'deactivation'));
 
 require_once('shortcodes/fau-person-shortcodes.php');     
-require_once('metaboxes/fau-person-metaboxes.php');
+//require_once('metaboxes/fau-person-metaboxes.php');
 require_once('widgets/fau-person-widget.php');    
 
 
@@ -39,7 +39,7 @@ require_once('widgets/fau-person-widget.php');
 
 class FAU_Person {
 
-    const version = '1.0.3';
+    const version = '1.0.4';
     const option_name = '_fau_person';
     const version_option_name = '_fau_person_version';
     const textdomain = 'fau-person';
@@ -74,11 +74,13 @@ class FAU_Person {
         add_action('init', array(__CLASS__, 'update_version'));
         add_action('init', array (__CLASS__, 'register_person_post_type'));
         add_action( 'init', array($this, 'register_persons_taxonomy') );
-        add_action( 'init', array($this, 'be_initialize_cmb_meta_boxes'), 9999 );
+        //add_action( 'init', array($this, 'be_initialize_cmb_meta_boxes'), 9999 );
+        add_action('init', array($this, 'include_cmb'), 999);
         add_action( 'restrict_manage_posts', array($this, 'person_restrict_manage_posts') );
         add_action('admin_menu', array($this, 'add_help_tabs'));
         add_action('widgets_init', array(__CLASS__, 'register_widgets'));
-        add_filter( 'cmb_meta_boxes', 'fau_person_metaboxes' );
+        add_action('admin_enqueue_scripts', array($this, 'add_admin_script'));
+        //add_filter( 'cmb_meta_boxes', 'fau_person_metaboxes' );
         add_filter('single_template', array($this, 'include_template_function'));
         //add_filter('pre_get_posts', array($this, 'person_post_types_admin_order'));
 
@@ -199,7 +201,7 @@ class FAU_Person {
             'content' => implode(PHP_EOL, $content_overview),
         );
 
-        $help_sidebar = __('<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', FAU_PERSON_TEXTDOMAIN);
+        $help_sidebar = sprintf('<p><strong>%1$s:</strong></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">%2$s</a></p>', __('Für mehr Information', FAU_PERSON_TEXTDOMAIN), __('RRZE-Webteam in Github', FAU_PERSON_TEXTDOMAIN));
 
         $screen = get_current_screen();
 
@@ -220,30 +222,30 @@ class FAU_Person {
             '<ol>',
             '<li>' . __('zwingend:', FAU_PERSON_TEXTDOMAIN),
             '<ul>',
-            '<li>' . __('slug: Titel des Personenbeitrags', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>slug: ' . __('Titel des Personenbeitrags', FAU_PERSON_TEXTDOMAIN) . '</li>',
             '</ul>', 
             '</li>',
             '<li>' . __('optional, wird standardmäßig angezeigt (wenn keine Anzeige gewünscht ist, Parameter=0 eingeben):', FAU_PERSON_TEXTDOMAIN),           
             '<ul>',
-            '<li>' . __('showtelefon: Telefonnummer', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>' . __('showtitle: Titel (Präfix)', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>' . __('showsuffix: Abschluss (Suffix)', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>' . __('showposition: Position/Funktion', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>' . __('showinstitution: Institution/Abteilung', FAU_PERSON_TEXTDOMAIN) . '</li>',      
-            '<li>' . __('showmail: E-Mail', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>showtelefon: ' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>showtitle: ' . __('Titel (Präfix)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>showsuffix: ' . __('Abschluss (Suffix)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>showposition: ' . __('Position/Funktion', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>showinstitution: ' . __('Institution/Abteilung', FAU_PERSON_TEXTDOMAIN) . '</li>',      
+            '<li>showmail: ' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . '</li>',
             '</ul>',
             '</li>',
             '<li>' . __('optional, wird standardmäßig nicht angezeigt (wenn Anzeige gewünscht ist, Parameter=1 eingeben):', FAU_PERSON_TEXTDOMAIN),           
             '<ul>',
-            '<li>' . __('showfax: Faxnummer', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>' . __('showwebsite: URL', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>' . __('showaddress: Adressangaben', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>' . __('showroom: Zimmernummer', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>' . __('showdescription: Feld Freitext', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>' . __('extended: alle vorherigen Angaben', FAU_PERSON_TEXTDOMAIN) . '</li>',  
-            '<li>' . __('showthumb: Personenbild', FAU_PERSON_TEXTDOMAIN) . '</li>',            
-            '<li>' . __('showpubs: Publikationen', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>' . __('showoffice: Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . '</li>', 
+            '<li>showfax: ' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>showwebsite: ' . __('URL', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>showaddress: ' . __('Adressangaben', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>showroom: ' . __('Zimmernummer', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>showdescription: ' . __('Feld Freitext', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>extended: ' . __('alle vorherigen Angaben', FAU_PERSON_TEXTDOMAIN) . '</li>',  
+            '<li>showthumb: ' . __('Personenbild', FAU_PERSON_TEXTDOMAIN) . '</li>',            
+            '<li>showpubs: ' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>showoffice: ' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . '</li>', 
             '</ul>',
             '</li>',            
             '</ol>',
@@ -255,7 +257,7 @@ class FAU_Person {
             'content' => implode(PHP_EOL, $content_overview),
         );
 
-        $help_sidebar = __('<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', FAU_PERSON_TEXTDOMAIN);
+        $help_sidebar = sprintf('<p><strong>%1$s:</strong></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">%2$s</a></p>', __('Für mehr Information', FAU_PERSON_TEXTDOMAIN), __('RRZE-Webteam in Github', FAU_PERSON_TEXTDOMAIN));
 
         $screen = get_current_screen();
 
@@ -280,8 +282,8 @@ class FAU_Person {
             'content' => implode(PHP_EOL, $content_overview),
         );
 
-        $help_sidebar = __('<p><strong>Für mehr Information:</strong></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">RRZE-Webteam in Github</a></p>', FAU_PERSON_TEXTDOMAIN);
-
+        $help_sidebar = sprintf('<p><strong>%1$s:</strong></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">%2$s</a></p>', __('Für mehr Information', FAU_PERSON_TEXTDOMAIN), __('RRZE-Webteam in Github', FAU_PERSON_TEXTDOMAIN));
+        
         $screen = get_current_screen();
 
         if ($screen->id != 'edit-persons_category') {
@@ -323,12 +325,67 @@ class FAU_Person {
         );
     }
     
+    public function add_admin_script($hook) {
+        global $post_type;
+        if('person' != $post_type) {
+            return;
+        }
+        wp_register_script('admin', plugin_dir_url( __FILE__ ) . '/js/admin.js', array('jquery'), false, true);
+
+        if ( 'post-new.php' == $hook) {
+            wp_enqueue_script('admin');
+            return;
+        } 
+        if ('post.php' == $hook) {       
+            wp_enqueue_script('admin');
+            return;
+        }
+    }
+
+/*
     public function be_initialize_cmb_meta_boxes() {
         if ( !class_exists( 'cmb_Meta_Box' ) ) {
             require_once('cmb/init.php' );
         }
     }    
+*/
 
+    /*
+     * Das CMB-Framework wird eingebunden und initialisiert.
+     * @return void
+     */
+    public function include_cmb() {
+        // Nur im Admin-Bereich aktivieren.
+        if(!is_admin()) {
+            return;
+        }
+        
+        // Das CMB-Framework wird eingebunden.
+        require_once(plugin_dir_path(__FILE__) . 'includes/cmb/cmb-meta-box.php');
+        require_once(plugin_dir_path(__FILE__) . 'includes/cmb/cmb-field.php');
+        require_once(plugin_dir_path(__FILE__) . 'includes/cmb/cmb-helper.php');
+        
+        // Die Meta-Box-Einstellungen werden eingebunden.
+        $meta_boxes = $this->cmb_meta_boxes();
+        if (!empty( $meta_boxes)) {
+            foreach ($meta_boxes as $meta_box) {
+                $cmb_meta_box = new CMB_Meta_Box($meta_box);
+                $cmb_meta_box::$textdomain = self::textdomain;
+            }
+        }
+        
+    }
+
+    /*
+     * Die CMB-Meta-Box-Einstellungen werden eingebunden.
+     * @return array
+     */
+    private function cmb_meta_boxes() {
+        $meta_boxes = array();
+        include_once(plugin_dir_path(__FILE__) . 'metaboxes/fau-person-metaboxes.php');
+        return $meta_boxes;
+    }    
+    
     public function person_restrict_manage_posts() {
         global $typenow;
         if ($typenow == "person") {

@@ -3,8 +3,26 @@
 // In dieser Datei werden alle Metaboxen und Felder für den Custom Post Type person definiert
 // Basis dafür Custom Metaboxes and Fields for WordPress, siehe auch fau-person/metabox/readme.md
 
-function fau_person_metaboxes( $meta_boxes ) {
+//function fau_person_metaboxes( $meta_boxes ) {
     $prefix = 'fau_person_'; // Prefix for all fields
+/*    $meta_boxes['fau_person_postdata'] = array(
+        'id' => 'fau_person_postdata',
+        'title' => __( 'Infos zum Personenbeitrag', FAU_PERSON_TEXTDOMAIN ),
+        'pages' => array('person'), // post type
+        'context' => 'normal',
+        'priority' => 'default',
+        'show_names' => true, // Show field names on the left
+        'readonly' => true,
+        'fields' => array(
+            array(
+                'name' => __('ID des Beitrags', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Zum Aufruf der Person im shortcode',
+                'id' => $prefix . 'id',
+                'type' => 'text',
+                'value' => get_post($id),
+            ),
+        )        
+    );*/
     // Zuordnung - fau_person_orga
     $meta_boxes['fau_person_orga'] = array(
         'id' => 'fau_person_orga',
@@ -60,10 +78,10 @@ function fau_person_metaboxes( $meta_boxes ) {
                 'desc' => '',
                 'type' => 'select',
                 'options' => array(
-                    '' => 'keine Auswahl',
-                    'Dr.' => 'Doktor',
-                    'Prof.' => 'Professor',
-                    'Prof. Dr.' => 'Professor Doktor'
+                    '' => __('keine Auswahl', FAU_PERSON_TEXTDOMAIN),
+                    'Dr.' => __('Doktor', FAU_PERSON_TEXTDOMAIN),
+                    'Prof.' => __('Professor', FAU_PERSON_TEXTDOMAIN),
+                    'Prof. Dr.' => __('Professor Doktor', FAU_PERSON_TEXTDOMAIN)
                 ),
                 'id' => $prefix . 'honorificPrefix'
             ),
@@ -122,8 +140,19 @@ function fau_person_metaboxes( $meta_boxes ) {
                 'id' => $prefix . 'workLocation'
             ),
             array(
-                'name' => __('Telefon', FAU_PERSON_TEXTDOMAIN),
+                'name' => __('Standort Telefonanschluss', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
+                'type' => 'radio',
+                'id' => $prefix . 'telephone_select',
+                'options' => array(
+                    'erl' => __('Uni-intern, Standort Erlangen', FAU_PERSON_TEXTDOMAIN),
+                    'nbg' => __('Uni-intern, Standort Nürnberg', FAU_PERSON_TEXTDOMAIN),
+                    'standard' => __('Außerhalb der Universität', FAU_PERSON_TEXTDOMAIN)
+                )
+            ),
+            array(
+                'name' => __('Telefon', FAU_PERSON_TEXTDOMAIN),
+                'desc' => __('Bitte geben Sie uni-interne Nummern für Erlangen in der Form 09131 85-22222 und für Nürnberg in der Form 0911 5302-555 an.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text',
                 'id' => $prefix . 'telephone'
             ),
@@ -189,5 +218,5 @@ function fau_person_metaboxes( $meta_boxes ) {
     );
     // Synchronisierung mit externen Daten - fau_person_sync ab hier
 
-    return $meta_boxes;
-}
+//    return $meta_boxes;
+//}
