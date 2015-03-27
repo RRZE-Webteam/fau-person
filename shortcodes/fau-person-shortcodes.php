@@ -5,6 +5,7 @@
     function fau_person( $atts, $content = null) {
             extract(shortcode_atts(array(
                     "slug" => 'slug',
+                    "id" => FALSE,
                     "showlink" => FALSE,
                     "showfax" => FALSE,
                     "showwebsite" => FALSE,
@@ -22,7 +23,11 @@
                     "showtelefon" => TRUE,
                     "extended" => FALSE,
                     ), $atts));
+ 
 
+            if(!empty($id)) {
+                   $slug = get_post($id)->post_title;
+            }
             $posts = get_posts(array('name' => $slug, 'post_type' => 'person', 'post_status' => 'publish'));
             if ($posts) {
                 $post = $posts[0];
@@ -80,52 +85,74 @@
  if(!function_exists('fau_person_markup')) {
     function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showmail, $showtelefon)
     {
-
-            $content = '<div class="person content-person">';			
+            $honorificPrefix = get_post_meta($id, 'fau_person_honorificPrefix', true);
+            $givenName = get_post_meta($id, 'fau_person_givenName', true);
+            $familyName = get_post_meta($id, 'fau_person_familyName', true);
+            $honorificSuffix = get_post_meta($id, 'fau_person_honorificSuffix', true);
+            $jobTitle = get_post_meta($id, 'fau_person_jobTitle', true);
+            $worksFor = get_post_meta($id, 'fau_person_worksFor', true);
+            $telephone = get_post_meta($id, 'fau_person_telephone', true);
+            $faxNumber = get_post_meta($id, 'fau_person_faxNumber', true);
+            $email = get_post_meta($id, 'fau_person_email', true);
+            $url = get_post_meta($id, 'fau_person_url', true);
+            $streetAddress = get_post_meta($id, 'fau_person_streetAddress', true);
+            $postalCode = get_post_meta($id, 'fau_person_postalCode', true);
+            $addressLocality = get_post_meta($id, 'fau_person_addressLocality', true);
+            $addressCountry = get_post_meta($id, 'fau_person_addressCountry', true);
+            $workLocation = get_post_meta($id, 'fau_person_workLocation', true);
+            $hoursAvailable = get_post_meta($id, 'fau_person_hoursAvailable', true);
+            $pubs = get_post_meta($id, 'fau_person_pubs', true);
+            $freitext = get_post_meta($id, 'fau_person_freitext', true);
+            $link = get_post_meta($id, 'fau_person_link', true);
+            
+            
+            
+        
+            $content = '<div class="person content-person" itemscope itemtype="http://schema.org/Person">';			
                     $content .= '<div class="row">';
 
                             if(has_post_thumbnail($id) && $showthumb)
                             {
-                                    $content .= '<div class="span1 span-small">';
+                                    $content .= '<div class="span1 span-small" itemprop="image">';
                                             $content .= get_the_post_thumbnail($id, 'person-thumb-bigger');
                                     $content .= '</div>';
                             }
 
                             $content .= '<div class="span3">';
                                     $content .= '<h3>';
-                                            if($showtitle && get_post_meta($id, 'fau_person_honorificPrefix', true)) 	$content .= get_post_meta($id, 'fau_person_honorificPrefix', true) . ' ';
+                                            if($showtitle && $honorificPrefix) 	$content .= $honorificPrefix . ' ';
                                             $content .= get_the_title($id);
-                                            if($showsuffix && get_post_meta($id, 'fau_person_honorificSuffix', true)) 	$content .= ' '.get_post_meta($id, 'fau_person_honorificSuffix', true);
+                                            if($showsuffix && $honorificSuffix) 	$content .= ' '.$honorificSuffix;
                                     $content .= '</h3>';
                                     $content .= '<ul class="person-info">';
-                                            if($showposition && get_post_meta($id, 'fau_person_jobTitle', true)) 				$content .= '<li class="person-info person-info-position"><strong>'.get_post_meta($id, 'fau_person_jobTitle', true).'</strong></li>';
-                                            if($showinstitution && get_post_meta($id, 'fau_person_worksFor', true))			$content .= '<li class="person-info person-info-institution">'.get_post_meta($id, 'fau_person_worksFor', true).'</li>';
-                                            if($showtelefon && get_post_meta($id, 'fau_person_telephone', true))					$content .= '<li class="person-info person-info-phone">'.get_post_meta($id, 'fau_person_telephone', true).'</li>';
-                                            if(($extended || $showfax) && get_post_meta($id, 'fau_person_faxNumber', true))		$content .= '<li class="person-info person-info-fax">'.get_post_meta($id, 'fau_person_faxNumber', true).'</li>';
-                                            if($showmail && get_post_meta($id, 'fau_person_email', true))					$content .= '<li class="person-info person-info-email"><a href="mailto:'.strtolower(get_post_meta($id, 'fau_person_email', true)).'">'.strtolower(get_post_meta($id, 'fau_person_email', true)).'</a></li>';
-                                            if(($extended || $showwebsite) && get_post_meta($id, 'fau_person_url', true))	$content .= '<li class="person-info person-info-www"><a href="'.get_post_meta($id, 'fau_person_url', true).'">'.get_post_meta($id, 'fau_person_url', true).'</a></li>';
+                                            if($showposition && $jobTitle) 				$content .= '<li class="person-info-position"><span class="screen-reader-text">'.__('Tätigkeit',FAU_PERSON_TEXTDOMAIN).': </span><strong><span itemprop="jobTitle">'.$jobTitle.'</span></strong></li>';
+                                            if($showinstitution && $worksFor)			$content .= '<li class="person-info-institution"><span class="screen-reader-text">'.__('Einrichtung',FAU_PERSON_TEXTDOMAIN).': </span><span itemprop="worksFor">'.$worksFor.'</span></li>';
+                                            if($showtelefon && $telephone)					$content .= '<li class="person-info-phone"><span class="screen-reader-text">'.__('Telefonnummer',FAU_PERSON_TEXTDOMAIN).': </span><span itemprop="telephone">'.$telephone.'</span></li>';
+                                            if(($extended || $showfax) && $faxNumber)		$content .= '<li class="person-info-fax"><span class="screen-reader-text">'.__('Faxnummer',FAU_PERSON_TEXTDOMAIN).': </span><span itemprop="faxNumber">'.$faxNumber.'</span></li>';
+                                            if($showmail && $email)					$content .= '<li class="person-info-email"><span class="screen-reader-text">'.__('E-Mail',FAU_PERSON_TEXTDOMAIN).': </span><a itemprop="email" href="mailto:'.strtolower($email).'">'.strtolower($email).'</a></li>';
+                                            if(($extended || $showwebsite) && $url)	$content .= '<li class="person-info-www"><span class="screen-reader-text">'.__('Webseite',FAU_PERSON_TEXTDOMAIN).': </span><a itemprop="url" href="'.$url.'">'.$url.'</a></li>';
                                             if(($extended || $showaddress)) {
-                                                //ACHTUNG: vorher css person-info-address (war Textarea)!!!
-                                                if(get_post_meta($id, 'fau_person_streetAddress', true))  $content .= '<li class="person-info person-info-street">'.get_post_meta($id, 'fau_person_streetAddress', true).'</li>';
-                                                if(get_post_meta($id, 'fau_person_postalCode', true) || get_post_meta($id, 'fau_person_addressLocality', true)) {
-                                                    $content .= '<li class="person-info person-info-city">';
-                                                    if(get_post_meta($id, 'fau_person_postalCode', true))	$content .= get_post_meta($id, 'fau_person_postalCode', true).' ';  
-                                                    if(get_post_meta($id, 'fau_person_addressLocality', true))	$content .= get_post_meta($id, 'fau_person_addressLocality', true);
+                                                //ACHTUNG: vorher css person-info-address (war Textarea bei FAU)!!!
+                                                if($streetAddress)  $content .= '<li class="person-info-street"><span class="screen-reader-text">'.__('Straße',FAU_PERSON_TEXTDOMAIN).': </span><span itemprop="streetAddress">'.$streetAddress.'</span></li>';
+                                                if($postalCode || $addressLocality) {
+                                                    $content .= '<li class="person-info-city"><span class="screen-reader-text">'.__('Wohnort',FAU_PERSON_TEXTDOMAIN).': </span>';
+                                                    if($postalCode)	$content .= '<span itemprop="postalCode">'.$postalCode.'</span> ';  
+                                                    if($addressLocality)	$content .= '<span itemprop="addressLocality">'.$addressLocality.'</span';
                                                     $content .= '</li>';
                                                 }
-                                                if(get_post_meta($id, 'fau_person_addressCountry', true))	$content .= '<li class="person-info person-info-country">'.get_post_meta($id, 'fau_person_addressCountry', true).'</li>';
+                                                if($addressCountry)	$content .= '<li class="person-info-country"><span class="screen-reader-text">'.__('Land',FAU_PERSON_TEXTDOMAIN).': </span><span itemprop="addressCountry">'.$addressCountry.'</span></li>';
                                                 
                                             }
-                                            if(($extended || $showroom) && get_post_meta($id, 'fau_person_workLocation', true))		$content .= '<li class="person-info person-info-room">' . __('Raum', FAU_PERSON_TEXTDOMAIN) .' '.get_post_meta($id, 'fau_person_workLocation', true).'</li>';
-                                            if($showoffice && get_post_meta($id, 'fau_person_hoursAvailable', true))		$content .= '<li class="person-info person-info-office">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) .': '.get_post_meta($id, 'fau_person_hoursAvailable', true).'</li>';
-                                            if($showpubs && get_post_meta($id, 'fau_person_pubs', true))		$content .= '<li class="person-info person-info-pubs">' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) .': '.get_post_meta($id, 'fau_person_Publikationen', true).'</li>';                                            
+                                            if(($extended || $showroom) && $workLocation)		$content .= '<li class="person-info-room"><span class="screen-reader-text">' . __('Raum', FAU_PERSON_TEXTDOMAIN) .' </span><span itemprop="workLocation">'.$workLocation.'</span></li>';
+                                            if($showoffice && $hoursAvailable)		$content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) .': </span><span itemprop="hoursAvailable">'.$hoursAvailable.'</span></li>';
+                                            if($showpubs && $pubs)		$content .= '<li class="person-info-pubs"><span class="screen-reader-text">' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) .': </span>'.$pubs.'</li>';                                            
                                             $content .= '</ul>';
 
                             $content .= '</div>';
                             $content .= '<div class="span3">';
-                                    if(($extended || $showdescription) && get_post_meta($id, 'fau_person_freitext', true))		$content .= '<div class="person-info person-info-description">'.get_post_meta($id, 'fau_person_freitext', true).'</div>';
-                                    if($showlink && get_post_meta($id, 'fau_person_link', true)) {
-                                            $content .= '<div class="person-info person-info-more"><a class="person-read-more" href="'.get_post_meta($id, 'fau_person_link', true).'">';
+                                    if(($extended || $showdescription) && $freitext)		$content .= '<div class="person-info-description">'.$freitext.'</div>';
+                                    if($showlink && $link) {
+                                            $content .= '<div class="person-info-more"><a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" class="person-read-more" href="'.$link.'">';
                                             $content .= __('Mehr', FAU_PERSON_TEXTDOMAIN) . ' ›</a></div>';
                                     }
 
