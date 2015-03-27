@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FAU-Person\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-11 17:15+0100\n"
+"POT-Creation-Date: 2015-03-27 15:17+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -18,87 +18,7 @@ msgstr ""
 "X-Generator: Poedit 1.6.5\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../cmb/helpers/cmb_Meta_Box_ajax.php:47
-msgid "Please Try Again"
-msgstr ""
-
-#: ../cmb/helpers/cmb_Meta_Box_ajax.php:131
-msgid "Remove Embed"
-msgstr ""
-
-#: ../cmb/helpers/cmb_Meta_Box_ajax.php:134
-#, php-format
-msgid "No oEmbed Results Found for %s. View more info at"
-msgstr ""
-
-#: ../cmb/helpers/cmb_Meta_Box_field.php:459
-msgid "Add Group"
-msgstr ""
-
-#: ../cmb/helpers/cmb_Meta_Box_field.php:460
-msgid "Remove Group"
-msgstr ""
-
-#: ../cmb/helpers/cmb_Meta_Box_types.php:250
-msgid "Add Row"
-msgstr ""
-
-#: ../cmb/helpers/cmb_Meta_Box_types.php:306
-#: ../cmb/helpers/cmb_Meta_Box_types.php:706
-#: ../cmb/helpers/cmb_Meta_Box_types.php:768
-msgid "Remove"
-msgstr ""
-
-#: ../cmb/helpers/cmb_Meta_Box_types.php:601
-#: ../cmb/helpers/cmb_Meta_Box_types.php:635
-msgid "No terms"
-msgstr ""
-
-#: ../cmb/helpers/cmb_Meta_Box_types.php:674
-#: ../cmb/helpers/cmb_Meta_Box_types.php:728
-msgid "Add or Upload File"
-msgstr ""
-
-#: ../cmb/helpers/cmb_Meta_Box_types.php:695
-#: ../cmb/helpers/cmb_Meta_Box_types.php:760
-msgid "Remove Image"
-msgstr ""
-
-#: ../cmb/helpers/cmb_Meta_Box_types.php:706
-#: ../cmb/helpers/cmb_Meta_Box_types.php:768
-msgid "File:"
-msgstr ""
-
-#: ../cmb/helpers/cmb_Meta_Box_types.php:706
-#: ../cmb/helpers/cmb_Meta_Box_types.php:768
-msgid "Download"
-msgstr ""
-
-#: ../cmb/init.php:258
-msgid "Clear"
-msgstr ""
-
-#: ../cmb/init.php:259
-msgid "Default"
-msgstr ""
-
-#: ../cmb/init.php:260
-msgid "Select Color"
-msgstr ""
-
-#: ../cmb/init.php:261
-msgid "Current Color"
-msgstr ""
-
-#: ../cmb/init.php:288
-msgid "Select / Deselect All"
-msgstr ""
-
-#: ../cmb/init.php:1179
-msgid "Save"
-msgstr ""
-
-#: ../fau-person.php:114
+#: ../fau-person.php:119
 #, php-format
 msgid ""
 "Ihre PHP-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die "
@@ -107,7 +27,7 @@ msgstr ""
 "Your server is running PHP version %s. Please upgrade at least to PHP "
 "version %s."
 
-#: ../fau-person.php:118
+#: ../fau-person.php:123
 #, php-format
 msgid ""
 "Ihre Wordpress-Version %s ist veraltet. Bitte aktualisieren Sie mindestens "
@@ -116,154 +36,327 @@ msgstr ""
 "Your Wordpress version is %s. Please upgrade at least to Wordpress version "
 "%s."
 
+#: ../fau-person.php:195
+msgid ""
+"Geben Sie auf dieser Seite alle gewünschten Daten zu einer Person ein. Die "
+"Einbindung der Personendaten erfolgt dann in den Beiträgen oder Seiten über "
+"einen Shortcode oder ein Widget."
+msgstr ""
+
 #: ../fau-person.php:200
+msgid "Personen eingeben"
+msgstr "Add persons"
+
+#: ../fau-person.php:204 ../fau-person.php:260 ../fau-person.php:285
+msgid "Für mehr Information"
+msgstr "Additional information"
+
+#: ../fau-person.php:204 ../fau-person.php:260 ../fau-person.php:285
+msgid "RRZE-Webteam in Github"
+msgstr "RRZE-Webteam on Github"
+
+#: ../fau-person.php:220
+msgid "Einbindung der Personen-Visitenkarte über Shortcode"
+msgstr ""
+
+#: ../fau-person.php:221
+msgid ""
+"Binden Sie die gewünschten Personendaten mit dem Shortcode [person] mit "
+"folgenden Parametern auf Ihren Seiten oder Beiträgen ein:"
+msgstr ""
+
+#: ../fau-person.php:223
+msgid "zwingend:"
+msgstr ""
+
+#: ../fau-person.php:225
+msgid "Titel des Personenbeitrags"
+msgstr ""
+
+#: ../fau-person.php:228
+msgid ""
+"optional, wird standardmäßig angezeigt (wenn keine Anzeige gewünscht ist, "
+"Parameter=0 eingeben):"
+msgstr ""
+
+#: ../fau-person.php:230 ../shortcodes/fau-person-shortcodes.php:130
+#: ../widgets/fau-person-widget.php:137
+msgid "Telefonnummer"
+msgstr "Phone number"
+
+#: ../fau-person.php:231 ../metaboxes/fau-person-metaboxes.php:77
+msgid "Titel (Präfix)"
+msgstr "Honorific prefix"
+
+#: ../fau-person.php:232 ../metaboxes/fau-person-metaboxes.php:107
+msgid "Abschluss (Suffix)"
+msgstr "Honorific suffix"
+
+#: ../fau-person.php:233 ../metaboxes/fau-person-metaboxes.php:36
+msgid "Position/Funktion"
+msgstr "Job title"
+
+#: ../fau-person.php:234 ../metaboxes/fau-person-metaboxes.php:42
+msgid "Institution/Abteilung"
+msgstr "Institution"
+
+#: ../fau-person.php:235 ../metaboxes/fau-person-metaboxes.php:177
+#: ../shortcodes/fau-person-shortcodes.php:132
+#: ../widgets/fau-person-widget.php:139
+msgid "E-Mail"
+msgstr "Email"
+
+#: ../fau-person.php:238
+msgid ""
+"optional, wird standardmäßig nicht angezeigt (wenn Anzeige gewünscht ist, "
+"Parameter=1 eingeben):"
+msgstr ""
+
+#: ../fau-person.php:240 ../shortcodes/fau-person-shortcodes.php:131
+#: ../widgets/fau-person-widget.php:138
+msgid "Faxnummer"
+msgstr "Fax number"
+
+#: ../fau-person.php:241
+msgid "URL"
+msgstr "URL"
+
+#: ../fau-person.php:242
+msgid "Adressangaben"
+msgstr ""
+
+#: ../fau-person.php:243
+msgid "Zimmernummer"
+msgstr "Room number"
+
+#: ../fau-person.php:244
+msgid "Feld Freitext"
+msgstr "Field more information"
+
+#: ../fau-person.php:245
+msgid "alle vorherigen Angaben"
+msgstr ""
+
+#: ../fau-person.php:246
+msgid "Personenbild"
+msgstr "Person image"
+
+#: ../fau-person.php:247 ../metaboxes/fau-person-metaboxes.php:212
+#: ../shortcodes/fau-person-shortcodes.php:148
+#: ../templates/single-person.php:62
+msgid "Publikationen"
+msgstr "Publications"
+
+#: ../fau-person.php:248 ../metaboxes/fau-person-metaboxes.php:206
+#: ../shortcodes/fau-person-shortcodes.php:147
+#: ../templates/single-person.php:61
+msgid "Sprechzeiten"
+msgstr "Office hours"
+
+#: ../fau-person.php:256 ../fau-person.php:281
+msgid "Übersicht"
+msgstr "Overview"
+
+#: ../fau-person.php:276
+msgid "Zuordnung von Personen zu verschiedenen Kategorien"
+msgstr ""
+
+#: ../fau-person.php:318
 msgid "Personen-Kategorien"
 msgstr "Person categories"
 
-#: ../fau-person.php:223
+#: ../fau-person.php:396
 #, php-format
 msgid "Alle %s anzeigen"
 msgstr "Show all %s"
 
-#: ../metaboxes/fau-person-metaboxes.php:11
+#: ../includes/cmb-meta-boxes.php:9
+msgid "Titel der Meta-Box"
+msgstr "Meta Box Title"
+
+#: ../includes/cmb/cmb-field.php:68
+msgid "Neu hinzufügen"
+msgstr "Add New"
+
+#: ../includes/cmb/cmb-field.php:69
+msgid "Feld entfernen"
+msgstr "Remove Field"
+
+#: ../includes/cmb/cmb-field.php:1090
+msgid "Keiner"
+msgstr "None"
+
+#: ../includes/cmb/cmb-field.php:1120
+msgid "Suchbegriff eingeben"
+msgstr "Type to search"
+
+#: ../includes/cmb/cmb-field.php:1447
+msgid "Neue Gruppe hinzufügen"
+msgstr "Add New Group"
+
+#: ../includes/cmb/cmb-field.php:1448
+msgid "Gruppe entfernen"
+msgstr "Remove Group"
+
+#: ../includes/cmb/cmb-field.php:1647
+msgid "Ziehen, um die genaue Position einzustellen."
+msgstr "Drag to set the exact location."
+
+#: ../includes/cmb/cmb-meta-box.php:86
+msgid "Sind Sie sicher, dass Sie dieses Feld löschen wollen?"
+msgstr "Are you sure you want to delete this field?"
+
+#: ../metaboxes/fau-person-metaboxes.php:29
 msgid "Zuordnung"
 msgstr ""
 
-#: ../metaboxes/fau-person-metaboxes.php:18
-msgid "Position/Funktion"
-msgstr "Job title"
-
-#: ../metaboxes/fau-person-metaboxes.php:24
-msgid "Institution/Abteilung"
-msgstr "Institution"
-
-#: ../metaboxes/fau-person-metaboxes.php:25
+#: ../metaboxes/fau-person-metaboxes.php:43
 msgid "Geben Sie hier die Institution ein."
 msgstr ""
 
-#: ../metaboxes/fau-person-metaboxes.php:30
+#: ../metaboxes/fau-person-metaboxes.php:48
 msgid "\"Mehr\"-Link führt zur Seite ..."
 msgstr ""
 
-#: ../metaboxes/fau-person-metaboxes.php:31
+#: ../metaboxes/fau-person-metaboxes.php:49
 msgid "Bitte vollständigen Permalink der Zielseite angeben"
 msgstr ""
 
-#: ../metaboxes/fau-person-metaboxes.php:40
+#: ../metaboxes/fau-person-metaboxes.php:58
 msgid "Kontaktinformationen"
 msgstr "Contact information"
 
-#: ../metaboxes/fau-person-metaboxes.php:47
+#: ../metaboxes/fau-person-metaboxes.php:65
 msgid "Typ des Eintrags"
 msgstr ""
 
-#: ../metaboxes/fau-person-metaboxes.php:48
+#: ../metaboxes/fau-person-metaboxes.php:66
 msgid ""
 "Bei Einrichtungen und Pseudonymen wird die Bezeichnung angezeigt, ansonsten "
 "Vor- und Nachname."
 msgstr ""
 
-#: ../metaboxes/fau-person-metaboxes.php:50
+#: ../metaboxes/fau-person-metaboxes.php:68
 msgid "Person (geschlechtsneutral)"
 msgstr "Person (no gender)"
 
-#: ../metaboxes/fau-person-metaboxes.php:51
+#: ../metaboxes/fau-person-metaboxes.php:69
 msgid "Männliche Person"
 msgstr "Male person"
 
-#: ../metaboxes/fau-person-metaboxes.php:52
+#: ../metaboxes/fau-person-metaboxes.php:70
 msgid "Weibliche Person"
 msgstr "Female person"
 
-#: ../metaboxes/fau-person-metaboxes.php:53
+#: ../metaboxes/fau-person-metaboxes.php:71
 msgid "Pseudonym"
 msgstr "Alias"
 
-#: ../metaboxes/fau-person-metaboxes.php:54
+#: ../metaboxes/fau-person-metaboxes.php:72
+#: ../shortcodes/fau-person-shortcodes.php:129
+#: ../widgets/fau-person-widget.php:136
 msgid "Einrichtung"
 msgstr "Institiution"
 
-#: ../metaboxes/fau-person-metaboxes.php:59
-msgid "Titel (Präfix)"
-msgstr "Honorific prefix"
+#: ../metaboxes/fau-person-metaboxes.php:81
+msgid "keine Auswahl"
+msgstr ""
 
-#: ../metaboxes/fau-person-metaboxes.php:71
+#: ../metaboxes/fau-person-metaboxes.php:82
+msgid "Doktor"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:83
+msgid "Professor"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:84
+msgid "Professor Doktor"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:89
 msgid "Vorname"
 msgstr "Given name"
 
-#: ../metaboxes/fau-person-metaboxes.php:77
+#: ../metaboxes/fau-person-metaboxes.php:95
 msgid "Nachname"
 msgstr "Family name"
 
-#: ../metaboxes/fau-person-metaboxes.php:83
+#: ../metaboxes/fau-person-metaboxes.php:101
 msgid "Bezeichnung (oder Pseudonym)"
 msgstr "Description"
 
-#: ../metaboxes/fau-person-metaboxes.php:89
-msgid "Abschluss (Suffix)"
-msgstr "Honorific suffix"
-
-#: ../metaboxes/fau-person-metaboxes.php:95
+#: ../metaboxes/fau-person-metaboxes.php:113
 msgid "Straße und Hausnummer"
 msgstr "Street address"
 
-#: ../metaboxes/fau-person-metaboxes.php:101
+#: ../metaboxes/fau-person-metaboxes.php:119
 msgid "Postleitzahl"
 msgstr "Postal code"
 
-#: ../metaboxes/fau-person-metaboxes.php:107
+#: ../metaboxes/fau-person-metaboxes.php:125
 msgid "Ort"
 msgstr "City"
 
-#: ../metaboxes/fau-person-metaboxes.php:113
+#: ../metaboxes/fau-person-metaboxes.php:131
+#: ../shortcodes/fau-person-shortcodes.php:143
+#: ../widgets/fau-person-widget.php:109
 msgid "Land"
 msgstr "Country"
 
-#: ../metaboxes/fau-person-metaboxes.php:119
-#: ../shortcodes/fau-person-shortcodes.php:119
-#: ../templates/single-person.php:60
+#: ../metaboxes/fau-person-metaboxes.php:137
+#: ../shortcodes/fau-person-shortcodes.php:146
+#: ../templates/single-person.php:60 ../widgets/fau-person-widget.php:142
 msgid "Raum"
 msgstr "Room"
 
-#: ../metaboxes/fau-person-metaboxes.php:125
+#: ../metaboxes/fau-person-metaboxes.php:143
+msgid "Standort Telefonanschluss"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:148
+msgid "Uni-intern, Standort Erlangen"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:149
+msgid "Uni-intern, Standort Nürnberg"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:150
+msgid "Außerhalb der Universität"
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:154
 msgid "Telefon"
 msgstr "Phone number"
 
-#: ../metaboxes/fau-person-metaboxes.php:131
+#: ../metaboxes/fau-person-metaboxes.php:155
+msgid ""
+"Bitte geben Sie uni-interne Nummern für Erlangen in der Form 09131 85-22222 "
+"und für Nürnberg in der Form 0911 5302-555 an."
+msgstr ""
+
+#: ../metaboxes/fau-person-metaboxes.php:160
 msgid "Telefax"
 msgstr "Fax number"
 
-#: ../metaboxes/fau-person-metaboxes.php:141
+#: ../metaboxes/fau-person-metaboxes.php:170
 msgid "Social Media"
 msgstr "Social media"
 
-#: ../metaboxes/fau-person-metaboxes.php:148
-msgid "E-Mail"
-msgstr "Email"
-
-#: ../metaboxes/fau-person-metaboxes.php:154
+#: ../metaboxes/fau-person-metaboxes.php:183
+#: ../shortcodes/fau-person-shortcodes.php:133
+#: ../widgets/fau-person-widget.php:140
 msgid "Webseite"
 msgstr "Website"
 
-#: ../metaboxes/fau-person-metaboxes.php:164
+#: ../metaboxes/fau-person-metaboxes.php:193
 msgid "Weitere Informationen"
 msgstr "Additional information"
 
-#: ../metaboxes/fau-person-metaboxes.php:171
+#: ../metaboxes/fau-person-metaboxes.php:200
 msgid "Freitext"
 msgstr "More information"
-
-#: ../metaboxes/fau-person-metaboxes.php:177
-#: ../shortcodes/fau-person-shortcodes.php:120
-#: ../templates/single-person.php:61
-msgid "Sprechzeiten"
-msgstr "Office hours"
-
-#: ../metaboxes/fau-person-metaboxes.php:183
-#: ../shortcodes/fau-person-shortcodes.php:121
-#: ../templates/single-person.php:62
-msgid "Publikationen"
-msgstr "Publications"
 
 #: ../posttypes/fau-person-posttype.php:4
 msgctxt "Post Type General Name"
@@ -327,13 +420,33 @@ msgstr "person"
 msgid "Personeninformationen"
 msgstr "Person information"
 
-#: ../shortcodes/fau-person-shortcodes.php:32
+#: ../shortcodes/fau-person-shortcodes.php:37
 #, php-format
 msgid ""
 "Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden."
 msgstr "We could not find any entry with the given search term %s."
 
-#: ../shortcodes/fau-person-shortcodes.php:129
+#: ../shortcodes/fau-person-shortcodes.php:128
+#: ../widgets/fau-person-widget.php:135
+msgid "Tätigkeit"
+msgstr "Job title"
+
+#: ../shortcodes/fau-person-shortcodes.php:136
+#: ../widgets/fau-person-widget.php:99
+msgid "Straße"
+msgstr "Street address"
+
+#: ../shortcodes/fau-person-shortcodes.php:138
+#: ../widgets/fau-person-widget.php:102
+msgid "Wohnort"
+msgstr "City"
+
+#: ../shortcodes/fau-person-shortcodes.php:155
+#, php-format
+msgid "Weitere Informationen zu %s aufrufen"
+msgstr "Additional information for %s"
+
+#: ../shortcodes/fau-person-shortcodes.php:156
 #: ../templates/single-person.php:65
 msgid "Mehr"
 msgstr "More"
@@ -341,3 +454,43 @@ msgstr "More"
 #: ../templates/single-person.php:70
 msgid "Es konnte kein Kontakteintrag gefunden werden."
 msgstr "We could not find any entry."
+
+#: ../widgets/fau-person-widget.php:10
+msgid "Personen-Visitenkarte"
+msgstr "Person information"
+
+#: ../widgets/fau-person-widget.php:11
+msgid "Personen-Visitenkarte anzeigen"
+msgstr "Show person information"
+
+#: ../widgets/fau-person-widget.php:36
+msgid "Titel"
+msgstr "Academical title"
+
+#: ../widgets/fau-person-widget.php:42
+msgid "Person"
+msgstr "Person"
+
+#, fuzzy
+#~ msgid "showtitle: Titel (Präfix)"
+#~ msgstr "Honorific prefix"
+
+#, fuzzy
+#~ msgid "showsuffix: Abschluss (Suffix)"
+#~ msgstr "Honorific suffix"
+
+#, fuzzy
+#~ msgid "showposition: Position/Funktion"
+#~ msgstr "Job title"
+
+#, fuzzy
+#~ msgid "showinstitution: Institution/Abteilung"
+#~ msgstr "Institution"
+
+#, fuzzy
+#~ msgid "showpubs: Publikationen"
+#~ msgstr "Publications"
+
+#, fuzzy
+#~ msgid "showoffice: Sprechzeiten"
+#~ msgstr "Office hours"
