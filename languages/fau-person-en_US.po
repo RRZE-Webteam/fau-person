@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FAU-Person\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-27 15:17+0100\n"
+"POT-Creation-Date: 2015-03-30 09:33+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -260,19 +260,19 @@ msgstr "Institiution"
 
 #: ../metaboxes/fau-person-metaboxes.php:81
 msgid "keine Auswahl"
-msgstr ""
+msgstr "No Select"
 
 #: ../metaboxes/fau-person-metaboxes.php:82
 msgid "Doktor"
-msgstr ""
+msgstr "Doctor"
 
 #: ../metaboxes/fau-person-metaboxes.php:83
 msgid "Professor"
-msgstr ""
+msgstr "Professor"
 
 #: ../metaboxes/fau-person-metaboxes.php:84
 msgid "Professor Doktor"
-msgstr ""
+msgstr "Professor Doctor"
 
 #: ../metaboxes/fau-person-metaboxes.php:89
 msgid "Vorname"

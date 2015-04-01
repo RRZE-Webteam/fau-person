@@ -3,8 +3,20 @@
 // In dieser Datei werden alle Metaboxen und Felder für den Custom Post Type person definiert
 // Basis dafür Custom Metaboxes and Fields for WordPress, siehe auch fau-person/metabox/readme.md
 
+add_action('init', function() {
+    if ( !class_exists( 'cmb_Meta_Box' ) ) {
+        // Das CMB-Framework wird eingebunden und initialisiert.
+        require_once(plugin_dir_path(__FILE__) . 'cmb/init.php');
+        // Textdomain wird festgestellt.
+        cmb_Meta_Box::$textdomain = self::textdomain;
+    }           
+}, 9999);
+
+
+add_filter('cmb_meta_boxes', function(array $metaboxes) {
 //function fau_person_metaboxes( $meta_boxes ) {
     $prefix = 'fau_person_'; // Prefix for all fields
+    $contactselect = $this->get_contactdata();
 /*    $meta_boxes['fau_person_postdata'] = array(
         'id' => 'fau_person_postdata',
         'title' => __( 'Infos zum Personenbeitrag', FAU_PERSON_TEXTDOMAIN ),
@@ -69,7 +81,7 @@
                     'realmale' => __('Männliche Person', FAU_PERSON_TEXTDOMAIN),
                     'realfemale' => __('Weibliche Person', FAU_PERSON_TEXTDOMAIN),
                     'pseudo' => __('Pseudonym', FAU_PERSON_TEXTDOMAIN),
-                    'einrichtung' => __('Einrichtung', FAU_PERSON_TEXTDOMAIN)
+                    'einrichtung' => __('Nicht-Person', FAU_PERSON_TEXTDOMAIN)
                 ),
                 'id' => $prefix . 'typ'
             ),
@@ -78,7 +90,7 @@
                 'desc' => '',
                 'type' => 'select',
                 'options' => array(
-                    '' => __('keine Auswahl', FAU_PERSON_TEXTDOMAIN),
+                    '' => __('Keine Angabe', FAU_PERSON_TEXTDOMAIN),
                     'Dr.' => __('Doktor', FAU_PERSON_TEXTDOMAIN),
                     'Prof.' => __('Professor', FAU_PERSON_TEXTDOMAIN),
                     'Prof. Dr.' => __('Professor Doktor', FAU_PERSON_TEXTDOMAIN)
@@ -205,7 +217,7 @@
             array(
                 'name' => __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
-                'type' => 'text',
+                'type' => 'textarea',
                 'id' => $prefix . 'hoursAvailable'
             ),
             array(
@@ -218,5 +230,27 @@
     );
     // Synchronisierung mit externen Daten - fau_person_sync ab hier
 
-//    return $meta_boxes;
-//}
+    
+    
+    $meta_boxes['fau_person_post_metabox'] = array(
+        'id' => 'fau_person_post_metabox',
+        'title' => __( 'Kontaktinformationen', FAU_PERSON_TEXTDOMAIN ),
+        'pages' => array('post', 'page'), // post type
+        'context' => 'normal',
+        'priority' => 'default',
+        'show_names' => true, // Show field names on the left
+        'fields' => array(
+            array(
+                'name' => __('Kontaktangabe auswählen', FAU_PERSON_TEXTDOMAIN),
+                'desc' => '',
+                'id' => $prefix . 'contactselect',
+                'type' => 'select',
+                'options' => $contactselect,
+            ),
+        )        
+    );
+    
+    return $meta_boxes;
+});
+    
+

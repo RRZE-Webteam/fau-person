@@ -39,14 +39,14 @@ require_once('widgets/fau-person-widget.php');
 
 class FAU_Person {
 
-    const version = '1.0.4';
     const option_name = '_fau_person';
-    const version_option_name = '_fau_person_version';
     const textdomain = 'fau-person';
     const php_version = '5.3'; // Minimal erforderliche PHP-Version
     const wp_version = '4.0'; // Minimal erforderliche WordPress-Version
     
-    public static $options;
+    protected static $options;
+    
+    public $contactselect;
 
     protected static $instance = null;
 
@@ -54,13 +54,12 @@ class FAU_Person {
 
         if (null == self::$instance) {
             self::$instance = new self;
-            self::$instance->init();
         }
 
         return self::$instance;
     }
 
-    private function init() {
+    private function __construct() {
         define('FAU_PERSON_ROOT', dirname(__FILE__));
         define('FAU_PERSON_FILE_PATH', FAU_PERSON_ROOT . '/' . basename(__FILE__));
         define('FAU_PERSON_URL', plugins_url('/', __FILE__));
@@ -69,13 +68,15 @@ class FAU_Person {
         
         load_plugin_textdomain(self::textdomain, false, sprintf('%s/languages/', dirname(plugin_basename(__FILE__))));
         
-        self::$options = (object) $this->get_options();
+        self::$options = self::get_options();       
+
+        include_once(plugin_dir_path(__FILE__) . 'includes/fau-person-metaboxes.php');
         
-        add_action('init', array(__CLASS__, 'update_version'));
+        //add_action('init', array(__CLASS__, 'update_version'));
         add_action('init', array (__CLASS__, 'register_person_post_type'));
         add_action( 'init', array($this, 'register_persons_taxonomy') );
         //add_action( 'init', array($this, 'be_initialize_cmb_meta_boxes'), 9999 );
-        add_action('init', array($this, 'include_cmb'), 999);
+        //add_action('init', array($this, 'include_cmb'), 999);
         add_action( 'restrict_manage_posts', array($this, 'person_restrict_manage_posts') );
         add_action('admin_menu', array($this, 'add_help_tabs'));
         add_action('widgets_init', array(__CLASS__, 'register_widgets'));
@@ -129,23 +130,62 @@ class FAU_Person {
         }
     }
 
-    public static function update_version() {
-        if (get_option(self::version_option_name, null) != self::version)
-            update_option(self::version_option_name, self::version);
-    }
-
-    private function default_options() {
+    private static function default_options() {
         return array(); // Standard-Array für zukünftige Optionen
     }
 
-    protected function get_options() {
-        $defaults = $this->default_options();
+    private static function get_options() {
+        $defaults = self::default_options();
         
         $options = (array) get_option(self::option_name);
         $options = wp_parse_args($options, $defaults);
         $options = array_intersect_key($options, $defaults);
 
-        return $options;
+        return (object) $options;
+    }
+    
+    public function get_contactdata() {
+        $contactselect = array(
+            '' => __( 'keine Angabe', FAU_PERSON_TEXTDOMAIN ),
+        );
+        
+         $args = array(
+            'post_type' => 'person',
+            'order' => 'ASC',
+            'meta_key' => 'fau_person_familyName',
+            'orderby' => 'meta_value',
+            'posts_per_page' => 30,
+        );
+
+	$personlist = get_posts($args);
+        //_rrze_debug($personlist);
+        if($personlist) {
+            //foreach()
+        }
+        /*if ($personlist) {
+            while ($personlist) {
+                //$personlist->the_post();
+                $listid = $personlist->post->ID;
+                $fullname = get_the_title($listid);
+                //$out .= '<option value="' . $listid . '"';
+                //if ($oldid && $oldid == $listid) {
+                  //  $out .= ' selected="selected';
+                //}
+                //$out .= '">' . $fullname . '</option>' . "\n";
+                $add = array($listid => $fullname);
+                $contactselect = array_merge($contactselect, $add);
+                        _rrze_debug($contactselect);
+            }
+        } else {
+            $wpautop(__('Keine Kontaktdaten verf&uuml;gbar.', FAU_PERSON_TEXTDOMAIN));
+        }
+*/
+
+
+
+
+        
+        return $contactselect;  
     }
     
     private static function get_caps($cap_type) {
@@ -340,51 +380,7 @@ class FAU_Person {
             wp_enqueue_script('admin');
             return;
         }
-    }
-
-/*
-    public function be_initialize_cmb_meta_boxes() {
-        if ( !class_exists( 'cmb_Meta_Box' ) ) {
-            require_once('cmb/init.php' );
-        }
-    }    
-*/
-
-    /*
-     * Das CMB-Framework wird eingebunden und initialisiert.
-     * @return void
-     */
-    public function include_cmb() {
-        // Nur im Admin-Bereich aktivieren.
-        if(!is_admin()) {
-            return;
-        }
-        
-        // Das CMB-Framework wird eingebunden.
-        require_once(plugin_dir_path(__FILE__) . 'includes/cmb/cmb-meta-box.php');
-        require_once(plugin_dir_path(__FILE__) . 'includes/cmb/cmb-field.php');
-        require_once(plugin_dir_path(__FILE__) . 'includes/cmb/cmb-helper.php');
-        
-        // Die Meta-Box-Einstellungen werden eingebunden.
-        $meta_boxes = $this->cmb_meta_boxes();
-        if (!empty( $meta_boxes)) {
-            foreach ($meta_boxes as $meta_box) {
-                $cmb_meta_box = new CMB_Meta_Box($meta_box);
-                $cmb_meta_box::$textdomain = self::textdomain;
-            }
-        }
-        
-    }
-
-    /*
-     * Die CMB-Meta-Box-Einstellungen werden eingebunden.
-     * @return array
-     */
-    private function cmb_meta_boxes() {
-        $meta_boxes = array();
-        include_once(plugin_dir_path(__FILE__) . 'metaboxes/fau-person-metaboxes.php');
-        return $meta_boxes;
-    }    
+    } 
     
     public function person_restrict_manage_posts() {
         global $typenow;
