@@ -144,49 +144,6 @@ class FAU_Person {
         return (object) $options;
     }
     
-    public function get_contactdata() {
-        $contactselect = array(
-            '' => __( 'keine Angabe', FAU_PERSON_TEXTDOMAIN ),
-        );
-        
-         $args = array(
-            'post_type' => 'person',
-            'order' => 'ASC',
-            'meta_key' => 'fau_person_familyName',
-            'orderby' => 'meta_value',
-            'posts_per_page' => 30,
-        );
-
-	$personlist = get_posts($args);
-        //_rrze_debug($personlist);
-        if($personlist) {
-            //foreach()
-        }
-        /*if ($personlist) {
-            while ($personlist) {
-                //$personlist->the_post();
-                $listid = $personlist->post->ID;
-                $fullname = get_the_title($listid);
-                //$out .= '<option value="' . $listid . '"';
-                //if ($oldid && $oldid == $listid) {
-                  //  $out .= ' selected="selected';
-                //}
-                //$out .= '">' . $fullname . '</option>' . "\n";
-                $add = array($listid => $fullname);
-                $contactselect = array_merge($contactselect, $add);
-                        _rrze_debug($contactselect);
-            }
-        } else {
-            $wpautop(__('Keine Kontaktdaten verf&uuml;gbar.', FAU_PERSON_TEXTDOMAIN));
-        }
-*/
-
-
-
-
-        
-        return $contactselect;  
-    }
     
     private static function get_caps($cap_type) {
         $caps = array(

@@ -13,10 +13,93 @@ add_action('init', function() {
 }, 9999);
 
 
+// render numbers
+add_action( 'cmb_render_text_number', 'sm_cmb_render_text_number', 10, 5 );
+function sm_cmb_render_text_number( $field_args, $escaped_value, $object_id, $object_type, $field_type_object ) {
+    echo $field_type_object->input( array( 'class' => 'cmb_text_small', 'type' => 'number' ) );
+}
+
+// validate the field
+add_filter( 'cmb_validate_text_number', 'sm_cmb_validate_text_number' );
+function sm_cmb_validate_text_number( $new ) {
+    $new = preg_replace( "/[^0-9]/", "", $new );
+
+    return $new;
+}
+
+
+function get_contactdata( $query_args ) {
+    
+    
+       /* $contactselect = array(
+            '' => __( 'keine Angabe', FAU_PERSON_TEXTDOMAIN ),
+        );
+        
+         $args = array(
+            'post_type' => 'person',
+            'order' => 'ASC',
+            'meta_key' => 'fau_person_familyName',
+            'orderby' => 'meta_value',
+            'posts_per_page' => 30,
+        );
+
+	$personlist = get_posts($args);
+        //_rrze_debug($personlist);
+        if($personlist) {
+            //foreach()
+        }
+        /*if ($personlist) {
+            while ($personlist) {
+                //$personlist->the_post();
+                $listid = $personlist->post->ID;
+                $fullname = get_the_title($listid);
+                //$out .= '<option value="' . $listid . '"';
+                //if ($oldid && $oldid == $listid) {
+                  //  $out .= ' selected="selected';
+                //}
+                //$out .= '">' . $fullname . '</option>' . "\n";
+                $add = array($listid => $fullname);
+                $contactselect = array_merge($contactselect, $add);
+                        _rrze_debug($contactselect);
+            }
+        } else {
+            $wpautop(__('Keine Kontaktdaten verf&uuml;gbar.', FAU_PERSON_TEXTDOMAIN));
+        }
+*/
+        
+        //return $contactselect;  
+
+    $args = wp_parse_args( $query_args, array(
+        'post_type' => 'person',
+        'posts_per_page' => 5,
+    ));
+    
+    $posts = get_posts( $args );
+    if ( $posts ) {
+        foreach ( $posts as $post ) {
+            $post_options[] = array(
+                'name' => $post->post_title,
+                'value' => $post->ID,
+            );
+        }
+    }
+    
+    return $post_options;
+    
+    
+}
+
+
+
+
+function get_univisdata( ) {
+    
+}
+
 add_filter('cmb_meta_boxes', function(array $metaboxes) {
 //function fau_person_metaboxes( $meta_boxes ) {
     $prefix = 'fau_person_'; // Prefix for all fields
-    $contactselect = $this->get_contactdata();
+    //$contactselect = $this->get_contactdata();
 /*    $meta_boxes['fau_person_postdata'] = array(
         'id' => 'fau_person_postdata',
         'title' => __( 'Infos zum Personenbeitrag', FAU_PERSON_TEXTDOMAIN ),
@@ -179,7 +262,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
     // Social Media - fau_person_social_media
     $meta_boxes['fau_person_social_media'] = array(
         'id' => 'fau_person_social_media',
-        'title' => __('Social Media', FAU_PERSON_TEXTDOMAIN),
+        'title' => __('Verknüpfungen', FAU_PERSON_TEXTDOMAIN),
         'pages' => array('person'), // post type
         'context' => 'normal',
         'priority' => 'default',
@@ -220,15 +303,44 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'type' => 'textarea',
                 'id' => $prefix . 'hoursAvailable'
             ),
+            /*array(
+                'name' => __('Publikationen', FAU_PERSON_TEXTDOMAIN),
+                'desc' => '',
+                'type' => 'text',
+                'id' => $prefix . 'pubs'
+            )*/
+        )
+    );
+    // Synchronisierung mit externen Daten - fau_person_sync ab hier
+    $meta_boxes['fau_person_sync'] = array(
+        'id' => 'fau_person_sync',
+        'title' => __('Datenimport', FAU_PERSON_TEXTDOMAIN),
+        'pages' => array('person'), // post type
+        'context' => 'normal',
+        'priority' => 'default',
+        'show_names' => true, // Show field names on the left
+        'fields' => array(
+            array(
+                'name' => __('UnivIS-ID', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Die UnivIS-ID der Person, von der die Daten importiert werden sollen.',
+                'type' => 'text_number',
+                'id' => $prefix . 'univis-id',
+                //'options' => get_univisdata(),
+            ),
+            /*array(
+                'name' => __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN),
+                'desc' => '',
+                'type' => 'textarea',
+                'id' => $prefix . 'hoursAvailable'
+            ),
             array(
                 'name' => __('Publikationen', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
                 'type' => 'text',
                 'id' => $prefix . 'pubs'
-            )
+            )*/
         )
     );
-    // Synchronisierung mit externen Daten - fau_person_sync ab hier
 
     
     
@@ -245,7 +357,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'desc' => '',
                 'id' => $prefix . 'contactselect',
                 'type' => 'select',
-                'options' => $contactselect,
+                'options' => get_contactdata( array( 'post_type' => 'person', 'posts_per_page' => 900 )),
             ),
         )        
     );
