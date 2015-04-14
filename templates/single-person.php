@@ -71,9 +71,7 @@ get_header(); ?>
                         }
                     echo $content;
                 ?>
-                        <div style="margin-top: 2em;">
-                            <?php the_content(); ?>
-                        </div>
+          
                     </div>
                 </div>
             </div>
