@@ -236,7 +236,7 @@
 			if($honorificSuffix) 	$fullname .= ' '.$honorificSuffix;
 
 
-			if ($options['plugin_fau_person_headline'] == 'jobTitle') {
+			if ($jobTitle) {
 			    $headline =  '<span itemprop="jobTitle">'.$jobTitle.'</span>';
 			    $res .= '<h2>'.$headline.'</h2>';
 
@@ -262,7 +262,7 @@
 		    }
 
 
-		   if ((!$options['plugin_fau_person_headline']) || ($options['plugin_fau_person_headline']=='fullname')) {
+		   if ($jobTitle) {
 			$content .= '<h3 itemprop="name">';
 			$content .= $fullname;
 			$content .= '</h3>';
@@ -270,8 +270,8 @@
 
 		    $content .= '<ul class="person-info">';
 
-		    if (($options['plugin_fau_person_headline'] != 'jobTitle') && ($position)) 
-			$content .= '<li class="person-info-position"><span class="screen-reader-text">'.__('Tätigkeit','fau').': </span><strong><span itemprop="jobTitle">'.$jobTitle.'</span></strong></li>';
+	//	    if (($options['plugin_fau_person_headline'] != 'jobTitle') && ($position)) 
+	//		$content .= '<li class="person-info-position"><span class="screen-reader-text">'.__('Tätigkeit','fau').': </span><strong><span itemprop="jobTitle">'.$jobTitle.'</span></strong></li>';
 
 		    if($worksFor)	
 			$content .= '<li class="person-info-institution"><span class="screen-reader-text">'.__('Einrichtung','fau').': </span><span itemprop="worksFor">'.$worksFor.'</span></li>';
