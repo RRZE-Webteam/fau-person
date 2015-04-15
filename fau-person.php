@@ -71,6 +71,7 @@ class FAU_Person {
         self::$options = self::get_options();       
 
         include_once(plugin_dir_path(__FILE__) . 'includes/fau-person-metaboxes.php');
+       
         
         //add_action('init', array(__CLASS__, 'update_version'));
         add_action('init', array (__CLASS__, 'register_person_post_type'));
