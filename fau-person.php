@@ -3,7 +3,7 @@
 /**
  * Plugin Name: FAU Person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 1.0.4
+ * Version: 1.0.6
  * Author: RRZE-Webteam (Karin Kimpan)
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -73,27 +73,20 @@ class FAU_Person {
         include_once(plugin_dir_path(__FILE__) . 'includes/fau-person-metaboxes.php');
        
         
-        //add_action('init', array(__CLASS__, 'update_version'));
         add_action('init', array (__CLASS__, 'register_person_post_type'));
         add_action( 'init', array($this, 'register_persons_taxonomy') );
-        //add_action( 'init', array($this, 'be_initialize_cmb_meta_boxes'), 9999 );
-        //add_action('init', array($this, 'include_cmb'), 999);
         add_action( 'restrict_manage_posts', array($this, 'person_restrict_manage_posts') );
         add_action('admin_menu', array($this, 'add_help_tabs'));
         add_action('widgets_init', array(__CLASS__, 'register_widgets'));
         add_action('admin_enqueue_scripts', array($this, 'add_admin_script'));
-        //add_filter( 'cmb_meta_boxes', 'fau_person_metaboxes' );
         add_filter('single_template', array($this, 'include_template_function'));
-        //add_filter('pre_get_posts', array($this, 'person_post_types_admin_order'));
 
-        //self::register_widgets();
         self::add_shortcodes();        
     }
 
     public static function activation() {
 
         self::version_compare();
-        update_option(self::version_option_name, self::version);
         
         self::register_person_post_type();
         flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind
@@ -145,6 +138,31 @@ class FAU_Person {
         return (object) $options;
     }
     
+
+   public function get_contactdata() {
+        $contactselect = array(
+            '' => __( 'keine Angabe', FAU_PERSON_TEXTDOMAIN ),
+        );
+        
+         $args = array(
+            'post_type' => 'person',
+            'order' => 'ASC',
+            'meta_key' => 'fau_person_familyName',
+            'orderby' => 'meta_value',
+            'posts_per_page' => 30,
+        );
+
+	$personlist = get_posts($args);
+        if($personlist) {
+
+        }
+
+
+
+
+        
+        return $contactselect;  
+    }
     
     private static function get_caps($cap_type) {
         $caps = array(
