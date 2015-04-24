@@ -3,7 +3,7 @@
 /**
  * Plugin Name: FAU Person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 1.0.6
+ * Version: 1.1
  * Author: RRZE-Webteam (Karin Kimpan)
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -30,9 +30,10 @@ add_action('plugins_loaded', array('FAU_Person', 'instance'));
 register_activation_hook(__FILE__, array('FAU_Person', 'activation'));
 register_deactivation_hook(__FILE__, array('FAU_Person', 'deactivation'));
 
+require_once('includes/fau-person-univis.php'); 
 require_once('shortcodes/fau-person-shortcodes.php');     
 //require_once('metaboxes/fau-person-metaboxes.php');
-require_once('widgets/fau-person-widget.php');    
+require_once('widgets/fau-person-widget.php');
 
 
 
@@ -139,7 +140,7 @@ class FAU_Person {
     }
     
 
-   public function get_contactdata() {
+   /*public function get_contactdata() {
         $contactselect = array(
             '' => __( 'keine Angabe', FAU_PERSON_TEXTDOMAIN ),
         );
@@ -162,7 +163,7 @@ class FAU_Person {
 
         
         return $contactselect;  
-    }
+    }*/
     
     private static function get_caps($cap_type) {
         $caps = array(
@@ -406,4 +407,5 @@ class FAU_Person {
             }
         }
     }    
+ 
 }

@@ -2,6 +2,7 @@
 
 require_once('univis_dicts.php');
 
+if(!class_exists('UNIVIS')) {
 class UNIVIS {
 
 	/**
@@ -488,4 +489,4 @@ class UNIVIS {
 	}
 
 }
-?>
+}

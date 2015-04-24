@@ -90,28 +90,91 @@
     }
  }
 
+ 
  if(!function_exists('fau_person_markup')) {
+
     function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showmail, $showtelefon)
     {
-            $honorificPrefix = get_post_meta($id, 'fau_person_honorificPrefix', true);
-            $givenName = get_post_meta($id, 'fau_person_givenName', true);
-            $familyName = get_post_meta($id, 'fau_person_familyName', true);
-            $honorificSuffix = get_post_meta($id, 'fau_person_honorificSuffix', true);
-            $jobTitle = get_post_meta($id, 'fau_person_jobTitle', true);
-            $worksFor = get_post_meta($id, 'fau_person_worksFor', true);
-            $telephone = get_post_meta($id, 'fau_person_telephone', true);
-            $faxNumber = get_post_meta($id, 'fau_person_faxNumber', true);
-            $email = get_post_meta($id, 'fau_person_email', true);
-            $url = get_post_meta($id, 'fau_person_url', true);
-            $streetAddress = get_post_meta($id, 'fau_person_streetAddress', true);
-            $postalCode = get_post_meta($id, 'fau_person_postalCode', true);
-            $addressLocality = get_post_meta($id, 'fau_person_addressLocality', true);
-            $addressCountry = get_post_meta($id, 'fau_person_addressCountry', true);
-            $workLocation = get_post_meta($id, 'fau_person_workLocation', true);
-            $hoursAvailable = get_post_meta($id, 'fau_person_hoursAvailable', true);
-            $pubs = get_post_meta($id, 'fau_person_pubs', true);
-            $freitext = get_post_meta($id, 'fau_person_freitext', true);
-            $link = get_post_meta($id, 'fau_person_link', true);
+    if( !empty( get_post_meta( $id, 'fau_person_univis_id', true ) ) )            
+        $univis_data = get_univisdata( get_post_meta($id, 'fau_person_univis_id', true));
+    if( !empty( $univis_data['title'] ) ) {
+        $honorificPrefix = $univis_data['title']; 
+    } else {
+        $honorificPrefix = get_post_meta($id, 'fau_person_honorificPrefix', true);
+    }
+    if( !empty( $univis_data['firstname'] ) ) {    
+        $givenName = $univis_data['firstname'];
+    } else {
+        $givenName = get_post_meta($id, 'fau_person_givenName', true);
+    }
+    if(!empty( $univis_data['lastname'] ) ) {    
+        $familyName = $univis_data['lastname'];
+    } else {         
+        $familyName = get_post_meta($id, 'fau_person_familyName', true);
+    }
+    if(!empty( $univis_data['atitle'] ) ) {         
+        $honorificSuffix = $univis_data['atitle'];
+    } else {
+        $honorificSuffix = get_post_meta($id, 'fau_person_honorificSuffix', true);
+    }
+    if( !empty( $univis_data['work'] ) ) {
+        $jobTitle = $univis_data['work']; 
+    } else {    
+        $jobTitle = get_post_meta($id, 'fau_person_jobTitle', true);
+    }
+    if( !empty( $univis_data['orgname'] ) ) {  
+        $worksFor = $univis_data['orgname'];
+    } else {        
+        $worksFor = get_post_meta($id, 'fau_person_worksFor', true);
+    }
+    if( !empty( $univis_data['locations'][0]['location'][0]['tel'] ) ) {  
+        $telephone = $univis_data['locations'][0]['location'][0]['tel'];
+    } else {            
+        $telephone = get_post_meta($id, 'fau_person_telephone', true);
+    }
+
+    if( !empty( $univis_data['locations'][0]['location'][0]['fax'] ) ) {  
+        $faxNumber = $univis_data['locations'][0]['location'][0]['fax'];
+    } else {        
+        $faxNumber = get_post_meta($id, 'fau_person_faxNumber', true);
+    }  
+    if( !empty( $univis_data['locations'][0]['location'][0]['email'] ) ) {  
+        $email = $univis_data['locations'][0]['location'][0]['email'];
+    } else {        
+        $email = get_post_meta($id, 'fau_person_email', true);
+    }
+    if( !empty( $univis_data['locations'][0]['location'][0]['url'] ) ) {  
+        $url = $univis_data['locations'][0]['location'][0]['url'];
+    } else {        
+        $url = get_post_meta($id, 'fau_person_url', true);
+    }
+    if( !empty( $univis_data['locations'][0]['location'][0]['street'] ) ) {  
+        $streetAddress = $univis_data['locations'][0]['location'][0]['street'];
+    } else {        
+        $streetAddress = get_post_meta($id, 'fau_person_streetAddress', true);
+    }
+    $postalCode = get_post_meta($id, 'fau_person_postalCode', true);
+    if( !empty( $univis_data['locations'][0]['location'][0]['ort'] ) ) {  
+        $addressLocality = $univis_data['locations'][0]['location'][0]['ort'];
+    } else {        
+        $addressLocality = get_post_meta($id, 'fau_person_addressLocality', true);
+    }
+    $addressCountry = get_post_meta($id, 'fau_person_addressCountry', true);
+    if( !empty( $univis_data['officehours']['officehour']['office'] ) ) {  
+        $workLocation = $univis_data['orgname'];
+    } else {        
+        $workLocation = get_post_meta($id, 'fau_person_workLocation', true);
+    }  
+// muss noch überarbeitet werden, da spezielle Angaben in Unterbereichen    
+//    if( !empty( $univis_data ['officehours'] ) ) {  
+//        $hoursAvailable = $univis_data['orgname'];
+//    } else {        
+        $hoursAvailable = get_post_meta($id, 'fau_person_hoursAvailable', true);
+//    } 
+    $pubs = get_post_meta($id, 'fau_person_pubs', true);     
+    $freitext = get_post_meta($id, 'fau_person_freitext', true);
+    $link = get_post_meta($id, 'fau_person_link', true);
+        
             
                                                             //ACHTUNG: vorher css person-info-address (war Textarea bei FAU)!!!
                                                 if($streetAddress || $postalCode || $addressLocality || $addressCountry) {
