@@ -75,25 +75,8 @@ class FAUPersonWidget extends WP_Widget
 		{
 			$post = get_post($id);
 			
-                        $honorificPrefix = get_post_meta($id, 'fau_person_honorificPrefix', true);
-                        $givenName = get_post_meta($id, 'fau_person_givenName', true);
-                        $familyName = get_post_meta($id, 'fau_person_familyName', true);
-                        $honorificSuffix = get_post_meta($id, 'fau_person_honorificSuffix', true);
-                        $jobTitle = get_post_meta($id, 'fau_person_jobTitle', true);
-                        $worksFor = get_post_meta($id, 'fau_person_worksFor', true);
-                        $telephone = get_post_meta($id, 'fau_person_telephone', true);
-                        $faxNumber = get_post_meta($id, 'fau_person_faxNumber', true);
-                        $email = get_post_meta($id, 'fau_person_email', true);
-                        $url = get_post_meta($id, 'fau_person_url', true);
-                        $streetAddress = get_post_meta($id, 'fau_person_streetAddress', true);
-                        $postalCode = get_post_meta($id, 'fau_person_postalCode', true);
-                        $addressLocality = get_post_meta($id, 'fau_person_addressLocality', true);
-                        $addressCountry = get_post_meta($id, 'fau_person_addressCountry', true);
-                        $workLocation = get_post_meta($id, 'fau_person_workLocation', true);
-                        $hoursAvailable = get_post_meta($id, 'fau_person_hoursAvailable', true);
-                        $pubs = get_post_meta($id, 'fau_person_pubs', true);
-                        $freitext = get_post_meta($id, 'fau_person_freitext', true);
-                        $link = get_post_meta($id, 'fau_person_link', true);             
+                        $fields = sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true) );
+                        extract($fields);       
                         
                         
                         if($streetAddress || $postalCode || $addressLocality || $addressCountry) {

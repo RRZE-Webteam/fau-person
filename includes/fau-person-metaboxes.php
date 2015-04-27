@@ -135,11 +135,23 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'type' => 'text'
             ),
             array(
+                'name' => __('Daten aus UnivIS', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Zeige die Position/Funktion aus UnivIS',
+                'type' => 'checkbox',
+                'id' => $prefix . 'jobTitle_sync'
+            ),                         
+            array(
                 'name' => __('Institution/Abteilung', FAU_PERSON_TEXTDOMAIN),
                 'desc' => __('Geben Sie hier die Institution ein.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text',
                 'id' => $prefix . 'worksFor'
             ),
+            array(
+                'name' => __('Daten aus UnivIS', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Zeige die Institution/Abteilung aus UnivIS',
+                'type' => 'checkbox',
+                'id' => $prefix . 'worksFor_sync'
+            ),                         
             array(
                 'name' => __('"Mehr"-Link führt zur Seite ...', FAU_PERSON_TEXTDOMAIN),
                 'desc' => __('Bitte vollständigen Permalink der Zielseite angeben', FAU_PERSON_TEXTDOMAIN),
@@ -182,17 +194,35 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'id' => $prefix . 'honorificPrefix'
             ),
             array(
+                'name' => __('Daten aus UnivIS', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Zeige den Titel (Präfix) aus UnivIS',
+                'type' => 'checkbox',
+                'id' => $prefix . 'honorificPrefix_sync'
+            ),            
+            array(
                 'name' => __('Vorname', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
                 'type' => 'text',
                 'id' => $prefix . 'givenName'
             ),
             array(
+                'name' => __('Daten aus UnivIS', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Zeige den Vornamen aus UnivIS',
+                'type' => 'checkbox',
+                'id' => $prefix . 'givenName_sync'
+            ),  
+            array(
                 'name' => __('Nachname', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
                 'type' => 'text',
                 'id' => $prefix . 'familyName'
             ),
+            array(
+                'name' => __('Daten aus UnivIS', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Zeige den Nachnamen aus UnivIS',
+                'type' => 'checkbox',
+                'id' => $prefix . 'familyName_sync'
+            ),              
             array(
                 'name' => __('Bezeichnung (oder Pseudonym)', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
@@ -206,14 +236,26 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'id' => $prefix . 'honorificSuffix'
             ),
             array(
+                'name' => __('Daten aus UnivIS', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Zeige den Abschluss (Suffix) aus UnivIS',
+                'type' => 'checkbox',
+                'id' => $prefix . 'honorificSuffix_sync'
+            ),              
+            array(
                 'name' => __('Straße und Hausnummer', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
                 'type' => 'text',
                 'id' => $prefix . 'streetAddress'
             ),
             array(
+                'name' => __('Daten aus UnivIS', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Zeige die Straße und Hausnummer aus UnivIS',
+                'type' => 'checkbox',
+                'id' => $prefix . 'streetAddress_sync'
+            ),                    
+            array(
                 'name' => __('Postleitzahl', FAU_PERSON_TEXTDOMAIN),
-                'desc' => '',
+                'desc' => 'Wenn der Ort aus UnivIS übernommen werden soll bitte leer lassen!',
                 'type' => 'text',
                 'id' => $prefix . 'postalCode'
             ),
@@ -223,6 +265,12 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'type' => 'text',
                 'id' => $prefix . 'addressLocality'
             ),
+            array(
+                'name' => __('Daten aus UnivIS', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Zeige Postleitzahl und Ort aus UnivIS',
+                'type' => 'checkbox',
+                'id' => $prefix . 'addressLocality_sync'
+            ),                         
             array(
                 'name' => __('Land', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
@@ -235,6 +283,12 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'type' => 'text',
                 'id' => $prefix . 'workLocation'
             ),
+            array(
+                'name' => __('Daten aus UnivIS', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Zeige den Raum aus UnivIS',
+                'type' => 'checkbox',
+                'id' => $prefix . 'workLocation_sync'
+            ),                         
             array(
                 'name' => __('Standort Telefonanschluss', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
@@ -253,11 +307,23 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'id' => $prefix . 'telephone'
             ),
             array(
+                'name' => __('Daten aus UnivIS', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Zeige die Telefonnummer aus UnivIS',
+                'type' => 'checkbox',
+                'id' => $prefix . 'telephone_sync'
+            ),              
+            array(
                 'name' => __('Telefax', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
                 'type' => 'text',
                 'id' => $prefix . 'faxNumber'
-            )
+            ),
+            array(
+                'name' => __('Daten aus UnivIS', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Zeige die Telefax-Nummer aus UnivIS',
+                'type' => 'checkbox',
+                'id' => $prefix . 'faxNumber_sync'
+            ),                         
         )
     );
     // Social Media - fau_person_social_media
@@ -276,11 +342,23 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'id' => $prefix . 'email'
             ),
             array(
+                'name' => __('Daten aus UnivIS', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Zeige die E-Mail-Adresse aus UnivIS',
+                'type' => 'checkbox',
+                'id' => $prefix . 'email_sync'
+            ),                         
+            array(
                 'name' => __('Webseite', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
                 'type' => 'text_url',
                 'id' => $prefix . 'url'
-            )
+            ),
+            array(
+                'name' => __('Daten aus UnivIS', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Zeige die Webseite aus UnivIS',
+                'type' => 'checkbox',
+                'id' => $prefix . 'url_sync'
+            ),                         
         )
     );
     // Weitere Informationen - fau_person_adds
@@ -304,6 +382,12 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'type' => 'textarea',
                 'id' => $prefix . 'hoursAvailable'
             ),
+            array(
+                'name' => __('Daten aus UnivIS', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Zeige die Sprechzeiten aus UnivIS',
+                'type' => 'checkbox',
+                'id' => $prefix . 'hoursAvailable_sync'
+            ),                         
             /*array(
                 'name' => __('Publikationen', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
