@@ -93,6 +93,8 @@
  if(!function_exists('fau_person_markup')) {
     function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showmail, $showtelefon)
     {
+
+	
             $honorificPrefix = get_post_meta($id, 'fau_person_honorificPrefix', true);
             $givenName = get_post_meta($id, 'fau_person_givenName', true);
             $familyName = get_post_meta($id, 'fau_person_familyName', true);
@@ -110,8 +112,9 @@
             $workLocation = get_post_meta($id, 'fau_person_workLocation', true);
             $hoursAvailable = get_post_meta($id, 'fau_person_hoursAvailable', true);
             $pubs = get_post_meta($id, 'fau_person_pubs', true);
-            $freitext = get_post_meta($id, 'fau_person_freitext', true);
+            $freitext = get_post_meta($id, 'fau_person_description', true);
             $link = get_post_meta($id, 'fau_person_link', true);
+	     $type = get_post_meta($id, 'fau_person_typ', true);
             
                                                             //ACHTUNG: vorher css person-info-address (war Textarea bei FAU)!!!
                                                 if($streetAddress || $postalCode || $addressLocality || $addressCountry) {
@@ -134,11 +137,27 @@
             $content = '<div class="person content-person" itemscope itemtype="http://schema.org/Person">';			
                     $content .= '<div class="row">';
 
-                            if(has_post_thumbnail($id) && $showthumb)
-                            {
-                                    $content .= '<div class="span1 span-small" itemprop="image">';
-                                            $content .= get_the_post_thumbnail($id, 'person-thumb-bigger');
-                                    $content .= '</div>';
+                            if($showthumb) {
+                                $content .= '<div class="span1 span-small" itemprop="image">';
+		   
+				    
+				if (has_post_thumbnail($id)) {
+				    $content .= get_the_post_thumbnail($id, 'person-thumb-bigger');
+				} else {
+				    if ($type == 'realmale') {
+					$bild =  plugin_dir_url( __FILE__ ) .'../platzhalter-mann.png';   
+				    } elseif ($type == 'realfemale') {
+					$bild = plugin_dir_url( __FILE__ ) .'../platzhalter-frau.png';
+				    } else {
+					$bild = plugin_dir_url( __FILE__ ) .'../platzhalter-mann.png';
+				    }
+				    
+				    if ($bild) {
+					$content .=  '<img src="'.$bild.'" width="90" height="120" alt="">';
+				    }
+				}
+
+                                $content .= '</div>';
                             }
 
                             $content .= '<div class="span3">';
