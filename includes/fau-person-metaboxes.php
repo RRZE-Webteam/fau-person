@@ -209,7 +209,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
         'show_names' => true, // Show field names on the left
         'fields' => array(
             array(
-                'name' => __('Freitext', FAU_PERSON_TEXTDOMAIN),
+                'name' => __('Kurzbeschreibung', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
                 'type' => 'textarea',
                 'id' => $prefix . 'description'

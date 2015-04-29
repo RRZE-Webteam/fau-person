@@ -4,7 +4,7 @@
  if(!function_exists('fau_person')) {   
     function fau_person( $atts, $content = null) {
             extract(shortcode_atts(array(
-                    "slug" => 'slug',
+                    "slug" => FALSE,
                     "id" => FALSE,
                     "showlink" => FALSE,
                     "showfax" => FALSE,
@@ -24,24 +24,32 @@
                     "extended" => FALSE,
 		     "format" => '',
                     ), $atts));
- 
-
-            if(!empty($id)) {
-                   $slug = get_post($id)->post_title;
-            }
-            $posts = get_posts(array('name' => $slug, 'post_type' => 'person', 'post_status' => 'publish'));
-            if ($posts) {
-                $post = $posts[0];
-                $id = $post->ID;	
-		
-		if (($format == 'full') || ($format=='page')) {
+     
+            
+            if( empty($id) ) {
+                if( empty($slug) )  {
+                    return sprintf(__('Bitte geben Sie den Titel oder die ID des Kontakteintrags an.', FAU_PERSON_TEXTDOMAIN), $slug);
+                } else {
+                    $posts = get_posts(array('name' => $slug, 'post_type' => 'person', 'post_status' => 'publish'));
+                    
+                    if ($posts) {
+                        $post = $posts[0];
+                        $id = $post->ID;		
+                    } else {
+                        return sprintf(__('Es konnte kein Kontakteintrag mit dem angegebenen Titel %s gefunden werden. Versuchen Sie statt dessen die Angabe der ID des Kontakteintrags.', FAU_PERSON_TEXTDOMAIN), $slug);                        
+                    }
+                        
+                }
+            } elseif( get_post($id) ) {
+		if ( ($format == 'full') || ($format=='page') ) {
 		    return fau_person_page($id);
 		} else { 
 		    return fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showmail, $showtelefon);
-	    }
-	    } else {
-                return sprintf(__('Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $slug);
+                }                
+            } else {
+                return sprintf(__('Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $id);                
             }
+
     }
  }
 
@@ -145,11 +153,11 @@
 				    $content .= get_the_post_thumbnail($id, 'person-thumb-bigger');
 				} else {
 				    if ($type == 'realmale') {
-					$bild =  plugin_dir_url( __FILE__ ) .'../platzhalter-mann.png';   
+					$bild =  plugin_dir_url( __FILE__ ) .'../images/platzhalter-mann.png';   
 				    } elseif ($type == 'realfemale') {
-					$bild = plugin_dir_url( __FILE__ ) .'../platzhalter-frau.png';
+					$bild = plugin_dir_url( __FILE__ ) .'../images/platzhalter-frau.png';
 				    } else {
-					$bild = plugin_dir_url( __FILE__ ) .'../platzhalter-mann.png';
+					$bild = plugin_dir_url( __FILE__ ) .'../images/platzhalter-mann.png';
 				    }
 				    
 				    if ($bild) {
