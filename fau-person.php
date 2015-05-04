@@ -3,7 +3,7 @@
 /**
  * Plugin Name: FAU Person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 1.0.7
+ * Version: 1.0.8
  * Author: RRZE-Webteam (Karin Kimpan)
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later

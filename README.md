@@ -8,7 +8,7 @@ Visitenkarten-Plugin für FAU Webauftritte
 Custom Post Type person
 
 
-####Version 1.0.6:
+####Version 1.0.8:
 
 #####Shortcode person (css-Klassen an FAU-Webauftritt angepasst)
 ######Beispiel:  
@@ -17,6 +17,8 @@ Titel der eingetragenen Person = Max Mustermann:
 
 Personen können alternativ auch mit der ID abgerufen werden:
 [person id="12345"]
+
+ACHTUNG: In manchen Fällen wird auch bei korrekter Schreibweise der Slug nicht gefunden (z.B. wenn Umlaut beinhaltet ist). Zuverlässiger ist die Anzeige über die ID.
 
 
 ######optionale Parameter:  
