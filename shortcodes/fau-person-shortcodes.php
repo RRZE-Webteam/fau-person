@@ -24,14 +24,12 @@
                     "extended" => FALSE,
 		     "format" => '',
                     ), $atts));
-     
-            
+                
             if( empty($id) ) {
                 if( empty($slug) )  {
                     return sprintf(__('Bitte geben Sie den Titel oder die ID des Kontakteintrags an.', FAU_PERSON_TEXTDOMAIN), $slug);
                 } else {
                     $posts = get_posts(array('name' => $slug, 'post_type' => 'person', 'post_status' => 'publish'));
-                    
                     if ($posts) {
                         $post = $posts[0];
                         $id = $post->ID;		
@@ -40,7 +38,8 @@
                     }
                         
                 }
-            } elseif( get_post($id) ) {
+            } 
+            if( get_post($id) ) {
 		if ( ($format == 'full') || ($format=='page') ) {
 		    return fau_person_page($id);
 		} else { 
