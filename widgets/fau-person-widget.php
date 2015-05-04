@@ -92,7 +92,7 @@ class FAUPersonWidget extends WP_Widget
                         $workLocation = get_post_meta($id, 'fau_person_workLocation', true);
                         $hoursAvailable = get_post_meta($id, 'fau_person_hoursAvailable', true);
                         $pubs = get_post_meta($id, 'fau_person_pubs', true);
-                        $freitext = get_post_meta($id, 'fau_person_freitext', true);
+                        $freitext = get_post_meta($id, 'fau_person_description', true);
                         $link = get_post_meta($id, 'fau_person_link', true);             
                         
                         
