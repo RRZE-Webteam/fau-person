@@ -7,8 +7,8 @@ class FAUPersonWidget extends WP_Widget
 	public function __construct() {
             parent::__construct(
                     'FAUPersonWidget',
-                    __('Personen-Visitenkarte', FAU_PERSON_TEXTDOMAIN),
-                    array('description' => __('Personen-Visitenkarte anzeigen', FAU_PERSON_TEXTDOMAIN), 'class' => 'FAUPersonWidget')
+                    __('Kontakt-Visitenkarte', FAU_PERSON_TEXTDOMAIN),
+                    array('description' => __('Kontakt-Visitenkarte anzeigen', FAU_PERSON_TEXTDOMAIN), 'class' => 'FAUPersonWidget')
             );
 	}
 
@@ -39,7 +39,7 @@ class FAUPersonWidget extends WP_Widget
 		echo '</p>';
 
 		echo '<p>';
-			echo '<label for="'.$this->get_field_id('id').'">' . __('Person', FAU_PERSON_TEXTDOMAIN). ': ';
+			echo '<label for="'.$this->get_field_id('id').'">' . __('Kontakt', FAU_PERSON_TEXTDOMAIN). ': ';
 
                         echo '<select id="'.$this->get_field_id('id').'" name="'.$this->get_field_name('id').'">';
 		

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FAU-Person\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-30 09:33+0100\n"
+"POT-Creation-Date: 2015-05-08 12:31+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -18,7 +18,7 @@ msgstr ""
 "X-Generator: Poedit 1.6.5\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../fau-person.php:119
+#: ../fau-person.php:117
 #, php-format
 msgid ""
 "Ihre PHP-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die "
@@ -27,7 +27,7 @@ msgstr ""
 "Your server is running PHP version %s. Please upgrade at least to PHP "
 "version %s."
 
-#: ../fau-person.php:123
+#: ../fau-person.php:121
 #, php-format
 msgid ""
 "Ihre Wordpress-Version %s ist veraltet. Bitte aktualisieren Sie mindestens "
@@ -36,143 +36,148 @@ msgstr ""
 "Your Wordpress version is %s. Please upgrade at least to Wordpress version "
 "%s."
 
-#: ../fau-person.php:195
+#: ../fau-person.php:146
+msgid "keine Angabe"
+msgstr "No Select"
+
+#: ../fau-person.php:213
 msgid ""
-"Geben Sie auf dieser Seite alle gewünschten Daten zu einer Person ein. Die "
-"Einbindung der Personendaten erfolgt dann in den Beiträgen oder Seiten über "
+"Geben Sie auf dieser Seite alle gewünschten Daten zu einem Kontakt ein. Die "
+"Einbindung der Kontaktdaten erfolgt dann in den Beiträgen oder Seiten über "
 "einen Shortcode oder ein Widget."
 msgstr ""
 
-#: ../fau-person.php:200
-msgid "Personen eingeben"
-msgstr "Add persons"
+#: ../fau-person.php:218
+msgid "Kontakte eingeben"
+msgstr "New contacts"
 
-#: ../fau-person.php:204 ../fau-person.php:260 ../fau-person.php:285
+#: ../fau-person.php:222 ../fau-person.php:278 ../fau-person.php:303
 msgid "Für mehr Information"
 msgstr "Additional information"
 
-#: ../fau-person.php:204 ../fau-person.php:260 ../fau-person.php:285
+#: ../fau-person.php:222 ../fau-person.php:278 ../fau-person.php:303
 msgid "RRZE-Webteam in Github"
 msgstr "RRZE-Webteam on Github"
 
-#: ../fau-person.php:220
-msgid "Einbindung der Personen-Visitenkarte über Shortcode"
-msgstr ""
+#: ../fau-person.php:238
+msgid "Einbindung der Kontakt-Visitenkarte über Shortcode"
+msgstr "Embed of contact information via shortcode"
 
-#: ../fau-person.php:221
+#: ../fau-person.php:239
 msgid ""
-"Binden Sie die gewünschten Personendaten mit dem Shortcode [person] mit "
+"Binden Sie die gewünschten Kontaktdaten mit dem Shortcode [person] mit "
 "folgenden Parametern auf Ihren Seiten oder Beiträgen ein:"
 msgstr ""
 
-#: ../fau-person.php:223
+#: ../fau-person.php:241
 msgid "zwingend:"
 msgstr ""
 
-#: ../fau-person.php:225
-msgid "Titel des Personenbeitrags"
-msgstr ""
+#: ../fau-person.php:243
+msgid "Titel des Kontakteintrags"
+msgstr "Title of Contact entry"
 
-#: ../fau-person.php:228
+#: ../fau-person.php:246
 msgid ""
 "optional, wird standardmäßig angezeigt (wenn keine Anzeige gewünscht ist, "
 "Parameter=0 eingeben):"
 msgstr ""
 
-#: ../fau-person.php:230 ../shortcodes/fau-person-shortcodes.php:130
-#: ../widgets/fau-person-widget.php:137
+#: ../fau-person.php:248 ../shortcodes/fau-person-shortcodes.php:180
+#: ../shortcodes/fau-person-shortcodes.php:306
+#: ../widgets/fau-person-widget.php:155
 msgid "Telefonnummer"
 msgstr "Phone number"
 
-#: ../fau-person.php:231 ../metaboxes/fau-person-metaboxes.php:77
+#: ../fau-person.php:249 ../includes/fau-person-metaboxes.php:95
 msgid "Titel (Präfix)"
 msgstr "Honorific prefix"
 
-#: ../fau-person.php:232 ../metaboxes/fau-person-metaboxes.php:107
+#: ../fau-person.php:250 ../includes/fau-person-metaboxes.php:125
 msgid "Abschluss (Suffix)"
 msgstr "Honorific suffix"
 
-#: ../fau-person.php:233 ../metaboxes/fau-person-metaboxes.php:36
+#: ../fau-person.php:251 ../includes/fau-person-metaboxes.php:60
 msgid "Position/Funktion"
 msgstr "Job title"
 
-#: ../fau-person.php:234 ../metaboxes/fau-person-metaboxes.php:42
+#: ../fau-person.php:252
 msgid "Institution/Abteilung"
 msgstr "Institution"
 
-#: ../fau-person.php:235 ../metaboxes/fau-person-metaboxes.php:177
-#: ../shortcodes/fau-person-shortcodes.php:132
-#: ../widgets/fau-person-widget.php:139
+#: ../fau-person.php:253 ../includes/fau-person-metaboxes.php:201
+#: ../shortcodes/fau-person-shortcodes.php:182
+#: ../shortcodes/fau-person-shortcodes.php:310
+#: ../widgets/fau-person-widget.php:157
 msgid "E-Mail"
 msgstr "Email"
 
-#: ../fau-person.php:238
+#: ../fau-person.php:256
 msgid ""
 "optional, wird standardmäßig nicht angezeigt (wenn Anzeige gewünscht ist, "
 "Parameter=1 eingeben):"
 msgstr ""
 
-#: ../fau-person.php:240 ../shortcodes/fau-person-shortcodes.php:131
-#: ../widgets/fau-person-widget.php:138
+#: ../fau-person.php:258 ../shortcodes/fau-person-shortcodes.php:181
+#: ../shortcodes/fau-person-shortcodes.php:308
+#: ../widgets/fau-person-widget.php:156
 msgid "Faxnummer"
 msgstr "Fax number"
 
-#: ../fau-person.php:241
+#: ../fau-person.php:259
 msgid "URL"
 msgstr "URL"
 
-#: ../fau-person.php:242
+#: ../fau-person.php:260
 msgid "Adressangaben"
-msgstr ""
+msgstr "Contact information"
 
-#: ../fau-person.php:243
+#: ../fau-person.php:261
 msgid "Zimmernummer"
 msgstr "Room number"
 
-#: ../fau-person.php:244
+#: ../fau-person.php:262
 msgid "Feld Freitext"
 msgstr "Field more information"
 
-#: ../fau-person.php:245
+#: ../fau-person.php:263
 msgid "alle vorherigen Angaben"
-msgstr ""
+msgstr "all previous information"
 
-#: ../fau-person.php:246
+#: ../fau-person.php:264
 msgid "Personenbild"
 msgstr "Person image"
 
-#: ../fau-person.php:247 ../metaboxes/fau-person-metaboxes.php:212
-#: ../shortcodes/fau-person-shortcodes.php:148
-#: ../templates/single-person.php:62
+#: ../fau-person.php:265 ../includes/fau-person-metaboxes.php:236
+#: ../shortcodes/fau-person-shortcodes.php:189
 msgid "Publikationen"
 msgstr "Publications"
 
-#: ../fau-person.php:248 ../metaboxes/fau-person-metaboxes.php:206
-#: ../shortcodes/fau-person-shortcodes.php:147
-#: ../templates/single-person.php:61
+#: ../fau-person.php:266 ../includes/fau-person-metaboxes.php:230
+#: ../shortcodes/fau-person-shortcodes.php:188
 msgid "Sprechzeiten"
 msgstr "Office hours"
 
-#: ../fau-person.php:256 ../fau-person.php:281
+#: ../fau-person.php:274 ../fau-person.php:299
 msgid "Übersicht"
 msgstr "Overview"
 
-#: ../fau-person.php:276
-msgid "Zuordnung von Personen zu verschiedenen Kategorien"
+#: ../fau-person.php:294
+msgid "Zuordnung von Personen und Kontakten zu verschiedenen Kategorien"
 msgstr ""
 
-#: ../fau-person.php:318
-msgid "Personen-Kategorien"
-msgstr "Person categories"
+#: ../fau-person.php:336
+msgid "Kontakt-Kategorien"
+msgstr "Contact categories"
 
-#: ../fau-person.php:396
+#: ../fau-person.php:370
 #, php-format
 msgid "Alle %s anzeigen"
 msgstr "Show all %s"
 
-#: ../includes/cmb-meta-boxes.php:9
-msgid "Titel der Meta-Box"
-msgstr "Meta Box Title"
+#: ../fau-person.php:417
+msgid "Kurzbeschreibung in Listenansichten (bis zu 400 Zeichen)"
+msgstr ""
 
 #: ../includes/cmb/cmb-field.php:68
 msgid "Neu hinzufügen"
@@ -195,6 +200,7 @@ msgid "Neue Gruppe hinzufügen"
 msgstr "Add New Group"
 
 #: ../includes/cmb/cmb-field.php:1448
+#: ../includes/cmb/helpers/cmb_Meta_Box_field.php:460
 msgid "Gruppe entfernen"
 msgstr "Remove Group"
 
@@ -206,270 +212,443 @@ msgstr "Drag to set the exact location."
 msgid "Sind Sie sicher, dass Sie dieses Feld löschen wollen?"
 msgstr "Are you sure you want to delete this field?"
 
-#: ../metaboxes/fau-person-metaboxes.php:29
+#: ../includes/cmb/helpers/cmb_Meta_Box_ajax.php:47
+msgid "Bitte versuchen Sie es erneut"
+msgstr "Please try again"
+
+#: ../includes/cmb/helpers/cmb_Meta_Box_ajax.php:131
+msgid "Embed entfernen"
+msgstr "Remove Embed"
+
+#: ../includes/cmb/helpers/cmb_Meta_Box_ajax.php:134
+#, php-format
+msgid "Keine oEmbed Ergebnisse für %s gefunden. Für weitere Infos siehe"
+msgstr "We could not find any results for %s. For further information see"
+
+#: ../includes/cmb/helpers/cmb_Meta_Box_field.php:459
+msgid "Gruppe hinzufügen"
+msgstr "Add New Group"
+
+#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:250
+msgid "Zeile hinzufügen"
+msgstr "Add New"
+
+#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:306
+#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:706
+#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:768
+#: ../includes/cmb/init.php:284
+msgid "Entfernen"
+msgstr "Remove Field"
+
+#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:601
+#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:635
+msgid "Keine Terms"
+msgstr "None"
+
+#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:674
+#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:728
+msgid "Datei hinzufügen"
+msgstr "File upload"
+
+#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:695
+#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:760
+#: ../includes/cmb/init.php:283
+msgid "Bild entfernen"
+msgstr "Remove Image"
+
+#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:706
+#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:768
+#: ../includes/cmb/init.php:285
+msgid "Datei:"
+msgstr "File:"
+
+#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:706
+#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:768
+#: ../includes/cmb/init.php:286
+msgid "Herunterladen"
+msgstr "Download"
+
+#: ../includes/cmb/init.php:260
+msgid "Löschen"
+msgstr "Delete"
+
+#: ../includes/cmb/init.php:261
+msgid "Standard"
+msgstr "Standard"
+
+#: ../includes/cmb/init.php:262
+msgid "Farbe wählen"
+msgstr "Choose color"
+
+#: ../includes/cmb/init.php:263
+msgid "Aktuelle Farbe"
+msgstr "Chosen color"
+
+#: ../includes/cmb/init.php:282
+msgid "Verwenden Sie diese Datei"
+msgstr "Use this file"
+
+#: ../includes/cmb/init.php:288
+msgid "[ ↑ ]&nbsp;"
+msgstr "[ ↑ ]&nbsp;"
+
+#: ../includes/cmb/init.php:289
+msgid "&nbsp;[ ↓ ]"
+msgstr "&nbsp;[ ↓ ]"
+
+#: ../includes/cmb/init.php:290
+msgid "Alle aktivieren / deaktivieren"
+msgstr "Enable / Disable all"
+
+#: ../includes/cmb/init.php:1181
+msgid "Speichern"
+msgstr "Save"
+
+#: ../includes/fau-person-metaboxes.php:41
 msgid "Zuordnung"
+msgstr "Assignement"
+
+#: ../includes/fau-person-metaboxes.php:48
+msgid "Organisation"
+msgstr "Organisation"
+
+#: ../includes/fau-person-metaboxes.php:49
+msgid "Geben Sie hier die Organisation (Lehrstuhl oder Einrichtung) ein."
 msgstr ""
 
-#: ../metaboxes/fau-person-metaboxes.php:43
-msgid "Geben Sie hier die Institution ein."
+#: ../includes/fau-person-metaboxes.php:54
+msgid "Abteilung"
+msgstr "Working group"
+
+#: ../includes/fau-person-metaboxes.php:55
+msgid "Geben Sie hier die Abteilung oder Arbeitsgruppe ein."
 msgstr ""
 
-#: ../metaboxes/fau-person-metaboxes.php:48
+#: ../includes/fau-person-metaboxes.php:66
 msgid "\"Mehr\"-Link führt zur Seite ..."
 msgstr ""
 
-#: ../metaboxes/fau-person-metaboxes.php:49
+#: ../includes/fau-person-metaboxes.php:67
 msgid "Bitte vollständigen Permalink der Zielseite angeben"
 msgstr ""
 
-#: ../metaboxes/fau-person-metaboxes.php:58
+#: ../includes/fau-person-metaboxes.php:76
+#: ../includes/fau-person-metaboxes.php:249
+#: ../posttypes/fau-person-posttype.php:26
 msgid "Kontaktinformationen"
 msgstr "Contact information"
 
-#: ../metaboxes/fau-person-metaboxes.php:65
+#: ../includes/fau-person-metaboxes.php:83
 msgid "Typ des Eintrags"
-msgstr ""
+msgstr "Typ of Contact"
 
-#: ../metaboxes/fau-person-metaboxes.php:66
+#: ../includes/fau-person-metaboxes.php:84
 msgid ""
 "Bei Einrichtungen und Pseudonymen wird die Bezeichnung angezeigt, ansonsten "
 "Vor- und Nachname."
 msgstr ""
 
-#: ../metaboxes/fau-person-metaboxes.php:68
+#: ../includes/fau-person-metaboxes.php:86
 msgid "Person (geschlechtsneutral)"
 msgstr "Person (no gender)"
 
-#: ../metaboxes/fau-person-metaboxes.php:69
+#: ../includes/fau-person-metaboxes.php:87
 msgid "Männliche Person"
 msgstr "Male person"
 
-#: ../metaboxes/fau-person-metaboxes.php:70
+#: ../includes/fau-person-metaboxes.php:88
 msgid "Weibliche Person"
 msgstr "Female person"
 
-#: ../metaboxes/fau-person-metaboxes.php:71
+#: ../includes/fau-person-metaboxes.php:89
 msgid "Pseudonym"
 msgstr "Alias"
 
-#: ../metaboxes/fau-person-metaboxes.php:72
-#: ../shortcodes/fau-person-shortcodes.php:129
-#: ../widgets/fau-person-widget.php:136
-msgid "Einrichtung"
-msgstr "Institiution"
+#: ../includes/fau-person-metaboxes.php:90
+msgid "Nicht-Person"
+msgstr "Non-Person"
 
-#: ../metaboxes/fau-person-metaboxes.php:81
-msgid "keine Auswahl"
-msgstr "No Select"
+#: ../includes/fau-person-metaboxes.php:99
+msgid "Keine Angabe"
+msgstr "Not specified"
 
-#: ../metaboxes/fau-person-metaboxes.php:82
+#: ../includes/fau-person-metaboxes.php:100
 msgid "Doktor"
 msgstr "Doctor"
 
-#: ../metaboxes/fau-person-metaboxes.php:83
+#: ../includes/fau-person-metaboxes.php:101
 msgid "Professor"
 msgstr "Professor"
 
-#: ../metaboxes/fau-person-metaboxes.php:84
+#: ../includes/fau-person-metaboxes.php:102
 msgid "Professor Doktor"
 msgstr "Professor Doctor"
 
-#: ../metaboxes/fau-person-metaboxes.php:89
+#: ../includes/fau-person-metaboxes.php:107
 msgid "Vorname"
 msgstr "Given name"
 
-#: ../metaboxes/fau-person-metaboxes.php:95
+#: ../includes/fau-person-metaboxes.php:113
 msgid "Nachname"
 msgstr "Family name"
 
-#: ../metaboxes/fau-person-metaboxes.php:101
+#: ../includes/fau-person-metaboxes.php:119
 msgid "Bezeichnung (oder Pseudonym)"
 msgstr "Description"
 
-#: ../metaboxes/fau-person-metaboxes.php:113
+#: ../includes/fau-person-metaboxes.php:131
 msgid "Straße und Hausnummer"
 msgstr "Street address"
 
-#: ../metaboxes/fau-person-metaboxes.php:119
+#: ../includes/fau-person-metaboxes.php:137
 msgid "Postleitzahl"
 msgstr "Postal code"
 
-#: ../metaboxes/fau-person-metaboxes.php:125
+#: ../includes/fau-person-metaboxes.php:143
 msgid "Ort"
 msgstr "City"
 
-#: ../metaboxes/fau-person-metaboxes.php:131
-#: ../shortcodes/fau-person-shortcodes.php:143
-#: ../widgets/fau-person-widget.php:109
+#: ../includes/fau-person-metaboxes.php:149
 msgid "Land"
 msgstr "Country"
 
-#: ../metaboxes/fau-person-metaboxes.php:137
-#: ../shortcodes/fau-person-shortcodes.php:146
-#: ../templates/single-person.php:60 ../widgets/fau-person-widget.php:142
+#: ../includes/fau-person-metaboxes.php:155
+#: ../shortcodes/fau-person-shortcodes.php:187
+#: ../shortcodes/fau-person-shortcodes.php:316
+#: ../widgets/fau-person-widget.php:160
 msgid "Raum"
 msgstr "Room"
 
-#: ../metaboxes/fau-person-metaboxes.php:143
+#: ../includes/fau-person-metaboxes.php:161
 msgid "Standort Telefonanschluss"
 msgstr ""
 
-#: ../metaboxes/fau-person-metaboxes.php:148
+#: ../includes/fau-person-metaboxes.php:166
 msgid "Uni-intern, Standort Erlangen"
 msgstr ""
 
-#: ../metaboxes/fau-person-metaboxes.php:149
+#: ../includes/fau-person-metaboxes.php:167
 msgid "Uni-intern, Standort Nürnberg"
 msgstr ""
 
-#: ../metaboxes/fau-person-metaboxes.php:150
+#: ../includes/fau-person-metaboxes.php:168
 msgid "Außerhalb der Universität"
 msgstr ""
 
-#: ../metaboxes/fau-person-metaboxes.php:154
+#: ../includes/fau-person-metaboxes.php:172
 msgid "Telefon"
 msgstr "Phone number"
 
-#: ../metaboxes/fau-person-metaboxes.php:155
+#: ../includes/fau-person-metaboxes.php:173
 msgid ""
-"Bitte geben Sie uni-interne Nummern für Erlangen in der Form 09131 85-22222 "
-"und für Nürnberg in der Form 0911 5302-555 an."
+"Bitte geben Sie uni-interne Nummern für Erlangen in der internationalen Form "
+"+49 9131 85-22222 und für Nürnberg in der internationalen Form +49 911 "
+"5302-555 an."
 msgstr ""
 
-#: ../metaboxes/fau-person-metaboxes.php:160
+#: ../includes/fau-person-metaboxes.php:178
 msgid "Telefax"
 msgstr "Fax number"
 
-#: ../metaboxes/fau-person-metaboxes.php:170
+#: ../includes/fau-person-metaboxes.php:179
+msgid ""
+"Bitte geben Sie die Nummer in der internationalen Form +49 9131 1111111 an."
+msgstr ""
+
+#: ../includes/fau-person-metaboxes.php:184
+msgid "Mobiltelefon"
+msgstr "Mobile phone"
+
+#: ../includes/fau-person-metaboxes.php:185
+msgid ""
+"Bitte geben Sie die Nummer in der internationalen Form +49 176 1111111 an."
+msgstr ""
+
+#: ../includes/fau-person-metaboxes.php:194
 msgid "Social Media"
 msgstr "Social media"
 
-#: ../metaboxes/fau-person-metaboxes.php:183
-#: ../shortcodes/fau-person-shortcodes.php:133
-#: ../widgets/fau-person-widget.php:140
+#: ../includes/fau-person-metaboxes.php:207
+#: ../shortcodes/fau-person-shortcodes.php:183
+#: ../shortcodes/fau-person-shortcodes.php:312
+#: ../widgets/fau-person-widget.php:158
 msgid "Webseite"
 msgstr "Website"
 
-#: ../metaboxes/fau-person-metaboxes.php:193
+#: ../includes/fau-person-metaboxes.php:217
 msgid "Weitere Informationen"
 msgstr "Additional information"
 
-#: ../metaboxes/fau-person-metaboxes.php:200
-msgid "Freitext"
-msgstr "More information"
+#: ../includes/fau-person-metaboxes.php:224
+msgid "Kurzauszug"
+msgstr ""
+
+#: ../includes/fau-person-metaboxes.php:225
+msgid "Wird bei der Anzeige in einer Sidebar verwendet, bis zu 160 Zeichen."
+msgstr ""
+
+#: ../includes/fau-person-metaboxes.php:256
+msgid "Kontaktangabe auswählen"
+msgstr "Select the type of Contact"
 
 #: ../posttypes/fau-person-posttype.php:4
 msgctxt "Post Type General Name"
-msgid "Personen"
-msgstr "Persons"
+msgid "Kontakte"
+msgstr "Contacts"
 
 #: ../posttypes/fau-person-posttype.php:5
 msgctxt "Post Type Singular Name"
-msgid "Person"
-msgstr "Person"
+msgid "Kontakt"
+msgstr "Contact"
 
-#: ../posttypes/fau-person-posttype.php:6
-msgid "Personen"
-msgstr "Persons"
+#: ../posttypes/fau-person-posttype.php:6 ../widgets/fau-person-widget.php:42
+msgid "Kontakt"
+msgstr "Contact"
 
 #: ../posttypes/fau-person-posttype.php:7
-msgid "Übergeordnete Person"
-msgstr "Parent person"
+msgid "Übergeordneter Kontakt"
+msgstr "Parent Contact"
 
 #: ../posttypes/fau-person-posttype.php:8
-msgid "Alle Personen"
-msgstr "All persons"
+msgid "Alle Kontakte"
+msgstr "All contacts"
 
 #: ../posttypes/fau-person-posttype.php:9
-msgid "Person ansehen"
-msgstr "Show person"
+msgid "Kontakt ansehen"
+msgstr "Show contact"
 
 #: ../posttypes/fau-person-posttype.php:10
-msgid "Person hinzufügen"
-msgstr "Add new person"
+msgid "Kontakt hinzufügen"
+msgstr "Add Contact"
 
 #: ../posttypes/fau-person-posttype.php:11
-msgid "Neue Person"
-msgstr "New person"
+msgid "Neuer Kontakt"
+msgstr "Add New"
 
 #: ../posttypes/fau-person-posttype.php:12
-msgid "Person bearbeiten"
-msgstr "Edit person"
+msgid "Kontakt bearbeiten"
+msgstr "Edit contact"
 
 #: ../posttypes/fau-person-posttype.php:13
-msgid "Person aktualisieren"
-msgstr "Update person"
+msgid "Kontakt aktualisieren"
+msgstr "Update contact"
 
 #: ../posttypes/fau-person-posttype.php:14
-msgid "Personen suchen"
-msgstr "Search persons"
+msgid "Kontakte suchen"
+msgstr "Search contacts"
 
 #: ../posttypes/fau-person-posttype.php:15
-msgid "Keine Personen gefunden"
-msgstr "No persons found"
+msgid "Keine Kontakte gefunden"
+msgstr "No contacts found"
 
 #: ../posttypes/fau-person-posttype.php:16
-msgid "Keine Personen in Papierkorb gefunden"
-msgstr "No persons found in trash"
+msgid "Keine Kontakte in Papierkorb gefunden"
+msgstr "No contacts found in trash"
 
 #: ../posttypes/fau-person-posttype.php:25
 msgid "person"
 msgstr "person"
 
-#: ../posttypes/fau-person-posttype.php:26
-msgid "Personeninformationen"
-msgstr "Person information"
+#: ../shortcodes/fau-person-shortcodes.php:30
+msgid "Bitte geben Sie den Titel oder die ID des Kontakteintrags an."
+msgstr "Please enter the title oder ID of the Contact entry."
 
 #: ../shortcodes/fau-person-shortcodes.php:37
+#, php-format
+msgid ""
+"Es konnte kein Kontakteintrag mit dem angegebenen Titel %s gefunden werden. "
+"Versuchen Sie statt dessen die Angabe der ID des Kontakteintrags."
+msgstr ""
+"We could not find any entry with the given search term %s. Try to use the ID "
+"of the contact information instead."
+
+#: ../shortcodes/fau-person-shortcodes.php:49
 #, php-format
 msgid ""
 "Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden."
 msgstr "We could not find any entry with the given search term %s."
 
-#: ../shortcodes/fau-person-shortcodes.php:128
-#: ../widgets/fau-person-widget.php:135
+#: ../shortcodes/fau-person-shortcodes.php:129
+#: ../shortcodes/fau-person-shortcodes.php:236
+#: ../widgets/fau-person-widget.php:100
+msgid "Adresse"
+msgstr "Address"
+
+#: ../shortcodes/fau-person-shortcodes.php:178
+#: ../widgets/fau-person-widget.php:153
 msgid "Tätigkeit"
 msgstr "Job title"
 
-#: ../shortcodes/fau-person-shortcodes.php:136
-#: ../widgets/fau-person-widget.php:99
-msgid "Straße"
-msgstr "Street address"
+#: ../shortcodes/fau-person-shortcodes.php:179
+#: ../shortcodes/fau-person-shortcodes.php:304
+#: ../widgets/fau-person-widget.php:154
+msgid "Einrichtung"
+msgstr "Institiution"
 
-#: ../shortcodes/fau-person-shortcodes.php:138
-#: ../widgets/fau-person-widget.php:102
-msgid "Wohnort"
-msgstr "City"
-
-#: ../shortcodes/fau-person-shortcodes.php:155
+#: ../shortcodes/fau-person-shortcodes.php:196
 #, php-format
 msgid "Weitere Informationen zu %s aufrufen"
 msgstr "Additional information for %s"
 
-#: ../shortcodes/fau-person-shortcodes.php:156
-#: ../templates/single-person.php:65
+#: ../shortcodes/fau-person-shortcodes.php:197
 msgid "Mehr"
 msgstr "More"
 
-#: ../templates/single-person.php:70
-msgid "Es konnte kein Kontakteintrag gefunden werden."
-msgstr "We could not find any entry."
-
 #: ../widgets/fau-person-widget.php:10
-msgid "Personen-Visitenkarte"
-msgstr "Person information"
+msgid "Kontakt-Visitenkarte"
+msgstr "Contact information"
 
 #: ../widgets/fau-person-widget.php:11
-msgid "Personen-Visitenkarte anzeigen"
-msgstr "Show person information"
+msgid "Kontakt-Visitenkarte anzeigen"
+msgstr "Show contact information"
 
 #: ../widgets/fau-person-widget.php:36
 msgid "Titel"
 msgstr "Academical title"
 
-#: ../widgets/fau-person-widget.php:42
-msgid "Person"
-msgstr "Person"
+#~ msgid "Kurzbeschreibung"
+#~ msgstr "Short description"
+
+#~ msgid "Personen eingeben"
+#~ msgstr "Add persons"
+
+#~ msgid "Person"
+#~ msgstr "Person"
+
+#~ msgid "Titel der Meta-Box"
+#~ msgstr "Meta Box Title"
+
+#~ msgid "Freitext"
+#~ msgstr "More information"
+
+#~ msgctxt "Post Type General Name"
+#~ msgid "Personen"
+#~ msgstr "Persons"
+
+#~ msgctxt "Post Type Singular Name"
+#~ msgid "Person"
+#~ msgstr "Person"
+
+#~ msgid "Personen"
+#~ msgstr "Persons"
+
+#~ msgid "Person hinzufügen"
+#~ msgstr "Add new person"
+
+#~ msgid "Neue Person"
+#~ msgstr "New person"
+
+#~ msgid "Personeninformationen"
+#~ msgstr "Person information"
+
+#~ msgid "Straße"
+#~ msgstr "Street address"
+
+#~ msgid "Wohnort"
+#~ msgstr "City"
+
+#~ msgid "Es konnte kein Kontakteintrag gefunden werden."
+#~ msgstr "We could not find any entry."
 
 #, fuzzy
 #~ msgid "showtitle: Titel (Präfix)"

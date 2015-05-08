@@ -8,14 +8,18 @@ Visitenkarten-Plugin für FAU Webauftritte
 Custom Post Type person
 
 
-####Version 1.0.8:
+####Version 1.0.9:
+
+- Felder Institution und Abteilung geteilt    
+- Feld Mobiltelefon ergänzt
+- Eingabefeld für allgemeinen Text (z.B. Lebenslauf, WYSIWYG-Editor), Kurzbeschreibung für Listenanzeige (falls im Shortcode showlist=1 gewählt ist) und Kurzauszug für Sidebaranzeige (falls im Shortcode showsidebar=1 gewählt ist)
 
 #####Shortcode person (css-Klassen an FAU-Webauftritt angepasst)
 ######Beispiel:  
-Titel der eingetragenen Person = Max Mustermann:  
+Titel des eingetragenen Kontaktes = Max Mustermann:  
 [person slug='Max Mustermann']  
 
-Personen können alternativ auch mit der ID abgerufen werden:
+Kontakte können alternativ auch mit der ID abgerufen werden:
 [person id="12345"]
 
 ACHTUNG: In manchen Fällen wird auch bei korrekter Schreibweise der Slug nicht gefunden (z.B. wenn Umlaut beinhaltet ist). Zuverlässiger ist die Anzeige über die ID.
@@ -43,7 +47,7 @@ extended (fasst alle Parameter mit * zusammen, so dass nur extended=1 angegeben 
 
 
 - format = full
-Anzeige wie bei einer Personen-Einzelseite
+Anzeige wie bei einer Kontakt-Einzelseite
 
 #####Vorlage zur Singledarstellung: templates/single-person.php
 kann gerne ins eigene Theme übernommen und daran angepasst werden, Vorlage ist an FAU-Webauftritt angepasst
