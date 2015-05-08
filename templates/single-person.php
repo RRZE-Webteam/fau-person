@@ -12,7 +12,7 @@ get_header(); ?>
                     $id = $post->ID;
 
 		    echo fau_person_page($id);
-   
+                    the_content();
 			?>
           
                     </div>

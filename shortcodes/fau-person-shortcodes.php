@@ -12,6 +12,7 @@
                     "showaddress" => FALSE,
                     "showroom" => FALSE,
                     "showdescription" => FALSE,
+                    "showlist" => FALSE,
                     "showthumb" => FALSE,
                     "showpubs" => FALSE,
                     "showoffice" => FALSE,
@@ -43,7 +44,7 @@
 		if ( ($format == 'full') || ($format=='page') ) {
 		    return fau_person_page($id);
 		} else { 
-		    return fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showmail, $showtelefon);
+		    return fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showmail, $showtelefon);
                 }                
             } else {
                 return sprintf(__('Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $id);                
@@ -63,6 +64,8 @@
                     "showaddress" => FALSE,
                     "showroom" => FALSE,
                     "showdescription" => FALSE,
+                    "showsidebar" => FALSE,
+                    "showlist" => FALSE,
                     "showthumb" => FALSE,
                     "showpubs" => FALSE,
                     "showoffice" => FALSE,
@@ -90,7 +93,7 @@
 
             foreach($posts as $post)
             {
-                    $content .= fau_person_markup($post->ID, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showmail, $showtelefon);
+                    $content .= fau_person_markup($post->ID, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showmail, $showtelefon);
             }
 
             return $content;
@@ -98,7 +101,7 @@
  }
 
  if(!function_exists('fau_person_markup')) {
-    function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showmail, $showtelefon)
+    function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showmail, $showtelefon)
     {
 
 	
@@ -119,9 +122,14 @@
             $workLocation = get_post_meta($id, 'fau_person_workLocation', true);
             $hoursAvailable = get_post_meta($id, 'fau_person_hoursAvailable', true);
             $pubs = get_post_meta($id, 'fau_person_pubs', true);
-            $freitext = get_post_meta($id, 'fau_person_description', true);
+            $description = get_post_meta($id, 'fau_person_description', true);
+            
             $link = get_post_meta($id, 'fau_person_link', true);
-	     $type = get_post_meta($id, 'fau_person_typ', true);
+	    $type = get_post_meta($id, 'fau_person_typ', true);
+            
+            
+            $excerpt = get_post_field('post_excerpt', $id);
+
             
                                                             //ACHTUNG: vorher css person-info-address (war Textarea bei FAU)!!!
                                                 if($streetAddress || $postalCode || $addressLocality || $addressCountry) {
@@ -190,7 +198,8 @@
 
                             $content .= '</div>';
                             $content .= '<div class="span3">';
-                                    if(($extended || $showdescription) && $freitext)		$content .= '<div class="person-info-description">'.$freitext.'</div>';
+                                    if( $showlist && $excerpt )                                  $content .= '<div class="person-info-description">'.$excerpt.'</div>';    
+                                    if(($extended || $showsidebar) && $description)		$content .= '<div class="person-info-description">'.$description.'</div>';
                                     if($showlink && $link) {
                                             $content .= '<div class="person-info-more"><a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" class="person-read-more" href="'.$link.'">';
                                             $content .= __('Mehr', FAU_PERSON_TEXTDOMAIN) . ' ›</a></div>';
@@ -227,7 +236,6 @@
 	    $workLocation = get_post_meta($id, 'fau_person_workLocation', true);
 	    $hoursAvailable = get_post_meta($id, 'fau_person_hoursAvailable', true);
 	    $pubs = get_post_meta($id, 'fau_person_pubs', true);
-	    $freitext = get_post_meta($id, 'fau_person_description', true);
 	    $link = get_post_meta($id, 'fau_person_link', true);             
 
 
@@ -321,12 +329,10 @@
 
 		    $res .=  $content;
 		    $res .= "\n";
-		    $res .=  $freitext;
-
 		    $res .= "</div>\n";
 
-
 	    return $res;
+
     } 
  }
 ?>
