@@ -14,27 +14,12 @@ add_action('init', function() {
 
 
 add_filter('cmb_meta_boxes', function(array $metaboxes) {
+        //global $post;
 //function fau_person_metaboxes( $meta_boxes ) {
     $prefix = 'fau_person_'; // Prefix for all fields
     $contactselect = $this->get_contactdata();
-/*    $meta_boxes['fau_person_postdata'] = array(
-        'id' => 'fau_person_postdata',
-        'title' => __( 'Infos zum Kontakteintrag', FAU_PERSON_TEXTDOMAIN ),
-        'pages' => array('person'), // post type
-        'context' => 'normal',
-        'priority' => 'default',
-        'show_names' => true, // Show field names on the left
-        'readonly' => true,
-        'fields' => array(
-            array(
-                'name' => __('ID des Beitrags', FAU_PERSON_TEXTDOMAIN),
-                'desc' => 'Zum Aufruf des Kontaktes im shortcode',
-                'id' => $prefix . 'id',
-                'type' => 'text',
-                'value' => get_post($id),
-            ),
-        )        
-    );*/
+   // $helpuse = $this->get_helpuse();
+
     // Zuordnung - fau_person_orga
     $meta_boxes['fau_person_orga'] = array(
         'id' => 'fau_person_orga',
@@ -67,6 +52,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'desc' => __('Bitte vollständigen Permalink der Zielseite angeben', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text_url',
                 'id' => $prefix . 'link',
+                //'after' => '<hr>' . __('Zum Anzeigen der Person verwenden Sie bitte die ID', FAU_PERSON_TEXTDOMAIN) . ' ' . $helpuse,
             )
         )
     );

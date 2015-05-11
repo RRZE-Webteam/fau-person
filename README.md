@@ -8,6 +8,12 @@ Visitenkarten-Plugin für FAU Webauftritte
 Custom Post Type person
 
 
+####Version 1.0.10:
+
+- Kurzbeschreibung für Listenanzeige wird aus allgemeinem Text generiert, wenn das Feld leer ist (55 Wörter oder bis zum Weiterlesen-Tag)    
+- format="shortlist" ergänzt für Auflistung von Titel (Präfix), Vorname, Nachname, Suffix, ggf. Kurzauszug (bei showlist=1)    
+- Eingabe mehrerer ids möglich (kommasepariert, z. B. id="42,44,56") für die Anzeige mehrerer Personen mit gleichen Shortcode-Parametern untereinander    
+
 ####Version 1.0.9:
 
 - Felder Institution und Abteilung geteilt    
