@@ -92,41 +92,32 @@ class FAUPersonWidget extends WP_Widget
                         $workLocation = get_post_meta($id, 'fau_person_workLocation', true);
                         $hoursAvailable = get_post_meta($id, 'fau_person_hoursAvailable', true);
                         $pubs = get_post_meta($id, 'fau_person_pubs', true);
-                        $freitext = get_post_meta($id, 'fau_person_description', true);
+                        $description = get_post_meta($id, 'fau_person_description', true);
                         $link = get_post_meta($id, 'fau_person_link', true);             
                         
+                if($streetAddress || $postalCode || $addressLocality || $addressCountry) {
+                    $contactpoint = '<li class="person-info-address"><span class="screen-reader-text">'.__('Adresse',FAU_PERSON_TEXTDOMAIN).': <br></span>';    
+                                                
+                    if($streetAddress) {
+                        $contactpoint .= '<span class="person-info-street" itemprop="streetAddress">'.$streetAddress.'</span>';
+                        if( $postalCode || $addressLocality )  {
+                            $contactpoint .= '<br>';
+                        } elseif( $addressCountry ) {
+                            $contactpoint .= '<br>';
+                        }                    
+                    }
+                    if($postalCode || $addressLocality) {
+                        $contactpoint .= '<span class="person-info-city">';
+                        if($postalCode)             $contactpoint .= '<span itemprop="postalCode">'.$postalCode.'</span> ';  
+                        if($addressLocality)	$contactpoint .= '<span itemprop="addressLocality">'.$addressLocality.'</span>';
+                        $contactpoint .= '</span>';
+                        if( $addressCountry )       $contactpoint .= '<br>';
+                    }                  
+                    if( $addressCountry )         $contactpoint .= '<span class="person-info-country" itemprop="addressCountry">'.$addressCountry.'</span>';
+                    $contactpoint .= '</li>';                                                
+                }
                         
-                        if($streetAddress || $postalCode || $addressLocality || $addressCountry) {
-                                $contactpoint = '<li class="person-info-address"><span class="screen-reader-text">'.__('Adresse',FAU_PERSON_TEXTDOMAIN).': </span><br>';    
-                                                
-                                if($streetAddress)          $contactpoint .= '<span class="person-info-street" itemprop="streetAddress">'.$streetAddress.'</span>';
-                                if($streetAddress && ($postalCode || $addressLocality)) $contactpoint .= '<br>';
-                                if($postalCode || $addressLocality) {
-                                        $contactpoint .= '<span class="person-info-city">';
-                                        if($postalCode)         $contactpoint .= '<span itemprop="postalCode">'.$postalCode.'</span> ';  
-                                        if($addressLocality)	$contactpoint .= '<span itemprop="addressLocality">'.$addressLocality.'</span>';
-                                        $contactpoint .= '</span>';
-                                        }
-                                if(($streetAddress || $postalCode || $addressLocality) && $addressCountry)                    $contactpoint .= '<br>';
-                                if($addressCountry)         $contactpoint .= '<span class="person-info-country" itemprop="addressCountry">'.$addressCountry.'</span></';
-                                $contactpoint .= '</li>';                                                
-                        }
-                                                
-
-                        /*
-                        if($streetAddress)  $contactPoint = '<li class="person-info-street"><span class="screen-reader-text">'.__('Straße',FAU_PERSON_TEXTDOMAIN).': </span><span itemprop="streetAddress">'.$streetAddress.'</span></li>';
-                        if($postalCode || $addressLocality) {
-                                if(empty($contactPoint)) $contactPoint = "";
-                                $contactPoint .= '<li class="person-info-city"><span class="screen-reader-text">'.__('Wohnort',FAU_PERSON_TEXTDOMAIN).': </span>';
-                                if($postalCode)     $contactPoint .= '<span itemprop="postalCode">'.$postalCode.'</span> ';  
-                                if($addressLocality)	$contactPoint .= '<span itemprop="addressLocality">'.$addressLocality.'</span';
-                                $contactPoint .= '</li>';
-                        }
-                        if($addressCountry) {	
-                            if(empty($contactPoint)) $contactPoint = "";
-                            $contactPoint .= '<li class="person-info-country"><span class="screen-reader-text">'.__('Land',FAU_PERSON_TEXTDOMAIN).': </span><span itemprop="addressCountry">'.$addressCountry.'</span></li>';
-                        }
-                            */                    
+                
                        
 			
 			$content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
@@ -158,7 +149,7 @@ class FAUPersonWidget extends WP_Widget
 							if($url)		$content .= '<li class="person-info-www"><span class="screen-reader-text">'.__('Webseite',FAU_PERSON_TEXTDOMAIN).': </span><a itemprop="url" href="'.$url.'">'.$url.'</a></li>';
 							if(!empty($contactpoint))		$content .= $contactpoint;
 							if($workLocation)			$content .= '<li class="person-info-room"><span class="screen-reader-text">' . __('Raum', FAU_PERSON_TEXTDOMAIN) .' </span><span itemprop="workLocation">'.$workLocation.'</span></li>';
-							//	if($description)		$content .= '<div class="person-info-description">'.$description.'</div>';
+							if($description)		$content .= '<div class="person-info-description">'.$description.'</div>';
 						$content .= '</ul>';
 					$content .= '</div>';
 				$content .= '</div>';
