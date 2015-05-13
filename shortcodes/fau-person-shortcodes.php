@@ -42,7 +42,12 @@
                 }
             }
             $list_ids = explode( ',', $id ); 
-            $liste = '';
+            if( $format == 'shortlist' ) {
+                $liste =  '<ul class="person liste-person" itemscope itemtype="http://schema.org/Person">';
+            } else {
+                $liste = '';
+            }
+            
             foreach ($list_ids as $value) {
                 $post = get_post( $value );
                 if( $post->post_type == 'person' ) {
@@ -57,6 +62,8 @@
                     $liste .= '<p>' . sprintf(__('Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $value) . '</p>';                
                 }                
             }
+            if( $format == 'shortlist' )
+                $liste =  $liste .  '</ul>';
             return $liste;
     }
  }
@@ -374,23 +381,22 @@
                 wp_reset_postdata();
             }
             
-            $content = '<div class="person liste-person" itemscope itemtype="http://schema.org/Person">';			
+            $content = '';			
 
             
 			$fullname = '';
-			if($honorificPrefix) 	$fullname .= '<span itemprop="honorificPrefix">'.$honorificPrefix.'</span> ';
+			if($honorificPrefix)            $fullname .= '<span itemprop="honorificPrefix">'.$honorificPrefix.'</span> ';
                         if($givenName || $familyName) {
-        			if($givenName) 	$fullname .= '<span itemprop="givenName">'.$givenName.'</span> ';
-                		if($familyName) 		$fullname .= '<span itemprop="familyName">'.$familyName.'</span>';
+        			if($givenName)          $fullname .= '<span itemprop="givenName">'.$givenName.'</span> ';
+                		if($familyName)         $fullname .= '<span itemprop="familyName">'.$familyName.'</span>';
                         } else {
                             $fullname .= get_the_title($id);
                         }
 			if($honorificSuffix) 	$fullname .= ' '.$honorificSuffix;
-                                    $content .= '<div class="person-info"><a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . get_post_field( 'guid', $id ) . '">' . $fullname . '</a></div>';
-                                    if( $showlist && $excerpt )                                  $content .= '<div class="person-info-description">'.$excerpt.'</div>';    
+                                    $content .= '<li class="person-info"><a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . get_post_field( 'guid', $id ) . '">' . $fullname . '</a>';
+                                    if( $showlist && $excerpt )                                  $content .= '<br>'.$excerpt;    
+                                    $content .= '</li>';
 
-
-            $content .= '</div>';
 
             return $content;
     }
