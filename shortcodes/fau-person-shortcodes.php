@@ -41,9 +41,11 @@
                         
                 }
             }
+            if(!empty($id)) {
             $list_ids = explode( ',', $id ); 
             if( $format == 'shortlist' ) {
                 $liste =  '<ul class="person liste-person" itemscope itemtype="http://schema.org/Person">';
+                $liste .= "\n";
             } else {
                 $liste = '';
             }
@@ -63,8 +65,9 @@
                 }                
             }
             if( $format == 'shortlist' )
-                $liste =  $liste .  '</ul>';
+                $liste .=  "</ul>\n";
             return $liste;
+            }
     }
  }
 
@@ -385,19 +388,18 @@
 
             
 			$fullname = '';
-			if($honorificPrefix)            $fullname .= '<span itemprop="honorificPrefix">'.$honorificPrefix.'</span> ';
+			if($honorificPrefix)            $fullname .= '<span itemprop="honorificPrefix">'.$honorificPrefix."</span> ";
                         if($givenName || $familyName) {
-        			if($givenName)          $fullname .= '<span itemprop="givenName">'.$givenName.'</span> ';
-                		if($familyName)         $fullname .= '<span itemprop="familyName">'.$familyName.'</span>';
+        			if($givenName)          $fullname .= '<span itemprop="givenName">'.$givenName."</span> ";
+                		if($familyName)         $fullname .= '<span itemprop="familyName">'.$familyName."</span>";
                         } else {
                             $fullname .= get_the_title($id);
                         }
 			if($honorificSuffix) 	$fullname .= ' '.$honorificSuffix;
-                                    $content .= '<li class="person-info"><a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . get_post_field( 'guid', $id ) . '">' . $fullname . '</a>';
-                                    if( $showlist && $excerpt )                                  $content .= '<br>'.$excerpt;    
-                                    $content .= '</li>';
-
-
+                                    $content .= '<li class="person-info">'."\n";
+                                    $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . get_post_field( 'guid', $id ) . '">' . $fullname . '</a>';
+                                    if( $showlist && $excerpt )                                  $content .= "<br>\n".$excerpt;    
+                                    $content .= "</li>\n";
             return $content;
     }
  }
