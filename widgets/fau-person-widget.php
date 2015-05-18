@@ -109,7 +109,7 @@ class FAUPersonWidget extends WP_Widget
                     if($postalCode || $addressLocality) {
                         $contactpoint .= '<span class="person-info-city">';
                         if($postalCode)             $contactpoint .= '<span itemprop="postalCode">'.$postalCode.'</span> ';  
-                        if($addressLocality)	$contactpoint .= '<span itemprop="addressLocality">'.$addressLocality.'</span>';
+                        if($addressLocality)        $contactpoint .= '<span itemprop="addressLocality">'.$addressLocality.'</span>';
                         $contactpoint .= '</span>';
                         if( $addressCountry )       $contactpoint .= '<br>';
                     }                  
