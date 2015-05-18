@@ -149,12 +149,9 @@
                 $excerpt = get_post_field( 'post_excerpt', $id );                
             } else {
                 $post = get_post( $id );
-                setup_postdata( $post );
-                $excerpt = get_the_excerpt();
-                wp_reset_postdata();
-            }
-
-
+                if ( $post->post_content )      $excerpt = wp_trim_excerpt($post->post_content);
+            }         
+            
             if($streetAddress || $postalCode || $addressLocality || $addressCountry) {
                 $contactpoint = '<li class="person-info-address"><span class="screen-reader-text">'.__('Adresse',FAU_PERSON_TEXTDOMAIN).': <br></span>';    
                                                 
@@ -192,8 +189,10 @@
 					$bild =  plugin_dir_url( __FILE__ ) .'../images/platzhalter-mann.png';   
 				    } elseif ($type == 'realfemale') {
 					$bild = plugin_dir_url( __FILE__ ) .'../images/platzhalter-frau.png';
+                                    } elseif ($type == 'einrichtung') {
+                                        $bild = plugin_dir_url( __FILE__ ) .'../images/platzhalter-organisation.png';
 				    } else {
-					$bild = plugin_dir_url( __FILE__ ) .'../images/platzhalter-mann.png';
+					$bild = plugin_dir_url( __FILE__ ) .'../images/platzhalter-unisex.png';
 				    }
 				    
 				    if ($bild) {
@@ -226,7 +225,8 @@
                                             $content .= '</ul>';
 
                             $content .= '</div>';
-                            $content .= '<div class="span3">';
+                            if( ($showlist && $excerpt) || (($showsidebar || $extended) && $description) || ($showlink && $link) ) {
+                                $content .= '<div class="span3">';
                                     if( $showlist && $excerpt )                                  $content .= '<div class="person-info-description"><p>'.$excerpt.'</p></div>';    
                                     if(($extended || $showsidebar) && $description)		$content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', FAU_PERSON_TEXTDOMAIN) .': </span>'.$description.'</div>';
                                     if($showlink && $link) {
@@ -234,8 +234,8 @@
                                             $content .= __('Mehr', FAU_PERSON_TEXTDOMAIN) . ' ›</a></div>';
                                     }
 
-                            $content .= '</div>';
-                    $content .= '</div>';
+                                $content .= '</div>'; }
+                    $content .= '</div>'; 
 
             $content .= '</div>';
 
@@ -269,19 +269,19 @@
 
 
 	    if($streetAddress || $postalCode || $addressLocality || $addressCountry) {
-		    $contactpoint = '<li class="person-info-address"><span class="screen-reader-text">'.__('Adresse',FAU_PERSON_TEXTDOMAIN).': </span><br>';    
+		$contactpoint = '<li class="person-info-address"><span class="screen-reader-text">'.__('Adresse',FAU_PERSON_TEXTDOMAIN).': <br></span>';    
 
-		    if($streetAddress)          $contactpoint .= '<span class="person-info-street" itemprop="streetAddress">'.$streetAddress.'</span>';
-		    if($streetAddress && ($postalCode || $addressLocality)) $contactpoint .= '<br>';
-		    if($postalCode || $addressLocality) {
-			    $contactpoint .= '<span class="person-info-city">';
-			    if($postalCode)         $contactpoint .= '<span itemprop="postalCode">'.$postalCode.'</span> ';  
-			    if($addressLocality)	$contactpoint .= '<span itemprop="addressLocality">'.$addressLocality.'</span>';
-			    $contactpoint .= '</span>';
-			    }
-		    if(($streetAddress || $postalCode || $addressLocality) && $addressCountry)                    $contactpoint .= '<br>';
-		    if($addressCountry)         $contactpoint .= '<span class="person-info-country" itemprop="addressCountry">'.$addressCountry.'</span></';
-		    $contactpoint .= '</li>';                                                
+		if($streetAddress)          $contactpoint .= '<span class="person-info-street" itemprop="streetAddress">'.$streetAddress.'</span>';
+		if($streetAddress && ($postalCode || $addressLocality))     $contactpoint .= "\n";
+		if($postalCode || $addressLocality) {
+                    $contactpoint .= '<span class="person-info-city">';
+                    if($postalCode)         $contactpoint .= '<span itemprop="postalCode">'.$postalCode.'</span> ';  
+                    if($addressLocality)    $contactpoint .= '<span itemprop="addressLocality">'.$addressLocality.'</span>';
+                    $contactpoint .= '</span>';
+                }
+		if(($streetAddress || $postalCode || $addressLocality) && $addressCountry)                    $contactpoint .= "\n";
+		if($addressCountry)         $contactpoint .= '<span class="person-info-country" itemprop="addressCountry">'.$addressCountry.'</span></';
+		$contactpoint .= '</li>';                                                
 	    }
 
 
@@ -307,14 +307,7 @@
 			    $headline = $fullname;
 			    $res .=  '<h2 itemprop="name">'.$headline.'</h2>';
 			}
-
-
-
-
-
 			$post = get_post($id);
-
-
 
 		    if(has_post_thumbnail($id)) {
 			    $content .= '<div itemprop="image" class="alignright">';
@@ -323,8 +316,7 @@
 			    $content .= get_the_post_thumbnail($id, 'person-thumb-page');
 			    $content .= '</div>';
 		    }
-
-
+                    
 		   if ($jobTitle) {
 			$content .= '<h3 itemprop="name">';
 			$content .= $fullname;
@@ -351,10 +343,7 @@
 		    if($workLocation)			
 			$content .= '<li class="person-info-room"><span class="screen-reader-text">' . __('Raum', 'fau') .' </span><span itemprop="workLocation">'.$workLocation.'</span></li>';
 
-
-
 		    $content .= '</ul>';
-
 
 		    $res .=  $content;
 		    $res .= "\n";
@@ -367,9 +356,7 @@
  
  if(!function_exists('fau_person_shortlist')) {
     function fau_person_shortlist($id, $showlist)
-    {
-
-	
+    {	
             $honorificPrefix = get_post_meta($id, 'fau_person_honorificPrefix', true);
             $givenName = get_post_meta($id, 'fau_person_givenName', true);
             $familyName = get_post_meta($id, 'fau_person_familyName', true);
@@ -379,28 +366,25 @@
                 $excerpt = get_post_field( 'post_excerpt', $id );                
             } else {
                 $post = get_post( $id );
-                setup_postdata( $post );
-                $excerpt = get_the_excerpt();
-                wp_reset_postdata();
+                $excerpt = wp_trim_excerpt($post->post_content);
             }
             
-            $content = '';			
-
-            
-			$fullname = '';
-			if($honorificPrefix)            $fullname .= '<span itemprop="honorificPrefix">'.$honorificPrefix."</span> ";
-                        if($givenName || $familyName) {
-        			if($givenName)          $fullname .= '<span itemprop="givenName">'.$givenName."</span> ";
-                		if($familyName)         $fullname .= '<span itemprop="familyName">'.$familyName."</span>";
-                        } else {
-                            $fullname .= get_the_title($id);
-                        }
-			if($honorificSuffix) 	$fullname .= ' '.$honorificSuffix;
-                                    $content .= '<li class="person-info">'."\n";
-                                    $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . get_post_field( 'guid', $id ) . '">' . $fullname . '</a>';
-                                    if( $showlist && $excerpt )                                  $content .= "<br>\n".$excerpt;    
-                                    $content .= "</li>\n";
+            $content = '';			           
+		$fullname = '';
+		if($honorificPrefix)            $fullname .= '<span itemprop="honorificPrefix">'.$honorificPrefix."</span> ";
+                if($givenName || $familyName) {
+                    if($givenName)          $fullname .= '<span itemprop="givenName">'.$givenName."</span> ";
+                    if($familyName)         $fullname .= '<span itemprop="familyName">'.$familyName."</span>";
+                } else {
+                    $fullname .= get_the_title($id);
+                }
+                if($honorificSuffix) 	$fullname .= ' '.$honorificSuffix;
+                $content .= '<li class="person-info">'."\n";
+                $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . get_post_field( 'guid', $id ) . '">' . $fullname . '</a>';
+                if( $showlist && $excerpt )                                  $content .= "\n".$excerpt;    
+                $content .= "</li>\n";
             return $content;
     }
  }
+ 
 ?>

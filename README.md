@@ -7,6 +7,10 @@ WordPress Plugin
 Visitenkarten-Plugin für FAU Webauftritte  
 Custom Post Type person
 
+####Version 1.0.12:
+
+- Platzhalterbilder für Einrichtung und geschlechtsneutrale Person ergänzt   
+
 ####Version 1.0.11:
 
 - Listenausgabe optimiert    
