@@ -366,7 +366,7 @@
                 $excerpt = get_post_field( 'post_excerpt', $id );                
             } else {
                 $post = get_post( $id );
-                $excerpt = wp_trim_excerpt($post->post_content);
+                if ( $post->post_content )      $excerpt = wp_trim_excerpt($post->post_content);
             }
             
             $content = '';			           
