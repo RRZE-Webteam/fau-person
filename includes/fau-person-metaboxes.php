@@ -30,6 +30,12 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
         'show_names' => true, // Show field names on the left
         'fields' => array(
             array(
+                'name' => __('Typ des Eintrags', FAU_PERSON_TEXTDOMAIN),
+                'desc' => __('Kontakt, Person oder Standort', FAU_PERSON_TEXTDOMAIN),
+                'type' => 'text',
+                'id' => $prefix . 'type'
+            ),            
+            array(
                 'name' => __('Organisation', FAU_PERSON_TEXTDOMAIN),
                 'desc' => __('Geben Sie hier die Organisation (Lehrstuhl oder Einrichtung) ein.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text',

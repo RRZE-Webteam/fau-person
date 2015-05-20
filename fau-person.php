@@ -37,6 +37,7 @@ require_once('widgets/fau-person-widget.php');
 
 
 
+
 class FAU_Person {
 
     const option_name = '_fau_person';
@@ -81,9 +82,12 @@ class FAU_Person {
         add_filter( 'single_template', array( $this, 'include_template_function' ) );
 
         self::add_shortcodes();        
-        
+      
         //Excerpt-Meta-Box umbenennen
         add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));
+        
+        add_action('admin_menu' , array( $this, 'person_menu_subpages' ));        
+        
     }
 
     public static function activation() {
@@ -304,6 +308,14 @@ class FAU_Person {
 
         $screen->set_help_sidebar($help_sidebar);
     }    
+    
+    public function person_menu_subpages() {
+        add_submenu_page('edit.php?post_type=person', __('Kontakt hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Kontakt hinzufügen', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'post-new.php', array( $this, 'add_person_types' ));
+    }
+    
+    public function add_person_types() {
+        
+    }
     
     public static function register_widgets() {
             register_widget( 'FAUPersonWidget' );

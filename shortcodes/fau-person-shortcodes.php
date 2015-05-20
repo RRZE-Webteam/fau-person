@@ -37,8 +37,7 @@
                         $id = $post->ID;		
                     } else {
                         return '<p>' . sprintf(__('Es konnte kein Kontakteintrag mit dem angegebenen Titel %s gefunden werden. Versuchen Sie statt dessen die Angabe der ID des Kontakteintrags.', FAU_PERSON_TEXTDOMAIN), $slug) . '</p>';                        
-                    }
-                        
+                    }                        
                 }
             }
             if(!empty($id)) {

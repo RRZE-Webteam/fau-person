@@ -1,7 +1,5 @@
 <?php
 
-
-
 class FAUPersonWidget extends WP_Widget
 {
 	public function __construct() {
