@@ -132,6 +132,10 @@ class FAU_Person {
     }
 
     private static function default_options() {
+        /*$person_fields = array(
+            
+        );*/
+        
         return array(); // Standard-Array für zukünftige Optionen
     }
 
@@ -145,20 +149,18 @@ class FAU_Person {
         return (object) $options;
     }
     
-    public function get_contactdata() {
-        $contactselect = array(
-            '' => __( 'keine Angabe', FAU_PERSON_TEXTDOMAIN ),
-        );
-        
+    public function get_contactdata() {     
          $args = array(
             'post_type' => 'person',
             'order' => 'ASC',
-            'meta_key' => 'fau_person_familyName',
-            'orderby' => 'meta_value',
-            'posts_per_page' => 30,
+            'orderby' => 'post_title',
+            'numberposts' => -1,
         );
 
-	$personlist = get_posts($args);
+        $personlist = get_posts( $args );
+        foreach( $personlist as $key => $value ){
+            $contactselect[] = $personlist[$key]->post_title . ' (ID: ' . $personlist[$key]->ID . ')'; 
+        }
         return $contactselect;  
     }
     
@@ -310,7 +312,7 @@ class FAU_Person {
     }    
     
     public function person_menu_subpages() {
-        add_submenu_page('edit.php?post_type=person', __('Kontakt hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Kontakt hinzufügen', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'post-new.php', array( $this, 'add_person_types' ));
+        add_submenu_page('edit.php?post_type=person', __('Kontakt hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Kontakt hinzufügen', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'kontakt', array( $this, 'add_person_types' ));
     }
     
     public function add_person_types() {
