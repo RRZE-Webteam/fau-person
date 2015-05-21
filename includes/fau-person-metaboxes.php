@@ -234,7 +234,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
         'id' => 'fau_person_post_metabox',
         'title' => __( 'Kontaktinformationen', FAU_PERSON_TEXTDOMAIN ),
         'pages' => array('post', 'page'), // post type
-        'context' => 'side',
+        'context' => 'normal',
         'priority' => 'default',
         'show_names' => true, // Show field names on the left
         'fields' => array(

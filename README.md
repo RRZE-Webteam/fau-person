@@ -9,7 +9,7 @@ Custom Post Type person
 
 ####Version 1.0.13:
 
-- Verfügbare Kontakte werden in Sidebar mit ihrer ID angezeigt (vereinfachte Suche für Shortcode)    
+- Verfügbare Kontakte werden auf Seiten und Beiträgen mit ihrer ID angezeigt (vereinfachte Suche für Shortcode, Metabox kann auch auf die Seite verschoben werden)    
 
 ####Version 1.0.12:
 
