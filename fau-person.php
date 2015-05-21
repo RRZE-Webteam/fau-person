@@ -151,7 +151,7 @@ class FAU_Person {
 
 	$personlist = get_posts($args);
         foreach( $personlist as $key => $value) {
-            $contactselect[] = $personlist[$key]->post_title . ' (ID: ' . $personlist[$key]->ID . ')';
+            $contactselect[] = $personlist[$key]->ID . ', ' . $personlist[$key]->post_title;
         }
         return $contactselect;  
     }
