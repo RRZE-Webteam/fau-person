@@ -234,12 +234,12 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
         'id' => 'fau_person_post_metabox',
         'title' => __( 'Kontaktinformationen', FAU_PERSON_TEXTDOMAIN ),
         'pages' => array('post', 'page'), // post type
-        'context' => 'normal',
+        'context' => 'side',
         'priority' => 'default',
         'show_names' => true, // Show field names on the left
         'fields' => array(
             array(
-                'name' => __('Kontaktangabe auswählen', FAU_PERSON_TEXTDOMAIN),
+                'name' => __('Verfügbare Kontakte anzeigen', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
                 'id' => $prefix . 'contactselect',
                 'type' => 'select',

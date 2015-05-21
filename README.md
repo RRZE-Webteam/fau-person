@@ -7,6 +7,10 @@ WordPress Plugin
 Visitenkarten-Plugin für FAU Webauftritte  
 Custom Post Type person
 
+####Version 1.0.13:
+
+- Verfügbare Kontakte werden in Sidebar mit ihrer ID angezeigt (vereinfachte Suche für Shortcode)    
+
 ####Version 1.0.12:
 
 - Platzhalterbilder für Einrichtung und geschlechtsneutrale Person ergänzt   

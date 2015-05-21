@@ -3,7 +3,7 @@
 /**
  * Plugin Name: FAU Person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 1.0.13
+ * Version: 1.0.14
  * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -142,19 +142,17 @@ class FAU_Person {
     }
     
     public function get_contactdata() {
-        $contactselect = array(
-            '' => __( 'keine Angabe', FAU_PERSON_TEXTDOMAIN ),
-        );
-        
          $args = array(
             'post_type' => 'person',
             'order' => 'ASC',
-            'meta_key' => 'fau_person_familyName',
-            'orderby' => 'meta_value',
-            'posts_per_page' => 30,
+            'orderby' => 'post_title',
+            'numberposts' => -1
         );
 
 	$personlist = get_posts($args);
+        foreach( $personlist as $key => $value) {
+            $contactselect[] = $personlist[$key]->post_title . ' (ID: ' . $personlist[$key]->ID . ')';
+        }
         return $contactselect;  
     }
     
