@@ -245,6 +245,21 @@
  
      	$res = '<div class="person" itemscope itemtype="http://schema.org/Person">';
 
+        $fields = sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true) );
+        extract($fields);           
+
+
+	    if($streetAddress || $postalCode || $addressLocality || $addressCountry) {
+		$contactpoint = '<li class="person-info-address"><span class="screen-reader-text">'.__('Adresse',FAU_PERSON_TEXTDOMAIN).': </span><br>';    
+		if($streetAddress)          $contactpoint .= '<span class="person-info-street" itemprop="streetAddress">'.$streetAddress.'</span>';
+		if($streetAddress && ($postalCode || $addressLocality))                         $contactpoint .= '<br>';
+		if($postalCode || $addressLocality) {
+                    $contactpoint .= '<span class="person-info-city">';
+                    if($postalCode)             $contactpoint .= '<span itemprop="postalCode">'.$postalCode.'</span> ';  
+                    if($addressLocality)	$contactpoint .= '<span itemprop="addressLocality">'.$addressLocality.'</span>';
+                    $contactpoint .= '</span>';
+                }
+		if(($streetAddress || $postalCode || $addressLocality) && $addressCountry)      $contactpoint .= '<br>';
 		if($addressCountry)         $contactpoint .= '<span class="person-info-country" itemprop="addressCountry">'.$addressCountry.'</span></';
 		$contactpoint .= '</li>';                                                
 	    }
@@ -285,3 +300,4 @@
 	    return $res;
 
     } 
+ }

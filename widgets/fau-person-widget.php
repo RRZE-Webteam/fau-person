@@ -116,9 +116,7 @@ class FAUPersonWidget extends WP_Widget
                         if( $addressCountry )       $contactpoint .= '<br>';
                     }                  
                     if( $addressCountry )         $contactpoint .= '<span class="person-info-country" itemprop="addressCountry">'.$addressCountry.'</span>';
-                    $contactpoint .= '</li>';                                                
-                }
-                        
+                    $contactpoint .= '</li>';                                                    
                 
                        
 			
@@ -158,9 +156,9 @@ class FAUPersonWidget extends WP_Widget
 			
 			$content .= '</div>';
 		}
-		
 		echo $content;
 		
 		echo $after_widget;
 	}
+        
 }
