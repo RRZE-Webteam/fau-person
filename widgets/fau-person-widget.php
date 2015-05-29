@@ -7,8 +7,8 @@ class FAUPersonWidget extends WP_Widget
 	public function __construct() {
             parent::__construct(
                     'FAUPersonWidget',
-                    __('Personen-Visitenkarte', FAU_PERSON_TEXTDOMAIN),
-                    array('description' => __('Personen-Visitenkarte anzeigen', FAU_PERSON_TEXTDOMAIN), 'class' => 'FAUPersonWidget')
+                    __('Kontakt-Visitenkarte', FAU_PERSON_TEXTDOMAIN),
+                    array('description' => __('Kontakt-Visitenkarte anzeigen', FAU_PERSON_TEXTDOMAIN), 'class' => 'FAUPersonWidget')
             );
 	}
 
@@ -39,7 +39,7 @@ class FAUPersonWidget extends WP_Widget
 		echo '</p>';
 
 		echo '<p>';
-			echo '<label for="'.$this->get_field_id('id').'">' . __('Person', FAU_PERSON_TEXTDOMAIN). ': ';
+			echo '<label for="'.$this->get_field_id('id').'">' . __('Kontakt', FAU_PERSON_TEXTDOMAIN). ': ';
 
                         echo '<select id="'.$this->get_field_id('id').'" name="'.$this->get_field_name('id').'">';
 		
@@ -78,20 +78,25 @@ class FAUPersonWidget extends WP_Widget
                         $fields = sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true) );
                         extract($fields);       
                         
-                        
                         if($streetAddress || $postalCode || $addressLocality || $addressCountry) {
-                                $contactpoint = '<li class="person-info-address"><span class="screen-reader-text">'.__('Adresse',FAU_PERSON_TEXTDOMAIN).': </span><br>';    
+                                $contactpoint = '<li class="person-info-address"><span class="screen-reader-text">'.__('Adresse',FAU_PERSON_TEXTDOMAIN).': <br></span>';    
                                                 
-                                if($streetAddress)          $contactpoint .= '<span class="person-info-street" itemprop="streetAddress">'.$streetAddress.'</span>';
-                                if($streetAddress && ($postalCode || $addressLocality)) $contactpoint .= '<br>';
+                                if($streetAddress) {          
+                                    $contactpoint .= '<span class="person-info-street" itemprop="streetAddress">'.$streetAddress.'</span>';
+                                    if( $postalCode || $addressLocality )  {
+                                        $contactpoint .= '<br>';
+                                    } elseif( $addressCountry ) {
+                                        $contactpoint .= '<br>';
+                                    }
+                                }
                                 if($postalCode || $addressLocality) {
-                                        $contactpoint .= '<span class="person-info-city">';
-                                        if($postalCode)         $contactpoint .= '<span itemprop="postalCode">'.$postalCode.'</span> ';  
-                                        if($addressLocality)	$contactpoint .= '<span itemprop="addressLocality">'.$addressLocality.'</span>';
+                                    $contactpoint .= '<span class="person-info-city">';
+                                    if($postalCode)             $contactpoint .= '<span itemprop="postalCode">'.$postalCode.'</span> ';  
+                                    if($addressLocality)        $contactpoint .= '<span itemprop="addressLocality">'.$addressLocality.'</span>';
                                         $contactpoint .= '</span>';
-                                        }
-                                if(($streetAddress || $postalCode || $addressLocality) && $addressCountry)                    $contactpoint .= '<br>';
-                                if($addressCountry)         $contactpoint .= '<span class="person-info-country" itemprop="addressCountry">'.$addressCountry.'</span></';
+                                    if( $addressCountry )       $contactpoint .= '<br>';
+                                }
+                    if( $addressCountry )         $contactpoint .= '<span class="person-info-country" itemprop="addressCountry">'.$addressCountry.'</span>';
                                 $contactpoint .= '</li>';                                                
                         }
                                                 
@@ -141,7 +146,7 @@ class FAUPersonWidget extends WP_Widget
 							if($url)		$content .= '<li class="person-info-www"><span class="screen-reader-text">'.__('Webseite',FAU_PERSON_TEXTDOMAIN).': </span><a itemprop="url" href="'.$url.'">'.$url.'</a></li>';
 							if(!empty($contactpoint))		$content .= $contactpoint;
 							if($workLocation)			$content .= '<li class="person-info-room"><span class="screen-reader-text">' . __('Raum', FAU_PERSON_TEXTDOMAIN) .' </span><span itemprop="workLocation">'.$workLocation.'</span></li>';
-							//	if($description)		$content .= '<div class="person-info-description">'.$description.'</div>';
+							if($description)		$content .= '<div class="person-info-description">'.$description.'</div>';
 						$content .= '</ul>';
 					$content .= '</div>';
 				$content .= '</div>';

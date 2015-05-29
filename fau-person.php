@@ -3,8 +3,8 @@
 /**
  * Plugin Name: FAU Person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 1.1.1
- * Author: RRZE-Webteam (Karin Kimpan)
+ * Version: 1.0.14
+ * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
  */
@@ -71,18 +71,20 @@ class FAU_Person {
         
         self::$options = self::get_options();       
 
-        include_once(plugin_dir_path(__FILE__) . 'includes/fau-person-metaboxes.php');
-       
-        
-        add_action('init', array (__CLASS__, 'register_person_post_type'));
-        add_action( 'init', array($this, 'register_persons_taxonomy') );
-        add_action( 'restrict_manage_posts', array($this, 'person_restrict_manage_posts') );
-        add_action('admin_menu', array($this, 'add_help_tabs'));
-        add_action('widgets_init', array(__CLASS__, 'register_widgets'));
-        add_action('admin_enqueue_scripts', array($this, 'add_admin_script'));
-        add_filter('single_template', array($this, 'include_template_function'));
+        include_once( plugin_dir_path(__FILE__) . 'includes/fau-person-metaboxes.php' );
+               
+        add_action('init', array (__CLASS__, 'register_person_post_type' ) );
+        add_action( 'init', array( $this, 'register_persons_taxonomy' ) );
+        add_action( 'restrict_manage_posts', array( $this, 'person_restrict_manage_posts' ) );
+        add_action( 'admin_menu', array( $this, 'add_help_tabs' ) );
+        add_action( 'widgets_init', array( __CLASS__, 'register_widgets' ) );
+        add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_script' ) );
+        add_filter( 'single_template', array( $this, 'include_template_function' ) );
 
-        self::add_shortcodes();        
+        self::add_shortcodes();
+       
+        //Excerpt-Meta-Box umbenennen
+        add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));        
     }
 
     public static function activation() {
@@ -105,7 +107,8 @@ class FAU_Person {
             $caps = self::get_caps('person');
             self::remove_caps('administrator', $caps);
             //self::remove_caps('editor', $caps);
-         
+            flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind
+    
     }
 
     private static function version_compare() {
@@ -139,31 +142,20 @@ class FAU_Person {
         return (object) $options;
     }
     
-
-   /*public function get_contactdata() {
-        $contactselect = array(
-            '' => __( 'keine Angabe', FAU_PERSON_TEXTDOMAIN ),
-        );
-        
+   public function get_contactdata() {      
          $args = array(
             'post_type' => 'person',
             'order' => 'ASC',
-            'meta_key' => 'fau_person_familyName',
-            'orderby' => 'meta_value',
-            'posts_per_page' => 30,
+            'orderby' => 'post_title',
+            'numberposts' => -1
         );
 
 	$personlist = get_posts($args);
-        if($personlist) {
-
-        }
-
-
-
-
-        
+       foreach( $personlist as $key => $value) {
+            $contactselect[] = $personlist[$key]->ID . ', ' . $personlist[$key]->post_title;
+        }        
         return $contactselect;  
-    }*/
+    }
     
     private static function get_caps($cap_type) {
         $caps = array(
@@ -209,12 +201,12 @@ class FAU_Person {
     public function help_menu_new_person() {
 
         $content_overview = array(
-            '<p>' . __('Geben Sie auf dieser Seite alle gewünschten Daten zu einer Person ein. Die Einbindung der Personendaten erfolgt dann in den Beiträgen oder Seiten über einen Shortcode oder ein Widget.', FAU_PERSON_TEXTDOMAIN) . '</p>'
+            '<p>' . __('Geben Sie auf dieser Seite alle gewünschten Daten zu einem Kontakt ein. Die Einbindung der Kontaktdaten erfolgt dann in den Beiträgen oder Seiten über einen Shortcode oder ein Widget.', FAU_PERSON_TEXTDOMAIN) . '</p>'
         );
 
         $help_tab_overview = array(
             'id' => 'overview',
-            'title' => __('Personen eingeben', FAU_PERSON_TEXTDOMAIN),
+            'title' => __('Kontakte eingeben', FAU_PERSON_TEXTDOMAIN),
             'content' => implode(PHP_EOL, $content_overview),
         );
 
@@ -234,12 +226,12 @@ class FAU_Person {
     public function help_menu_person() {
 
         $content_overview = array(
-            '<p><strong>' . __('Einbindung der Personen-Visitenkarte über Shortcode', FAU_PERSON_TEXTDOMAIN) . '</strong></p>',
-            '<p>' . __('Binden Sie die gewünschten Personendaten mit dem Shortcode [person] mit folgenden Parametern auf Ihren Seiten oder Beiträgen ein:', FAU_PERSON_TEXTDOMAIN) . '</p>',
+            '<p><strong>' . __('Einbindung der Kontakt-Visitenkarte über Shortcode', FAU_PERSON_TEXTDOMAIN) . '</strong></p>',
+            '<p>' . __('Binden Sie die gewünschten Kontaktdaten mit dem Shortcode [person] mit folgenden Parametern auf Ihren Seiten oder Beiträgen ein:', FAU_PERSON_TEXTDOMAIN) . '</p>',
             '<ol>',
             '<li>' . __('zwingend:', FAU_PERSON_TEXTDOMAIN),
             '<ul>',
-            '<li>slug: ' . __('Titel des Personenbeitrags', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>slug: ' . __('Titel des Kontakteintrags', FAU_PERSON_TEXTDOMAIN) . '</li>',
             '</ul>', 
             '</li>',
             '<li>' . __('optional, wird standardmäßig angezeigt (wenn keine Anzeige gewünscht ist, Parameter=0 eingeben):', FAU_PERSON_TEXTDOMAIN),           
@@ -290,7 +282,7 @@ class FAU_Person {
     public function help_menu_persons_category() {
 
         $content_overview = array(
-            '<p><strong>' . __('Zuordnung von Personen zu verschiedenen Kategorien', FAU_PERSON_TEXTDOMAIN) . '</strong></p>',
+            '<p><strong>' . __('Zuordnung von Personen und Kontakten zu verschiedenen Kategorien', FAU_PERSON_TEXTDOMAIN) . '</strong></p>',
         );
 
         $help_tab_overview = array(
@@ -332,7 +324,7 @@ class FAU_Person {
                 'person', //post type name
                 array(
             'hierarchical' => true,
-            'label' => __('Personen-Kategorien', FAU_PERSON_TEXTDOMAIN), //Display name
+            'label' => __('Kontakt-Kategorien', FAU_PERSON_TEXTDOMAIN), //Display name
             'query_var' => true,
             'rewrite' => array(
                 'slug' => 'persons', // This controls the base slug that will display before each term
@@ -407,5 +399,32 @@ class FAU_Person {
             }
         }
     }    
- 
+    
+    //Excerpt Metabox entfernen um Titel zu ändern und Länge zu modifizieren
+    public function modified_excerpt_metabox() {
+            remove_meta_box( 'postexcerpt', 'person', 'normal' ); 
+            add_meta_box( 
+                    'postexcerpt'
+                    , __( 'Kurzbeschreibung in Listenansichten (bis zu 400 Zeichen)', FAU_PERSON_TEXTDOMAIN )
+                    , 'post_excerpt_meta_box'
+                    , 'person'
+                    , 'normal'
+                    , 'high' 
+            );
+    }
+    
+/*    public function get_helpuse() {
+        global $post;
+        if ($post->ID >0) {
+            $helpuse = __('<p>Einbindung in Seiten und Beiträge via: </p>', FAU_PERSON_TEXTDOMAIN);
+            $helpuse .= '<pre> [person id="'.$post->ID.'"] </pre>';
+            if ($post->post_name) {
+                $helpuse .= ' oder <br> <pre> [person slug="'.$post->post_name.'"] </pre>';
+            }
+
+        }
+        	return $helpuse;
+    }*/
+        
+    
 }

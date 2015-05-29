@@ -18,6 +18,8 @@ add_action('init', function() {
 }, 9999);
 
 
+
+
 // render numbers
 add_action( 'cmb_render_text_number', 'sm_cmb_render_text_number', 10, 5 );
 function sm_cmb_render_text_number( $field_args, $escaped_value, $object_id, $object_type, $field_type_object ) {
@@ -98,10 +100,13 @@ function get_contactdata( $query_args ) {
 
 
 add_filter('cmb_meta_boxes', function(array $metaboxes) {
+            //global $post;
 //function fau_person_metaboxes( $meta_boxes ) {
     $prefix = 'fau_person_'; // Prefix for all fields
-    //$contactselect = $this->get_contactdata();
-/*    $meta_boxes['fau_person_postdata'] = array(
+    $contactselect = $this->get_contactdata();
+   // $helpuse = $this->get_helpuse();
+    
+    /*    $meta_boxes['fau_person_postdata'] = array(
         'id' => 'fau_person_postdata',
         'title' => __( 'Infos zum Personenbeitrag', FAU_PERSON_TEXTDOMAIN ),
         'pages' => array('person'), // post type
@@ -129,10 +134,10 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
         'show_names' => true, // Show field names on the left
         'fields' => array(
             array(
-                'name' => __('Position/Funktion', FAU_PERSON_TEXTDOMAIN),
-                'desc' => '',
-                'id' => $prefix . 'jobTitle',
-                'type' => 'text'
+                'name' => __('Organisation', FAU_PERSON_TEXTDOMAIN),
+                'desc' => __('Geben Sie hier die Organisation (Lehrstuhl oder Einrichtung) ein.', FAU_PERSON_TEXTDOMAIN),
+                'type' => 'text',
+                'id' => $prefix . 'worksFor'
             ),
             array(
                 'name' => __('Daten aus UnivIS', FAU_PERSON_TEXTDOMAIN),
@@ -141,10 +146,16 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'id' => $prefix . 'jobTitle_sync'
             ),                         
             array(
-                'name' => __('Institution/Abteilung', FAU_PERSON_TEXTDOMAIN),
-                'desc' => __('Geben Sie hier die Institution ein.', FAU_PERSON_TEXTDOMAIN),
+                'name' => __('Abteilung', FAU_PERSON_TEXTDOMAIN),
+                'desc' => __('Geben Sie hier die Abteilung oder Arbeitsgruppe ein.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text',
-                'id' => $prefix . 'worksFor'
+                'id' => $prefix . 'department'
+            ),
+            array(
+                'name' => __('Position/Funktion', FAU_PERSON_TEXTDOMAIN),
+                'desc' => '',
+                'id' => $prefix . 'jobTitle',
+                'type' => 'text'
             ),
             array(
                 'name' => __('Daten aus UnivIS', FAU_PERSON_TEXTDOMAIN),
@@ -157,6 +168,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'desc' => __('Bitte vollständigen Permalink der Zielseite angeben', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text_url',
                 'id' => $prefix . 'link',
+                //'after' => '<hr>' . __('Zum Anzeigen der Person verwenden Sie bitte die ID', FAU_PERSON_TEXTDOMAIN) . ' ' . $helpuse,                
             )
         )
     );
@@ -255,8 +267,9 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
             ),                    
             array(
                 'name' => __('Postleitzahl', FAU_PERSON_TEXTDOMAIN),
-                'desc' => 'Wenn der Ort aus UnivIS übernommen werden soll bitte leer lassen!',
-                'type' => 'text',
+                //'desc' => 'Wenn der Ort aus UnivIS übernommen werden soll bitte leer lassen!',
+                'desc' => '',
+                'type' => 'text_small',
                 'id' => $prefix . 'postalCode'
             ),
             array(
@@ -302,7 +315,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
             ),
             array(
                 'name' => __('Telefon', FAU_PERSON_TEXTDOMAIN),
-                'desc' => __('Bitte geben Sie uni-interne Nummern für Erlangen in der Form 09131 85-22222 und für Nürnberg in der Form 0911 5302-555 an.', FAU_PERSON_TEXTDOMAIN),
+                'desc' => __('Bitte geben Sie uni-interne Nummern für Erlangen in der internationalen Form +49 9131 85-22222 und für Nürnberg in der internationalen Form +49 911 5302-555 an.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text',
                 'id' => $prefix . 'telephone'
             ),
@@ -314,7 +327,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
             ),              
             array(
                 'name' => __('Telefax', FAU_PERSON_TEXTDOMAIN),
-                'desc' => '',
+                'desc' => __('Bitte geben Sie die Nummer in der internationalen Form +49 9131 1111111 an.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text',
                 'id' => $prefix . 'faxNumber'
             ),
@@ -323,13 +336,19 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'desc' => 'Zeige die Telefax-Nummer aus UnivIS',
                 'type' => 'checkbox',
                 'id' => $prefix . 'faxNumber_sync'
-            ),                         
+            ), 
+            array(
+                'name' => __('Mobiltelefon', FAU_PERSON_TEXTDOMAIN),
+                'desc' => __('Bitte geben Sie die Nummer in der internationalen Form +49 176 1111111 an.', FAU_PERSON_TEXTDOMAIN),
+                'type' => 'text',
+                'id' => $prefix . 'mobilePhone'
+            ),
         )
     );
     // Social Media - fau_person_social_media
     $meta_boxes['fau_person_social_media'] = array(
         'id' => 'fau_person_social_media',
-        'title' => __('Verknüpfungen', FAU_PERSON_TEXTDOMAIN),
+        'title' => __('Social Media', FAU_PERSON_TEXTDOMAIN),
         'pages' => array('person'), // post type
         'context' => 'normal',
         'priority' => 'default',
@@ -371,15 +390,15 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
         'show_names' => true, // Show field names on the left
         'fields' => array(
             array(
-                'name' => __('Freitext', FAU_PERSON_TEXTDOMAIN),
-                'desc' => '',
-                'type' => 'textarea',
+                'name' => __('Kurzauszug', FAU_PERSON_TEXTDOMAIN),
+                'desc' => __('Wird bei der Anzeige in einer Sidebar verwendet, bis zu 160 Zeichen.', FAU_PERSON_TEXTDOMAIN),
+                'type' => 'textarea_small',
                 'id' => $prefix . 'description'
             ),
             array(
                 'name' => __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
-                'type' => 'textarea',
+                'type' => 'textarea_small',
                 'id' => $prefix . 'hoursAvailable'
             ),
             array(
@@ -437,11 +456,11 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
         'show_names' => true, // Show field names on the left
         'fields' => array(
             array(
-                'name' => __('Kontaktangabe auswählen', FAU_PERSON_TEXTDOMAIN),
+                'name' => __('Verfügbare Kontakte anzeigen', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
                 'id' => $prefix . 'contactselect',
                 'type' => 'select',
-                'options' => get_contactdata( array( 'post_type' => 'person', 'posts_per_page' => 900 )),
+                'options' => $contactselect,
             ),
         )        
     );

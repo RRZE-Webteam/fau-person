@@ -1,19 +1,19 @@
 <?php
 
 $person_labels = array(
-    'name' => _x('Personen', 'Post Type General Name', self::textdomain),
-    'singular_name' => _x('Person', 'Post Type Singular Name', self::textdomain),
-    'menu_name' => __('Personen', self::textdomain),
-    'parent_item_colon' => __('Übergeordnete Person', self::textdomain),
-    'all_items' => __('Alle Personen', self::textdomain),
-    'view_item' => __('Person ansehen', self::textdomain),
-    'add_new_item' => __('Person hinzufügen', self::textdomain),
-    'add_new' => __('Neue Person', self::textdomain),
-    'edit_item' => __('Person bearbeiten', self::textdomain),
-    'update_item' => __('Person aktualisieren', self::textdomain),
-    'search_items' => __('Personen suchen', self::textdomain),
-    'not_found' => __('Keine Personen gefunden', self::textdomain),
-    'not_found_in_trash' => __('Keine Personen in Papierkorb gefunden', self::textdomain),
+    'name' => _x('Kontakte', 'Post Type General Name', self::textdomain),
+    'singular_name' => _x('Kontakt', 'Post Type Singular Name', self::textdomain),
+    'menu_name' => __('Kontakt', self::textdomain),
+    'parent_item_colon' => __('Übergeordneter Kontakt', self::textdomain),
+    'all_items' => __('Alle Kontakte', self::textdomain),
+    'view_item' => __('Kontakt ansehen', self::textdomain),
+    'add_new_item' => __('Kontakt hinzufügen', self::textdomain),
+    'add_new' => __('Neuer Kontakt', self::textdomain),
+    'edit_item' => __('Kontakt bearbeiten', self::textdomain),
+    'update_item' => __('Kontakt aktualisieren', self::textdomain),
+    'search_items' => __('Kontakte suchen', self::textdomain),
+    'not_found' => __('Keine Kontakte gefunden', self::textdomain),
+    'not_found_in_trash' => __('Keine Kontakte in Papierkorb gefunden', self::textdomain),
 );
 $person_rewrite = array(
     'slug' => 'person',
@@ -23,9 +23,9 @@ $person_rewrite = array(
 );
 $person_args = array(
     'label' => __('person', self::textdomain),
-    'description' => __('Personeninformationen', self::textdomain),
+    'description' => __('Kontaktinformationen', self::textdomain),
     'labels' => $person_labels,
-    'supports' => array('title', 'editor', 'thumbnail'),
+    'supports' => array('title', 'editor', 'excerpt', 'thumbnail'),
     'taxonomies' => array('persons_category'),
     'hierarchical' => false,
     'public' => true,
@@ -33,7 +33,7 @@ $person_args = array(
     'show_in_menu' => true,
     'show_in_nav_menus' => false,
     'show_in_admin_bar' => true,
-    'menu_position' => 5,
+    'menu_position' => 20,
     'menu_icon' => 'dashicons-id-alt',
     'can_export' => true,
     'has_archive' => true,

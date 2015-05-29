@@ -7,16 +7,39 @@ WordPress Plugin
 Visitenkarten-Plugin für FAU Webauftritte  
 Custom Post Type person
 
+####Version 1.0.13:
 
-####Version 1.0.6:
+- Verfügbare Kontakte werden auf Seiten und Beiträgen mit ihrer ID angezeigt (vereinfachte Suche für Shortcode, Metabox kann auch auf die Seite verschoben werden)    
+
+####Version 1.0.12:
+
+- Platzhalterbilder für Einrichtung und geschlechtsneutrale Person ergänzt   
+
+####Version 1.0.11:
+
+- Listenausgabe optimiert    
+
+####Version 1.0.10:
+
+- Kurzbeschreibung für Listenanzeige wird aus allgemeinem Text generiert, wenn das Feld leer ist (55 Wörter oder bis zum Weiterlesen-Tag)    
+- format="shortlist" ergänzt für Auflistung von Titel (Präfix), Vorname, Nachname, Suffix, ggf. Kurzauszug (bei showlist=1)    
+- Eingabe mehrerer ids möglich (kommasepariert, z. B. id="42,44,56") für die Anzeige mehrerer Personen mit gleichen Shortcode-Parametern untereinander    
+
+####Version 1.0.9:
+
+- Felder Institution und Abteilung geteilt    
+- Feld Mobiltelefon ergänzt
+- Eingabefeld für allgemeinen Text (z.B. Lebenslauf, WYSIWYG-Editor), Kurzbeschreibung für Listenanzeige (falls im Shortcode showlist=1 gewählt ist) und Kurzauszug für Sidebaranzeige (falls im Shortcode showsidebar=1 gewählt ist)
 
 #####Shortcode person (css-Klassen an FAU-Webauftritt angepasst)
 ######Beispiel:  
-Titel der eingetragenen Person = Max Mustermann:  
+Titel des eingetragenen Kontaktes = Max Mustermann:  
 [person slug='Max Mustermann']  
 
-Personen können alternativ auch mit der ID abgerufen werden:
+Kontakte können alternativ auch mit der ID abgerufen werden:
 [person id="12345"]
+
+ACHTUNG: In manchen Fällen wird auch bei korrekter Schreibweise der Slug nicht gefunden (z.B. wenn Umlaut beinhaltet ist). Zuverlässiger ist die Anzeige über die ID.
 
 
 ######optionale Parameter:  
@@ -41,7 +64,7 @@ extended (fasst alle Parameter mit * zusammen, so dass nur extended=1 angegeben 
 
 
 - format = full
-Anzeige wie bei einer Personen-Einzelseite
+Anzeige wie bei einer Kontakt-Einzelseite
 
 #####Vorlage zur Singledarstellung: templates/single-person.php
 kann gerne ins eigene Theme übernommen und daran angepasst werden, Vorlage ist an FAU-Webauftritt angepasst

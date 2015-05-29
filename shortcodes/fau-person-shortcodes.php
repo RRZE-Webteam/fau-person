@@ -4,7 +4,7 @@
  if(!function_exists('fau_person')) {   
     function fau_person( $atts, $content = null) {
             extract(shortcode_atts(array(
-                    "slug" => 'slug',
+                    "slug" => FALSE,
                     "id" => FALSE,
                     "showlink" => FALSE,
                     "showfax" => FALSE,
@@ -25,22 +25,46 @@
 		     "format" => '',
                     ), $atts));
  
-
-            if(!empty($id)) {
-                   $slug = get_post($id)->post_title;
+            if( empty($id) ) {
+                if( empty($slug) )  {
+                    return '<p>' . sprintf(__('Bitte geben Sie den Titel oder die ID des Kontakteintrags an.', FAU_PERSON_TEXTDOMAIN), $slug) . '</p>';
+                } else {
+                    $posts = get_posts(array('name' => $slug, 'post_type' => 'person', 'post_status' => 'publish'));
+                    if ($posts) {
+                        $post = $posts[0];
+                        $id = $post->ID;		
+                    } else {
+                        return '<p>' . sprintf(__('Es konnte kein Kontakteintrag mit dem angegebenen Titel %s gefunden werden. Versuchen Sie statt dessen die Angabe der ID des Kontakteintrags.', FAU_PERSON_TEXTDOMAIN), $slug) . '</p>';                        
+                    }
+                        
+                }
             }
-            $posts = get_posts(array('name' => $slug, 'post_type' => 'person', 'post_status' => 'publish'));
-            if ($posts) {
-                $post = $posts[0];
-                $id = $post->ID;	
-		
-		if (($format == 'full') || ($format=='page')) {
-		    return fau_person_page($id);
-		} else { 
-		    return fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showmail, $showtelefon);
-	    }
-	    } else {
-                return sprintf(__('Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $slug);
+            if(!empty($id)) {
+            $list_ids = explode( ',', $id ); 
+            if( $format == 'shortlist' ) {
+                $liste =  '<ul class="person liste-person" itemscope itemtype="http://schema.org/Person">';
+                $liste .= "\n";
+            } else {
+                $liste = '';
+            }
+            
+            foreach ($list_ids as $value) {
+                $post = get_post( $value );
+                if( $post->post_type == 'person' ) {
+                    if ( ($format == 'full') || ($format=='page') ) {
+                        $liste .= fau_person_page($value);
+                    } elseif ( $format == 'shortlist' ) {
+                        $liste .= fau_person_shortlist($value, $showlist);
+                    } else { 
+                        $liste .= fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showmail, $showtelefon);
+                    }                
+                } else {
+                    $liste .= '<p>' . sprintf(__('Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $value) . '</p>';                
+                }                
+            }
+            if( $format == 'shortlist' )
+                $liste .=  "</ul>\n";
+            return $liste;
             }
     }
  }
@@ -90,7 +114,6 @@
     }
  }
 
- 
  if(!function_exists('fau_person_markup')) {
 
     function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showmail, $showtelefon) {
