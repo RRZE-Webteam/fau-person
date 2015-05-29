@@ -72,7 +72,7 @@ class FAU_Person {
         self::$options = self::get_options();       
 
         include_once( plugin_dir_path(__FILE__) . 'includes/fau-person-metaboxes.php' );
-               
+        
         add_action('init', array (__CLASS__, 'register_person_post_type' ) );
         add_action( 'init', array( $this, 'register_persons_taxonomy' ) );
         add_action( 'restrict_manage_posts', array( $this, 'person_restrict_manage_posts' ) );

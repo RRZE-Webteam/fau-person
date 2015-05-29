@@ -100,21 +100,26 @@ class FAUPersonWidget extends WP_Widget
                                 $contactpoint .= '</li>';                                                
                         }
                                                 
-
-                        /*
-                        if($streetAddress)  $contactPoint = '<li class="person-info-street"><span class="screen-reader-text">'.__('Straße',FAU_PERSON_TEXTDOMAIN).': </span><span itemprop="streetAddress">'.$streetAddress.'</span></li>';
-                        if($postalCode || $addressLocality) {
-                                if(empty($contactPoint)) $contactPoint = "";
-                                $contactPoint .= '<li class="person-info-city"><span class="screen-reader-text">'.__('Wohnort',FAU_PERSON_TEXTDOMAIN).': </span>';
-                                if($postalCode)     $contactPoint .= '<span itemprop="postalCode">'.$postalCode.'</span> ';  
-                                if($addressLocality)	$contactPoint .= '<span itemprop="addressLocality">'.$addressLocality.'</span';
-                                $contactPoint .= '</li>';
-                        }
-                        if($addressCountry) {	
-                            if(empty($contactPoint)) $contactPoint = "";
-                            $contactPoint .= '<li class="person-info-country"><span class="screen-reader-text">'.__('Land',FAU_PERSON_TEXTDOMAIN).': </span><span itemprop="addressCountry">'.$addressCountry.'</span></li>';
-                        }
-                            */                    
+                    if($streetAddress) {
+                        $contactpoint .= '<span class="person-info-street" itemprop="streetAddress">'.$streetAddress.'</span>';
+                        if( $postalCode || $addressLocality )  {
+                            $contactpoint .= '<br>';
+                        } elseif( $addressCountry ) {
+                            $contactpoint .= '<br>';
+                        }                    
+                    }
+                    if($postalCode || $addressLocality) {
+                        $contactpoint .= '<span class="person-info-city">';
+                        if($postalCode)             $contactpoint .= '<span itemprop="postalCode">'.$postalCode.'</span> ';  
+                        if($addressLocality)        $contactpoint .= '<span itemprop="addressLocality">'.$addressLocality.'</span>';
+                        $contactpoint .= '</span>';
+                        if( $addressCountry )       $contactpoint .= '<br>';
+                    }                  
+                    if( $addressCountry )         $contactpoint .= '<span class="person-info-country" itemprop="addressCountry">'.$addressCountry.'</span>';
+                    $contactpoint .= '</li>';                                                
+                }
+                        
+                
                        
 			
 			$content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
