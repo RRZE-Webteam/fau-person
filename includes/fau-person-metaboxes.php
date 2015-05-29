@@ -24,7 +24,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
     $meta_boxes['fau_person_orga'] = array(
         'id' => 'fau_person_orga',
         'title' => __( 'Zuordnung', FAU_PERSON_TEXTDOMAIN ),
-        'pages' => array('person'), // post type
+        'pages' => array('person', 'kontakt'), // post type
         'context' => 'normal',
         'priority' => 'default',
         'show_names' => true, // Show field names on the left
@@ -66,7 +66,8 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
     $meta_boxes['fau_person_info'] = array(
         'id' => 'fau_person_info',
         'title' => __( 'Kontaktinformationen', FAU_PERSON_TEXTDOMAIN ),
-        'pages' => array('person'), // post type
+        'pages' => array('person', 'kontakt'), // post type
+        'show_on' => array( 'key' => 'submenu-slug', 'value' => 'kontakt' ),        
         'context' => 'normal',
         'priority' => 'default',
         'show_names' => true, // Show field names on the left
@@ -256,5 +257,8 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
     
     return $meta_boxes;
 });
+
+
+
     
 

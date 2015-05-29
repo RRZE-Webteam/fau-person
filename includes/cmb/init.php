@@ -332,7 +332,11 @@ class cmb_Meta_Box {
 		foreach ( $this->_meta_box['pages'] as $page ) {
 			if ( apply_filters( 'cmb_show_on', true, $this->_meta_box ) )
 				add_meta_box( $this->_meta_box['id'], $this->_meta_box['title'], array( $this, 'post_metabox' ), $page, $this->_meta_box['context'], $this->_meta_box['priority']) ;
-		}
+                //_rrze_debug("ID ".$this->_meta_box['id']);
+                //_rrze_debug("Titel ".$this->_meta_box['title']);
+                //_rrze_debug("Page ".$page);
+                        }
+
 	}
 
 	/**

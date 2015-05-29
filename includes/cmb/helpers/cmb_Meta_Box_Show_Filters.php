@@ -101,5 +101,42 @@ class cmb_Meta_Box_Show_Filters {
 		// Allow options-page metaboxes to be displayed anywhere on the front-end
 		return true;
 	}
+        
+        /**
+        * Only show options for submenu slug for Custom Post Type person
+        * RRZE-Webteam
+        * @param bool $display
+        * @param array $meta_box
+        * @return bool display metabox
+        */
+        public static function check_submenu_slug( $display, $meta_box ) {
+               // _rrze_debug($meta_box['show_on']['key']);      
+    		// check if show_on-filter = 'submenu-slug'
+		if ( ! isset( $meta_box['show_on']['key'] ) || 'submenu-slug' !== $meta_box['show_on']['key'] )              
+			return $display;
+
+                // check if post_type = 'person'
+                    if( ! isset( $_GET['post_type'] ) || 'person' !== $_GET['post_type']  )
+                        return $display;
+                    
+			if ( ! isset( $_GET['page'] ) ) 
+				return $display;
+                                
+                    if ( ! isset( $meta_box['show_on']['value'] ) )
+				return $false;
+                       // _rrze_debug("Seite " . $_GET['page'] );
+                                           // _rrze_debug("Meta-Box " . $meta_box['show_on']['value'] );
+                                
+                        /*if ( $_GET['page'] !== $meta_box['show_on']['value'] ) {
+                            
+                       // _rrze_debug("hier komm ich nicht rein");
+                            return $display;
+                        }*/
+                                            
+                        $text = in_array( $_GET['page'], (array) $meta_box['show_on']['value'] );
+                        //_rrze_debug('Der WErt ist ' . $text);
+                        
+			return in_array( $_GET['page'], (array) $meta_box['show_on']['value'] );
+        }   
 
 }

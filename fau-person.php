@@ -87,9 +87,22 @@ class FAU_Person {
         add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));
         
         add_action('admin_menu' , array( $this, 'person_menu_subpages' ));        
-        
+          
     }
 
+    
+public function adding_custom_meta_boxes( $post ) {
+    add_meta_box( 
+        'my-meta-box',
+        __( 'My Meta Box' ),
+        'render_my_meta_box',
+        'post',
+        'normal',
+        'default'
+    );
+}
+ 
+    
     public static function activation() {
 
         self::version_compare();
@@ -312,11 +325,19 @@ class FAU_Person {
     }    
     
     public function person_menu_subpages() {
-        add_submenu_page('edit.php?post_type=person', __('Kontakt hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Kontakt hinzufügen', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'kontakt', array( $this, 'add_person_types' ));
+        add_submenu_page('edit.php?post_type=person', __('Person hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neue Person', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_person', array( $this, 'add_person_types' ));
+        add_submenu_page('edit.php?post_type=person', __('Kontakt hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neuer Kontakt', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_kontakt', array( $this, 'add_person_types' ));
+        add_submenu_page('edit.php?post_type=person', __('Person hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neuer Standort', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_standort', array( $this, 'add_person_types' ));
+        add_action('load-person_page_new_kontakt', array( $this, 'person_menu' ));
+    }
+    
+    public function person_menu() {
+        $metaboxes = array();
+        do_action('cmb_meta_boxes', $metaboxes);
     }
     
     public function add_person_types() {
-        
+            add_action( 'load-person_page_konakt', array( $this, 'adding_custom_meta_boxes' ));  
     }
     
     public static function register_widgets() {
