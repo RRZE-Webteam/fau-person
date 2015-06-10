@@ -3,7 +3,6 @@
 
 get_header(); ?>
     <?php while ( have_posts() ) : the_post(); ?>
-        <?php get_template_part('hero', 'small'); ?>
         <div id="content">
             <div class="container">
                 <div class="row">
