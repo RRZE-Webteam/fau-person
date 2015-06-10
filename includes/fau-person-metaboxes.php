@@ -481,17 +481,23 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
         //$sxi = $fname;
         $sxi = new SimpleXmlIterator($fname, null, true);
         return sxiToArray($sxi);
+
     }
 
     function sxiToArray($sxi) {
         $a = array();
 
         for ($sxi->rewind(); $sxi->valid(); $sxi->next()) {
+
             if (!array_key_exists($sxi->key(), $a)) {
                 $a[$sxi->key()] = array();
             }
             if ($sxi->hasChildren()) {
                 $a[$sxi->key()][] = sxiToArray($sxi->current());
+            }
+            //wird benötigt, damit alle Orgunits angezeigt werden, in regulärem UnivIS-Plugin nicht drin
+            elseif($sxi->key() === 'orgunit') {
+                $a[$sxi->key()][] = strval($sxi->current());
             } else {
                 $a[$sxi->key()] = strval($sxi->current());
 

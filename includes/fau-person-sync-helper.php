@@ -66,9 +66,12 @@ class sync_helper {
         }
         foreach( $fields_univis_orgunits as $key => $value ) {
             if( array_key_exists( 'orgunits', $person ) ) {
-                $person_orgunits = $person['orgunits'];
-                $person_orgunit = $person['officehours'][0]['officehour'][0];
-                $value = self::sync_univis( $id, $person_orgunit, $key, $value );
+                $person_orgunits = $person['orgunits'][0]['orgunit'];
+                $i = count($person_orgunits);
+                if($i>1) {
+                    $i = count($person_orgunits)-2;
+                } 
+                $value = self::sync_univis( $id, $person_orgunits, $key, $i );
             } else {
                 $value = get_post_meta($id, 'fau_person_'.$key, true);                
             }
@@ -89,7 +92,7 @@ class sync_helper {
 		$url = $univis_url."?search=persons&id=".$univis_id."&show=xml";
 		if(!fopen($url, "r")) {
 			// Univis Server ist nicht erreichbar
-			return -1;
+			return array();
 		}
 		$persArray = xml2array($url);
                 if(empty($persArray)) {
