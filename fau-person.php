@@ -48,6 +48,7 @@ class FAU_Person {
     protected static $options;
     
     public $contactselect;
+    public $univis_default;
 
     protected static $instance = null;
 
@@ -386,7 +387,7 @@ class FAU_Person {
             //}
         }
         return $template_path;
-    }
+    }    
 
     public function person_post_types_admin_order($wp_query) {
         if (is_admin()) {
@@ -399,6 +400,20 @@ class FAU_Person {
             }
         }
     }    
+    
+    
+    
+    public function univis_defaults() {
+        _rrze_debug(cmb_Meta_Box::get_object_type() == 'post');
+        if (is_single()) {
+            $id = cmb_Meta_Box::get_object_id();
+            $univis_id = get_post_meta($id, 'fau_person_univis_id', true);
+            $univis_default = sync_helper::get_fields($id, $univis_id);
+            extract($univis_default);
+            _rrze_debug($univis_default);
+        }
+        return $worksFor;
+    }
     
     //Excerpt Metabox entfernen um Titel zu ändern und Länge zu modifizieren
     public function modified_excerpt_metabox() {
