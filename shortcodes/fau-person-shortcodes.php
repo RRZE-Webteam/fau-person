@@ -92,6 +92,7 @@
             "showsuffix" => TRUE,
             "showposition" => TRUE,
             "showinstitution" => TRUE,
+            "showabteilung" => TRUE,            
             "showmail" => TRUE,
             "showtelefon" => TRUE,
             "extended" => FALSE,
@@ -247,7 +248,7 @@ if(!function_exists('fau_person_markup')) {
     function fau_person_page($id) {
  
      	$content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
-
+        
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true));
         extract($fields);
 
