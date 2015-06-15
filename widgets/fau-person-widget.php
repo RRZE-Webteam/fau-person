@@ -63,7 +63,7 @@ class FAUPersonWidget extends WP_Widget {
         if (!empty($id)) {
             $post = get_post($id);
 
-            $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true));
+            $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
             extract($fields);
 
             if ($streetAddress || $postalCode || $addressLocality || $addressCountry) {

@@ -122,7 +122,7 @@
 if(!function_exists('fau_person_markup')) {
 
     function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon) {
-        $fields = sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true) );
+        $fields = sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true), 0 );
         extract($fields);
          
         
@@ -249,7 +249,7 @@ if(!function_exists('fau_person_markup')) {
  
      	$content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
         
-        $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true));
+        $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
         extract($fields);
 
         if ($streetAddress || $postalCode || $addressLocality || $addressCountry) {

@@ -2,7 +2,7 @@
 
 class sync_helper {
 
-    public static function get_fields( $id, $univis_id ) {
+    public static function get_fields( $id, $univis_id, $defaults ) {
         $person = self::get_univisdata( $univis_id );
         $fields_univis = array(
             'department' => 'orgname',
@@ -40,16 +40,20 @@ class sync_helper {
         $fields = array();
         foreach( $fields_univis as $key => $value ) {
             if( array_key_exists( $value, $person ) ) {
-                $value = self::sync_univis( $id, $person, $key, $value ); 
+                $value = self::sync_univis( $id, $person, $key, $value, $defaults ); 
             } else {
-                $value = get_post_meta($id, 'fau_person_'.$key, true);                
+                if( $defaults ) {
+                    $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);
+                } else {
+                    $value = get_post_meta($id, 'fau_person_'.$key, true);           
+                }
             }
             $fields[$key] = $value;
         }
         foreach( $fields_univis_location as $key => $value ) {
             if( array_key_exists( 'locations', $person ) ) {
                 $person_location = $person['locations'][0]['location'][0];
-                $value = self::sync_univis( $id, $person_location, $key, $value );
+                $value = self::sync_univis( $id, $person_location, $key, $value, $defaults );
             } else {
                 $value = get_post_meta($id, 'fau_person_'.$key, true);
             }
@@ -58,7 +62,7 @@ class sync_helper {
         foreach( $fields_univis_officehours as $key => $value ) {
             if( array_key_exists( 'officehours', $person ) ) {
                 $person_officehours = $person['officehours'][0]['officehour'][0];
-                $value = self::sync_univis( $id, $person_officehours, $key, $value );
+                $value = self::sync_univis( $id, $person_officehours, $key, $value, $defaults );
             } else {
                 $value = get_post_meta($id, 'fau_person_'.$key, true);                
             }
@@ -71,7 +75,7 @@ class sync_helper {
                 if($i>1) {
                     $i = count($person_orgunits)-2;
                 } 
-                $value = self::sync_univis( $id, $person_orgunits, $key, $i );
+                $value = self::sync_univis( $id, $person_orgunits, $key, $i, $defaults );
             } else {
                 $value = get_post_meta($id, 'fau_person_'.$key, true);                
             }
@@ -124,13 +128,21 @@ class sync_helper {
         }
     }
    
-    public static function sync_univis( $id, $person, $fau_person_var, $univis_var ) {   
+    public static function sync_univis( $id, $person, $fau_person_var, $univis_var, $defaults ) {   
         //wird benötigt, falls jeder einzelne Wert abgefragt werden soll
         //if( !empty( $person[$univis_var] ) && get_post_meta($id, 'fau_person_'.$fau_person_var_sync', true) ) {
-        if( !empty( $person[$univis_var] ) && get_post_meta($id, 'fau_person_univis_sync', true) ) {
-            $val = $person[$univis_var];             
+        if( $defaults ) {
+            if( !empty( $person[$univis_var] ) ) {
+                $val = sprintf(__('<p class="cmb_metabox_description">[Aus UnivIS angezeigter Wert: %s]</p>', FAU_PERSON_TEXTDOMAIN), $person[$univis_var]);
+            } else {
+                $val = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);
+            }
         } else {
-            $val = get_post_meta($id, 'fau_person_'.$fau_person_var, true);
+            if( !empty( $person[$univis_var] ) && get_post_meta($id, 'fau_person_univis_sync', true) ) {
+                $val = $person[$univis_var];             
+            } else {
+                $val = get_post_meta($id, 'fau_person_'.$fau_person_var, true);
+            }
         }
         return $val;        
     }

@@ -104,7 +104,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
 //function fau_person_metaboxes( $meta_boxes ) {
     $prefix = 'fau_person_'; // Prefix for all fields
     $contactselect = $this->get_contactdata();
-   // $univis_default = $this->univis_defaults();
+    $univis_default = $this->univis_defaults();  
    // $helpuse = $this->get_helpuse();
     
     /*    $meta_boxes['fau_person_postdata'] = array(
@@ -139,21 +139,21 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'desc' => __('Geben Sie hier die Organisation (Lehrstuhl oder Einrichtung) ein.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text',
                 'id' => $prefix . 'worksFor',
-                //'default' => $unvis_default
+                'after' => $univis_default['worksFor']
             ),
             array(
                 'name' => __('Abteilung', FAU_PERSON_TEXTDOMAIN),
                 'desc' => __('Geben Sie hier die Abteilung oder Arbeitsgruppe ein.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text',
                 'id' => $prefix . 'department',
-                //'default' => $univis_default
+                'after' => $univis_default['department']                
             ),
             array(
                 'name' => __('Position/Funktion', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
                 'id' => $prefix . 'jobTitle',
                 'type' => 'text',
-                //'default' => $univis_default
+                'after' => $univis_default['jobTitle']    
             ),
             array(
                 'name' => __('"Mehr"-Link führt zur Seite ...', FAU_PERSON_TEXTDOMAIN),
@@ -196,21 +196,21 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                     'Prof. Dr.' => __('Professor Doktor', FAU_PERSON_TEXTDOMAIN)
                 ),
                 'id' => $prefix . 'honorificPrefix',
-                'default' => ''
+                'after' => $univis_default['honorificPrefix']    
             ),
             array(
                 'name' => __('Vorname', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
                 'type' => 'text',
                 'id' => $prefix . 'givenName',
-                'default' => ''
+                'after' => $univis_default['givenName']    
             ),
             array(
                 'name' => __('Nachname', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
                 'type' => 'text',
                 'id' => $prefix . 'familyName',
-                'default' => ''
+                'after' => $univis_default['familyName']  
             ),
             array(
                 'name' => __('Bezeichnung (oder Pseudonym)', FAU_PERSON_TEXTDOMAIN),
@@ -223,14 +223,14 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'desc' => '',
                 'type' => 'text',
                 'id' => $prefix . 'honorificSuffix',
-                'default' => ''
+                'after' => $univis_default['honorificSuffix']  
             ),
             array(
                 'name' => __('Straße und Hausnummer', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
                 'type' => 'text',
                 'id' => $prefix . 'streetAddress',
-                'default' => ''
+                'after' => $univis_default['streetAddress']  
             ),
             array(
                 'name' => __('Postleitzahl', FAU_PERSON_TEXTDOMAIN),
@@ -244,7 +244,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'desc' => '',
                 'type' => 'text',
                 'id' => $prefix . 'addressLocality',
-                'default' => ''
+                'after' => $univis_default['addressLocality']  
             ),
             array(
                 'name' => __('Land', FAU_PERSON_TEXTDOMAIN),
@@ -257,7 +257,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'desc' => '',
                 'type' => 'text',
                 'id' => $prefix . 'workLocation',
-                'default' => ''
+                'after' => $univis_default['workLocation'] 
             ),
             array(
                 'name' => __('Standort Telefonanschluss', FAU_PERSON_TEXTDOMAIN),
@@ -275,14 +275,14 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'desc' => __('Bitte geben Sie uni-interne Nummern für Erlangen in der internationalen Form +49 9131 85-22222 und für Nürnberg in der internationalen Form +49 911 5302-555 an.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text',
                 'id' => $prefix . 'telephone',
-                'default' => ''
+                'after' => $univis_default['telephone'] 
             ),
             array(
                 'name' => __('Telefax', FAU_PERSON_TEXTDOMAIN),
                 'desc' => __('Bitte geben Sie die Nummer in der internationalen Form +49 9131 1111111 an.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text',
                 'id' => $prefix . 'faxNumber',
-                'default' => ''
+                'after' => $univis_default['faxNumber'] 
             ),
             array(
                 'name' => __('Mobiltelefon', FAU_PERSON_TEXTDOMAIN),
@@ -306,14 +306,14 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'desc' => '',
                 'type' => 'text_email',
                 'id' => $prefix . 'email',
-                'default' => ''
+                'after' => $univis_default['email'] 
             ),
             array(
                 'name' => __('Webseite', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
                 'type' => 'text_url',
                 'id' => $prefix . 'url',
-                'default' => ''
+                'after' => $univis_default['url'] 
             ),
         )
     );
@@ -487,8 +487,6 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
     
     return $meta_boxes;
 });
-
-
 
 
     ///////////////////////////////////////////////////////////////

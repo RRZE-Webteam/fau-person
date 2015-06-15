@@ -87,7 +87,7 @@ class FAU_Person {
         //Excerpt-Meta-Box umbenennen
         add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));        
     }
-
+    
     public static function activation() {
 
         self::version_compare();
@@ -403,16 +403,14 @@ class FAU_Person {
     
     
     
-    public function univis_defaults() {
-        _rrze_debug(cmb_Meta_Box::get_object_type() == 'post');
-        if (is_single()) {
+    public function univis_defaults( ) {
             $id = cmb_Meta_Box::get_object_id();
-            $univis_id = get_post_meta($id, 'fau_person_univis_id', true);
-            $univis_default = sync_helper::get_fields($id, $univis_id);
-            extract($univis_default);
-            _rrze_debug($univis_default);
-        }
-        return $worksFor;
+            $post = get_post($id);
+            if( !is_null( $post ) && $post->post_type === 'person' && get_post_meta($id, 'fau_person_univis_id', true)) {
+                $univis_id = get_post_meta($id, 'fau_person_univis_id', true);
+                $univis_default = sync_helper::get_fields($id, $univis_id, 1);
+                return $univis_default;
+            }
     }
     
     //Excerpt Metabox entfernen um Titel zu ändern und Länge zu modifizieren
