@@ -52,6 +52,8 @@ class FAU_Person {
 
     protected static $instance = null;
 
+    private $search_univis_id_page = null;
+    
     public static function instance() {
 
         if (null == self::$instance) {
@@ -74,12 +76,16 @@ class FAU_Person {
 
         include_once( plugin_dir_path(__FILE__) . 'includes/fau-person-metaboxes.php' );
         
-        add_action('init', array (__CLASS__, 'register_person_post_type' ) );
+        add_action( 'init', array (__CLASS__, 'register_person_post_type' ) );
         add_action( 'init', array( $this, 'register_persons_taxonomy' ) );
         add_action( 'restrict_manage_posts', array( $this, 'person_restrict_manage_posts' ) );
         add_action( 'admin_menu', array( $this, 'add_help_tabs' ) );
+        //add_action( 'admin_menu', array( $this, 'add_options_pages' ) );
+        add_action( 'admin_init', array( $this, 'admin_init' ) );
         add_action( 'widgets_init', array( __CLASS__, 'register_widgets' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_script' ) );
+        
+        
         add_filter( 'single_template', array( $this, 'include_template_function' ) );
 
         self::add_shortcodes();
@@ -130,7 +136,13 @@ class FAU_Person {
     }
 
     private static function default_options() {
-        return array(); // Standard-Array für zukünftige Optionen
+        $options = array(
+            'firstname' => '',
+            'givenname' => '',
+            'univis_id' => ''
+        );
+                
+        return $options; // Standard-Array für zukünftige Optionen
     }
 
     private static function get_options() {
@@ -140,7 +152,7 @@ class FAU_Person {
         $options = wp_parse_args($options, $defaults);
         $options = array_intersect_key($options, $defaults);
 
-        return (object) $options;
+        return $options;
     }
     
    public function get_contactdata() {      
@@ -281,6 +293,109 @@ class FAU_Person {
     }    
     
     public function help_menu_persons_category() {
+
+        $content_overview = array(
+            '<p><strong>' . __('Zuordnung von Personen und Kontakten zu verschiedenen Kategorien', FAU_PERSON_TEXTDOMAIN) . '</strong></p>',
+        );
+
+        $help_tab_overview = array(
+            'id' => 'overview',
+            'title' => __('Übersicht', FAU_PERSON_TEXTDOMAIN),
+            'content' => implode(PHP_EOL, $content_overview),
+        );
+
+        $help_sidebar = sprintf('<p><strong>%1$s:</strong></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">%2$s</a></p>', __('Für mehr Information', FAU_PERSON_TEXTDOMAIN), __('RRZE-Webteam in Github', FAU_PERSON_TEXTDOMAIN));
+        
+        $screen = get_current_screen();
+
+        if ($screen->id != 'edit-persons_category') {
+            return;
+        }
+
+        $screen->add_help_tab($help_tab_overview);
+
+        $screen->set_help_sidebar($help_sidebar);
+    }   
+    
+    public function add_options_pages() {
+        $this->search_univis_id_page = add_submenu_page('edit.php?post_type=person', __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'search-univis-id', array( $this, 'search_univis_id' ));
+        add_action('load-' . $this->search_univis_id_page, array($this, 'help_menu_search_univis_id'));
+    }
+    
+    public function search_univis_id() {
+        ?>
+        <div class="wrap">
+            <?php screen_icon(); ?>
+            <h2><?php echo esc_html(__('Suche nach <i>UnivIS-ID</i>', FAU_PERSON_TEXTDOMAIN)); ?></h2>
+
+            <form method="post" action="options.php">
+                <?php
+                settings_fields('search_univis_id_options');
+                do_settings_sections('search_univis_id_options');
+                submit_button();
+                ?>
+            </form>            
+        </div>
+        <?php        
+    }
+
+    public function admin_init() {
+
+        register_setting('search_univis_id_options', self::option_name, array($this, 'options_validate'));
+
+        add_settings_section('search_univis_id_section', __('Bitte geben Sie den Vor- und Nachnamen der Person ein, von der Sie die UnivIS-ID benötigen.', FAU_PERSON_TEXTDOMAIN), '__return_false', 'search_univis_id_options');
+
+        add_settings_field('univis_id_firstname', __('Vorname', FAU_PERSON_TEXTDOMAIN), array($this, 'univis_id_firstname'), 'search_univis_id_options', 'search_univis_id_section');
+        add_settings_field('univis_id_givenname', __('Nachname', FAU_PERSON_TEXTDOMAIN), array($this, 'univis_id_givenname'), 'search_univis_id_options', 'search_univis_id_section');
+        
+        add_settings_section('find_univis_id_section', __('Folgende Daten wurden in UnivIS gefunden:', FAU_PERSON_TEXTDOMAIN), '__return_false', 'search_univis_id_options');
+
+        add_settings_field('univis_id_result', __('UnivIS-ID', FAU_PERSON_TEXTDOMAIN), array($this, 'univis_id_result'), 'search_univis_id_options', 'find_univis_id_section');
+    }
+    
+    public function options_validate($input) {
+        $defaults = self::default_options();        
+        $options = $this->get_options();
+
+        $input['firstname'] = strval($input['firstname']);
+        $input['givenname'] = strval($input['givenname']);
+        $input['firstname'] = !empty($input['firstname']) ? $input['firstname'] : $defaults['firstname'];
+        $input['givenname'] = !empty($input['givenname']) ? $input['givenname'] : $defaults['givenname'];
+        return $input;
+    }    
+
+    public function embed_defaults($defaults) {
+        $options = $this->get_options();
+
+        $defaults['firstname'] = $options['firstname'];
+        $defaults['givenname'] = $options['givenname'];
+
+        return $defaults;
+    }    
+    
+    public function univis_id_firstname() {
+        $options = $this->get_options();
+        ?>
+        <input type='text' name="<?php printf('%s[firstname]', self::option_name); ?>" value="<?php echo $options['firstname']; ?>">
+        <?php
+    }
+
+    public function univis_id_givenname() {
+        $options = $this->get_options();
+        ?>
+        <input type='text' name="<?php printf('%s[givenname]', self::option_name); ?>" value="<?php echo $options['givenname']; ?>">
+        <?php
+    }    
+    
+    public function univis_id_result() {
+        $options = $this->get_options();
+                _rrze_debug($options['univis_id']);
+        ?>
+        <input type='text' name="<?php printf('%s[univis_id]', self::option_name); ?>" value="<?php echo $options['univis_id']; ?>">
+        <?php
+    }    
+    
+    public function help_menu_search_univis_id() {
 
         $content_overview = array(
             '<p><strong>' . __('Zuordnung von Personen und Kontakten zu verschiedenen Kategorien', FAU_PERSON_TEXTDOMAIN) . '</strong></p>',
