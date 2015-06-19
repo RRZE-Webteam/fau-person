@@ -49,10 +49,9 @@
             } else {
                 $liste = '';
             }
-
             foreach ($list_ids as $value) {
                 $post = get_post($value);
-                if ($post->post_type == 'person') {
+                if ($post && $post->post_type == 'person') {
                     if (($format == 'full') || ($format == 'page')) {
                         $liste .= fau_person_page($value);
                     } elseif ($format == 'shortlist') {
@@ -235,8 +234,6 @@ if(!function_exists('fau_person_markup')) {
             }
             $content .= '</div>';
         }
-        $content .= '</div>';
-        $content .= '</div>';
         $content .= '</div>';
         $content .= '</div>';
         return $content;
