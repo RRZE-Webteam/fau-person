@@ -341,4 +341,36 @@ if(!function_exists('fau_person_markup')) {
 
         return $content;
     } 
+ }    
+  
+if(!function_exists('fau_person_shortlist')) {
+    function fau_person_shortlist($id, $showlist)
+    {	
+            $honorificPrefix = get_post_meta($id, 'fau_person_honorificPrefix', true);
+            $givenName = get_post_meta($id, 'fau_person_givenName', true);
+            $familyName = get_post_meta($id, 'fau_person_familyName', true);
+            $honorificSuffix = get_post_meta($id, 'fau_person_honorificSuffix', true);
+            if( get_post_field( 'post_excerpt', $id ) ) {
+                $excerpt = get_post_field( 'post_excerpt', $id );                
+            } else {
+                $post = get_post( $id );
+                if ( $post->post_content )      $excerpt = wp_trim_excerpt($post->post_content);
+            }
+            
+            $content = '';			           
+		$fullname = '';
+		if($honorificPrefix)            $fullname .= '<span itemprop="honorificPrefix">'.$honorificPrefix."</span> ";
+                if($givenName || $familyName) {
+                    if($givenName)          $fullname .= '<span itemprop="givenName">'.$givenName."</span> ";
+                    if($familyName)         $fullname .= '<span itemprop="familyName">'.$familyName."</span>";
+                } else {
+                    $fullname .= get_the_title($id);
+                }
+                if($honorificSuffix) 	$fullname .= ' '.$honorificSuffix;
+                $content .= '<li class="person-info">'."\n";
+                $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . get_post_field( 'guid', $id ) . '">' . $fullname . '</a>';
+                if( $showlist && $excerpt )                                  $content .= "\n".$excerpt;    
+                $content .= "</li>\n";
+            return $content;
+    }
  }
