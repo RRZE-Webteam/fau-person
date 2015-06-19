@@ -3,7 +3,11 @@
 class sync_helper {
 
     public static function get_fields( $id, $univis_id, $defaults ) {
-        $person = self::get_univisdata( $univis_id );
+        if( $univis_id ) {
+            $person = self::get_univisdata( $univis_id );
+        } else {
+            $person = array();
+        }
         $fields_univis = array(
             'department' => 'orgname',
             'honorificPrefix' => 'title',
@@ -88,19 +92,27 @@ class sync_helper {
         return $fields;
     }
     
-    
-    public static function get_univisdata( $univis_id ) {    
+    public static function get_univisdata( $univis_id, $firstname=0, $givenname=0 ) {    
     	$univis_url = "http://univis.uni-erlangen.de/prg";
-        if($univis_id) {
-		// Hole Daten von Univis
-		$url = $univis_url."?search=persons&id=".$univis_id."&show=xml";
+           // Hole Daten von Univis
+        if( $univis_id || $firstname || $givenname ) {
+        if( $univis_id ) {
+            $url = $univis_url."?search=persons&id=".urlencode($univis_id)."&show=xml";
+        } elseif( $firstname && $givenname ) {
+            $url = $univis_url."?search=persons&name=".urlencode($givenname)."&firstname=".urlencode($firstname)."&show=xml";
+        } elseif( $firstname ) {
+            $url = $univis_url."?search=persons&firstname=".urlencode($firstname)."&show=xml";
+        } elseif( $givenname ) {
+            $url = $univis_url."?search=persons&name=".urlencode($givenname)."&show=xml";
+        } 
+      
 		if(!fopen($url, "r")) {
 			// Univis Server ist nicht erreichbar
 			return array();
 		}
 		$persArray = xml2array($url);
                 if(empty($persArray)) {
-                    echo "Leider konnte die Person nicht gefunden werden.";
+                    //echo "Leider konnte die Person nicht gefunden werden.";
                     return array();
                 } else {
 		$person = $persArray["Person"];
@@ -110,8 +122,8 @@ class sync_helper {
 			// Keine Person gefunden
 			return array();
 		}
-		// Falls mehrer Personen gefunden wurden, wähle die erste
-		if($person) $person = $person[0];
+		// Falls mehrer Personen gefunden wurden, wähle die erste, wenn Abfrage nach UnivIS-ID
+		if( $univis_id && $person ) $person = $person[0];
 		// Lade Publikationen und Lehrveranstaltungen falls noetig
 /*              if ($this->optionen["Personenanzeige_Publikationen"]) {
 			$person["publikationen"] = $this->_ladePublikationen($person["id"]);
@@ -123,7 +135,7 @@ class sync_helper {
 		return $person;
                 }
         } else {
-            echo "Sie haben keine UnivIS-ID angegeben.";
+            //echo "Sie haben keine UnivIS-ID angegeben.";
             return array();
         }
     }

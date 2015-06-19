@@ -323,18 +323,57 @@ class FAU_Person {
     }
     
     public function search_univis_id() {
+        $options = $this->get_options();
+        $firstname = $options['firstname'];
+        $givenname = $options['givenname'];
+        $person = sync_helper::get_univisdata(0, $firstname, $givenname);
         ?>
         <div class="wrap">
             <?php screen_icon(); ?>
-            <h2><?php echo esc_html(__('Suche nach <i>UnivIS-ID</i>', FAU_PERSON_TEXTDOMAIN)); ?></h2>
+            <h2><?php echo esc_html(__('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN)); ?></h2>
 
             <form method="post" action="options.php">
                 <?php
                 settings_fields('search_univis_id_options');
                 do_settings_sections('search_univis_id_options');
-                submit_button();
+                submit_button(esc_html(__('Person suchen', FAU_PERSON_TEXTDOMAIN)));
                 ?>
             </form>            
+        </div>
+        <div class="wrap">
+            <?php
+                settings_fields('find_univis_id_options');
+                do_settings_sections('find_univis_id_options');
+                foreach($person as $key=>$value) {
+                    if(array_key_exists('email', $person[$key]['locations'][0]['location'][0])) {
+                        $email = $person[$key]['locations'][0]['location'][0]['email'];
+                    } else {
+                        $email = "Keine Daten in UnivIS eingepflegt.";
+                    }
+                    if(array_key_exists('id', $person[$key])) {
+                        $id = $person[$key]['id'];
+                    } else {
+                        $id = "Keine Daten in UnivIS eingepflegt.";
+                    }
+                    if(array_key_exists('firstname', $person[$key])) {
+                        $firstname = $person[$key]['firstname'];
+                    } else {
+                        $firstname = "Keine Daten in UnivIS eingepflegt.";
+                    }
+                    if(array_key_exists('lastname', $person[$key])) {
+                        $lastname = $person[$key]['lastname'];
+                    } else {
+                        $lastname = "Keine Daten in UnivIS eingepflegt.";
+                    }
+                    if(array_key_exists('orgname', $person[$key])) {
+                        $orgname = $person[$key]['orgname'];
+                    } else {
+                        $orgname = "Keine Daten in UnivIS eingepflegt.";
+                    }
+                    echo 'UnivIS-ID '. $id . ': '. $firstname . ' ' . $lastname . ', E-Mail: ' . $email. ', Organisation: ' . $orgname;
+                    echo "<br>";
+                }
+            ?>
         </div>
         <?php        
     }
@@ -347,10 +386,13 @@ class FAU_Person {
 
         add_settings_field('univis_id_firstname', __('Vorname', FAU_PERSON_TEXTDOMAIN), array($this, 'univis_id_firstname'), 'search_univis_id_options', 'search_univis_id_section');
         add_settings_field('univis_id_givenname', __('Nachname', FAU_PERSON_TEXTDOMAIN), array($this, 'univis_id_givenname'), 'search_univis_id_options', 'search_univis_id_section');
-        
-        add_settings_section('find_univis_id_section', __('Folgende Daten wurden in UnivIS gefunden:', FAU_PERSON_TEXTDOMAIN), '__return_false', 'search_univis_id_options');
 
-        add_settings_field('univis_id_result', __('UnivIS-ID', FAU_PERSON_TEXTDOMAIN), array($this, 'univis_id_result'), 'search_univis_id_options', 'find_univis_id_section');
+        
+        register_setting('find_univis_id_options', self::option_name, array($this, 'options_validate'));
+        
+        add_settings_section('find_univis_id_section', __('Folgende Daten wurden in UnivIS gefunden:', FAU_PERSON_TEXTDOMAIN), '__return_false', 'find_univis_id_options');
+
+        //add_settings_field('univis_id_result', __('UnivIS-ID', FAU_PERSON_TEXTDOMAIN), array($this, 'univis_id_result'), 'search_univis_id_options', 'find_univis_id_section');
     }
     
     public function options_validate($input) {
