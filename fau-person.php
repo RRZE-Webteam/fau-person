@@ -80,7 +80,7 @@ class FAU_Person {
         add_action( 'init', array( $this, 'register_persons_taxonomy' ) );
         add_action( 'restrict_manage_posts', array( $this, 'person_restrict_manage_posts' ) );
         add_action( 'admin_menu', array( $this, 'add_help_tabs' ) );
-        //add_action( 'admin_menu', array( $this, 'add_options_pages' ) );
+        add_action( 'admin_menu', array( $this, 'add_options_pages' ) );
         add_action( 'admin_init', array( $this, 'admin_init' ) );
         add_action( 'widgets_init', array( __CLASS__, 'register_widgets' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_script' ) );
@@ -138,8 +138,7 @@ class FAU_Person {
     private static function default_options() {
         $options = array(
             'firstname' => '',
-            'givenname' => '',
-            'univis_id' => ''
+            'givenname' => ''
         );
                 
         return $options; // Standard-Array für zukünftige Optionen
@@ -344,34 +343,39 @@ class FAU_Person {
             <?php
                 settings_fields('find_univis_id_options');
                 do_settings_sections('find_univis_id_options');
-                foreach($person as $key=>$value) {
-                    if(array_key_exists('email', $person[$key]['locations'][0]['location'][0])) {
-                        $email = $person[$key]['locations'][0]['location'][0]['email'];
-                    } else {
-                        $email = "Keine Daten in UnivIS eingepflegt.";
+                $person = $this->record_sort($person, 'lastname');
+                if(empty($person)) {
+                    echo "Es konnten keine Daten zur Person gefunden werden. Bitte verändern Sie Ihre Suchwerte.";
+                } else {
+                    foreach($person as $key=>$value) {
+                        if(array_key_exists('locations', $person[$key]) && array_key_exists('location', $person[$key]['locations'][0]) && array_key_exists('email', $person[$key]['locations'][0]['location'][0])) {
+                            $email = $person[$key]['locations'][0]['location'][0]['email'];
+                        } else {
+                            $email = "Keine Daten in UnivIS eingepflegt.";
+                        }
+                        if(array_key_exists('id', $person[$key])) {
+                            $id = $person[$key]['id'];
+                        } else {
+                            $id = "Keine Daten in UnivIS eingepflegt.";
+                        }
+                        if(array_key_exists('firstname', $person[$key])) {
+                            $firstname = $person[$key]['firstname'];
+                        } else {
+                            $firstname = "Keine Daten in UnivIS eingepflegt.";
+                        }
+                        if(array_key_exists('lastname', $person[$key])) {
+                            $lastname = $person[$key]['lastname'];
+                        } else {
+                            $lastname = "Keine Daten in UnivIS eingepflegt.";
+                        }
+                        if(array_key_exists('orgname', $person[$key])) {
+                            $orgname = $person[$key]['orgname'];
+                        } else {
+                            $orgname = "Keine Daten in UnivIS eingepflegt.";
+                        }
+                        echo 'UnivIS-ID '. $id . ': '. $firstname . ' ' . $lastname . ', E-Mail: ' . $email. ', Organisation: ' . $orgname;
+                        echo "<br>";
                     }
-                    if(array_key_exists('id', $person[$key])) {
-                        $id = $person[$key]['id'];
-                    } else {
-                        $id = "Keine Daten in UnivIS eingepflegt.";
-                    }
-                    if(array_key_exists('firstname', $person[$key])) {
-                        $firstname = $person[$key]['firstname'];
-                    } else {
-                        $firstname = "Keine Daten in UnivIS eingepflegt.";
-                    }
-                    if(array_key_exists('lastname', $person[$key])) {
-                        $lastname = $person[$key]['lastname'];
-                    } else {
-                        $lastname = "Keine Daten in UnivIS eingepflegt.";
-                    }
-                    if(array_key_exists('orgname', $person[$key])) {
-                        $orgname = $person[$key]['orgname'];
-                    } else {
-                        $orgname = "Keine Daten in UnivIS eingepflegt.";
-                    }
-                    echo 'UnivIS-ID '. $id . ': '. $firstname . ' ' . $lastname . ', E-Mail: ' . $email. ', Organisation: ' . $orgname;
-                    echo "<br>";
                 }
             ?>
         </div>
@@ -391,8 +395,6 @@ class FAU_Person {
         register_setting('find_univis_id_options', self::option_name, array($this, 'options_validate'));
         
         add_settings_section('find_univis_id_section', __('Folgende Daten wurden in UnivIS gefunden:', FAU_PERSON_TEXTDOMAIN), '__return_false', 'find_univis_id_options');
-
-        //add_settings_field('univis_id_result', __('UnivIS-ID', FAU_PERSON_TEXTDOMAIN), array($this, 'univis_id_result'), 'search_univis_id_options', 'find_univis_id_section');
     }
     
     public function options_validate($input) {
@@ -418,24 +420,17 @@ class FAU_Person {
     public function univis_id_firstname() {
         $options = $this->get_options();
         ?>
-        <input type='text' name="<?php printf('%s[firstname]', self::option_name); ?>" value="<?php echo $options['firstname']; ?>">
+        <input type='text' name="<?php printf('%s[firstname]', self::option_name); ?>" value="<?php echo $options['firstname']; ?>"><p class="description"><?php _e('Bitte keine Umlaute, sondern statt dessen ae, oe, ue, ss verwenden.', self::textdomain); ?></p>
         <?php
     }
 
     public function univis_id_givenname() {
         $options = $this->get_options();
         ?>
-        <input type='text' name="<?php printf('%s[givenname]', self::option_name); ?>" value="<?php echo $options['givenname']; ?>">
+        <input type='text' name="<?php printf('%s[givenname]', self::option_name); ?>" value="<?php echo $options['givenname']; ?>"><p class="description"><?php _e('Bitte keine Umlaute, sondern statt dessen ae, oe, ue, ss verwenden.', self::textdomain); ?></p>
+        
         <?php
-    }    
-    
-    public function univis_id_result() {
-        $options = $this->get_options();
-                _rrze_debug($options['univis_id']);
-        ?>
-        <input type='text' name="<?php printf('%s[univis_id]', self::option_name); ?>" value="<?php echo $options['univis_id']; ?>">
-        <?php
-    }    
+    }       
     
     public function help_menu_search_univis_id() {
 
@@ -595,6 +590,18 @@ class FAU_Person {
         }
         	return $helpuse;
     }*/
-        
+    
+    	private function record_sort($records, $field, $reverse=false) {
+	    $hash = array();
+	    foreach($records as $record) {
+	        $hash[$record[$field]] = $record;
+	    }
+	    ($reverse)? krsort($hash) : ksort($hash);
+	    $records = array();
+	    foreach($hash as $record) {
+	        $records[] = $record;
+	    }
+	    return $records;
+	}
     
 }
