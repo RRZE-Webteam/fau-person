@@ -103,7 +103,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
     //global $post;
 //function fau_person_metaboxes( $meta_boxes ) {
     $prefix = 'fau_person_'; // Prefix for all fields
-    $contactselect = $this->get_contactdata();
+    $contactselect = (array) $this->get_contactdata();
     $univis_default = $this->univis_defaults();  
    // $helpuse = $this->get_helpuse();
     
