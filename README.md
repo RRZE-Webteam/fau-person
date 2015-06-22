@@ -7,6 +7,11 @@ WordPress Plugin
 Visitenkarten-Plugin für FAU Webauftritte  
 Custom Post Type person
 
+####Version 1.1.0:
+
+- UnivIS-Schnittstelle ergänzt: Bei Eingabe der UnivIS-ID der Person und Aktivieren von "Daten aus UnivIS anzeigen" werden in der Ausgabe die Daten angezeigt, die in UnivIS hinterlegt sind. Die entsprechenden Werte werden unterhalb der Felder angezeigt. Außerdem ist die Suche 
+
+
 ####Version 1.0.13:
 
 - Verfügbare Kontakte werden auf Seiten und Beiträgen mit ihrer ID angezeigt (vereinfachte Suche für Shortcode, Metabox kann auch auf die Seite verschoben werden)    
