@@ -250,7 +250,7 @@ if(!function_exists('fau_person_markup')) {
         extract($fields);
 
         if ($streetAddress || $postalCode || $addressLocality || $addressCountry) {
-            $contactpoint = '<li class="person-info-address"><span class="screen-reader-text">' . __('Adresse', FAU_PERSON_TEXTDOMAIN) . ': </span><br>';
+            $contactpoint = '<li class="person-info-address"><span class="screen-reader-text">' . __('Adresse', FAU_PERSON_TEXTDOMAIN) . ': <br></span>';
             if ($streetAddress) {
                 $contactpoint .= '<span class="person-info-street" itemprop="streetAddress">' . $streetAddress . '</span>';
                 if ($postalCode || $addressLocality) {
