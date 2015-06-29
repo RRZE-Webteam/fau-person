@@ -26,7 +26,40 @@
             "showtelefon" => TRUE,
             "extended" => FALSE,
             "format" => '',
+            "show" => '', 
+            "hide" => '',
                         ), $atts));
+
+                                
+        if (!empty($show)) {
+            $show = explode(', ', $show);
+            if( in_array( 'mehrlink', $show ) )         $showlink = 1;
+            if( in_array( 'fax', $show ) )              $showfax = 1;
+            if( in_array( 'webseite', $show ) )         $showwebsite = 1;
+            if( in_array( 'adresse', $show ) )          $showaddress = 1;
+            if( in_array( 'raum', $show ) )             $showroom = 1;
+            if( in_array( 'kurzauszug', $show ) )       $showdescription = 1;
+            if( in_array( 'kurzbeschreibung', $show ) ) $showlist = 1;
+            if( in_array( 'bild', $show ) )             $showthumb = 1;
+            if( in_array( 'publikationen', $show ) )    $showpubs = 1;
+            if( in_array( 'sprechzeiten', $show ) )     $showoffice = 1;
+            if( in_array( 'mobil', $show ) )            $showmobile = 1;
+        }    
+        if ( !empty( $hide ) ) {
+            $hide = explode(', ', $hide);
+            if( in_array( 'titel', $hide ) )            $showtitle = 0;
+            if( in_array( 'suffix', $hide ) )           $showsuffix = 0;
+            if( in_array( 'position', $hide ) )         $showposition = 0;
+            if( in_array( 'institution', $hide ) )      $showinstitution = 0;
+            if( in_array( 'abteilung', $hide ) )        $showabteilung = 0;
+            if( in_array( 'mail', $hide ) )             $showmail = 0;
+            if( in_array( 'telefon', $hide ) )          $showtelefon = 0;           
+        }
+        if ( !empty( $format ) ) {         
+            //name, sidebar, index, page, plain, 
+            if( $format == 'sidebar' )                  $showsidebar = 1;
+            if( $format == 'name' )                     $name = 1;
+        }                        
 
         if (empty($id)) {
             if (empty($slug)) {
@@ -41,31 +74,49 @@
                 }
             }
         }
+
         if (!empty($id)) {
+
             $list_ids = explode(',', $id);
-            if ($format == 'shortlist') {
-                $liste = '<ul class="person liste-person" itemscope itemtype="http://schema.org/Person">';
-                $liste .= "\n";
-            } else {
+            if ( ( $format == 'shortlist' || $format == 'name') ) {
+                $liste = '<span class="person liste-person" itemscope itemtype="http://schema.org/Person">';
+            } elseif ( $format == 'full' || $format == 'page' ) {
                 $liste = '';
+            } elseif ( $showlist ) {
+                $liste = '<ul class="person liste-person" itemscope itemtype="http://schema.org/Person">';
+                $liste .= "\n";              
+            } else {
+                $liste = '<p>';
             }
+
+            $number = count($list_ids);   
+            $i = 1;
             foreach ($list_ids as $value) {
                 $post = get_post($value);
                 if ($post && $post->post_type == 'person') {
                     if (($format == 'full') || ($format == 'page')) {
                         $liste .= fau_person_page($value);
-                    } elseif ($format == 'shortlist') {
+                    } elseif ( $format == 'shortlist' || $format == 'name' ) {
                         $liste .= fau_person_shortlist($value, $showlist);
+                        if( $i < $number )  $liste .= ", ";
                     } else {
                         $liste .= fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon);
                     }
                 } else {
-                    $liste .= '<p>' . sprintf(__('Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $value) . '</p>';
+                    $liste .=  sprintf(__('Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $value);
+                    if( $i < $number )  $liste .= ", ";
                 }
+                $i++;
             }
-            if ($format == 'shortlist')
+            if ( $format == 'shortlist' || $format == 'name'  ) {
+                $liste .= "</span>\n";
+            } elseif ( $showlist ) {
                 $liste .= "</ul>\n";
+            } elseif( $format != 'full' && $format != 'page' ) {
+                $liste .= "</p>\n";                
+            } 
             return $liste;
+            
         }
     }
 
@@ -183,13 +234,13 @@ if(!function_exists('fau_person_markup')) {
             }
             $content .= '</div>';
         }
-
         $content .= '<div class="span3">';
         $content .= '<h3>';
         if($showtitle && $honorificPrefix)                      
             $content .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
         if(get_post_meta( $id, 'fau_person_univis_sync', true)) {
             $content .= '<span itemprop="givenName">' . $givenName . '</span> <span itemprop="familyName">' . $familyName . '</span>';
+
         } elseif( !empty( get_the_title($id) ) ) {                                                
             $content .= get_the_title($id);
         }
@@ -278,6 +329,7 @@ if(!function_exists('fau_person_markup')) {
             $url = 'http://' . $url;
         }
         //$content = '';
+        
         $fullname = '';
         if ($honorificPrefix)
             $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
@@ -343,10 +395,10 @@ if(!function_exists('fau_person_markup')) {
 if(!function_exists('fau_person_shortlist')) {
     function fau_person_shortlist($id, $showlist)
     {	
-            $honorificPrefix = get_post_meta($id, 'fau_person_honorificPrefix', true);
-            $givenName = get_post_meta($id, 'fau_person_givenName', true);
-            $familyName = get_post_meta($id, 'fau_person_familyName', true);
-            $honorificSuffix = get_post_meta($id, 'fau_person_honorificSuffix', true);
+        
+        $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+        extract($fields);
+        
             if( get_post_field( 'post_excerpt', $id ) ) {
                 $excerpt = get_post_field( 'post_excerpt', $id );                
             } else {
@@ -354,20 +406,25 @@ if(!function_exists('fau_person_shortlist')) {
                 if ( $post->post_content )      $excerpt = wp_trim_excerpt($post->post_content);
             }
             
+            if( $link ) {
+                $personlink = $link;
+            } else {
+                $personlink = get_post_field( 'guid', $id );
+            }
             $content = '';			           
 		$fullname = '';
 		if($honorificPrefix)            $fullname .= '<span itemprop="honorificPrefix">'.$honorificPrefix."</span> ";
                 if($givenName || $familyName) {
                     if($givenName)          $fullname .= '<span itemprop="givenName">'.$givenName."</span> ";
                     if($familyName)         $fullname .= '<span itemprop="familyName">'.$familyName."</span>";
-                } else {
+                } elseif (!empty(get_the_title($id) ) ) {
                     $fullname .= get_the_title($id);
                 }
                 if($honorificSuffix) 	$fullname .= ' '.$honorificSuffix;
-                $content .= '<li class="person-info">'."\n";
-                $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . get_post_field( 'guid', $id ) . '">' . $fullname . '</a>';
-                if( $showlist && $excerpt )                                  $content .= "\n".$excerpt;    
-                $content .= "</li>\n";
+                $content .= '<span class="person-info">';
+                $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
+                //if( $showlist && $excerpt )                                  $content .= "\n".$excerpt;    
+                $content .= '</span>';
             return $content;
     }
  }
