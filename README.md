@@ -10,6 +10,16 @@ Custom Post Type person
 ####Version 1.1.2:
 
 - doppelte Anzeige der PLZ bei Einbindung aus UnivIS beseitigt    
+- Name der Person verlinkt auf ausführliche Kontaktseite der Person, es sei denn, ein anderer "Mehr"-Link ist im Kontakt hinterlegt, dann wird auf diesen verlinkt: Eingabe des "Mehr"-Links in den Bereich "Social Media" verschoben    
+- Shortcode-Parameter ergänzt:
+-- show und hide: um Einzelwerte anzeigen zu lassen oder auszublenden (Werte entsprechen den Bezeichnungen der Felder bei im Kontakteingabeformular). Mit show werden die entsprechenden Werte angezeigt, mit hide verborgen:    
+   kurzbeschreibung, organisation, abteilung, position, titel, suffix, adresse, raum, telefon, fax, mobil, mail, webseite, mehrlink, kurzauszug, sprechzeiten, publikationen, bild     
+   Beispiel: [person id="12345" show="adresse, raum, sprechzeiten" hide="position, telefon"]    
+-- format: um verschiedene Ausgabeformate zu erhalten (je nachdem auch entsprechende Felder ein- oder ausgeblendet)
+   name: Ausgabe von Titel, Vorname, Nachname und Suffix (sofern vorhanden) im Fließtext mit Link auf die Kontaktseite der Person
+   page: vollständige Ausgabe des ganzen Kontaktes wie bei der Kontakt-Einzelseite, die Parameter show und hide haben hierauf keinen Einfluss
+   sidebar: Ausgabe wie bei der Anzeige in der Sidebar im Theme    
+   liste: Ausgabe der Namen mit Listenpunkten, unten drunter Kurzbeschreibung    
 
 ####Version 1.1.0:
 

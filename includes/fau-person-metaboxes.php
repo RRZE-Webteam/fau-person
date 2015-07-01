@@ -105,6 +105,8 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
     $prefix = 'fau_person_'; // Prefix for all fields
     $contactselect = (array) $this->get_contactdata();
     $univis_default = $this->univis_defaults();  
+    //ID der Kontaktseite
+    $id = cmb_Meta_Box::get_object_id();
    // $helpuse = $this->get_helpuse();
     
     /*    $meta_boxes['fau_person_postdata'] = array(
@@ -155,13 +157,6 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'type' => 'text',
                 'after' => $univis_default['jobTitle']    
             ),
-            array(
-                'name' => __('"Mehr"-Link führt zur Seite ...', FAU_PERSON_TEXTDOMAIN),
-                'desc' => __('Bitte vollständigen Permalink der Zielseite angeben', FAU_PERSON_TEXTDOMAIN),
-                'type' => 'text_url',
-                'id' => $prefix . 'link',
-                //'after' => '<hr>' . __('Zum Anzeigen der Person verwenden Sie bitte die ID', FAU_PERSON_TEXTDOMAIN) . ' ' . $helpuse,                
-            )
         )
     );
     // Meta-Box Kontaktinformation - fau_person_info
@@ -193,7 +188,9 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                     '' => __('Keine Angabe', FAU_PERSON_TEXTDOMAIN),
                     'Dr.' => __('Doktor', FAU_PERSON_TEXTDOMAIN),
                     'Prof.' => __('Professor', FAU_PERSON_TEXTDOMAIN),
-                    'Prof. Dr.' => __('Professor Doktor', FAU_PERSON_TEXTDOMAIN)
+                    'Prof. Dr.' => __('Professor Doktor', FAU_PERSON_TEXTDOMAIN),
+                    'PD' => __('Privatdozent', FAU_PERSON_TEXTDOMAIN),
+                    'PD Dr.' => __('Privatdozent Doktor', FAU_PERSON_TEXTDOMAIN)
                 ),
                 'id' => $prefix . 'honorificPrefix',
                 'after' => $univis_default['honorificPrefix']    
@@ -315,6 +312,14 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'id' => $prefix . 'url',
                 'after' => $univis_default['url'] 
             ),
+            array(
+                'name' => __('Name und "Mehr"-Link verlinken auf Seite ...', FAU_PERSON_TEXTDOMAIN),
+                'desc' => __('Bitte vollständigen Permalink der ausführlichen Personenseite angeben.', FAU_PERSON_TEXTDOMAIN),
+                'type' => 'text_url',
+                'id' => $prefix . 'link',
+                'after' => sprintf(__('<p class="cmb_metabox_description">[Standardwert wenn leer: %s]</p>', FAU_PERSON_TEXTDOMAIN), get_permalink( $id )),
+                //'after' => '<hr>' . __('Zum Anzeigen der Person verwenden Sie bitte die ID', FAU_PERSON_TEXTDOMAIN) . ' ' . $helpuse,                
+            )            
         )
     );
     // Meta-Box Weitere Informationen - fau_person_adds

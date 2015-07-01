@@ -28,38 +28,82 @@
             "format" => '',
             "show" => '', 
             "hide" => '',
+            "showmobile" => FALSE,
                         ), $atts));
-
-                                
+        
+        $shortlist = '';    
+        $sidebar = '';
+        $page = '';
+        $list = '';
+        if ( !empty( $format ) ) {         
+            //name, sidebar, index, page, plain, 
+            if( $format == 'name' || $format == 'shortlist' )   $shortlist = 1;
+            if( $format == 'sidebar' ) {
+                $showsidebar = 1;
+                $sidebar = 1;
+                $showtitle = 1;
+                $showsuffix = 1;
+                $showposition = 1;
+                $showinstitution = 1;
+                $showabteilung = 1;
+                $showtelefon = 1;
+                $showfax = 1;
+                $showwebsite = 1;
+                $showaddress = 1;
+                $showroom = 1;
+                $showdescription = 1;
+                $showthumb = 1;
+            }
+            if( $format == 'full' || $format == 'page' )        $page = 1;
+            if( $format == 'liste' ) {
+                $list = 1;
+                $showlist = 1;
+            }
+        }     
+        //Wenn neue Felder dazukommen, hier die Anzeigeoptionen auch mit einstellen
         if (!empty($show)) {
             $show = explode(', ', $show);
-            if( in_array( 'mehrlink', $show ) )         $showlink = 1;
-            if( in_array( 'fax', $show ) )              $showfax = 1;
-            if( in_array( 'webseite', $show ) )         $showwebsite = 1;
-            if( in_array( 'adresse', $show ) )          $showaddress = 1;
-            if( in_array( 'raum', $show ) )             $showroom = 1;
-            if( in_array( 'kurzauszug', $show ) )       $showdescription = 1;
             if( in_array( 'kurzbeschreibung', $show ) ) $showlist = 1;
-            if( in_array( 'bild', $show ) )             $showthumb = 1;
-            if( in_array( 'publikationen', $show ) )    $showpubs = 1;
-            if( in_array( 'sprechzeiten', $show ) )     $showoffice = 1;
+            if( in_array( 'organisation', $show ) )     $showinstitution = 1;   
+            if( in_array( 'abteilung', $show ) )        $showabteilung = 1;  
+            if( in_array( 'position', $show ) )         $showposition = 1;
+            if( in_array( 'titel', $show ) )            $showtitle = 1;    
+            if( in_array( 'suffix', $show ) )           $showsuffix = 1;  
+            if( in_array( 'adresse', $show ) )          $showaddress = 1;            
+            if( in_array( 'raum', $show ) )             $showroom = 1;  
+            if( in_array( 'telefon', $show ) )          $showtelefon = 1;             
+            if( in_array( 'fax', $show ) )              $showfax = 1;
             if( in_array( 'mobil', $show ) )            $showmobile = 1;
+            if( in_array( 'mail', $show ) )             $showmail = 1; 
+            if( in_array( 'webseite', $show ) )         $showwebsite = 1;            
+            if( in_array( 'mehrlink', $show ) )         $showlink = 1;
+            if( in_array( 'kurzauszug', $show ) )       $showdescription = 1;
+            if( in_array( 'sprechzeiten', $show ) )     $showoffice = 1;
+            if( in_array( 'publikationen', $show ) )    $showpubs = 1;
+            if( in_array( 'bild', $show ) )             $showthumb = 1;
         }    
         if ( !empty( $hide ) ) {
             $hide = explode(', ', $hide);
-            if( in_array( 'titel', $hide ) )            $showtitle = 0;
-            if( in_array( 'suffix', $hide ) )           $showsuffix = 0;
+            if( in_array( 'kurzbeschreibung', $hide ) ) $showlist = 0;
+            if( in_array( 'organisation', $hide ) )     $showinstitution = 0;   
+            if( in_array( 'abteilung', $hide ) )        $showabteilung = 0;  
             if( in_array( 'position', $hide ) )         $showposition = 0;
-            if( in_array( 'institution', $hide ) )      $showinstitution = 0;
-            if( in_array( 'abteilung', $hide ) )        $showabteilung = 0;
-            if( in_array( 'mail', $hide ) )             $showmail = 0;
-            if( in_array( 'telefon', $hide ) )          $showtelefon = 0;           
+            if( in_array( 'titel', $hide ) )            $showtitle = 0;    
+            if( in_array( 'suffix', $hide ) )           $showsuffix = 0;  
+            if( in_array( 'adresse', $hide ) )          $showaddress = 0;            
+            if( in_array( 'raum', $hide ) )             $showroom = 0;  
+            if( in_array( 'telefon', $hide ) )          $showtelefon = 0;             
+            if( in_array( 'fax', $hide ) )              $showfax = 0;
+            if( in_array( 'mobil', $hide ) )            $showmobile = 0;
+            if( in_array( 'mail', $hide ) )             $showmail = 0; 
+            if( in_array( 'webseite', $hide ) )         $showwebsite = 0;            
+            if( in_array( 'mehrlink', $hide ) )         $showlink = 0;
+            if( in_array( 'kurzauszug', $hide ) )       $showdescription = 0;
+            if( in_array( 'sprechzeiten', $hide ) )     $showoffice = 0;
+            if( in_array( 'publikationen', $hide ) )    $showpubs = 0;
+            if( in_array( 'bild', $hide ) )             $showthumb = 0;         
         }
-        if ( !empty( $format ) ) {         
-            //name, sidebar, index, page, plain, 
-            if( $format == 'sidebar' )                  $showsidebar = 1;
-            if( $format == 'name' )                     $name = 1;
-        }                        
+                
 
         if (empty($id)) {
             if (empty($slug)) {
@@ -78,11 +122,11 @@
         if (!empty($id)) {
 
             $list_ids = explode(',', $id);
-            if ( ( $format == 'shortlist' || $format == 'name') ) {
+            if ( $shortlist ) {
                 $liste = '<span class="person liste-person" itemscope itemtype="http://schema.org/Person">';
-            } elseif ( $format == 'full' || $format == 'page' ) {
+            } elseif ( $page ) {
                 $liste = '';
-            } elseif ( $showlist ) {
+            } elseif ( $list ) {
                 $liste = '<ul class="person liste-person" itemscope itemtype="http://schema.org/Person">';
                 $liste .= "\n";              
             } else {
@@ -94,13 +138,19 @@
             foreach ($list_ids as $value) {
                 $post = get_post($value);
                 if ($post && $post->post_type == 'person') {
-                    if (($format == 'full') || ($format == 'page')) {
+                    if ( $page ) {
                         $liste .= fau_person_page($value);
-                    } elseif ( $format == 'shortlist' || $format == 'name' ) {
+                    } elseif ( $shortlist ) {
                         $liste .= fau_person_shortlist($value, $showlist);
                         if( $i < $number )  $liste .= ", ";
+                    } elseif ( $list ) {
+                        $liste .= '<li class="person-info">'."\n";
+                        $liste .= fau_person_shortlist($value, $showlist);
+                        $content .= "</li>\n";
+                    } elseif ( $sidebar ) {
+                        $liste .= fau_person_sidebar($value, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb);
                     } else {
-                        $liste .= fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon);
+                        $liste .= fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile);
                     }
                 } else {
                     $liste .=  sprintf(__('Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $value);
@@ -108,11 +158,11 @@
                 }
                 $i++;
             }
-            if ( $format == 'shortlist' || $format == 'name'  ) {
+            if ( $shortlist  ) {
                 $liste .= "</span>\n";
-            } elseif ( $showlist ) {
+            } elseif ( $list ) {
                 $liste .= "</ul>\n";
-            } elseif( $format != 'full' && $format != 'page' ) {
+            } elseif( !$page ) {
                 $liste .= "</p>\n";                
             } 
             return $liste;
@@ -146,6 +196,7 @@
             "showmail" => TRUE,
             "showtelefon" => TRUE,
             "extended" => FALSE,
+            "showmobile" => FALSE,
                         ), $atts));
 
         $category = get_term_by('slug', $category, 'persons_category');
@@ -161,7 +212,7 @@
         $content = '';
 
         foreach ($posts as $post) {
-            $content .= fau_person_markup($post->ID, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon);
+            $content .= fau_person_markup($post->ID, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile);
         }
 
         return $content;
@@ -171,14 +222,18 @@
 
 if(!function_exists('fau_person_markup')) {
 
-    function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon) {
+    function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile) {
         $fields = sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true), 0 );
         extract($fields);
-         
         
-        $link = get_post_meta($id, 'fau_person_link', true);
 	$type = get_post_meta($id, 'fau_person_typ', true);
 
+        if( $link ) {
+            $personlink = $link;
+        } else {
+            $personlink = get_post_field( 'guid', $id );
+        }
+        
         if( get_post_field( 'post_excerpt', $id ) ) {
             $excerpt = get_post_field( 'post_excerpt', $id );                
         } else {
@@ -211,12 +266,26 @@ if(!function_exists('fau_person_markup')) {
                 $contactpoint .= '<span class="person-info-country" itemprop="addressCountry">'.$addressCountry.'</span>';
             $contactpoint .= '</li>';                                                
         }
+        
+        $fullname = '';
+        if($showtitle && $honorificPrefix)                      
+            $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
+        if($givenName || $familyName) {
+                    if($givenName)          $fullname .= '<span itemprop="givenName">'.$givenName."</span> ";
+                    if($familyName)         $fullname .= '<span itemprop="familyName">'.$familyName."</span>";
+        } elseif( !empty( get_the_title($id) ) ) {                                                
+            $fullname .= get_the_title($id);
+        }
+        if($showsuffix && $honorificSuffix)                     
+            $fullname .= ' <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
+        
                     
         $content = '<div class="person content-person" itemscope itemtype="http://schema.org/Person">';			
         $content .= '<div class="row">';
 
         if($showthumb) {
-            $content .= '<div class="span1 span-small" itemprop="image">';		   				    
+            $content .= '<div class="span1 span-small" itemprop="image">';	
+            $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">';
             if (has_post_thumbnail($id)) {
                 $content .= get_the_post_thumbnail($id, 'person-thumb-bigger');
             } else {
@@ -232,20 +301,12 @@ if(!function_exists('fau_person_markup')) {
 		if ($bild) 
                     $content .=  '<img src="'.$bild.'" width="90" height="120" alt="">';
             }
+            $content .= '</a>';
             $content .= '</div>';
         }
         $content .= '<div class="span3">';
-        $content .= '<h3>';
-        if($showtitle && $honorificPrefix)                      
-            $content .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
-        if(get_post_meta( $id, 'fau_person_univis_sync', true)) {
-            $content .= '<span itemprop="givenName">' . $givenName . '</span> <span itemprop="familyName">' . $familyName . '</span>';
-
-        } elseif( !empty( get_the_title($id) ) ) {                                                
-            $content .= get_the_title($id);
-        }
-        if($showsuffix && $honorificSuffix)                     
-            $content .= ' <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
+        $content .= '<h3>';        
+        $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
         $content .= '</h3>';
         $content .= '<ul class="person-info">';
         if ($showposition && $jobTitle)
@@ -393,8 +454,7 @@ if(!function_exists('fau_person_markup')) {
  }    
   
 if(!function_exists('fau_person_shortlist')) {
-    function fau_person_shortlist($id, $showlist)
-    {	
+    function fau_person_shortlist($id, $showlist) {	
         
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
         extract($fields);
@@ -423,8 +483,110 @@ if(!function_exists('fau_person_shortlist')) {
                 if($honorificSuffix) 	$fullname .= ' '.$honorificSuffix;
                 $content .= '<span class="person-info">';
                 $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
-                //if( $showlist && $excerpt )                                  $content .= "\n".$excerpt;    
+                if( $showlist && $excerpt )                                  $content .= "\n".$excerpt;    
                 $content .= '</span>';
             return $content;
     }
  }
+ 
+if(!function_exists('fau_person_sidebar')) {
+    function fau_person_sidebar($id, $showlist=0, $showinstitution=0, $showabteilung=0, $showposition=0, $showtitle=0, $showsuffix=0, $showaddress=0, $showroom=0, $showtelefon=0, $showfax=0, $showmobile=0, $showmail=0, $showwebsite=0, $showlink=0, $showdescription=0, $showoffice=0, $showpubs=0, $showthumb=0) {
+            if (!empty($id)) {
+            $post = get_post($id);
+
+            $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+            extract($fields);
+
+            if( $link ) {
+                $personlink = $link;
+            } else {
+                $personlink = get_post_field( 'guid', $id );
+            }
+            
+            if( $showaddress ) {
+                if ($streetAddress || $postalCode || $addressLocality || $addressCountry) {
+                    $contactpoint = '<li class="person-info-address"><span class="screen-reader-text">' . __('Adresse', FAU_PERSON_TEXTDOMAIN) . ': <br></span>';
+                    if ($streetAddress) {
+                        $contactpoint .= '<span class="person-info-street" itemprop="streetAddress">' . $streetAddress . '</span>';
+                        if ($postalCode || $addressLocality) {
+                            $contactpoint .= '<br>';
+                        } elseif ($addressCountry) {
+                            $contactpoint .= '<br>';
+                        }
+                    }
+                    if ($postalCode || $addressLocality) {
+                        $contactpoint .= '<span class="person-info-city">';
+                        if ($postalCode)
+                            $contactpoint .= '<span itemprop="postalCode">' . $postalCode . '</span> ';
+                        if ($addressLocality)
+                            $contactpoint .= '<span itemprop="addressLocality">' . $addressLocality . '</span>';
+                        $contactpoint .= '</span>';
+                        if ($addressCountry)
+                            $contactpoint .= '<br>';
+                    }
+                    if ($addressCountry)
+                        $contactpoint .= '<span class="person-info-country" itemprop="addressCountry">' . $addressCountry . '</span>';
+                    $contactpoint .= '</li>';
+                }
+            }
+
+            $fullname = '';
+            if ($honorificPrefix && $showtitle)           $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
+            if($givenName || $familyName) {
+                if($givenName)              $fullname .= '<span itemprop="givenName">'.$givenName."</span> ";
+                if($familyName)             $fullname .= '<span itemprop="familyName">'.$familyName."</span>";
+            } elseif( !empty( get_the_title($id) ) ) {                                                
+                $content .= get_the_title($id);
+            }
+            if ($honorificSuffix && $showsuffix)           $fullname .= ' <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
+            
+            $content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
+            
+            if (!empty($title)) 
+                $content .= '<h2 class="small">' . $title . '</h2>';
+
+            $content .= '<div class="row">';
+
+            if (has_post_thumbnail($id) && $showthumb) {
+                $content .= '<div class="span1" itemprop="image">';
+                $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">';
+                $content .= get_the_post_thumbnail($id, 'person-thumb');
+                $content .= '</a>';
+                $content .= '</div>';
+            }
+
+            $content .= '<div class="span3">';
+            $content .= '<h3>';
+            $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
+            $content .= '</h3>';
+            $content .= '<ul class="person-info">';
+            if ($jobTitle && $showposition)
+                $content .= '<li class="person-info-position"><span class="screen-reader-text">' . __('Tätigkeit', FAU_PERSON_TEXTDOMAIN) . ': </span><strong><span itemprop="jobTitle">' . $jobTitle . '</span></strong></li>';
+            if ($worksFor && $showinstitution)
+                $content .= '<li class="person-info-institution"><span class="screen-reader-text">' . __('Organisation', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="worksFor">' . $worksFor . '</span></li>';
+            if ($department && $showabteilung)
+                $content .= '<li class="person-info-abteilung"><span class="screen-reader-text">' . __('Abteilung', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="department">' . $department . '</span></li>';
+            if ($telephone && $showtelefon)
+                $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="telephone">' . $telephone . '</span></li>';
+            if ($faxNumber && $showfax)
+                $content .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>';
+            if ($email && $showmail)
+                $content .= '<li class="person-info-email"><span class="screen-reader-text">' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="email" href="mailto:' . strtolower($email) . '">' . strtolower($email) . '</a></li>';
+            if ($url && $showwebsite)
+                $content .= '<li class="person-info-www"><span class="screen-reader-text">' . __('Webseite', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="url" href="' . $url . '">' . $url . '</a></li>';
+            if (!empty($contactpoint))
+                $content .= $contactpoint;
+            if ($workLocation && $showoffice)
+                $content .= '<li class="person-info-room"><span class="screen-reader-text">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' </span><span itemprop="workLocation">' . $workLocation . '</span></li>';
+            if ($description && $showdescription)
+                $content .= '<div class="person-info-description">' . $description . '</div>';
+            $content .= '</ul>';
+            $content .= '</div>';
+            $content .= '</div>';
+
+            $content .= '</div>';
+        }
+        return $content;
+
+    }
+}
