@@ -531,6 +531,7 @@ if(!function_exists('fau_person_sidebar')) {
             }
 
             $fullname = '';
+            $content = '';
             if ($honorificPrefix && $showtitle)           $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
             if($givenName || $familyName) {
                 if($givenName)              $fullname .= '<span itemprop="givenName">'.$givenName."</span> ";
