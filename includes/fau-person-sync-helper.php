@@ -34,12 +34,14 @@ class sync_helper {
             'contactPoint' => '',
             'typ' => '',
             'alternateName' => '',
-            'postalCode' => '',
             'addressCountry' => '',
             'pubs' => '',
             'link' => '',
             'hoursAvailable' => '',
             'description' => '',
+        );
+        $fields_exception = array(
+            'postalCode' => '',
         );
         $fields = array();
         foreach( $fields_univis as $key => $value ) {
@@ -55,7 +57,7 @@ class sync_helper {
             $fields[$key] = $value;
         }
         foreach( $fields_univis_location as $key => $value ) {
-            if( array_key_exists( 'locations', $person ) ) {
+            if( array_key_exists( 'locations', $person ) && array_key_exists( 'location', $person['locations'][0] ) ) {
                 $person_location = $person['locations'][0]['location'][0];
                 $value = self::sync_univis( $id, $person_location, $key, $value, $defaults );
             } else {
@@ -64,7 +66,7 @@ class sync_helper {
             $fields[$key] = $value;
         }
         foreach( $fields_univis_officehours as $key => $value ) {
-            if( array_key_exists( 'officehours', $person ) ) {
+            if( array_key_exists( 'officehours', $person ) && array_key_exists( 'officehour', $person['officehours'][0] ) ) {
                 $person_officehours = $person['officehours'][0]['officehour'][0];
                 $value = self::sync_univis( $id, $person_officehours, $key, $value, $defaults );
             } else {
@@ -88,6 +90,16 @@ class sync_helper {
         foreach( $fields_fauperson as $key => $value ) {
             $value = get_post_meta($id, 'fau_person_'.$key, true);
             $fields[$key] = $value;            
+        }
+        foreach( $fields_exception as $key => $value ) {
+            if( $key == 'postalCode' ) {
+                if( get_post_meta($id, 'fau_person_univis_sync', true) && array_key_exists('ort', $person['locations'][0]['location'][0]) ) {
+                    $value = '';
+                } else {
+                    $value = get_post_meta($id, 'fau_person_'.$key, true); 
+                }
+            }
+            $fields[$key] = $value;  
         }
         return $fields;
     }

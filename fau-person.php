@@ -3,7 +3,7 @@
 /**
  * Plugin Name: FAU Person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 1.1.1
+ * Version: 1.1.2
  * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -560,7 +560,7 @@ class FAU_Person {
     }    
     
     
-    
+    //Legt die in UnivIS hinterlegten Werte in einem Array ab, Feldbezeichnungen
     public function univis_defaults( ) {
             $id = cmb_Meta_Box::get_object_id();
             $post = get_post($id);
