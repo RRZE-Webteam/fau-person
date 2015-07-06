@@ -531,13 +531,12 @@ if(!function_exists('fau_person_sidebar')) {
             }
 
             $fullname = '';
-            $content = '';
             if ($honorificPrefix && $showtitle)           $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
             if($givenName || $familyName) {
                 if($givenName)              $fullname .= '<span itemprop="givenName">'.$givenName."</span> ";
                 if($familyName)             $fullname .= '<span itemprop="familyName">'.$familyName."</span>";
             } elseif( !empty( get_the_title($id) ) ) {                                                
-                $content .= get_the_title($id);
+                $fullname .= get_the_title($id);
             }
             if ($honorificSuffix && $showsuffix)           $fullname .= ' <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
             
