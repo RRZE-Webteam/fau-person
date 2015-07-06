@@ -231,7 +231,7 @@ if(!function_exists('fau_person_markup')) {
         if( $link ) {
             $personlink = $link;
         } else {
-            $personlink = get_post_field( 'guid', $id );
+            $personlink = get_permalink( $id );
         }
         
         if( get_post_field( 'post_excerpt', $id ) ) {
@@ -469,7 +469,7 @@ if(!function_exists('fau_person_shortlist')) {
             if( $link ) {
                 $personlink = $link;
             } else {
-                $personlink = get_post_field( 'guid', $id );
+                $personlink = get_permalink( $id );
             }
             $content = '';			           
 		$fullname = '';
@@ -500,7 +500,7 @@ if(!function_exists('fau_person_sidebar')) {
             if( $link ) {
                 $personlink = $link;
             } else {
-                $personlink = get_post_field( 'guid', $id );
+                $personlink = get_permalink( $id );
             }
             
             if( $showaddress ) {
