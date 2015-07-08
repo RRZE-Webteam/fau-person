@@ -349,7 +349,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'type' => 'text',
                 'id' => $prefix . 'pubs'
             )*/
-        )
+        )   
     );
     // Meta-Box Synchronisierung mit externen Daten - fau_person_sync ab hier
     $meta_boxes['fau_person_sync'] = array(
@@ -536,6 +536,8 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
         }
         return $a;
     }
+    
+
 
     
 

@@ -45,6 +45,18 @@ class FAU_Person {
     const php_version = '5.3'; // Minimal erforderliche PHP-Version
     const wp_version = '4.0'; // Minimal erforderliche WordPress-Version
     
+    /*
+     * DB-Version
+     * string
+     */
+    const db_version = '1.1';
+    
+    /*
+     * Name der Variable unter der die DB-Version des Plugins gespeichert wird.
+     * string
+     */    
+    const db_version_option_name = 'fau_person_db_version';
+    
     protected static $options;
     
     public $contactselect;
@@ -64,6 +76,7 @@ class FAU_Person {
     }
 
     private function __construct() {
+        global $wpdb;
         define('FAU_PERSON_ROOT', dirname(__FILE__));
         define('FAU_PERSON_FILE_PATH', FAU_PERSON_ROOT . '/' . basename(__FILE__));
         define('FAU_PERSON_URL', plugins_url('/', __FILE__));
@@ -75,6 +88,9 @@ class FAU_Person {
         self::$options = self::get_options();       
 
         include_once( plugin_dir_path(__FILE__) . 'includes/fau-person-metaboxes.php' );
+
+        $wpdb->dmtable = $wpdb->base_prefix . 'univis_data';
+        $this->update_db_version();
         
         add_action( 'init', array (__CLASS__, 'register_person_post_type' ) );
         add_action( 'init', array( $this, 'register_persons_taxonomy' ) );
@@ -101,11 +117,19 @@ class FAU_Person {
         self::register_person_post_type();
         flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind
 
+        self::$options = self::get_options();  
+        
+        $wpdb->dmtable = $wpdb->base_prefix . 'univis_data';
+        update_option(self::db_version_option_name, self::db_version);
+        
         // CPT-Capabilities für die Administrator-Rolle zuweisen
         // 
         $caps = self::get_caps('person');
         self::add_caps('administrator', $caps);
         //self::add_caps('editor', $caps);
+        
+        // Anlegen der DM-Tabelle
+        self::db_delta_dmtable();
            
     }
     
@@ -135,6 +159,13 @@ class FAU_Person {
         }
     }
 
+    public function update_db_version() {
+        if (get_option(self::db_version_option_name, null) != self::db_version) {
+            self::db_delta_dmtable();
+            update_option(self::db_version_option_name, self::db_version);
+        }
+    }
+    
     private static function default_options() {
         $options = array(
             'firstname' => '',
@@ -324,6 +355,35 @@ class FAU_Person {
         $this->search_univis_id_page = add_submenu_page('edit.php?post_type=person', __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'search-univis-id', array( $this, 'search_univis_id' ));
         add_action('load-' . $this->search_univis_id_page, array($this, 'help_menu_search_univis_id'));
     }
+
+        
+    /*
+     * Anlegen der DM-Tabelle
+     * return void
+     */
+    public static function db_delta_dmtable() {
+        global $wpdb;
+
+        // Existenz prüfen
+        if ($wpdb->get_var("SHOW TABLES LIKE '$wpdb->dmtable'") == $wpdb->dmtable) {
+            return;
+        }
+
+        // Einbinden
+        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+        
+        // Anlegen
+        dbDelta(
+            "CREATE TABLE IF NOT EXISTS `{$wpdb->dmtable}` (
+            id bigint(20) NOT NULL auto_increment,
+            univis_id bigint(20) NOT NULL,
+            `domain` varchar(255) NOT NULL,
+            `active` tinyint(4) default '1',
+            PRIMARY KEY  (`id`),
+            KEY `univis_id` (`univis_id`,`domain`,`active`) );"
+        );
+    }
+          
     
     public function search_univis_id() {
         $options = $this->get_options();
