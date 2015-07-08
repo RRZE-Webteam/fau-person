@@ -231,7 +231,7 @@ if(!function_exists('fau_person_markup')) {
         if( $link ) {
             $personlink = $link;
         } else {
-            $personlink = get_post_field( 'guid', $id );
+            $personlink = get_permalink( $id );
         }
         
         if( get_post_field( 'post_excerpt', $id ) ) {
@@ -469,7 +469,7 @@ if(!function_exists('fau_person_shortlist')) {
             if( $link ) {
                 $personlink = $link;
             } else {
-                $personlink = get_post_field( 'guid', $id );
+                $personlink = get_permalink( $id );
             }
             $content = '';			           
 		$fullname = '';
@@ -500,7 +500,7 @@ if(!function_exists('fau_person_sidebar')) {
             if( $link ) {
                 $personlink = $link;
             } else {
-                $personlink = get_post_field( 'guid', $id );
+                $personlink = get_permalink( $id );
             }
             
             if( $showaddress ) {
@@ -531,13 +531,12 @@ if(!function_exists('fau_person_sidebar')) {
             }
 
             $fullname = '';
-            $content = '';
             if ($honorificPrefix && $showtitle)           $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
             if($givenName || $familyName) {
                 if($givenName)              $fullname .= '<span itemprop="givenName">'.$givenName."</span> ";
                 if($familyName)             $fullname .= '<span itemprop="familyName">'.$familyName."</span>";
             } elseif( !empty( get_the_title($id) ) ) {                                                
-                $content .= get_the_title($id);
+                $fullname .= get_the_title($id);
             }
             if ($honorificSuffix && $showsuffix)           $fullname .= ' <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
             
