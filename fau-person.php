@@ -3,7 +3,7 @@
 /**
  * Plugin Name: FAU Person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 1.1.2
+ * Version: 1.2.0
  * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -23,6 +23,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+
+/* Einbindung der Daten zu neuem Plugin:
+$field  id, firstname, lastname
+        rückgabe array
+        class exists Univis_Data
+ * 
  */
 
 add_action('plugins_loaded', array('FAU_Person', 'instance'));
@@ -45,18 +53,6 @@ class FAU_Person {
     const php_version = '5.3'; // Minimal erforderliche PHP-Version
     const wp_version = '4.0'; // Minimal erforderliche WordPress-Version
     
-    /*
-     * DB-Version
-     * string
-     */
-    const db_version = '1.1';
-    
-    /*
-     * Name der Variable unter der die DB-Version des Plugins gespeichert wird.
-     * string
-     */    
-    const db_version_option_name = 'fau_person_db_version';
-    
     protected static $options;
     
     public $contactselect;
@@ -76,7 +72,6 @@ class FAU_Person {
     }
 
     private function __construct() {
-        global $wpdb;
         define('FAU_PERSON_ROOT', dirname(__FILE__));
         define('FAU_PERSON_FILE_PATH', FAU_PERSON_ROOT . '/' . basename(__FILE__));
         define('FAU_PERSON_URL', plugins_url('/', __FILE__));
@@ -89,9 +84,6 @@ class FAU_Person {
 
         include_once( plugin_dir_path(__FILE__) . 'includes/fau-person-metaboxes.php' );
 
-        $wpdb->dmtable = $wpdb->base_prefix . 'univis_data';
-        $this->update_db_version();
-        
         add_action( 'init', array (__CLASS__, 'register_person_post_type' ) );
         add_action( 'init', array( $this, 'register_persons_taxonomy' ) );
         add_action( 'restrict_manage_posts', array( $this, 'person_restrict_manage_posts' ) );
@@ -119,18 +111,11 @@ class FAU_Person {
 
         self::$options = self::get_options();  
         
-        $wpdb->dmtable = $wpdb->base_prefix . 'univis_data';
-        update_option(self::db_version_option_name, self::db_version);
-        
         // CPT-Capabilities für die Administrator-Rolle zuweisen
         // 
         $caps = self::get_caps('person');
         self::add_caps('administrator', $caps);
-        //self::add_caps('editor', $caps);
-        
-        // Anlegen der DM-Tabelle
-        self::db_delta_dmtable();
-           
+        //self::add_caps('editor', $caps);       
     }
     
     public static function deactivation() {       
@@ -159,13 +144,6 @@ class FAU_Person {
         }
     }
 
-    public function update_db_version() {
-        if (get_option(self::db_version_option_name, null) != self::db_version) {
-            self::db_delta_dmtable();
-            update_option(self::db_version_option_name, self::db_version);
-        }
-    }
-    
     private static function default_options() {
         $options = array(
             'firstname' => '',
@@ -356,40 +334,16 @@ class FAU_Person {
         add_action('load-' . $this->search_univis_id_page, array($this, 'help_menu_search_univis_id'));
     }
 
-        
-    /*
-     * Anlegen der DM-Tabelle
-     * return void
-     */
-    public static function db_delta_dmtable() {
-        global $wpdb;
-
-        // Existenz prüfen
-        if ($wpdb->get_var("SHOW TABLES LIKE '$wpdb->dmtable'") == $wpdb->dmtable) {
-            return;
-        }
-
-        // Einbinden
-        require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-        
-        // Anlegen
-        dbDelta(
-            "CREATE TABLE IF NOT EXISTS `{$wpdb->dmtable}` (
-            id bigint(20) NOT NULL auto_increment,
-            univis_id bigint(20) NOT NULL,
-            `domain` varchar(255) NOT NULL,
-            `active` tinyint(4) default '1',
-            PRIMARY KEY  (`id`),
-            KEY `univis_id` (`univis_id`,`domain`,`active`) );"
-        );
-    }
-          
-    
     public function search_univis_id() {
         $options = $this->get_options();
         $firstname = $options['firstname'];
         $givenname = $options['givenname'];
-        $person = sync_helper::get_univisdata(0, $firstname, $givenname);
+        //$person = sync_helper::get_univisdata(0, $firstname, $givenname);
+        if(class_exists( 'Univis_Data' ) ) {
+            $person = Univis_Data::get_data_by_fullname( $firstname, $givenname );            
+        } else {
+            $person = array();
+        }
         ?>
         <div class="wrap">
             <?php screen_icon(); ?>
@@ -407,11 +361,10 @@ class FAU_Person {
             <?php
                 settings_fields('find_univis_id_options');
                 do_settings_sections('find_univis_id_options');
-                $person = $this->array_orderby($person,"lastname", SORT_ASC, "firstname", SORT_ASC );
                 if(empty($person)) {
-                    echo __('Es konnten keine Daten zur Person gefunden werden. Bitte verändern Sie Ihre Suchwerte.', FAU_PERSON_TEXTDOMAIN);
+                    echo __('Es konnten keine Daten zur Person gefunden werden. Bitte verändern Sie Ihre Suchwerte und stellen Sie sicher, dass das Plugin Univis-Data aktiviert ist.', FAU_PERSON_TEXTDOMAIN);
                 } else {
-
+                    $person = $this->array_orderby($person,"lastname", SORT_ASC, "firstname", SORT_ASC );
                     foreach($person as $key=>$value) {
                         if(array_key_exists('locations', $person[$key]) && array_key_exists('location', $person[$key]['locations'][0]) && array_key_exists('email', $person[$key]['locations'][0]['location'][0])) {
                             $email = $person[$key]['locations'][0]['location'][0]['email'];

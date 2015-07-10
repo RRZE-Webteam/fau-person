@@ -3,8 +3,9 @@
 class sync_helper {
 
     public static function get_fields( $id, $univis_id, $defaults ) {
-        if( $univis_id ) {
-            $person = self::get_univisdata( $univis_id );
+        if( $univis_id && class_exists( 'Univis_Data' ) ) {
+            //$person = self::get_univisdata( $univis_id );
+            $person = Univis_Data::get_data_by( 'id', $univis_id );
         } else {
             $person = array();
         }
@@ -93,7 +94,7 @@ class sync_helper {
         }
         foreach( $fields_exception as $key => $value ) {
             if( $key == 'postalCode' ) {
-                if( get_post_meta($id, 'fau_person_univis_sync', true) && array_key_exists('ort', $person['locations'][0]['location'][0]) ) {
+                if( get_post_meta($id, 'fau_person_univis_sync', true) && array_key_exists( 'locations', $person ) && array_key_exists( 'location', $person['locations'][0] ) && array_key_exists('ort', $person['locations'][0]['location'][0]) ) {
                     $value = '';
                 } else {
                     $value = get_post_meta($id, 'fau_person_'.$key, true); 
@@ -104,6 +105,7 @@ class sync_helper {
         return $fields;
     }
     
+    /*
     public static function get_univisdata( $univis_id, $firstname=0, $givenname=0 ) {    
     	$univis_url = "http://univis.uni-erlangen.de/prg";
            // Hole Daten von Univis
@@ -136,7 +138,7 @@ class sync_helper {
 		}
 		// Falls mehrer Personen gefunden wurden, wähle die erste, wenn Abfrage nach UnivIS-ID
 		if( $univis_id && $person ) $person = $person[0];
-		// Lade Publikationen und Lehrveranstaltungen falls noetig
+		// Lade Publikationen und Lehrveranstaltungen falls noetig */
 /*              if ($this->optionen["Personenanzeige_Publikationen"]) {
 			$person["publikationen"] = $this->_ladePublikationen($person["id"]);
 		}
@@ -144,6 +146,7 @@ class sync_helper {
 			$person["lehrveranstaltungen"] = $this->_ladeLehrveranstaltungenAlle($person["id"]);
 		}
 */
+    /*
 		return $person;
                 }
         } else {
@@ -151,6 +154,8 @@ class sync_helper {
             return array();
         }
     }
+     * 
+     */
    
     public static function sync_univis( $id, $person, $fau_person_var, $univis_var, $defaults ) {   
         //wird benötigt, falls jeder einzelne Wert abgefragt werden soll
