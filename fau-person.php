@@ -338,9 +338,8 @@ class FAU_Person {
         $options = $this->get_options();
         $firstname = $options['firstname'];
         $givenname = $options['givenname'];
-        //$person = sync_helper::get_univisdata(0, $firstname, $givenname);
         if(class_exists( 'Univis_Data' ) ) {
-            $person = Univis_Data::get_data_by_fullname( $firstname, $givenname );            
+            $person = sync_helper::get_univisdata(0, $firstname, $givenname);           
         } else {
             $person = array();
         }

@@ -4,8 +4,7 @@ class sync_helper {
 
     public static function get_fields( $id, $univis_id, $defaults ) {
         if( $univis_id && class_exists( 'Univis_Data' ) ) {
-            //$person = self::get_univisdata( $univis_id );
-            $person = Univis_Data::get_data_by( 'id', $univis_id );
+            $person = self::get_univisdata( $univis_id );
         } else {
             $person = array();
         }
@@ -104,7 +103,28 @@ class sync_helper {
         }
         return $fields;
     }
-    
+
+    public static function get_univisdata($id = 0, $firstname = '', $lastname = '' ) {    
+
+        if( !$id && !$firstname && !$lastname ) {
+		return array();
+	}
+        
+        if($id) {
+        	$result = UnivIS_Data::get_person($id);
+        } elseif( $firstname && $lastname ) {
+        	$result = UnivIS_Data::search_by_fullname($firstname, $lastname);
+        } elseif( $firstname ) {
+        	$result = UnivIS_Data::search_by('firstname', $firstname);
+        } elseif( $lastname ) {
+        	$result = UnivIS_Data::search_by('lastname', $lastname);
+        } else {
+         	$result = array();
+        } 
+        
+        return $result;
+    }
+
     /*
     public static function get_univisdata( $univis_id, $firstname=0, $givenname=0 ) {    
     	$univis_url = "http://univis.uni-erlangen.de/prg";
