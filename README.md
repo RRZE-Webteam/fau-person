@@ -9,6 +9,11 @@ WordPress Plugin
 Visitenkarten-Plugin für FAU Webauftritte  
 Custom Post Type person
 
+####Version 1.2.0:
+
+- Beschleunigter Abruf der Daten bei Anschluss an UnivIS
+- ACHTUNG: UnivIS-Anbindung funktioniert jetzt nur noch, wenn zusätzlich das Plugin **** installiert ist!
+
 ####Version 1.1.2:
 
 - doppelte Anzeige der PLZ bei Einbindung aus UnivIS beseitigt    
