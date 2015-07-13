@@ -45,71 +45,61 @@ class sync_helper {
         $fields_exception = array(
             'postalCode' => '',
         );            
-            foreach( $fields_univis as $key => $value ) {
-                if( $univis_sync && array_key_exists( $value, $person ) ) {
-                    $value = self::sync_univis( $id, $person, $key, $value, $defaults ); 
+        foreach( $fields_univis as $key => $value ) {
+            if( $univis_sync && array_key_exists( $value, $person ) ) {
+                $value = self::sync_univis( $id, $person, $key, $value, $defaults ); 
+            } else {
+                if( $defaults ) {
+                    $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);     
                 } else {
-                    if( $defaults ) {
-                        $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);     
-                    } else {
-                        $value = get_post_meta($id, 'fau_person_'.$key, true);                          
-                    }
+                    $value = get_post_meta($id, 'fau_person_'.$key, true);                          
                 }
-                $fields[$key] = $value;
             }
-            foreach( $fields_univis_location as $key => $value ) {
-                if( $univis_sync && array_key_exists( 'locations', $person ) && array_key_exists( 'location', $person['locations'][0] ) ) {
-                    $person_location = $person['locations'][0]['location'][0];
-                    $value = self::sync_univis( $id, $person_location, $key, $value, $defaults );
+            $fields[$key] = $value;
+        }
+        foreach( $fields_univis_location as $key => $value ) {
+            if( $univis_sync && array_key_exists( 'locations', $person ) && array_key_exists( 'location', $person['locations'][0] ) ) {
+                $person_location = $person['locations'][0]['location'][0];
+                $value = self::sync_univis( $id, $person_location, $key, $value, $defaults );
+            } else {
+                if( $defaults ) {
+                    $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);
                 } else {
-                    if( $defaults ) {
-                        $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);
-                    } else {
-                        $value = get_post_meta($id, 'fau_person_'.$key, true);
-                    }
+                    $value = get_post_meta($id, 'fau_person_'.$key, true);
                 }
-                $fields[$key] = $value;
             }
-            foreach( $fields_univis_officehours as $key => $value ) {
-                if( $univis_sync && array_key_exists( 'officehours', $person ) && array_key_exists( 'officehour', $person['officehours'][0] ) ) {
-                    $person_officehours = $person['officehours'][0]['officehour'][0];
-                    $value = self::sync_univis( $id, $person_officehours, $key, $value, $defaults );
+            $fields[$key] = $value;
+        }
+        foreach( $fields_univis_officehours as $key => $value ) {
+            if( $univis_sync && array_key_exists( 'officehours', $person ) && array_key_exists( 'officehour', $person['officehours'][0] ) ) {
+                $person_officehours = $person['officehours'][0]['officehour'][0];
+                $value = self::sync_univis( $id, $person_officehours, $key, $value, $defaults );
+            } else {
+                if( $defaults ) {
+                    $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);
                 } else {
-                    if( $defaults ) {
-                        $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);
-                    } else {
-                        $value = get_post_meta($id, 'fau_person_'.$key, true);  
-                    }
+                    $value = get_post_meta($id, 'fau_person_'.$key, true);  
                 }
-                $fields[$key] = $value;
             }
-            foreach( $fields_univis_orgunits as $key => $value ) {
-                if( array_key_exists( 'orgunits', $person ) ) {
-                    $person_orgunits = $person['orgunits'][0]['orgunit'];
-                    $i = count($person_orgunits);
-                    if($i>1) {
-                        $i = count($person_orgunits)-2;
-                    } 
-                    $value = self::sync_univis( $id, $person_orgunits, $key, $i, $defaults );             
+            $fields[$key] = $value;
+        }
+        foreach( $fields_univis_orgunits as $key => $value ) {
+            if( array_key_exists( 'orgunits', $person ) ) {
+                $person_orgunits = $person['orgunits'][0]['orgunit'];
+                $i = count($person_orgunits);
+                if($i>1) {
+                    $i = count($person_orgunits)-2;
+                } 
+                $value = self::sync_univis( $id, $person_orgunits, $key, $i, $defaults );             
+            } else {
+                if( $defaults ) {
+                    $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);
                 } else {
-                    if( $defaults ) {
-                        $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);
-                    } else {
-                        $value = get_post_meta($id, 'fau_person_'.$key, true); 
-                    }
+                    $value = get_post_meta($id, 'fau_person_'.$key, true); 
                 }
-                $fields[$key] = $value;
-            }        
-            foreach( $fields_exception as $key => $value ) {
-                if( $key == 'postalCode' ) {
-                    if( get_post_meta($id, 'fau_person_univis_sync', true) && array_key_exists( 'locations', $person ) && array_key_exists( 'location', $person['locations'][0] ) && array_key_exists('ort', $person['locations'][0]['location'][0]) ) {
-                        $value = '';
-                    } else {
-                        $value = get_post_meta($id, 'fau_person_'.$key, true); 
-                    }
-                }
-                $fields[$key] = $value;  
             }
+            $fields[$key] = $value;
+        }        
         foreach( $fields_fauperson as $key => $value ) {
             $value = get_post_meta($id, 'fau_person_'.$key, true);
             $fields[$key] = $value;            

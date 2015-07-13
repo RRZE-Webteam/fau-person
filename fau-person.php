@@ -25,14 +25,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
-
-/* Einbindung der Daten zu neuem Plugin:
-$field  id, firstname, lastname
-        rückgabe array
-        class exists Univis_Data
- * 
- */
-
 add_action('plugins_loaded', array('FAU_Person', 'instance'));
 
 register_activation_hook(__FILE__, array('FAU_Person', 'activation'));
