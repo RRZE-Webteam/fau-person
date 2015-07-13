@@ -97,14 +97,17 @@ function get_contactdata( $query_args ) {
 }
 
 
-
-
 add_filter('cmb_meta_boxes', function(array $metaboxes) {
     //global $post;
 //function fau_person_metaboxes( $meta_boxes ) {
     $prefix = 'fau_person_'; // Prefix for all fields
     $contactselect = (array) $this->get_contactdata();
     $univis_default = $this->univis_defaults();  
+    if( !class_exists( 'Univis_Data' ) ) {
+        $univis_sync = __('<p class="cmb_metabox_description">Es können aktuell keine Daten aus UnivIS angezeigt werden. Bitte überprüfen Sie, ob Sie das Plugin univis-data installiert und aktiviert haben.</p>', FAU_PERSON_TEXTDOMAIN);
+    } else {
+        $univis_sync = '';
+    }
     //ID der Kontaktseite
     $id = cmb_Meta_Box::get_object_id();
    // $helpuse = $this->get_helpuse();
@@ -349,7 +352,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'type' => 'text',
                 'id' => $prefix . 'pubs'
             )*/
-        )
+        )   
     );
     // Meta-Box Synchronisierung mit externen Daten - fau_person_sync ab hier
     $meta_boxes['fau_person_sync'] = array(
@@ -362,7 +365,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
         'fields' => array(
             array(
                 'name' => __('UnivIS-ID', FAU_PERSON_TEXTDOMAIN),
-                'desc' => 'Die UnivIS-ID der Person, von der die Daten importiert werden sollen.',
+                'desc' => 'Die UnivIS-ID der Person, von der die Daten angezeigt werden sollen.',
                 'type' => 'text_number',
                 'id' => $prefix . 'univis_id',
             ),
@@ -371,6 +374,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'desc' => 'Zeige in der Ausgabe die Daten, die in UnivIS hinterlegt sind: Titel (Präfix), Vorname, Nachname, Titel (Suffix), Organisation bzw. Abteilung, Position/Funktion, Adresse, Telefon- und Telefaxnummer, E-Mail, Webseite). Die in diesen Feldern hier eingegebenen Werte werden in der Ausgabe nicht angezeigt.',
                 'type' => 'checkbox',
                 'id' => $prefix . 'univis_sync',
+                'before' => $univis_sync,
             ),
         )
     );
@@ -492,50 +496,3 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
     
     return $meta_boxes;
 });
-
-
-    ///////////////////////////////////////////////////////////////
-    /////		Hilfsmethoden
-    ///////////////////////////////////////////////////////////////
-    // XML Parser
-    function xml2array($fname) {
-        //$sxi = $fname;
-        $sxi = new SimpleXmlIterator($fname, null, true);
-        return sxiToArray($sxi);
-
-    }
-
-    function sxiToArray($sxi) {
-        $a = array();
-
-        for ($sxi->rewind(); $sxi->valid(); $sxi->next()) {
-
-            if (!array_key_exists($sxi->key(), $a)) {
-                $a[$sxi->key()] = array();
-            }
-            if ($sxi->hasChildren()) {
-                $a[$sxi->key()][] = sxiToArray($sxi->current());
-            }
-            //wird benötigt, damit alle Orgunits angezeigt werden, in regulärem UnivIS-Plugin nicht drin
-            elseif($sxi->key() === 'orgunit') {
-                $a[$sxi->key()][] = strval($sxi->current());
-            } else {
-                $a[$sxi->key()] = strval($sxi->current());
-
-                //Fuege die UnivisRef Informationen ein.
-                if ($sxi->UnivISRef) {
-                    $attributes = (array) $sxi->UnivISRef->attributes();
-                    $a[$sxi->key()][] = $attributes["@attributes"];
-                }
-            }
-
-            if ($sxi->attributes()) {
-                $attributes = (array) $sxi->attributes();
-                $a["@attributes"] = $attributes["@attributes"];
-            }
-        }
-        return $a;
-    }
-
-    
-

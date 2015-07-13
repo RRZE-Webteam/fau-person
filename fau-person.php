@@ -3,7 +3,7 @@
 /**
  * Plugin Name: FAU Person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 1.1.2
+ * Version: 1.2.1
  * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -23,6 +23,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+
+/* Einbindung der Daten zu neuem Plugin:
+$field  id, firstname, lastname
+        rückgabe array
+        class exists Univis_Data
+ * 
  */
 
 add_action('plugins_loaded', array('FAU_Person', 'instance'));
@@ -75,7 +83,7 @@ class FAU_Person {
         self::$options = self::get_options();       
 
         include_once( plugin_dir_path(__FILE__) . 'includes/fau-person-metaboxes.php' );
-        
+
         add_action( 'init', array (__CLASS__, 'register_person_post_type' ) );
         add_action( 'init', array( $this, 'register_persons_taxonomy' ) );
         add_action( 'restrict_manage_posts', array( $this, 'person_restrict_manage_posts' ) );
@@ -101,12 +109,13 @@ class FAU_Person {
         self::register_person_post_type();
         flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind
 
+        self::$options = self::get_options();  
+        
         // CPT-Capabilities für die Administrator-Rolle zuweisen
         // 
         $caps = self::get_caps('person');
         self::add_caps('administrator', $caps);
-        //self::add_caps('editor', $caps);
-           
+        //self::add_caps('editor', $caps);       
     }
     
     public static function deactivation() {       
@@ -324,12 +333,16 @@ class FAU_Person {
         $this->search_univis_id_page = add_submenu_page('edit.php?post_type=person', __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'search-univis-id', array( $this, 'search_univis_id' ));
         add_action('load-' . $this->search_univis_id_page, array($this, 'help_menu_search_univis_id'));
     }
-    
+
     public function search_univis_id() {
         $options = $this->get_options();
         $firstname = $options['firstname'];
         $givenname = $options['givenname'];
-        $person = sync_helper::get_univisdata(0, $firstname, $givenname);
+        if(class_exists( 'Univis_Data' ) ) {
+            $person = sync_helper::get_univisdata(0, $firstname, $givenname);           
+        } else {
+            $person = array();
+        }
         ?>
         <div class="wrap">
             <?php screen_icon(); ?>
@@ -347,11 +360,10 @@ class FAU_Person {
             <?php
                 settings_fields('find_univis_id_options');
                 do_settings_sections('find_univis_id_options');
-                $person = $this->array_orderby($person,"lastname", SORT_ASC, "firstname", SORT_ASC );
                 if(empty($person)) {
-                    echo __('Es konnten keine Daten zur Person gefunden werden. Bitte verändern Sie Ihre Suchwerte.', FAU_PERSON_TEXTDOMAIN);
+                    echo __('Es konnten keine Daten zur Person gefunden werden. Bitte verändern Sie Ihre Suchwerte und stellen Sie sicher, dass das Plugin Univis-Data aktiviert ist.', FAU_PERSON_TEXTDOMAIN);
                 } else {
-
+                    $person = $this->array_orderby($person,"lastname", SORT_ASC, "firstname", SORT_ASC );
                     foreach($person as $key=>$value) {
                         if(array_key_exists('locations', $person[$key]) && array_key_exists('location', $person[$key]['locations'][0]) && array_key_exists('email', $person[$key]['locations'][0]['location'][0])) {
                             $email = $person[$key]['locations'][0]['location'][0]['email'];
