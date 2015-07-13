@@ -114,6 +114,16 @@ class sync_helper {
             $value = get_post_meta($id, 'fau_person_'.$key, true);
             $fields[$key] = $value;            
         }
+        foreach( $fields_exception as $key => $value ) {
+            if( $key == 'postalCode' ) {
+                if( get_post_meta($id, 'fau_person_univis_sync', true) && array_key_exists( 'locations', $person ) && array_key_exists( 'location', $person['locations'][0] ) && array_key_exists('ort', $person['locations'][0]['location'][0]) ) {
+                    $value = '';
+                } else {
+                    $value = get_post_meta($id, 'fau_person_'.$key, true); 
+                }
+            }
+            $fields[$key] = $value;  
+        }
         return $fields;
     }
 
