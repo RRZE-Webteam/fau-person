@@ -1,4 +1,5 @@
 ACHTUNG! KONFLIKT MIT DEM PLUGIN RRZE-UNIVIS MÖGLICH! DIESES UNBEDINGT VORHER AUF MINDESTENS VERSION 1.0.4 UPDATEN!
+AB VERSION 1.2.0 FUNKTIONIERT DIE UNIVIS-ANBINDUNG NUR NOCH, WENN ZUSÄTZLICH DAS PLUGIN univis-data (https://gitlab.rrze.fau.de/rrze-webteam/univis-data) INSTALLIERT IST!
 
 fau-person
 ============
@@ -9,10 +10,9 @@ WordPress Plugin
 Visitenkarten-Plugin für FAU Webauftritte  
 Custom Post Type person
 
-####Version 1.2.0:
+####Version 1.2.1:
 
-- Beschleunigter Abruf der Daten bei Anschluss an UnivIS
-- ACHTUNG: UnivIS-Anbindung funktioniert jetzt nur noch, wenn zusätzlich das Plugin **** installiert ist!
+- Beschleunigter Abruf der Daten bei Anschluss an UnivIS: Über das Plugin univis-data werden in den Tabellen wp_univis und wp_univismeta alle UnivIS-Daten zwischengespeichert.    
 
 ####Version 1.1.2:
 
