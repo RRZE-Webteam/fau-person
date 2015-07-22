@@ -279,7 +279,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
             ),
             array(
                 'name' => __('Telefax', FAU_PERSON_TEXTDOMAIN),
-                'desc' => __('Bitte geben Sie die Nummer in der internationalen Form +49 9131 1111111 an.', FAU_PERSON_TEXTDOMAIN),
+                'desc' => __('Bitte geben Sie uni-interne Nummern für Erlangen in der internationalen Form +49 9131 85-22222 und für Nürnberg in der internationalen Form +49 911 5302-555 an, uni-externe Nummern in der internationalen Form +49 9131 1111111.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text',
                 'id' => $prefix . 'faxNumber',
                 'after' => $univis_default['faxNumber'] 
