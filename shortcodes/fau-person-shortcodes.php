@@ -159,7 +159,7 @@
                 $i++;
             }
             if ( $shortlist  ) {
-                $liste .= "</span>\n";
+                $liste .= "</span>";
             } elseif ( $list ) {
                 $liste .= "</ul>\n";
             } elseif( !$page ) {

@@ -10,6 +10,10 @@ WordPress Plugin
 Visitenkarten-Plugin für FAU Webauftritte  
 Custom Post Type person
 
+####Version 1.2.2:
+
+- fehlerhafter Umbruch nach Shortcode-Parameter format="name" korrigiert    
+
 ####Version 1.2.1:
 
 - Beschleunigter Abruf der Daten bei Anschluss an UnivIS: Über das Plugin univis-data werden in den Tabellen wp_univis und wp_univismeta alle UnivIS-Daten zwischengespeichert.    
