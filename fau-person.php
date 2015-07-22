@@ -84,7 +84,7 @@ class FAU_Person {
         add_action( 'admin_init', array( $this, 'admin_init' ) );
         add_action( 'widgets_init', array( __CLASS__, 'register_widgets' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_script' ) );
-        
+	add_action( 'admin_init', array($this, 'person_shortcodes_rte_button' ) );        
         
         add_filter( 'single_template', array( $this, 'include_template_function' ) );
 
@@ -586,6 +586,17 @@ class FAU_Person {
                     , 'normal'
                     , 'high' 
             );
+    }
+    
+    public function person_shortcodes_rte_button() {
+        if( current_user_can('edit_posts') &&  current_user_can('edit_pages') ) {
+            add_filter( 'mce_external_plugins', array($this, 'person_rte_add_buttons' ));
+        }
+    }
+
+    public function person_rte_add_buttons( $plugin_array ) {
+        $plugin_array['personrteshortcodes'] = plugin_dir_url(__FILE__) . 'js/tinymce-shortcodes.js';
+        return $plugin_array;
     }
     
 /*    public function get_helpuse() {
