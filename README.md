@@ -10,9 +10,15 @@ WordPress Plugin
 Visitenkarten-Plugin für FAU Webauftritte  
 Custom Post Type person
 
+####Version 1.2.3:
+
+- fehlenden Widget-Titel hinzugefügt    
+
 ####Version 1.2.2:
 
 - fehlerhafter Umbruch nach Shortcode-Parameter format="name" korrigiert    
+- TinyMCE-Unterstützung eingebaut (jetzt auch über „Werkzeuge“ Shortcode auswählbar)    
+- Hinweistext zu Telefax-Nummer geändert    
 
 ####Version 1.2.1:
 
