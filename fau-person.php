@@ -3,7 +3,7 @@
 /**
  * Plugin Name: FAU Person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 1.2.3
+ * Version: 1.2.4
  * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -44,6 +44,8 @@ class FAU_Person {
     const textdomain = 'fau-person';
     const php_version = '5.3'; // Minimal erforderliche PHP-Version
     const wp_version = '4.0'; // Minimal erforderliche WordPress-Version
+    const search_univis_id_transient = 'sui_1k4fu7056Kl12a5';
+    
     
     protected static $options;
     
@@ -137,10 +139,7 @@ class FAU_Person {
     }
 
     private static function default_options() {
-        $options = array(
-            'firstname' => '',
-            'givenname' => ''
-        );
+        $options = array();
                 
         return $options; // Standard-Array für zukünftige Optionen
     }
@@ -164,8 +163,12 @@ class FAU_Person {
         );
 
 	$personlist = get_posts($args);
+
         if( $personlist ) {
             foreach( $personlist as $key => $value) {
+                    //$lastname = $personlist[$key]->post_title;
+                    //_rrze_debug_log($personlist);
+                    //_rrze_debug_log($lastname);
                 $contactselect[] = $personlist[$key]->ID . ', ' . $personlist[$key]->post_title;                
             }   
         } else {
@@ -322,14 +325,18 @@ class FAU_Person {
     }   
     
     public function add_options_pages() {
+        //Umgehen von register_setting für die Suche-Seite
+        $input = isset($_POST[self::option_name]) ? $_POST[self::option_name] : null;
+        set_transient(self::search_univis_id_transient, $input, 30);
+                
         $this->search_univis_id_page = add_submenu_page('edit.php?post_type=person', __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'search-univis-id', array( $this, 'search_univis_id' ));
         add_action('load-' . $this->search_univis_id_page, array($this, 'help_menu_search_univis_id'));
     }
 
     public function search_univis_id() {
-        $options = $this->get_options();
-        $firstname = $options['firstname'];
-        $givenname = $options['givenname'];
+        $transient = get_transient(self::search_univis_id_transient);
+        $firstname = isset($transient['firstname']) ? $transient['firstname'] : '';
+        $givenname = isset($transient['givenname']) ? $transient['givenname'] : '';
         if(class_exists( 'Univis_Data' ) ) {
             $person = sync_helper::get_univisdata(0, $firstname, $givenname);           
         } else {
@@ -340,7 +347,7 @@ class FAU_Person {
             <?php screen_icon(); ?>
             <h2><?php echo esc_html(__('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN)); ?></h2>
 
-            <form method="post" action="options.php">
+            <form method="post">
                 <?php
                 settings_fields('search_univis_id_options');
                 do_settings_sections('search_univis_id_options');
@@ -360,27 +367,27 @@ class FAU_Person {
                         if(array_key_exists('locations', $person[$key]) && array_key_exists('location', $person[$key]['locations'][0]) && array_key_exists('email', $person[$key]['locations'][0]['location'][0])) {
                             $email = $person[$key]['locations'][0]['location'][0]['email'];
                         } else {
-                            $email = __('Keine Daten in UnivIS eingepflegt.', FAU_PERSON_TEXTDOMAIN);
+                            $email = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
                         }
                         if(array_key_exists('id', $person[$key])) {
                             $id = $person[$key]['id'];
                         } else {
-                            $id = __('Keine Daten in UnivIS eingepflegt.', FAU_PERSON_TEXTDOMAIN);
+                            $id = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
                         }
                         if(array_key_exists('firstname', $person[$key])) {
                             $firstname = $person[$key]['firstname'];
                         } else {
-                            $firstname = __('Keine Daten in UnivIS eingepflegt.', FAU_PERSON_TEXTDOMAIN);
+                            $firstname = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
                         }
                         if(array_key_exists('lastname', $person[$key])) {
                             $lastname = $person[$key]['lastname'];
                         } else {
-                            $lastname = __('Keine Daten in UnivIS eingepflegt.', FAU_PERSON_TEXTDOMAIN);
+                            $lastname = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
                         }
                         if(array_key_exists('orgname', $person[$key])) {
                             $orgname = $person[$key]['orgname'];
                         } else {
-                            $orgname = __('Keine Daten in UnivIS eingepflegt.', FAU_PERSON_TEXTDOMAIN);
+                            $orgname = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
                         }
                         //echo sprintf(__('UnivIS-ID %1$s: %2$s %3$s, E-Mail: %4$s, Organisation: %5$s', FAU_PERSON_TEXTDOMAIN), $id, $firstname, $lastname, $email, $orgname);
                         echo 'UnivIS-ID '. $id . ': '. $firstname . ' ' . $lastname . ', E-Mail: ' . $email. ', Organisation: ' . $orgname;
@@ -389,55 +396,31 @@ class FAU_Person {
                 }
             ?>
         </div>
-        <?php        
+        <?php
+            delete_transient(self::search_univis_id_transient);
     }
 
     public function admin_init() {
-
-        register_setting('search_univis_id_options', self::option_name, array($this, 'options_validate'));
 
         add_settings_section('search_univis_id_section', __('Bitte geben Sie den Vor- und Nachnamen der Person ein, von der Sie die UnivIS-ID benötigen.', FAU_PERSON_TEXTDOMAIN), '__return_false', 'search_univis_id_options');
 
         add_settings_field('univis_id_firstname', __('Vorname', FAU_PERSON_TEXTDOMAIN), array($this, 'univis_id_firstname'), 'search_univis_id_options', 'search_univis_id_section');
         add_settings_field('univis_id_givenname', __('Nachname', FAU_PERSON_TEXTDOMAIN), array($this, 'univis_id_givenname'), 'search_univis_id_options', 'search_univis_id_section');
-
-        
-        register_setting('find_univis_id_options', self::option_name, array($this, 'options_validate'));
-        
+      
         add_settings_section('find_univis_id_section', __('Folgende Daten wurden in UnivIS gefunden:', FAU_PERSON_TEXTDOMAIN), '__return_false', 'find_univis_id_options');
     }
     
-    public function options_validate($input) {
-        $defaults = self::default_options();        
-        $options = $this->get_options();
-
-        $input['firstname'] = strval($input['firstname']);
-        $input['givenname'] = strval($input['givenname']);
-        $input['firstname'] = !empty($input['firstname']) ? $input['firstname'] : $defaults['firstname'];
-        $input['givenname'] = !empty($input['givenname']) ? $input['givenname'] : $defaults['givenname'];
-        return $input;
-    }    
-
-    public function embed_defaults($defaults) {
-        $options = $this->get_options();
-
-        $defaults['firstname'] = $options['firstname'];
-        $defaults['givenname'] = $options['givenname'];
-
-        return $defaults;
-    }    
-    
     public function univis_id_firstname() {
-        $options = $this->get_options();
+        $transient = get_transient(self::search_univis_id_transient);
         ?>
-        <input type='text' name="<?php printf('%s[firstname]', self::option_name); ?>" value="<?php echo $options['firstname']; ?>"><p class="description"><?php _e('Bitte keine Umlaute, sondern statt dessen ae, oe, ue, ss verwenden.', FAU_PERSON_TEXTDOMAIN); ?></p>
+        <input type='text' name="<?php printf('%s[firstname]', self::option_name); ?>" value="<?php echo (isset($transient['firstname'])) ? $transient['firstname'] : NULL; ?>"><p class="description"><?php _e('Bitte keine Umlaute, sondern statt dessen ae, oe, ue, ss verwenden.', FAU_PERSON_TEXTDOMAIN); ?></p>
         <?php
     }
 
     public function univis_id_givenname() {
-        $options = $this->get_options();
+        $transient = get_transient(self::search_univis_id_transient);
         ?>
-        <input type='text' name="<?php printf('%s[givenname]', self::option_name); ?>" value="<?php echo $options['givenname']; ?>"><p class="description"><?php _e('Bitte keine Umlaute, sondern statt dessen ae, oe, ue, ss verwenden.', FAU_PERSON_TEXTDOMAIN); ?></p>
+        <input type='text' name="<?php printf('%s[givenname]', self::option_name); ?>" value="<?php echo (isset($transient['givenname'])) ? $transient['givenname'] : NULL; ?>"><p class="description"><?php _e('Bitte keine Umlaute, sondern statt dessen ae, oe, ue, ss verwenden.', FAU_PERSON_TEXTDOMAIN); ?></p>
         
         <?php
     }       
@@ -619,7 +602,11 @@ class FAU_Person {
 			if (is_string($field)) {
 				$tmp = array();
 				foreach ($data as $key => $row)
+                                    if(isset($row[$field])) {
 					$tmp[$key] = $row[$field];
+                                    } else {
+                                        $tmp[$key] = '';
+                                    }
 				$args[$n] = $tmp;
 			}
 		}

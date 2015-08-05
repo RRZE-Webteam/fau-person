@@ -10,6 +10,10 @@ WordPress Plugin
 Visitenkarten-Plugin für FAU Webauftritte  
 Custom Post Type person
 
+####Version 1.2.4:
+
+- fehlende Rechte auf "Suche nach UnivIS-ID"-Seite ergänzt 
+
 ####Version 1.2.3:
 
 - fehlenden Widget-Titel hinzugefügt    

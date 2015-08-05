@@ -35,7 +35,7 @@ function sm_cmb_validate_text_number( $new ) {
 
 
 
-function get_contactdata( $query_args ) {
+//function get_contactdata( $query_args ) {
     
     
        /* $contactselect = array(
@@ -76,7 +76,7 @@ function get_contactdata( $query_args ) {
         
         //return $contactselect;  
 
-    $args = wp_parse_args( $query_args, array(
+    /*$args = wp_parse_args( $query_args, array(
         'post_type' => 'person',
         'posts_per_page' => 5,
     ));
@@ -94,7 +94,7 @@ function get_contactdata( $query_args ) {
     return $post_options;
     
     
-}
+}*/
 
 
 add_filter('cmb_meta_boxes', function(array $metaboxes) {
