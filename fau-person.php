@@ -157,19 +157,25 @@ class FAU_Person {
    public function get_contactdata() {      
          $args = array(
             'post_type' => 'person',
-            'order' => 'ASC',
-            'orderby' => 'post_title',
             'numberposts' => -1
         );
 
 	$personlist = get_posts($args);
-
-        if( $personlist ) {
+      
+        if( $personlist ) {  
             foreach( $personlist as $key => $value) {
-                    //$lastname = $personlist[$key]->post_title;
-                    //_rrze_debug_log($personlist);
-                    //_rrze_debug_log($lastname);
-                $contactselect[] = $personlist[$key]->ID . ', ' . $personlist[$key]->post_title;                
+                $personlist[$key] = (array)$personlist[$key];
+                $name = $personlist[$key]['post_title'];
+                if(strpos($name, ' ')) {
+                    $lastname = ltrim(strrchr($name, ' '));
+                } else {
+                    $lastname = $name;
+                }
+                $personlist[$key]['lastname'] = $lastname;
+            }
+            $personlist = $this->array_orderby( $personlist, "lastname", SORT_ASC );
+            foreach( $personlist as $key => $value) {
+                $contactselect[] = $personlist[$key]['ID'] . ', ' . $personlist[$key]['post_title'];                
             }   
         } else {
             $contactselect = __('Sie haben noch keine Kontakte eingepflegt.', FAU_PERSON_TEXTDOMAIN);

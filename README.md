@@ -12,7 +12,8 @@ Custom Post Type person
 
 ####Version 1.2.4:
 
-- fehlende Rechte auf "Suche nach UnivIS-ID"-Seite ergänzt 
+- fehlende Rechte auf "Suche nach UnivIS-ID"-Seite ergänzt     
+- Sortierung der verfügbaren Kontakte nach Nachname in der Metabox "Kontaktinformationen" bei Seiten und Beiträgen    
 
 ####Version 1.2.3:
 
