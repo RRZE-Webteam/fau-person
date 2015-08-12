@@ -10,6 +10,11 @@ WordPress Plugin
 Visitenkarten-Plugin für FAU Webauftritte  
 Custom Post Type person
 
+####Version 1.2.5:
+
+- Auf Kontakt-Detailseite und für Shortcodes mit format="page" doppelte Anzeige der Position entfernt (als Überschrift h2 weg)     
+- UnivIS-ID (8-stellige Zahl) und PLZ (5-stellige Zahl) bei Eingabe validiert    
+
 ####Version 1.2.4:
 
 - fehlende Rechte auf "Suche nach UnivIS-ID"-Seite ergänzt     

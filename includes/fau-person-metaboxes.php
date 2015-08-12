@@ -3,8 +3,6 @@
 require_once(plugin_dir_path(__FILE__) . 'univis/class_controller.php');
 
 
-
-
 // In dieser Datei werden alle Metaboxen und Felder für den Custom Post Type person definiert
 // Basis dafür Custom Metaboxes and Fields for WordPress, siehe auch fau-person/metabox/readme.md
 
@@ -18,7 +16,20 @@ add_action('init', function() {
 }, 9999);
 
 
+function validate_univis_id( $str ) {   
+    if( ctype_digit( $str ) && strlen( $str ) == 8 ) 
+        return $str;
+}
 
+function validate_plz( $str ) {   
+    if( ctype_digit( $str ) && strlen( $str ) == 5 ) 
+        return $str;
+}
+
+/*    
+function univis_id_notice() {
+        ?><div id="message" class="updated"><p><?php _e('Bitte geben Sie eine gültige UnivIS-ID (8-stellige Zahl) ein.', self::textdomain) ?></p></div><?php
+}*/
 
 // render numbers
 add_action( 'cmb_render_text_number', 'sm_cmb_render_text_number', 10, 5 );
@@ -171,9 +182,10 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
             array(
                 'name' => __('Postleitzahl', FAU_PERSON_TEXTDOMAIN),
                 //'desc' => 'Wenn der Ort aus UnivIS übernommen werden soll bitte leer lassen!',
-                'desc' => '',
+                'desc' => 'Nur 5-stellige Zahlen erlaubt.',
                 'type' => 'text_small',
-                'id' => $prefix . 'postalCode'
+                'id' => $prefix . 'postalCode',
+                'sanitization_cb' => 'validate_plz',
             ),
             array(
                 'name' => __('Ort', FAU_PERSON_TEXTDOMAIN),
@@ -301,9 +313,10 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
         'fields' => array(
             array(
                 'name' => __('UnivIS-ID', FAU_PERSON_TEXTDOMAIN),
-                'desc' => 'Die UnivIS-ID der Person, von der die Daten angezeigt werden sollen.',
-                'type' => 'text_number',
+                'desc' => 'Die UnivIS-ID der Person, von der die Daten angezeigt werden sollen (8-stellige Zahl).',
+                'type' => 'text',
                 'id' => $prefix . 'univis_id',
+                'sanitization_cb' => 'validate_univis_id',
             ),
             array(
                 'name' => __('Daten aus UnivIS anzeigen', FAU_PERSON_TEXTDOMAIN),

@@ -400,24 +400,13 @@ if(!function_exists('fau_person_markup')) {
             $fullname .= '<span itemprop="familyName">' . $familyName . '</span>';
         if ($honorificSuffix)
             $fullname .= ' <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
-        if ($jobTitle) {
-            $headline = '<span itemprop="jobTitle">' . $jobTitle . '</span>';
-            $content .= '<h2>' . $headline . '</h2>';
-        } else {
-            $headline = $fullname;
-            $content .= '<h2 itemprop="name">' . $headline . '</h2>';
-        }
+        $content .= '<h2 itemprop="name">' . $fullname . '</h2>';
         $post = get_post($id);
         if (has_post_thumbnail($id)) {
             $content .= '<div itemprop="image" class="alignright">';
             // $content .= get_the_post_thumbnail($id, 'post');	    
             $content .= get_the_post_thumbnail($id, 'person-thumb-page');
             $content .= '</div>';
-        }
-        if ($jobTitle) {
-            $content .= '<h3 itemprop="name">';
-            $content .= $fullname;
-            $content .= '</h3>';
         }
         $content .= '<ul class="person-info">';
         if ($jobTitle)
