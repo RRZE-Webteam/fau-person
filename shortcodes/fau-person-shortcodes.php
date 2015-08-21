@@ -433,6 +433,7 @@ if(!function_exists('fau_person_markup')) {
         if ($pubs)
             $content .= '<li class="person-info-pubs"><span class="screen-reader-text">' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $pubs . '</li>';
         $content .= '</ul>';
+        $content .= '</div>';
 
 
         //	    if (($options['plugin_fau_person_headline'] != 'jobTitle') && ($position)) 

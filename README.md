@@ -10,6 +10,10 @@ WordPress Plugin
 Visitenkarten-Plugin für FAU Webauftritte  
 Custom Post Type person
 
+####Version 1.2.6:
+
+- fehlendes </div> ergänzt in Einzeldarstellung     
+
 ####Version 1.2.5:
 
 - Auf Kontakt-Detailseite und für Shortcodes mit format="page" doppelte Anzeige der Position entfernt (als Überschrift h2 weg)     
