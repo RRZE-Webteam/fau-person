@@ -12,7 +12,7 @@ Custom Post Type person
 
 ####Version 1.2.6:
 
-- fehlendes </div> ergänzt in Einzeldarstellung     
+- fehlendes schließendes div ergänzt in Einzeldarstellung     
 
 ####Version 1.2.5:
 
