@@ -90,9 +90,15 @@ class FAU_Person {
 	add_action( 'admin_init', array($this, 'person_shortcodes_rte_button' ) );     
         
         add_filter( 'single_template', array( $this, 'include_template_function' ) );
-
+        
         self::add_shortcodes();        
-      
+        
+        // Kontakttyp als zusätzliche Spalte in Übersicht
+        add_filter( 'manage_person_posts_columns', array( $this, 'change_columns' ));
+        add_action( 'manage_person_posts_custom_column', array( $this, 'custom_columns'), 10, 2 ); 
+        // Sortierung der zusätzlichen Spalte
+        //add_filter( 'manage_edit-person_sortable_columns', array( $this, 'sortable_columns' ));
+        
         //Excerpt-Meta-Box umbenennen
         add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));
         
@@ -474,16 +480,34 @@ public function adding_custom_meta_boxes( $post ) {
     }    
     
     public function person_menu_subpages() {
+        // Personen mit oder ohne bestimmte Funktionen. Andere Ansprechpartner (aus der Rubrik Kontakt) und Standorte können diesen zugeordnet werden
         add_submenu_page('edit.php?post_type=person', __('Person hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neue Person', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_person', array( $this, 'add_person_types' ));
+        // Kontakte, z.B. Vorzimmer, Sekretariat, Abteilungen. Hier sind Ansprechpartner aus den Personen zuordenbar 
         add_submenu_page('edit.php?post_type=person', __('Kontakt hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neuer Kontakt', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_kontakt', array( $this, 'add_person_types' ));
-        add_submenu_page('edit.php?post_type=person', __('Person hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neuer Standort', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_standort', array( $this, 'add_person_types' ));
-        add_action('load-person_page_new_kontakt', array( $this, 'person_menu' ));
+        // Zentrale Adressen, können in Personen und Kontakte übernommen werden
+        add_submenu_page('edit.php?post_type=person', __('Standort hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neuer Standort', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_standort', array( $this, 'add_person_types' ));
+        add_action('load-person_page_new_person', array( $this, 'person_menu' ));
+        add_action('load-person_page_new_kontakt', array( $this, 'kontakt_menu' ));
+        add_action('load-person_page_new_standort', array( $this, 'standort_menu' ));
     }
     
     public function person_menu() {
-        $metaboxes = array();
-        do_action('cmb_meta_boxes', $metaboxes);
+        wp_redirect( admin_url( 'post-new.php?post_type=person' ) );
+        //$metaboxes = array();
+        //do_action('cmb_meta_boxes', $metaboxes);
     }
+
+    public function kontakt_menu() {
+        wp_redirect( admin_url( 'post-new.php?post_type=person' ) );
+        //$metaboxes = array();
+        //do_action('cmb_meta_boxes', $metaboxes);
+    }
+    
+    public function standort_menu() {
+        wp_redirect( admin_url( 'post-new.php?post_type=person' ) );
+        //$metaboxes = array();
+        //do_action('cmb_meta_boxes', $metaboxes);
+    }    
     
     public function add_person_types() {
             add_action( 'load-person_page_konakt', array( $this, 'adding_custom_meta_boxes' ));  
@@ -556,6 +580,53 @@ public function adding_custom_meta_boxes( $post ) {
         }
     }
     
+    // Change the columns for the edit CPT screen
+    public function change_columns( $cols ) {
+	$cols = array(
+	    'cb' => '<input type="checkbox" />',
+	    'title' => __( 'Neuer Titel', FAU_PERSON_TEXTDOMAIN ),
+            'typ' => __( 'Typ', FAU_PERSON_TEXTDOMAIN ),
+            'date' => __( 'Datum', FAU_PERSON_TEXTDOMAIN )
+
+	);
+
+	return $cols;
+    }
+
+    public function custom_columns( $column, $post_id ) {
+	switch ( $column ) {
+	    case "typ":
+                $typ = get_post_meta( $post_id, 'fau_person_typ', true);
+                switch ( $typ ) {
+                    case 'realperson':
+                        $typ = __('Person (geschlechtsneutral)', FAU_PERSON_TEXTDOMAIN);
+                        break;
+                    case 'realmale':
+                        $typ = __('Männliche Person', FAU_PERSON_TEXTDOMAIN);
+                        break;
+                    case 'realfemale':
+                        $typ = __('Weibliche Person', FAU_PERSON_TEXTDOMAIN);
+                        break;
+                    case 'pseudo':
+                        $typ = __('Pseudonym', FAU_PERSON_TEXTDOMAIN);
+                        break;
+                    case 'einrichtung':
+                        $typ = __('Nicht-Person', FAU_PERSON_TEXTDOMAIN);
+                        break;
+                }
+                echo $typ;
+                break;
+	}
+    }
+    
+    // Make these columns sortable
+    public function sortable_columns() {
+	return array(
+	    //'title' => 'title',
+	    'typ' => 'typ',
+	    //'date' => 'date'
+	);
+    }	
     
     public function include_template_function($template_path) {
         global $post;
