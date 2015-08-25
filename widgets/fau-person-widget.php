@@ -60,7 +60,7 @@ class FAUPersonWidget extends WP_Widget {
         $id = empty($instance['id']) ? ' ' : $instance['id'];
         $title = empty($instance['title']) ? ' ' : $instance['title'];
 
-        echo fau_person_sidebar($id, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1);
+        echo fau_person_sidebar($id, $title, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 0, 0, 1);
         echo $after_widget;
     }
 

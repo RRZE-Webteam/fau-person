@@ -148,7 +148,7 @@
                         $liste .= fau_person_shortlist($value, $showlist);
                         $content .= "</li>\n";
                     } elseif ( $sidebar ) {
-                        $liste .= fau_person_sidebar($value, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb);
+                        $liste .= fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb);
                     } else {
                         $liste .= fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile);
                     }
@@ -159,7 +159,7 @@
                 $i++;
             }
             if ( $shortlist  ) {
-                $liste .= "</span>\n";
+                $liste .= "</span>";
             } elseif ( $list ) {
                 $liste .= "</ul>\n";
             } elseif( !$page ) {
@@ -400,24 +400,13 @@ if(!function_exists('fau_person_markup')) {
             $fullname .= '<span itemprop="familyName">' . $familyName . '</span>';
         if ($honorificSuffix)
             $fullname .= ' <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
-        if ($jobTitle) {
-            $headline = '<span itemprop="jobTitle">' . $jobTitle . '</span>';
-            $content .= '<h2>' . $headline . '</h2>';
-        } else {
-            $headline = $fullname;
-            $content .= '<h2 itemprop="name">' . $headline . '</h2>';
-        }
+        $content .= '<h2 itemprop="name">' . $fullname . '</h2>';
         $post = get_post($id);
         if (has_post_thumbnail($id)) {
             $content .= '<div itemprop="image" class="alignright">';
             // $content .= get_the_post_thumbnail($id, 'post');	    
             $content .= get_the_post_thumbnail($id, 'person-thumb-page');
             $content .= '</div>';
-        }
-        if ($jobTitle) {
-            $content .= '<h3 itemprop="name">';
-            $content .= $fullname;
-            $content .= '</h3>';
         }
         $content .= '<ul class="person-info">';
         if ($jobTitle)
@@ -444,6 +433,7 @@ if(!function_exists('fau_person_markup')) {
         if ($pubs)
             $content .= '<li class="person-info-pubs"><span class="screen-reader-text">' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $pubs . '</li>';
         $content .= '</ul>';
+        $content .= '</div>';
 
 
         //	    if (($options['plugin_fau_person_headline'] != 'jobTitle') && ($position)) 
@@ -490,7 +480,7 @@ if(!function_exists('fau_person_shortlist')) {
  }
  
 if(!function_exists('fau_person_sidebar')) {
-    function fau_person_sidebar($id, $showlist=0, $showinstitution=0, $showabteilung=0, $showposition=0, $showtitle=0, $showsuffix=0, $showaddress=0, $showroom=0, $showtelefon=0, $showfax=0, $showmobile=0, $showmail=0, $showwebsite=0, $showlink=0, $showdescription=0, $showoffice=0, $showpubs=0, $showthumb=0) {
+    function fau_person_sidebar($id, $title, $showlist=0, $showinstitution=0, $showabteilung=0, $showposition=0, $showtitle=0, $showsuffix=0, $showaddress=0, $showroom=0, $showtelefon=0, $showfax=0, $showmobile=0, $showmail=0, $showwebsite=0, $showlink=0, $showdescription=0, $showoffice=0, $showpubs=0, $showthumb=0) {
             if (!empty($id)) {
             $post = get_post($id);
 

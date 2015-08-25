@@ -10,6 +10,30 @@ WordPress Plugin
 Visitenkarten-Plugin für FAU Webauftritte  
 Custom Post Type person
 
+####Version 1.2.6:
+
+- fehlendes schließendes div ergänzt in Einzeldarstellung     
+
+####Version 1.2.5:
+
+- Auf Kontakt-Detailseite und für Shortcodes mit format="page" doppelte Anzeige der Position entfernt (als Überschrift h2 weg)     
+- UnivIS-ID (8-stellige Zahl) und PLZ (5-stellige Zahl) bei Eingabe validiert    
+
+####Version 1.2.4:
+
+- fehlende Rechte auf "Suche nach UnivIS-ID"-Seite ergänzt     
+- Sortierung der verfügbaren Kontakte nach Nachname in der Metabox "Kontaktinformationen" bei Seiten und Beiträgen    
+
+####Version 1.2.3:
+
+- fehlenden Widget-Titel hinzugefügt    
+
+####Version 1.2.2:
+
+- fehlerhafter Umbruch nach Shortcode-Parameter format="name" korrigiert    
+- TinyMCE-Unterstützung eingebaut (jetzt auch über „Werkzeuge“ Shortcode auswählbar)    
+- Hinweistext zu Telefax-Nummer geändert    
+
 ####Version 1.2.1:
 
 - Beschleunigter Abruf der Daten bei Anschluss an UnivIS: Über das Plugin univis-data werden in den Tabellen wp_univis und wp_univismeta alle UnivIS-Daten zwischengespeichert.    

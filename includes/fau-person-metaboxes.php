@@ -3,8 +3,6 @@
 require_once(plugin_dir_path(__FILE__) . 'univis/class_controller.php');
 
 
-
-
 // In dieser Datei werden alle Metaboxen und Felder für den Custom Post Type person definiert
 // Basis dafür Custom Metaboxes and Fields for WordPress, siehe auch fau-person/metabox/readme.md
 
@@ -18,7 +16,20 @@ add_action('init', function() {
 }, 9999);
 
 
+function validate_univis_id( $str ) {   
+    if( ctype_digit( $str ) && strlen( $str ) == 8 ) 
+        return $str;
+}
 
+function validate_plz( $str ) {   
+    if( ctype_digit( $str ) && strlen( $str ) == 5 ) 
+        return $str;
+}
+
+/*    
+function univis_id_notice() {
+        ?><div id="message" class="updated"><p><?php _e('Bitte geben Sie eine gültige UnivIS-ID (8-stellige Zahl) ein.', self::textdomain) ?></p></div><?php
+}*/
 
 // render numbers
 add_action( 'cmb_render_text_number', 'sm_cmb_render_text_number', 10, 5 );
@@ -32,70 +43,6 @@ function sm_cmb_validate_text_number( $new ) {
     $new = filter_var($new, FILTER_SANITIZE_NUMBER_INT);
     return $new;
 }
-
-
-
-function get_contactdata( $query_args ) {
-    
-    
-       /* $contactselect = array(
-            '' => __( 'keine Angabe', FAU_PERSON_TEXTDOMAIN ),
-        );
-        
-         $args = array(
-            'post_type' => 'person',
-            'order' => 'ASC',
-            'meta_key' => 'fau_person_familyName',
-            'orderby' => 'meta_value',
-            'posts_per_page' => 30,
-        );
-
-	$personlist = get_posts($args);
-        //_rrze_debug($personlist);
-        if($personlist) {
-            //foreach()
-        }
-        /*if ($personlist) {
-            while ($personlist) {
-                //$personlist->the_post();
-                $listid = $personlist->post->ID;
-                $fullname = get_the_title($listid);
-                //$out .= '<option value="' . $listid . '"';
-                //if ($oldid && $oldid == $listid) {
-                  //  $out .= ' selected="selected';
-                //}
-                //$out .= '">' . $fullname . '</option>' . "\n";
-                $add = array($listid => $fullname);
-                $contactselect = array_merge($contactselect, $add);
-                        _rrze_debug($contactselect);
-            }
-        } else {
-            $wpautop(__('Keine Kontaktdaten verf&uuml;gbar.', FAU_PERSON_TEXTDOMAIN));
-        }
-*/
-        
-        //return $contactselect;  
-
-    $args = wp_parse_args( $query_args, array(
-        'post_type' => 'person',
-        'posts_per_page' => 5,
-    ));
-    
-    $posts = get_posts( $args );
-    if ( $posts ) {
-        foreach ( $posts as $post ) {
-            $post_options[] = array(
-                'name' => $post->post_title,
-                'value' => $post->ID,
-            );
-        }
-    }
-    
-    return $post_options;
-    
-    
-}
-
 
 add_filter('cmb_meta_boxes', function(array $metaboxes) {
     //global $post;
@@ -242,9 +189,10 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
             array(
                 'name' => __('Postleitzahl', FAU_PERSON_TEXTDOMAIN),
                 //'desc' => 'Wenn der Ort aus UnivIS übernommen werden soll bitte leer lassen!',
-                'desc' => '',
+                'desc' => 'Nur 5-stellige Zahlen erlaubt.',
                 'type' => 'text_small',
-                'id' => $prefix . 'postalCode'
+                'id' => $prefix . 'postalCode',
+                'sanitization_cb' => 'validate_plz',
             ),
             array(
                 'name' => __('Ort', FAU_PERSON_TEXTDOMAIN),
@@ -286,7 +234,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
             ),
             array(
                 'name' => __('Telefax', FAU_PERSON_TEXTDOMAIN),
-                'desc' => __('Bitte geben Sie die Nummer in der internationalen Form +49 9131 1111111 an.', FAU_PERSON_TEXTDOMAIN),
+                'desc' => __('Bitte geben Sie uni-interne Nummern für Erlangen in der internationalen Form +49 9131 85-22222 und für Nürnberg in der internationalen Form +49 911 5302-555 an, uni-externe Nummern in der internationalen Form +49 9131 1111111.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text',
                 'id' => $prefix . 'faxNumber',
                 'after' => $univis_default['faxNumber'] 
@@ -372,9 +320,10 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
         'fields' => array(
             array(
                 'name' => __('UnivIS-ID', FAU_PERSON_TEXTDOMAIN),
-                'desc' => 'Die UnivIS-ID der Person, von der die Daten angezeigt werden sollen.',
-                'type' => 'text_number',
+                'desc' => 'Die UnivIS-ID der Person, von der die Daten angezeigt werden sollen (8-stellige Zahl).',
+                'type' => 'text',
                 'id' => $prefix . 'univis_id',
+                'sanitization_cb' => 'validate_univis_id',
             ),
             array(
                 'name' => __('Daten aus UnivIS anzeigen', FAU_PERSON_TEXTDOMAIN),
