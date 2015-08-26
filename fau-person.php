@@ -82,6 +82,10 @@ class FAU_Person {
         add_action( 'init', array (__CLASS__, 'register_person_post_type' ) );
         add_action( 'init', array( $this, 'register_persons_taxonomy' ) );
         add_action( 'restrict_manage_posts', array( $this, 'person_restrict_manage_posts' ) );
+        
+        add_action( 'init', array (__CLASS__, 'register_standort_post_type' ) );
+        //add_action( 'restrict_manage_posts', array( $this, 'standort_restrict_manage_posts' ) );
+        
         add_action( 'admin_menu', array( $this, 'add_help_tabs' ) );
         add_action( 'admin_menu', array( $this, 'add_options_pages' ) );
         add_action( 'admin_init', array( $this, 'admin_init' ) );
@@ -482,13 +486,17 @@ public function adding_custom_meta_boxes( $post ) {
     public function person_menu_subpages() {
         // Personen mit oder ohne bestimmte Funktionen. Andere Ansprechpartner (aus der Rubrik Kontakt) und Standorte können diesen zugeordnet werden
         add_submenu_page('edit.php?post_type=person', __('Person hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neue Person', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_person', array( $this, 'add_person_types' ));
-        // Kontakte, z.B. Vorzimmer, Sekretariat, Abteilungen. Hier sind Ansprechpartner aus den Personen zuordenbar 
-        add_submenu_page('edit.php?post_type=person', __('Kontakt hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neuer Kontakt', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_kontakt', array( $this, 'add_person_types' ));
+        // Kontakte, z.B. Vorzimmer, Sekretariat, Abteilungen. Hier sind Ansprechpartner aus den Personen zuordenbar, wird direkt über CPT angezeigt
+        //add_submenu_page('edit.php?post_type=person', __('Kontakt hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neuer Kontakt', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_kontakt', array( $this, 'add_person_types' ));
         // Zentrale Adressen, können in Personen und Kontakte übernommen werden
         add_submenu_page('edit.php?post_type=person', __('Standort hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neuer Standort', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_standort', array( $this, 'add_person_types' ));
         add_action('load-person_page_new_person', array( $this, 'person_menu' ));
-        add_action('load-person_page_new_kontakt', array( $this, 'kontakt_menu' ));
+        //add_action('load-person_page_new_kontakt', array( $this, 'kontakt_menu' ));
         add_action('load-person_page_new_standort', array( $this, 'standort_menu' ));
+    }
+    
+    public function add_person_types() {
+            //add_action( 'load-person_page_konakt', array( $this, 'adding_custom_meta_boxes' ));  
     }
     
     public function person_menu() {
@@ -504,14 +512,11 @@ public function adding_custom_meta_boxes( $post ) {
     }
     
     public function standort_menu() {
-        wp_redirect( admin_url( 'post-new.php?post_type=person' ) );
+        wp_redirect( admin_url( 'post-new.php?post_type=standort' ) );
         //$metaboxes = array();
         //do_action('cmb_meta_boxes', $metaboxes);
     }    
-    
-    public function add_person_types() {
-            add_action( 'load-person_page_konakt', array( $this, 'adding_custom_meta_boxes' ));  
-    }
+
     
     public static function register_widgets() {
             register_widget( 'FAUPersonWidget' );
@@ -520,6 +525,7 @@ public function adding_custom_meta_boxes( $post ) {
     private static function add_shortcodes() {     
         add_shortcode('person', 'fau_person' );
         add_shortcode('persons', 'fau_persons');
+        add_shortcode('standort', 'fau_person');
     }
 
     public static function register_person_post_type() {
@@ -527,6 +533,11 @@ public function adding_custom_meta_boxes( $post ) {
         register_post_type('person', $person_args);
     }
 
+    public static function register_standort_post_type() {
+        require_once('posttypes/fau-standort-posttype.php');
+        register_post_type('standort', $standort_args);
+    }
+    
     public function register_persons_taxonomy() {
         register_taxonomy(
                 'persons_category', //The name of the taxonomy. Name should be in slug form (must not contain capital letters or spaces).
