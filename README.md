@@ -10,6 +10,10 @@ WordPress Plugin
 Visitenkarten-Plugin für FAU Webauftritte  
 Custom Post Type person
 
+####Version 1.2.7:
+
+- Bugfixes (fehlende Anzeige Mehr-Link, falsche Einbindung des Kurzauszugs in Sidebar)      
+
 ####Version 1.2.6:
 
 - fehlendes schließendes div ergänzt in Einzeldarstellung     

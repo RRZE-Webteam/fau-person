@@ -568,9 +568,9 @@ if(!function_exists('fau_person_sidebar')) {
                 $content .= $contactpoint;
             if ($workLocation && $showoffice)
                 $content .= '<li class="person-info-room"><span class="screen-reader-text">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' </span><span itemprop="workLocation">' . $workLocation . '</span></li>';
-            if ($description && $showdescription)
-                $content .= '<div class="person-info-description">' . $description . '</div>';
             $content .= '</ul>';
+            if ($description && $showdescription)
+                $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $description . '</div>';
             $content .= '</div>';
             $content .= '</div>';
 
