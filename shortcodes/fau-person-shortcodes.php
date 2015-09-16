@@ -334,14 +334,14 @@ if(!function_exists('fau_person_markup')) {
         $content .= '</ul>';
 
         $content .= '</div>';
-        if (($showlist && $excerpt) || (($showsidebar || $extended) && $description) || ($showlink && $link)) {
+        if (($showlist && $excerpt) || (($showsidebar || $extended) && $description) || ($showlink && $personlink)) {
             $content .= '<div class="span3">';
             if ($showlist && $excerpt)
                 $content .= '<div class="person-info-description"><p>' . $excerpt . '</p></div>';
             if (($extended || $showsidebar) && $description)
                 $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $description . '</div>';
-            if ($showlink && $link) {
-                $content .= '<div class="person-info-more"><a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" class="person-read-more" href="' . $link . '">';
+            if ($showlink && $personlink) {
+                $content .= '<div class="person-info-more"><a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" class="person-read-more" href="' . $personlink . '">';
                 $content .= __('Mehr', FAU_PERSON_TEXTDOMAIN) . ' ›</a></div>';
             }
             $content .= '</div>';
