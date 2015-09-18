@@ -41,17 +41,21 @@
             if( $format == 'sidebar' ) {
                 $showsidebar = 1;
                 $sidebar = 1;
+                $showinstitution = 0;
+                $showabteilung = 1;
+                $showposition = 0;
                 $showtitle = 1;
                 $showsuffix = 1;
-                $showposition = 1;
-                $showinstitution = 1;
-                $showabteilung = 1;
+                $showaddress = 0;
+                $showroom = 0;
                 $showtelefon = 1;
-                $showfax = 1;
+                $showfax = 0;
+                $showmobile = 0;
+                $showmail = 1;
                 $showwebsite = 1;
-                $showaddress = 1;
-                $showroom = 1;
                 $showdescription = 1;
+                $showoffice = 0;
+                $showpubs = 0;
                 $showthumb = 1;
             }
             if( $format == 'full' || $format == 'page' )        $page = 1;
@@ -162,7 +166,11 @@
                 $liste .= "</span>";
             } elseif ( $list ) {
                 $liste .= "</ul>\n";
-            } elseif( !$page ) {
+            } elseif ( $page ) {
+                $post = get_post( $id );
+                if ( $post->post_content ) $content = $post->post_content;  
+                $liste .= $content;
+            } else {
                 $liste .= "</p>\n";                
             } 
             return $liste;
