@@ -10,6 +10,11 @@ WordPress Plugin
 Visitenkarten-Plugin für FAU Webauftritte  
 Custom Post Type person
 
+####Version 1.2.9:
+
+- Trennung von Name und Suffix mit Komma      
+- Formatierung des Content-Feldes bei Ausgabe über Shortcode     
+
 ####Version 1.2.8:
 
 - Korrektur des Anzeige-Formats page (Content ergänzt)      

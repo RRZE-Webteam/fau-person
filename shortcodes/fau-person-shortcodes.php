@@ -168,7 +168,7 @@
                 $liste .= "</ul>\n";
             } elseif ( $page ) {
                 $post = get_post( $id );
-                if ( $post->post_content ) $content = $post->post_content;  
+                if ( $post->post_content ) $content = wpautop($post->post_content);  
                 $liste .= $content;
             } else {
                 $liste .= "</p>\n";                
@@ -285,7 +285,7 @@ if(!function_exists('fau_person_markup')) {
             $fullname .= get_the_title($id);
         }
         if($showsuffix && $honorificSuffix)                     
-            $fullname .= ' <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
+            $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
         
                     
         $content = '<div class="person content-person" itemscope itemtype="http://schema.org/Person">';			
@@ -407,7 +407,7 @@ if(!function_exists('fau_person_markup')) {
         if ($familyName)
             $fullname .= '<span itemprop="familyName">' . $familyName . '</span>';
         if ($honorificSuffix)
-            $fullname .= ' <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
+            $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
         $content .= '<h2 itemprop="name">' . $fullname . '</h2>';
         $post = get_post($id);
         if (has_post_thumbnail($id)) {
@@ -478,10 +478,10 @@ if(!function_exists('fau_person_shortlist')) {
                 } elseif (!empty(get_the_title($id) ) ) {
                     $fullname .= get_the_title($id);
                 }
-                if($honorificSuffix) 	$fullname .= ' '.$honorificSuffix;
+                if($honorificSuffix) 	$fullname .= ', '.$honorificSuffix;
                 $content .= '<span class="person-info">';
                 $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
-                if( $showlist && $excerpt )                                  $content .= "\n".$excerpt;    
+                if( $showlist && $excerpt )                                  $content .= "<br>".$excerpt;    
                 $content .= '</span>';
             return $content;
     }
@@ -536,7 +536,7 @@ if(!function_exists('fau_person_sidebar')) {
             } elseif( !empty( get_the_title($id) ) ) {                                                
                 $fullname .= get_the_title($id);
             }
-            if ($honorificSuffix && $showsuffix)           $fullname .= ' <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
+            if ($honorificSuffix && $showsuffix)           $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
             
             $content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
             
