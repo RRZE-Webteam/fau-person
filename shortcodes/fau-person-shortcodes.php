@@ -41,17 +41,21 @@
             if( $format == 'sidebar' ) {
                 $showsidebar = 1;
                 $sidebar = 1;
+                $showinstitution = 0;
+                $showabteilung = 1;
+                $showposition = 0;
                 $showtitle = 1;
                 $showsuffix = 1;
-                $showposition = 1;
-                $showinstitution = 1;
-                $showabteilung = 1;
+                $showaddress = 0;
+                $showroom = 0;
                 $showtelefon = 1;
-                $showfax = 1;
+                $showfax = 0;
+                $showmobile = 0;
+                $showmail = 1;
                 $showwebsite = 1;
-                $showaddress = 1;
-                $showroom = 1;
                 $showdescription = 1;
+                $showoffice = 0;
+                $showpubs = 0;
                 $showthumb = 1;
             }
             if( $format == 'full' || $format == 'page' )        $page = 1;
@@ -162,7 +166,11 @@
                 $liste .= "</span>";
             } elseif ( $list ) {
                 $liste .= "</ul>\n";
-            } elseif( !$page ) {
+            } elseif ( $page ) {
+                $post = get_post( $id );
+                if ( $post->post_content ) $content = wpautop($post->post_content);  
+                $liste .= $content;
+            } else {
                 $liste .= "</p>\n";                
             } 
             return $liste;
@@ -277,7 +285,7 @@ if(!function_exists('fau_person_markup')) {
             $fullname .= get_the_title($id);
         }
         if($showsuffix && $honorificSuffix)                     
-            $fullname .= ' <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
+            $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
         
                     
         $content = '<div class="person content-person" itemscope itemtype="http://schema.org/Person">';			
@@ -334,14 +342,14 @@ if(!function_exists('fau_person_markup')) {
         $content .= '</ul>';
 
         $content .= '</div>';
-        if (($showlist && $excerpt) || (($showsidebar || $extended) && $description) || ($showlink && $link)) {
+        if (($showlist && $excerpt) || (($showsidebar || $extended) && $description) || ($showlink && $personlink)) {
             $content .= '<div class="span3">';
             if ($showlist && $excerpt)
                 $content .= '<div class="person-info-description"><p>' . $excerpt . '</p></div>';
             if (($extended || $showsidebar) && $description)
                 $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $description . '</div>';
-            if ($showlink && $link) {
-                $content .= '<div class="person-info-more"><a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" class="person-read-more" href="' . $link . '">';
+            if ($showlink && $personlink) {
+                $content .= '<div class="person-info-more"><a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" class="person-read-more" href="' . $personlink . '">';
                 $content .= __('Mehr', FAU_PERSON_TEXTDOMAIN) . ' ›</a></div>';
             }
             $content .= '</div>';
@@ -399,7 +407,7 @@ if(!function_exists('fau_person_markup')) {
         if ($familyName)
             $fullname .= '<span itemprop="familyName">' . $familyName . '</span>';
         if ($honorificSuffix)
-            $fullname .= ' <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
+            $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
         $content .= '<h2 itemprop="name">' . $fullname . '</h2>';
         $post = get_post($id);
         if (has_post_thumbnail($id)) {
@@ -470,10 +478,10 @@ if(!function_exists('fau_person_shortlist')) {
                 } elseif (!empty(get_the_title($id) ) ) {
                     $fullname .= get_the_title($id);
                 }
-                if($honorificSuffix) 	$fullname .= ' '.$honorificSuffix;
+                if($honorificSuffix) 	$fullname .= ', '.$honorificSuffix;
                 $content .= '<span class="person-info">';
                 $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
-                if( $showlist && $excerpt )                                  $content .= "\n".$excerpt;    
+                if( $showlist && $excerpt )                                  $content .= "<br>".$excerpt;    
                 $content .= '</span>';
             return $content;
     }
@@ -528,7 +536,7 @@ if(!function_exists('fau_person_sidebar')) {
             } elseif( !empty( get_the_title($id) ) ) {                                                
                 $fullname .= get_the_title($id);
             }
-            if ($honorificSuffix && $showsuffix)           $fullname .= ' <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
+            if ($honorificSuffix && $showsuffix)           $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
             
             $content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
             
@@ -568,9 +576,9 @@ if(!function_exists('fau_person_sidebar')) {
                 $content .= $contactpoint;
             if ($workLocation && $showoffice)
                 $content .= '<li class="person-info-room"><span class="screen-reader-text">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' </span><span itemprop="workLocation">' . $workLocation . '</span></li>';
-            if ($description && $showdescription)
-                $content .= '<div class="person-info-description">' . $description . '</div>';
             $content .= '</ul>';
+            if ($description && $showdescription)
+                $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $description . '</div>';
             $content .= '</div>';
             $content .= '</div>';
 
