@@ -26,21 +26,23 @@ function validate_plz( $str ) {
         return $str;
 }
 
-//Anzeigen des Feldes nur bei Kontakten
-function show_on_kontakt( $field ) {
-        $typ = get_post_meta($field->object_id, 'fau_person_typ', true);
-    if( $typ == 'pseudo' || $typ == 'einrichtung') {
-        $kontakt = true;
+//Anzeigen des Feldes nur bei Einrichtungen
+function show_on_einrichtung( $field ) {
+    $default_fau_person_typ = FAU_Person::default_fau_person_typ();
+    $typ = get_post_meta($field->object_id, 'fau_person_typ', true);
+    if( $typ == 'pseudo' || $typ == 'einrichtung' || $default_fau_person_typ == 'einrichtung') {
+        $einrichtung = true;
     } else {
-        $kontakt = false;
+        $einrichtung = false;
     }
-    return $kontakt;
+    return $einrichtung;
 }
 
 //Anzeigen des Feldes nur bei Personen
 function show_on_person( $field ) {
+    $default_fau_person_typ = FAU_Person::default_fau_person_typ();
     $typ = get_post_meta($field->object_id, 'fau_person_typ', true);
-    if( $typ == 'pseudo' || $typ == 'einrichtung') {
+    if( $typ == 'pseudo' || $typ == 'einrichtung' || $default_fau_person_typ == 'einrichtung') {
         $person = false;
     } else {
         $person = true;
@@ -83,11 +85,11 @@ function mb_show_on_person( $display, $meta_box ) {
     if ( $current_template && in_array( $current_template, (array) $meta_box['show_on']['value'] ) )
         return false;
 */
+    
     return true;
 
 }
 add_filter( 'cmb_show_on', 'mb_show_on_person', 10, 2 );
-
 
 add_filter('cmb_meta_boxes', function(array $metaboxes) {
     //global $post;
@@ -100,25 +102,25 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
     } else {
         $univis_sync = '';
     }
+    $default_fau_person_typ = $this->default_fau_person_typ();
     //ID der Kontaktseite
-    $id = cmb_Meta_Box::get_object_id();
+    $person_id = cmb_Meta_Box::get_object_id();
    // $helpuse = $this->get_helpuse();
     
-    /*    $meta_boxes['fau_person_postdata'] = array(
+    /*$meta_boxes['fau_person_postdata'] = array(
         'id' => 'fau_person_postdata',
         'title' => __( 'Infos zum Personenbeitrag', FAU_PERSON_TEXTDOMAIN ),
         'pages' => array('person'), // post type
         'context' => 'normal',
         'priority' => 'default',
         'show_names' => true, // Show field names on the left
-        'readonly' => true,
         'fields' => array(
             array(
                 'name' => __('ID des Beitrags', FAU_PERSON_TEXTDOMAIN),
                 'desc' => 'Zum Aufruf der Person im shortcode',
                 'id' => $prefix . 'id',
                 'type' => 'text',
-                'value' => get_post($id),
+                'default' => $person_id,
             ),
         )        
     );*/
@@ -127,7 +129,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
     $meta_boxes['fau_person_orga'] = array(
         'id' => 'fau_person_orga',
         'title' => __( 'Zuordnung', FAU_PERSON_TEXTDOMAIN ),
-        'pages' => array('person', 'kontakt'), // post type
+        'pages' => array('person'), // post type
         'context' => 'normal',
         'priority' => 'default',
         'show_on' => 'mb_show_on_person',
@@ -161,7 +163,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
     $meta_boxes['fau_person_info'] = array(
         'id' => 'fau_person_info',
         'title' => __( 'Kontaktinformationen', FAU_PERSON_TEXTDOMAIN ),
-        'pages' => array('person', 'kontakt'), // post type
+        'pages' => array('person'), // post type
         //'show_on' => array( 'key' => 'submenu-slug', 'value' => 'kontakt' ),        
         'context' => 'normal',
         'priority' => 'default',
@@ -177,7 +179,8 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                     'pseudo' => __('Pseudonym', FAU_PERSON_TEXTDOMAIN),
                     'einrichtung' => __('Nicht-Person', FAU_PERSON_TEXTDOMAIN)
                 ),
-                'id' => $prefix . 'typ'
+                'id' => $prefix . 'typ',
+                'default' => $default_fau_person_typ
             ),
             array(
                 'name' => __('Titel (Präfix)', FAU_PERSON_TEXTDOMAIN),
@@ -216,7 +219,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'desc' => '',
                 'type' => 'text',
                 'id' => $prefix . 'alternateName',
-                'show_on_cb' => 'show_on_kontakt'
+                'show_on_cb' => 'show_on_einrichtung'
             ),
             array(
                 'name' => __('Abschluss (Suffix)', FAU_PERSON_TEXTDOMAIN),
@@ -320,10 +323,10 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
             ),
             array(
                 'name' => __('Name und "Mehr"-Link verlinken auf Seite ...', FAU_PERSON_TEXTDOMAIN),
-                'desc' => __('Bitte vollständigen Permalink der ausführlichen Personenseite angeben.', FAU_PERSON_TEXTDOMAIN),
+                'desc' => __('Bitte vollständigen Permalink der ausführlichen Kontaktseite angeben.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text_url',
                 'id' => $prefix . 'link',
-                'after' => sprintf(__('<p class="cmb_metabox_description">[Standardwert wenn leer: %s]</p>', FAU_PERSON_TEXTDOMAIN), get_permalink( $id )),
+                'after' => sprintf(__('<p class="cmb_metabox_description">[Standardwert wenn leer: %s]</p>', FAU_PERSON_TEXTDOMAIN), get_permalink( $person_id )),
                 //'after' => '<hr>' . __('Zum Anzeigen der Person verwenden Sie bitte die ID', FAU_PERSON_TEXTDOMAIN) . ' ' . $helpuse,                
             )            
         )
@@ -389,7 +392,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'desc' => 'Die UnivIS-Org-Nr der Einrichtung, von der die Daten angezeigt werden sollen.',
                 'type' => 'text',
                 'id' => $prefix . 'univis_org_nr',
-                'show_on_cb' => 'show_on_kontakt'
+                'show_on_cb' => 'show_on_einrichtung'
                 //'sanitization_cb' => 'validate_univis_id',
             ),
             array(
@@ -398,7 +401,21 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'type' => 'checkbox',
                 'id' => $prefix . 'univis_org_sync',
                 'before' => $univis_sync,
-                'show_on_cb' => 'show_on_kontakt'
+                'show_on_cb' => 'show_on_einrichtung'
+            ),
+            array(
+                'name' => __('Standort-ID', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Die ID des Standort-Eintrages, von dem die Daten angezeigt werden sollen.',
+                'type' => 'text',
+                'id' => $prefix . 'standort_nr',
+
+            ),
+            array(
+                'name' => __('Adresse aus Standort anzeigen', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Zeige in der Ausgabe die Daten, die als Standort eingegeben wurden: Straße, Postleitzahl, Ort, Land). Die in diesen Feldern hier eingegebenen Werte werden in der Ausgabe nicht angezeigt.',
+                'type' => 'checkbox',
+                'id' => $prefix . 'standort_sync',
+                //'before' => $standort_sync,
             ),
         )
     );
@@ -422,12 +439,37 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
         )        
     );
     
+    // Meta-Box um eine Kontaktperson oder -Einrichtung zuzuordnen
+    $meta_boxes['fau_person_connection'] = array(
+        'id' => 'fau_person_connection',
+        'title' => __( 'Kontaktinformationen', FAU_PERSON_TEXTDOMAIN ),
+        'pages' => array('person'), // post type
+        'context' => 'normal',
+        'priority' => 'default',
+        'show_names' => true, // Show field names on the left
+        'fields' => array(
+            array(
+                'name' => __('Art der Zugehörigkeit', FAU_PERSON_TEXTDOMAIN),
+                'desc' => __('Der hier eingegebene Text wird vor der Ausgabe des verknüpften Kontaktes angezeigt (z.B. Vorzimmer, Kontakt über).', FAU_PERSON_TEXTDOMAIN),
+                'id' => $prefix . 'connection_text',
+                'type' => 'text',
+            ),
+            array(
+                'name' => __('Zugeordneten Kontakt auswählen', FAU_PERSON_TEXTDOMAIN),
+                'desc' => '',
+                'id' => $prefix . 'connection',
+                'type' => 'select',
+                'options' => $contactselect,
+                'repeatable' => true,
+            ),
+        )        
+    );
     
     
-    // Meta-Box Kontaktinformation - fau_standort_info
+    // Meta-Box Standortinformation - fau_standort_info
     $meta_boxes['fau_standort_info'] = array(
         'id' => 'fau_standort_info',
-        'title' => __( 'Kontaktinformationen', FAU_PERSON_TEXTDOMAIN ),
+        'title' => __( 'Standortinformationen', FAU_PERSON_TEXTDOMAIN ),
         'pages' => array('standort'), // post type
         //'show_on' => array( 'key' => 'submenu-slug', 'value' => 'kontakt' ),        
         'context' => 'normal',

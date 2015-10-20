@@ -1,7 +1,8 @@
 <?php
 
 /**
- * Plugin Name: FAU Person
+ Plugin Name: FAU Person
+ Plugin URI: https://github.com/RRZE-Webteam/fau-person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
  * Version: 1.2.9
  * Author: RRZE-Webteam
@@ -128,21 +129,26 @@ public function adding_custom_meta_boxes( $post ) {
         self::version_compare();
         
         self::register_person_post_type();
+        self::register_standort_post_type();
         flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind
 
         self::$options = self::get_options();  
         
         // CPT-Capabilities für die Administrator-Rolle zuweisen
         // 
-        $caps = self::get_caps('person');
-        self::add_caps('administrator', $caps);
+        $caps_person = self::get_caps('person');
+        self::add_caps('administrator', $caps_person);
+        $caps_standort = self::get_caps('standort');
+        self::add_caps('administrator', $caps_standort);
         //self::add_caps('editor', $caps);       
     }
     
     public static function deactivation() {       
         // CPT-Capabilities aus der Administrator-Rolle entfernen
-            $caps = self::get_caps('person');
-            self::remove_caps('administrator', $caps);
+            $caps_person = self::get_caps('person');
+            self::remove_caps('administrator', $caps_person);
+            $caps_standort = self::get_caps('standort');
+            self::remove_caps('administrator', $caps_standort);
             //self::remove_caps('editor', $caps);
             flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind
     
@@ -396,31 +402,32 @@ public function adding_custom_meta_boxes( $post ) {
                     echo __('Es konnten keine Daten zur Person gefunden werden. Bitte verändern Sie Ihre Suchwerte und stellen Sie sicher, dass das Plugin Univis-Data aktiviert ist.', FAU_PERSON_TEXTDOMAIN);
                 } else {
                     $person = $this->array_orderby($person,"lastname", SORT_ASC, "firstname", SORT_ASC );
+                    $no_univis_data = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
                     foreach($person as $key=>$value) {
                         if(array_key_exists('locations', $person[$key]) && array_key_exists('location', $person[$key]['locations'][0]) && array_key_exists('email', $person[$key]['locations'][0]['location'][0])) {
                             $email = $person[$key]['locations'][0]['location'][0]['email'];
                         } else {
-                            $email = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
+                            $email = $no_univis_data;
                         }
                         if(array_key_exists('id', $person[$key])) {
                             $id = $person[$key]['id'];
                         } else {
-                            $id = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
+                            $id = $no_univis_data;
                         }
                         if(array_key_exists('firstname', $person[$key])) {
                             $firstname = $person[$key]['firstname'];
                         } else {
-                            $firstname = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
+                            $firstname = __('Vorname', FAU_PERSON_TEXTDOMAIN) . ": " . $no_univis_data . ", ";
                         }
                         if(array_key_exists('lastname', $person[$key])) {
                             $lastname = $person[$key]['lastname'];
                         } else {
-                            $lastname = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
+                            $lastname = __('Nachname', FAU_PERSON_TEXTDOMAIN) . ": " . $no_univis_data;
                         }
                         if(array_key_exists('orgname', $person[$key])) {
                             $orgname = $person[$key]['orgname'];
                         } else {
-                            $orgname = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
+                            $orgname = $no_univis_data;
                         }
                         //echo sprintf(__('UnivIS-ID %1$s: %2$s %3$s, E-Mail: %4$s, Organisation: %5$s', FAU_PERSON_TEXTDOMAIN), $id, $firstname, $lastname, $email, $orgname);
                         echo 'UnivIS-ID '. $id . ': '. $firstname . ' ' . $lastname . ', E-Mail: ' . $email. ', Organisation: ' . $orgname;
@@ -487,15 +494,16 @@ public function adding_custom_meta_boxes( $post ) {
         // Personen mit oder ohne bestimmte Funktionen. Andere Ansprechpartner (aus der Rubrik Kontakt) und Standorte können diesen zugeordnet werden
         add_submenu_page('edit.php?post_type=person', __('Person hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neue Person', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_person', array( $this, 'add_person_types' ));
         // Kontakte, z.B. Vorzimmer, Sekretariat, Abteilungen. Hier sind Ansprechpartner aus den Personen zuordenbar, wird direkt über CPT angezeigt
-        //add_submenu_page('edit.php?post_type=person', __('Kontakt hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neuer Kontakt', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_kontakt', array( $this, 'add_person_types' ));
+        add_submenu_page('edit.php?post_type=person', __('Einrichtung hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neue Einrichtung', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_einrichtung', array( $this, 'add_person_types' ));
         // Zentrale Adressen, können in Personen und Kontakte übernommen werden
         add_submenu_page('edit.php?post_type=person', __('Standort hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neuer Standort', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_standort', array( $this, 'add_person_types' ));
         add_action('load-person_page_new_person', array( $this, 'person_menu' ));
-        //add_action('load-person_page_new_kontakt', array( $this, 'kontakt_menu' ));
+        add_action('load-person_page_new_einrichtung', array( $this, 'einrichtung_menu' ));
         add_action('load-person_page_new_standort', array( $this, 'standort_menu' ));
     }
     
     public function add_person_types() {
+        //wp_redirect( admin_url( 'post-new.php?post_type=standort' ) );
             //add_action( 'load-person_page_konakt', array( $this, 'adding_custom_meta_boxes' ));  
     }
     
@@ -505,8 +513,8 @@ public function adding_custom_meta_boxes( $post ) {
         //do_action('cmb_meta_boxes', $metaboxes);
     }
 
-    public function kontakt_menu() {
-        wp_redirect( admin_url( 'post-new.php?post_type=person' ) );
+    public function einrichtung_menu() {
+        wp_redirect( admin_url( 'post-new.php?post_type=person&fau_person_typ=einrichtung' ) );
         //$metaboxes = array();
         //do_action('cmb_meta_boxes', $metaboxes);
     }
@@ -519,7 +527,7 @@ public function adding_custom_meta_boxes( $post ) {
 
     
     public static function register_widgets() {
-            register_widget( 'FAUPersonWidget' );
+        register_widget( 'FAUPersonWidget' );
     }
     
     private static function add_shortcodes() {     
@@ -667,6 +675,15 @@ public function adding_custom_meta_boxes( $post ) {
         }
     }    
     
+    //Überprüft bei neuen Seiten ob Person oder Einrichtung eingegeben wird, abhängig vom Feldtyp fau_person_typ
+    public static function default_fau_person_typ( ) {     
+        if(isset($_GET["fau_person_typ"]) && $_GET["fau_person_typ"] == 'einrichtung') {
+            $default_fau_person_typ = 'einrichtung';
+        } else {
+            $default_fau_person_typ = 'realperson';
+        }
+        return $default_fau_person_typ;
+    }
     
     //Legt die in UnivIS hinterlegten Werte in einem Array ab, Feldbezeichnungen
     public function univis_defaults( ) {
