@@ -33,6 +33,8 @@ register_deactivation_hook(__FILE__, array('FAU_Person', 'deactivation'));
 
 require_once('includes/fau-person-sync-helper.php'); 
 require_once('shortcodes/fau-person-shortcodes.php');     
+require_once('includes/fau-standort-sync-helper.php'); 
+require_once('shortcodes/fau-standort-shortcodes.php');  
 //require_once('metaboxes/fau-person-metaboxes.php');
 require_once('widgets/fau-person-widget.php');
 
@@ -657,6 +659,17 @@ public function adding_custom_meta_boxes( $post ) {
                     $template_path = $theme_file;
                 } else {
                     $template_path = FAU_PERSON_ROOT . '/templates/single-person.php';                    
+                }
+            //}
+        }
+        if ($post->post_type == 'standort') {
+            //if (is_single()) {
+                // checks if the file exists in the theme first,
+                // otherwise serve the file from the plugin
+                if ($theme_file = locate_template(array('single-standort.php'))) {
+                    $template_path = $theme_file;
+                } else {
+                    $template_path = FAU_PERSON_ROOT . '/templates/single-standort.php';                    
                 }
             //}
         }

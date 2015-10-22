@@ -407,7 +407,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'name' => __('Standort-ID', FAU_PERSON_TEXTDOMAIN),
                 'desc' => 'Die ID des Standort-Eintrages, von dem die Daten angezeigt werden sollen.',
                 'type' => 'text',
-                'id' => $prefix . 'standort_nr',
+                'id' => $prefix . 'standort_id',
 
             ),
             array(
