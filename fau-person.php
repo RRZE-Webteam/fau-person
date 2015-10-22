@@ -630,7 +630,7 @@ public function adding_custom_meta_boxes( $post ) {
                         $typ = __('Pseudonym', FAU_PERSON_TEXTDOMAIN);
                         break;
                     case 'einrichtung':
-                        $typ = __('Nicht-Person', FAU_PERSON_TEXTDOMAIN);
+                        $typ = __('Einrichtung', FAU_PERSON_TEXTDOMAIN);
                         break;
                 }
                 echo $typ;

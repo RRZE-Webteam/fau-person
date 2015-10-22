@@ -176,8 +176,8 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'options' => array('realperson' => __('Person (geschlechtsneutral)', FAU_PERSON_TEXTDOMAIN),
                     'realmale' => __('Männliche Person', FAU_PERSON_TEXTDOMAIN),
                     'realfemale' => __('Weibliche Person', FAU_PERSON_TEXTDOMAIN),
+                    'einrichtung' => __('Einrichtung', FAU_PERSON_TEXTDOMAIN),
                     'pseudo' => __('Pseudonym', FAU_PERSON_TEXTDOMAIN),
-                    'einrichtung' => __('Nicht-Person', FAU_PERSON_TEXTDOMAIN)
                 ),
                 'id' => $prefix . 'typ',
                 'default' => $default_fau_person_typ
