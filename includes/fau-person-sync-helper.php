@@ -4,11 +4,12 @@ class sync_helper {
     //gibt die Werte der Person an, Inhalte abhängig von UnivIS, Übergabewerte: ID der Person, UnivIS-ID der Person, Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular
     public static function get_fields( $id, $univis_id, $defaults ) {
         $univis_sync = 0;
+        $standort_sync = 0;
         $person = array();
         if( $univis_id && class_exists( 'Univis_Data' ) ) {
             $person = self::get_univisdata( $univis_id );
             $univis_sync = 1;
-        }
+        } elseif( $standort_id )
         $fields = array();
         $fields_univis = array(
             'department' => 'orgname',

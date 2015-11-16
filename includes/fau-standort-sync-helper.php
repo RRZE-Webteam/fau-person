@@ -3,6 +3,7 @@
 class standort_sync_helper {
     //gibt die Werte des Standorts an, für Standort-Synchronisation $edfaults=1
     public static function get_fields( $id, $standort_id, $defaults ) {
+        $standort_sync = 0;
         $fields = array();
         $fields_standort = array(
             'streetAddress' => '',

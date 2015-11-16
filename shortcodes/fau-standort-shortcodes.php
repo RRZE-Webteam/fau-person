@@ -13,32 +13,16 @@
             "show" => '', 
             "hide" => '',
                         ), $atts));
-        
-        $shortlist = '';    
+          
         $sidebar = '';
         $page = '';
         $list = '';
         if ( !empty( $format ) ) {         
-            //name, sidebar, index, page, plain, 
-            if( $format == 'name' || $format == 'shortlist' )   $shortlist = 1;
             if( $format == 'sidebar' ) {
                 $showsidebar = 1;
                 $sidebar = 1;
-                $showinstitution = 0;
-                $showabteilung = 1;
-                $showposition = 0;
-                $showtitle = 1;
-                $showsuffix = 1;
                 $showaddress = 0;
-                $showroom = 0;
-                $showtelefon = 1;
-                $showfax = 0;
-                $showmobile = 0;
-                $showmail = 1;
-                $showwebsite = 1;
                 $showdescription = 1;
-                $showoffice = 0;
-                $showpubs = 0;
                 $showthumb = 1;
             }
             if( $format == 'full' || $format == 'page' )        $page = 1;
@@ -319,10 +303,6 @@ if(!function_exists('fau_person_markup')) {
         $content .= '</ul>';
         $content .= '</div>';
 
-
-        //	    if (($options['plugin_fau_person_headline'] != 'jobTitle') && ($position)) 
-        //		$content .= '<li class="person-info-position"><span class="screen-reader-text">'.__('Tätigkeit','fau').': </span><strong><span itemprop="jobTitle">'.$jobTitle.'</span></strong></li>';
-
         return $content;
     } 
  }    
@@ -347,14 +327,9 @@ if(!function_exists('fau_standort_shortlist')) {
             }
             $content = '';			           
 		$fullname = '';
-		if($honorificPrefix)            $fullname .= '<span itemprop="honorificPrefix">'.$honorificPrefix."</span> ";
-                if($givenName || $familyName) {
-                    if($givenName)          $fullname .= '<span itemprop="givenName">'.$givenName."</span> ";
-                    if($familyName)         $fullname .= '<span itemprop="familyName">'.$familyName."</span>";
-                } elseif (!empty(get_the_title($id) ) ) {
+                if (!empty(get_the_title($id) ) ) {
                     $fullname .= get_the_title($id);
                 }
-                if($honorificSuffix) 	$fullname .= ', '.$honorificSuffix;
                 $content .= '<span class="person-info">';
                 $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
                 if( $showlist && $excerpt )                                  $content .= "<br>".$excerpt;    
