@@ -35,11 +35,12 @@ Folgende Werte können eingegeben werden:
 kurzbeschreibung, organisation, abteilung, position, titel, suffix, adresse, raum, telefon, fax, mobil, mail, webseite, mehrlink, kurzauszug, sprechzeiten, publikationen, bild     
 Beispiel: [person id="12345" show="adresse, raum, sprechzeiten" hide="position, telefon"]    
 
-- format: je nach Wert unterscheidet sich die Ausgabedarstellung und die angezeigten Standardparameter    
+- format: je nach Wert unterscheidet sich die Ausgabedarstellung und die angezeigten Standardparameter:    
 name: Ausgabe von Titel, Vorname, Nachname und Suffix (sofern vorhanden) im Fließtext mit Link auf die Kontaktseite der Person    
 page: vollständige Ausgabe des ganzen Kontaktes wie bei der Kontakt-Einzelseite, die Parameter show und hide haben hierauf keinen Einfluss    
 sidebar: Ausgabe wie bei der Anzeige in der Sidebar im Theme    
 liste: Ausgabe der Namen mit Listenpunkten, unten drunter Kurzbeschreibung    
+Beispiel: [person id="42, 44, 56" format="name"]
 
 #####Vorlage zur Singledarstellung: templates/single-person.php
 kann gerne ins eigene Theme übernommen und daran angepasst werden, beigefügte Vorlage ist an FAU-Fakultätsthemes angepasst
