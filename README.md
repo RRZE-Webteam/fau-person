@@ -29,8 +29,7 @@ Eingabe mehrerer ids möglich (kommasepariert, z. B. id="42, 44, 56") für die A
 
 
 ######optionale Parameter (Parameter aus früheren Versionen funktionieren noch):  
-- show: nur anzugeben, wenn ein zusätzliches Feld zu den Standardfeldern angezeigt werden soll     
-- hide: nur anzugeben, wenn die Anzeige eines Standardfeldes nicht gewünscht ist    
+- show (nur anzugeben, wenn ein zusätzliches Feld zu den Standardfeldern angezeigt werden soll), hide (nur anzugeben, wenn die Anzeige eines Standardfeldes nicht gewünscht ist)    
 Folgende Werte können eingegeben werden:    
 kurzbeschreibung, organisation, abteilung, position, titel, suffix, adresse, raum, telefon, fax, mobil, mail, webseite, mehrlink, kurzauszug, sprechzeiten, publikationen, bild     
 Beispiel: [person id="12345" show="adresse, raum, sprechzeiten" hide="position, telefon"]    
