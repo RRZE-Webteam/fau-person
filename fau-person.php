@@ -199,7 +199,7 @@ public function adding_custom_meta_boxes( $post ) {
       
         if( $personlist ) {  
             foreach( $personlist as $key => $value) {
-                $personlist[$key] = (array)$personlist[$key];
+                $personlist[$key] = (array) $personlist[$key];
                 $name = $personlist[$key]['post_title'];
                 if(strpos($name, ' ')) {
                     $lastname = ltrim(strrchr($name, ' '));
@@ -216,6 +216,27 @@ public function adding_custom_meta_boxes( $post ) {
             $contactselect = __('Sie haben noch keine Kontakte eingepflegt.', FAU_PERSON_TEXTDOMAIN);
         }
         return $contactselect;  
+    }
+    
+    public function get_standortdata() {      
+         $args = array(
+            'post_type' => 'standort',
+            'numberposts' => -1
+        );
+
+	$standortlist = get_posts($args);
+        if( $standortlist ) {  
+            foreach( $standortlist as $key => $value) {
+                $standortlist[$key] = (array) $standortlist[$key];   
+                $standortselect[ $standortlist[$key]['ID'] ] = $standortlist[$key]['post_title'];
+            }                                                
+            asort($standortselect);
+            $standortselect = array( '0' => __('Kein Standort ausgewählt.', FAU_PERSON_TEXTDOMAIN) ) + $standortselect;
+
+        } else {
+            $standortselect[0] = __('Noch kein Standort eingepflegt.', FAU_PERSON_TEXTDOMAIN);
+        }
+        return $standortselect;  
     }
     
     private static function get_caps($cap_type) {

@@ -96,6 +96,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
 //function fau_person_metaboxes( $meta_boxes ) {
     $prefix = 'fau_person_'; // Prefix for all fields
     $contactselect = (array) $this->get_contactdata();
+    $standortselect = $this->get_standortdata();
     $univis_default = $this->univis_defaults();  
     if( !class_exists( 'Univis_Data' ) ) {
         $univis_sync = __('<p class="cmb_metabox_description">Es können aktuell keine Daten aus UnivIS angezeigt werden. Bitte überprüfen Sie, ob Sie das Plugin univis-data installiert und aktiviert haben.</p>', FAU_PERSON_TEXTDOMAIN);
@@ -406,9 +407,9 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
             array(
                 'name' => __('Standort-ID', FAU_PERSON_TEXTDOMAIN),
                 'desc' => 'Die ID des Standort-Eintrages, von dem die Daten angezeigt werden sollen.',
-                'type' => 'text',
+                'type' => 'select',
                 'id' => $prefix . 'standort_id',
-
+                'options' => $standortselect,
             ),
             array(
                 'name' => __('Adresse aus Standort anzeigen', FAU_PERSON_TEXTDOMAIN),
