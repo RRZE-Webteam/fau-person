@@ -9,7 +9,7 @@ class sync_helper {
         if( $univis_id && class_exists( 'Univis_Data' ) ) {
             $person = self::get_univisdata( $univis_id );
             $univis_sync = 1;
-        } elseif( $standort_id )
+        } 
         $fields = array();
         $fields_univis = array(
             'department' => 'orgname',

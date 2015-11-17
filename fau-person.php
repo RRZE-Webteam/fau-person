@@ -213,7 +213,7 @@ public function adding_custom_meta_boxes( $post ) {
                 $contactselect[] = $personlist[$key]['ID'] . ', ' . $personlist[$key]['post_title'];                
             }   
         } else {
-            $contactselect = __('Sie haben noch keine Kontakte eingepflegt.', FAU_PERSON_TEXTDOMAIN);
+            $contactselect[] = __('Noch keine Kontakte eingepflegt.', FAU_PERSON_TEXTDOMAIN);
         }
         return $contactselect;  
     }

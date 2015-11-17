@@ -95,7 +95,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
     //global $post;
 //function fau_person_metaboxes( $meta_boxes ) {
     $prefix = 'fau_person_'; // Prefix for all fields
-    $contactselect = (array) $this->get_contactdata();
+    $contactselect = $this->get_contactdata();
     $standortselect = $this->get_standortdata();
     $univis_default = $this->univis_defaults();  
     if( !class_exists( 'Univis_Data' ) ) {
