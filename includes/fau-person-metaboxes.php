@@ -103,6 +103,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
     } else {
         $univis_sync = '';
     }
+    $standort_default = $this->standort_defaults();  
     $default_fau_person_typ = $this->default_fau_person_typ();
     //ID der Kontaktseite
     $person_id = cmb_Meta_Box::get_object_id();
@@ -235,7 +236,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'desc' => '',
                 'type' => 'text',
                 'id' => $prefix . 'streetAddress',
-                'after' => $univis_default['streetAddress']  
+                'after' => $univis_default['streetAddress'] . $standort_default['streetAddress'] 
             ),
             array(
                 'name' => __('Postleitzahl', FAU_PERSON_TEXTDOMAIN),
@@ -244,19 +245,21 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'type' => 'text_small',
                 'id' => $prefix . 'postalCode',
                 'sanitization_cb' => 'validate_plz',
+                'after' => $standort_default['postalCode'] 
             ),
             array(
                 'name' => __('Ort', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
                 'type' => 'text',
                 'id' => $prefix . 'addressLocality',
-                'after' => $univis_default['addressLocality']  
+                'after' => $univis_default['addressLocality'] . $standort_default['addressLocality'] 
             ),
             array(
                 'name' => __('Land', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
                 'type' => 'text',
-                'id' => $prefix . 'addressCountry'
+                'id' => $prefix . 'addressCountry',
+                'after' => $standort_default['addressCountry'] 
             ),
             array(
                 'name' => __('Raum', FAU_PERSON_TEXTDOMAIN),
@@ -482,7 +485,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'desc' => '',
                 'type' => 'text',
                 'id' => $prefix . 'streetAddress',
-                'after' => $univis_default['streetAddress']  
+                //'after' => $univis_default['streetAddress']  
             ),
             array(
                 'name' => __('Postleitzahl', FAU_PERSON_TEXTDOMAIN),
@@ -497,7 +500,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'desc' => '',
                 'type' => 'text',
                 'id' => $prefix . 'addressLocality',
-                'after' => $univis_default['addressLocality']  
+                //'after' => _rrze_debug($prefix . 'addressLocality')  
             ),
             array(
                 'name' => __('Land', FAU_PERSON_TEXTDOMAIN),

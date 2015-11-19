@@ -730,6 +730,16 @@ public function adding_custom_meta_boxes( $post ) {
             }
     }
     
+    public function standort_defaults( ) {
+            $id = cmb_Meta_Box::get_object_id();
+            $post = get_post($id);
+            if( !is_null( $post ) && $post->post_type === 'person' && get_post_meta($id, 'fau_person_standort_id', true)) {
+                $standort_id = get_post_meta($id, 'fau_person_standort_id', true);
+                $standort_default = standort_sync_helper::get_fields($id, $standort_id, 1);
+                return $standort_default;        
+            }
+    }
+    
     //Excerpt Metabox entfernen um Titel zu ändern und Länge zu modifizieren
     public function modified_excerpt_metabox() {
             remove_meta_box( 'postexcerpt', 'person', 'normal' ); 

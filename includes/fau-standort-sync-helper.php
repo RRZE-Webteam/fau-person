@@ -7,6 +7,7 @@ class standort_sync_helper {
         $fields = array();
         if( $standort_id ) {
             $standort_sync = 1;
+            
         } 
         $fields_standort = array(
             'streetAddress' => '',
@@ -16,39 +17,33 @@ class standort_sync_helper {
         );
     
         foreach( $fields_standort as $key => $value ) {
-            $value = get_post_meta($id, 'fau_person_'.$key, true);
-            $fields[$key] = $value;            
-        }
-        
-        
-        
-        foreach( $fields_standort as $key => $value ) {
             if( $standort_sync ) {
-                $value = self::sync_standort( $id, $person, $key, $value, $defaults ); 
+                    $value = self::sync_standort( $id, $standort_id, $key, $defaults );                     
             } else {
                 if( $defaults ) {
-                    $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);     
+                    $value = __('<p class="cmb_metabox_description">[Im Standort ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);     
                 } else {
                     $value = get_post_meta($id, 'fau_person_'.$key, true);                          
                 }
             }
-            $fields[$key] = $value;
+            $fields[$key] = $value;            
         }
         return $fields;
     }
     
-//$id = ID des Standorteintrags, $person = Array mit Personendaten, $fau_person_var = Bezeichnung Personenplugin, $univis_vat = Bezeichnung UnivIS, $defaults = Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular    
-    public static function sync_standort( $id, $person, $fau_person_var, $univis_var, $defaults ) {   
+//$id = ID des Personeneintrags, $standort_id = ID des Standorteintrags, $fau_person_var = Bezeichnung des Feldes im Personenplugin, $defaults = Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular    
+    public static function sync_standort( $id, $standort_id, $fau_person_var, $defaults ) {   
+        $value = get_post_meta($standort_id, 'fau_person_'.$fau_person_var, true);
         //wird benötigt, falls jeder einzelne Wert abgefragt werden soll
         if( $defaults ) {
-            if( !empty( $person[$univis_var] ) ) {
-                $val = sprintf(__('<p class="cmb_metabox_description">[Von Standort angezeigter Wert: %s]</p>', FAU_PERSON_TEXTDOMAIN), $person[$univis_var]);
+            if( !empty( $value ) ) {
+                $val = sprintf(__('<p class="cmb_metabox_description">[Von Standort angezeigter Wert: %s]</p>', FAU_PERSON_TEXTDOMAIN), $value);               
             } else {
                 $val = __('<p class="cmb_metabox_description">[Im Standort ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);
             }
         } else {
-            if( !empty( $person[$univis_var] ) && get_post_meta($id, 'fau_person_univis_sync', true) ) {
-                $val = $person[$univis_var];             
+            if( !empty( $value ) && get_post_meta($id, 'fau_person_standort_sync', true) ) {
+                $val = $value;             
             } else {
                 $val = get_post_meta($id, 'fau_person_'.$fau_person_var, true);
             }

@@ -365,8 +365,8 @@ if(!function_exists('fau_person_markup')) {
     function fau_person_page($id) {
  
      	$content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
-        
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+
         extract($fields);
 
         if ($streetAddress || $postalCode || $addressLocality || $addressCountry) {
@@ -453,6 +453,7 @@ if(!function_exists('fau_person_markup')) {
   
 if(!function_exists('fau_person_shortlist')) {
     function fau_person_shortlist($id, $showlist) {	
+        
         
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
         extract($fields);
