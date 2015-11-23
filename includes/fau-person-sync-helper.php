@@ -41,10 +41,14 @@ class sync_helper {
             'link' => '',
             'hoursAvailable' => '',
             'description' => '',
+            'connection_text' => ''
         );
         $fields_exception = array(
             'postalCode' => '',
         );            
+        $fields_connection = array(
+            'connection' => array( ),
+        );
         foreach( $fields_univis as $key => $value ) {
             if( $univis_sync && array_key_exists( $value, $person ) ) {
                 $value = self::sync_univis( $id, $person, $key, $value, $defaults ); 
@@ -114,6 +118,21 @@ class sync_helper {
             }
             $fields[$key] = $value;  
         }
+        foreach( $fields_connection as $key => $value ) {
+            if( $key == 'connection' ) {
+                $connection = get_post_meta($id, 'fau_person_connection', true);
+                //_rrze_debug($connection);
+                if( $connection ) {            
+                    foreach( $connection as $key => $value ) {
+                  //      _rrze_debug($value);
+                        $connection_fields[$key] = sync_helper::get_fields($value, get_post_meta($value, 'fau_person_univis_id', true), 0);
+                    }
+                    //_rrze_debug($connection_fields);
+                }                
+            }
+            $fields[$key] = $value;  
+        }
+
         if( !$defaults && !get_post_meta($id, 'fau_person_univis_sync', true) ) {
             $fields_standort = standort_sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_standort_id', true), 0 );
             $fields = array_merge( $fields, $fields_standort );

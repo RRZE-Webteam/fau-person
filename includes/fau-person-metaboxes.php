@@ -96,6 +96,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
 //function fau_person_metaboxes( $meta_boxes ) {
     $prefix = 'fau_person_'; // Prefix for all fields
     $contactselect = $this->get_contactdata();
+    $contactselect_connection = $this->get_contactdata(1);
     $standortselect = $this->get_standortdata();
     $univis_default = $this->univis_defaults();  
     if( !class_exists( 'Univis_Data' ) ) {
@@ -463,7 +464,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'desc' => '',
                 'id' => $prefix . 'connection',
                 'type' => 'select',
-                'options' => $contactselect,
+                'options' => $contactselect_connection,
                 'repeatable' => true,
             ),
         )        

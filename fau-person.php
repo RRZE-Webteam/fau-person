@@ -189,7 +189,7 @@ public function adding_custom_meta_boxes( $post ) {
         return $options;
     }
     
-   public function get_contactdata() {      
+   public function get_contactdata( $connection=0 ) {      
          $args = array(
             'post_type' => 'person',
             'numberposts' => -1
@@ -210,10 +210,13 @@ public function adding_custom_meta_boxes( $post ) {
             }
             $personlist = $this->array_orderby( $personlist, "lastname", SORT_ASC );
             foreach( $personlist as $key => $value) {
-                $contactselect[] = $personlist[$key]['ID'] . ', ' . $personlist[$key]['post_title'];                
-            }   
+                $contactselect[ $personlist[$key]['ID'] ] = $personlist[$key]['ID'] . ', ' . $personlist[$key]['post_title'];                
+            }
+            if ( $connection ) {
+                $contactselect = array( '0' => __('Kein Kontakt ausgewählt.', FAU_PERSON_TEXTDOMAIN) ) + $contactselect;
+            }
         } else {
-            $contactselect[] = __('Noch keine Kontakte eingepflegt.', FAU_PERSON_TEXTDOMAIN);
+            $contactselect[0] = __('Noch keine Kontakte eingepflegt.', FAU_PERSON_TEXTDOMAIN);
         }
         return $contactselect;  
     }
