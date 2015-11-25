@@ -41,13 +41,24 @@ class sync_helper {
             'link' => '',
             'hoursAvailable' => '',
             'description' => '',
-            'connection_text' => ''
         );
         $fields_exception = array(
             'postalCode' => '',
         );            
         $fields_connection = array(
-            'connection' => array( ),
+            'connection_text' => '',
+            'connection_honorificPrefix' => 'honorificPrefix',
+            'connection_givenName' => 'givenName',
+            'connection_familyName' => 'familyName',
+            'connection_honorificSuffix' => 'honorificSuffix',
+            'connection_streetAddress' => 'streetAddress',
+            'connection_postalCode' => 'postalCode',
+            'connection_addressCountry' => 'addressCountry',  
+            'connection_workLocation' => 'workLocation',
+            'connection_telephone' => 'telephone',
+            'connection_faxNumber' => 'faxNumber',         
+            'connection_email' => 'email',
+            'connection_sprechzeiten' => 'hoursAvailable',
         );
         foreach( $fields_univis as $key => $value ) {
             if( $univis_sync && array_key_exists( $value, $person ) ) {
@@ -118,19 +129,24 @@ class sync_helper {
             }
             $fields[$key] = $value;  
         }
-        foreach( $fields_connection as $key => $value ) {
-            if( $key == 'connection' ) {
-                $connection = get_post_meta($id, 'fau_person_connection', true);
-                //_rrze_debug($connection);
-                if( $connection ) {            
-                    foreach( $connection as $key => $value ) {
-                  //      _rrze_debug($value);
-                        $connection_fields[$key] = sync_helper::get_fields($value, get_post_meta($value, 'fau_person_univis_id', true), 0);
-                    }
-                    //_rrze_debug($connection_fields);
-                }                
+        $connections = get_post_meta($id, 'fau_person_connection', true);
+        if( $connections ) {    
+            $connection = array();
+            foreach( $connections as $ckey => $cvalue ) {
+                $connection_fields[$ckey] = sync_helper::get_fields($cvalue, get_post_meta($cvalue, 'fau_person_univis_id', true), 0);
             }
-            $fields[$key] = $value;  
+            foreach ($connection_fields as $key => $value) {    
+                foreach( $fields_connection as $fckey => $fcvalue ) {
+                    if($fckey == 'connection_text') {
+                        $value = get_post_meta($id, 'fau_person_'.$fckey, true);
+                        $connection[$key][$fckey] = $value;                   
+                    } else {
+                        $value = $connection_fields[$key][$fcvalue];
+                        $connection[$key][$fcvalue] = $value; 
+                    }
+                }                    
+            }
+            $fields['connections'] = $connection;
         }
 
         if( !$defaults && !get_post_meta($id, 'fau_person_univis_sync', true) ) {
