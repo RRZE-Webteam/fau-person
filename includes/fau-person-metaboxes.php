@@ -466,6 +466,19 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'type' => 'select',
                 'options' => $contactselect_connection,
                 'repeatable' => true,
+            ),    
+            array(
+                'name' => __('Angezeigte Daten der zugeordneten Kontakte', FAU_PERSON_TEXTDOMAIN),
+                'desc' => '',
+                'id' => $prefix . 'connection_anzeige',
+                'type' => 'multicheck',
+                'options' => array(
+                    'adresse' => __('Adresse', FAU_PERSON_TEXTDOMAIN),
+                    'telefon' => __('Telefon', FAU_PERSON_TEXTDOMAIN),
+                    'fax' => __('Telefax', FAU_PERSON_TEXTDOMAIN),
+                    'email' => __('E-Mail', FAU_PERSON_TEXTDOMAIN),
+                    'sprechzeiten' => __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN),
+                )
             ),
         )        
     );
