@@ -366,17 +366,8 @@ if(!function_exists('fau_person_markup')) {
  
      	$content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
-        $connection = get_post_meta($id, 'fau_person_connection', true);
-        if( $connection ) {            
-            foreach( $connection as $key => $value ) {
-            //_rrze_debug($value);
-                $connection_fields[$key] = sync_helper::get_fields($value, get_post_meta($value, 'fau_person_univis_id', true), 0);
-            }
-              //  _rrze_debug($connection_fields);
-        }
 
         extract($fields);
-        //_rrze_debug($fields);
 
         if ($streetAddress || $postalCode || $addressLocality || $addressCountry) {
             $contactpoint = '<li class="person-info-address"><span class="screen-reader-text">' . __('Adresse', FAU_PERSON_TEXTDOMAIN) . ': <br></span>';

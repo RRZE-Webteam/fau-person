@@ -174,7 +174,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
         'fields' => array(
             array(
                 'name' => __('Typ des Eintrags', FAU_PERSON_TEXTDOMAIN),
-                'desc' => __('Bei Einrichtungen und Pseudonymen wird die Bezeichnung angezeigt, ansonsten Vor- und Nachname.', FAU_PERSON_TEXTDOMAIN),
+                //'desc' => __('Bei Einrichtungen und Pseudonymen wird die Bezeichnung angezeigt, ansonsten Vor- und Nachname.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'select',
                 'options' => array('realperson' => __('Person (geschlechtsneutral)', FAU_PERSON_TEXTDOMAIN),
                     'realmale' => __('Männliche Person', FAU_PERSON_TEXTDOMAIN),
@@ -370,7 +370,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
     // Meta-Box Synchronisierung mit externen Daten - fau_person_sync ab hier
     $meta_boxes['fau_person_sync'] = array(
         'id' => 'fau_person_sync',
-        'title' => __('Datenimport', FAU_PERSON_TEXTDOMAIN),
+        'title' => __('Daten aus UnivIS', FAU_PERSON_TEXTDOMAIN),
         'pages' => array('person'), // post type
         'context' => 'side',
         'priority' => 'high',
@@ -378,53 +378,65 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
         'fields' => array(
             array(
                 'name' => __('UnivIS-ID', FAU_PERSON_TEXTDOMAIN),
-                'desc' => 'Die UnivIS-ID der Person, von der die Daten angezeigt werden sollen (8-stellige Zahl).',
+                //'desc' => 'UnivIS-ID der Person (8-stellige Zahl)',
                 'type' => 'text',
                 'id' => $prefix . 'univis_id',
                 'sanitization_cb' => 'validate_univis_id',
                 'show_on_cb' => 'show_on_person'
             ),
             array(
-                'name' => __('Daten aus UnivIS anzeigen', FAU_PERSON_TEXTDOMAIN),
-                'desc' => 'Zeige in der Ausgabe die Daten, die in UnivIS hinterlegt sind: Titel (Präfix), Vorname, Nachname, Titel (Suffix), Organisation bzw. Abteilung, Position/Funktion, Adresse, Telefon- und Telefaxnummer, E-Mail, Webseite). Die in diesen Feldern hier eingegebenen Werte werden in der Ausgabe nicht angezeigt.',
+                'name' => __('UnivIS-Daten in Ausgabe anzeigen', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Titel (Präfix), Vorname, Nachname, Titel (Suffix), Organisation bzw. Abteilung, Position/Funktion, Adresse, Telefon- und Telefaxnummer, E-Mail, Webseite. Die hier in diesen Feldern eingegebenen Werte werden in der Ausgabe nicht angezeigt.',
                 'type' => 'checkbox',
                 'id' => $prefix . 'univis_sync',
                 'before' => $univis_sync,
                 'show_on_cb' => 'show_on_person'
             ),
             array(
-                'name' => __('UnivIS-Org-Nr', FAU_PERSON_TEXTDOMAIN),
-                'desc' => 'Die UnivIS-Org-Nr der Einrichtung, von der die Daten angezeigt werden sollen.',
+                'name' => __('UnivIS-OrgNr', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Aktuell können noch keine Einrichtungsdaten aus UnivIS übernommen werden.',
                 'type' => 'text',
                 'id' => $prefix . 'univis_org_nr',
                 'show_on_cb' => 'show_on_einrichtung'
                 //'sanitization_cb' => 'validate_univis_id',
             ),
-            array(
-                'name' => __('Daten aus UnivIS anzeigen', FAU_PERSON_TEXTDOMAIN),
-                'desc' => 'Zeige in der Ausgabe die Daten, die in UnivIS hinterlegt sind: Adresse, Telefon- und Telefaxnummer, E-Mail, Webseite). Die in diesen Feldern hier eingegebenen Werte werden in der Ausgabe nicht angezeigt.',
+            /* array(
+                'name' => __('UnivIS-Daten in Ausgabe anzeigen', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Adresse, Telefon- und Telefaxnummer, E-Mail, Webseite. Die hier in diesen Feldern eingegebenen Werte werden in der Ausgabe nicht angezeigt.',
                 'type' => 'checkbox',
                 'id' => $prefix . 'univis_org_sync',
                 'before' => $univis_sync,
                 'show_on_cb' => 'show_on_einrichtung'
-            ),
+            ), */
+        )
+    );
+
+    // Meta-Box Synchronisierung mit externen Daten - fau_person_sync ab hier
+    $meta_boxes['fau_person_options'] = array(
+        'id' => 'fau_person_options',
+        'title' => __('Zusatzoptionen', FAU_PERSON_TEXTDOMAIN),
+        'pages' => array('person'), // post type
+        'context' => 'side',
+        'priority' => 'default',
+        'show_names' => true, // Show field names on the left
+        'fields' => array(
             array(
-                'name' => __('Standort-ID', FAU_PERSON_TEXTDOMAIN),
-                'desc' => 'Die ID des Standort-Eintrages, von dem die Daten angezeigt werden sollen.',
+                'name' => __('Zugeordneter Standort', FAU_PERSON_TEXTDOMAIN),
+                //'desc' => 'Der Standort, von dem die Daten angezeigt werden sollen.',
                 'type' => 'select',
                 'id' => $prefix . 'standort_id',
                 'options' => $standortselect,
             ),
             array(
-                'name' => __('Adresse aus Standort anzeigen', FAU_PERSON_TEXTDOMAIN),
-                'desc' => 'Zeige in der Ausgabe die Daten, die als Standort eingegeben wurden: Straße, Postleitzahl, Ort, Land). Die in diesen Feldern hier eingegebenen Werte werden in der Ausgabe nicht angezeigt.',
+                'name' => __('Standort-Daten in Ausgabe anzeigen', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Straße, Postleitzahl, Ort, Land. Die hier in diesen Feldern eingegebenen Werte werden in der Ausgabe nicht angezeigt.',
                 'type' => 'checkbox',
                 'id' => $prefix . 'standort_sync',
                 //'before' => $standort_sync,
             ),
         )
-    );
-
+    );    
+    
     // Meta-Box zur Anzeige der verfügbaren Kontakte auf post und page, um die Personen-ID schneller herauszufinden
     $meta_boxes['fau_person_post_metabox'] = array(
         'id' => 'fau_person_post_metabox',
@@ -447,38 +459,45 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
     // Meta-Box um eine Kontaktperson oder -Einrichtung zuzuordnen
     $meta_boxes['fau_person_connection'] = array(
         'id' => 'fau_person_connection',
-        'title' => __( 'Kontaktinformationen', FAU_PERSON_TEXTDOMAIN ),
+        'title' => __( 'Verknüpfte Kontakte', FAU_PERSON_TEXTDOMAIN ),
         'pages' => array('person'), // post type
         'context' => 'normal',
         'priority' => 'default',
         'show_names' => true, // Show field names on the left
         'fields' => array(
             array(
-                'name' => __('Art der Zugehörigkeit', FAU_PERSON_TEXTDOMAIN),
+                'name' => __('Art der Verknüpfung', FAU_PERSON_TEXTDOMAIN),
                 'desc' => __('Der hier eingegebene Text wird vor der Ausgabe des verknüpften Kontaktes angezeigt (z.B. Vorzimmer, Kontakt über).', FAU_PERSON_TEXTDOMAIN),
                 'id' => $prefix . 'connection_text',
                 'type' => 'text',
             ),
             array(
-                'name' => __('Zugeordneten Kontakt auswählen', FAU_PERSON_TEXTDOMAIN),
+                'name' => __('Verknüpfte Kontakte auswählen', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
-                'id' => $prefix . 'connection',
+                'id' => $prefix . 'connection_id',
                 'type' => 'select',
                 'options' => $contactselect_connection,
                 'repeatable' => true,
             ),    
             array(
-                'name' => __('Angezeigte Daten der zugeordneten Kontakte', FAU_PERSON_TEXTDOMAIN),
+                'name' => __('Angezeigte Daten der verknüpften Kontakte', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
-                'id' => $prefix . 'connection_anzeige',
+                'id' => $prefix . 'connection_options',
                 'type' => 'multicheck',
                 'options' => array(
-                    'adresse' => __('Adresse', FAU_PERSON_TEXTDOMAIN),
-                    'telefon' => __('Telefon', FAU_PERSON_TEXTDOMAIN),
-                    'fax' => __('Telefax', FAU_PERSON_TEXTDOMAIN),
+                    'contactPoint' => __('Adresse', FAU_PERSON_TEXTDOMAIN),
+                    'telephone' => __('Telefon', FAU_PERSON_TEXTDOMAIN),
+                    'faxNumber' => __('Telefax', FAU_PERSON_TEXTDOMAIN),
                     'email' => __('E-Mail', FAU_PERSON_TEXTDOMAIN),
-                    'sprechzeiten' => __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN),
+                    'hoursAvailable' => __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN),
                 )
+            ),
+            array(
+                'name' => __('Eigene Daten ausblenden', FAU_PERSON_TEXTDOMAIN),
+                'desc' => 'Ausschließlich die verknüpften Kontakte werden in der Ausgabe angezeigt.',
+                'type' => 'checkbox',
+                'id' => $prefix . 'connection_only',
+                //'before' => $standort_sync,
             ),
         )        
     );

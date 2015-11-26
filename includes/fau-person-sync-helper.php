@@ -47,6 +47,8 @@ class sync_helper {
         );            
         $fields_connection = array(
             'connection_text' => '',
+            'connection_only' => '',
+            'connection_options' => array(),
             'connection_honorificPrefix' => 'honorificPrefix',
             'connection_givenName' => 'givenName',
             'connection_familyName' => 'familyName',
@@ -58,7 +60,7 @@ class sync_helper {
             'connection_telephone' => 'telephone',
             'connection_faxNumber' => 'faxNumber',         
             'connection_email' => 'email',
-            'connection_sprechzeiten' => 'hoursAvailable',
+            'connection_hoursAvailable' => 'hoursAvailable',
         );
         foreach( $fields_univis as $key => $value ) {
             if( $univis_sync && array_key_exists( $value, $person ) ) {
@@ -129,7 +131,7 @@ class sync_helper {
             }
             $fields[$key] = $value;  
         }
-        $connections = get_post_meta($id, 'fau_person_connection', true);
+        $connections = get_post_meta($id, 'fau_person_connection_id', true);
         if( $connections ) {    
             $connection = array();
             foreach( $connections as $ckey => $cvalue ) {
@@ -137,9 +139,9 @@ class sync_helper {
             }
             foreach ($connection_fields as $key => $value) {    
                 foreach( $fields_connection as $fckey => $fcvalue ) {
-                    if($fckey == 'connection_text') {
+                    if( $fckey == 'connection_text' || $fckey == 'connection_only' || $fckey == 'connection_options' ) {
                         $value = get_post_meta($id, 'fau_person_'.$fckey, true);
-                        $connection[$key][$fckey] = $value;                   
+                        $fields[$fckey] = $value;                   
                     } else {
                         $value = $connection_fields[$key][$fcvalue];
                         $connection[$key][$fcvalue] = $value; 
