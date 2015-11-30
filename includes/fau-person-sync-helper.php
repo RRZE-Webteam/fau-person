@@ -55,12 +55,14 @@ class sync_helper {
             'connection_honorificSuffix' => 'honorificSuffix',
             'connection_streetAddress' => 'streetAddress',
             'connection_postalCode' => 'postalCode',
+            'connection_addressLocality' => 'addressLocality',
             'connection_addressCountry' => 'addressCountry',  
             'connection_workLocation' => 'workLocation',
             'connection_telephone' => 'telephone',
             'connection_faxNumber' => 'faxNumber',         
             'connection_email' => 'email',
             'connection_hoursAvailable' => 'hoursAvailable',
+            'connection_nr' => 'nr',
         );
         foreach( $fields_univis as $key => $value ) {
             if( $univis_sync && array_key_exists( $value, $person ) ) {
@@ -136,6 +138,8 @@ class sync_helper {
             $connection = array();
             foreach( $connections as $ckey => $cvalue ) {
                 $connection_fields[$ckey] = sync_helper::get_fields($cvalue, get_post_meta($cvalue, 'fau_person_univis_id', true), 0);
+                $connection_fields[$ckey]['nr'] = $cvalue;
+                //_rrze_debug($connection_fields);
             }
             foreach ($connection_fields as $key => $value) {    
                 foreach( $fields_connection as $fckey => $fcvalue ) {

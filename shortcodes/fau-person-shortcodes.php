@@ -368,7 +368,7 @@ if(!function_exists('fau_person_markup')) {
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
 
         extract($fields);
-
+                //_rrze_debug($connection_only);
         if ($streetAddress || $postalCode || $addressLocality || $addressCountry) {
             $contactpoint = '<li class="person-info-address"><span class="screen-reader-text">' . __('Adresse', FAU_PERSON_TEXTDOMAIN) . ': <br></span>';
             if ($streetAddress) {
@@ -390,7 +390,7 @@ if(!function_exists('fau_person_markup')) {
                     $contactpoint .= '<br>';
             }
             if ($addressCountry)
-                $contactpoint .= '<span class="person-info-country" itemprop="addressCountry">' . $addressCountry . '</span></';
+                $contactpoint .= '<span class="person-info-country" itemprop="addressCountry">' . $addressCountry . '</span>';
             $contactpoint .= '</li>';
         }
 
@@ -417,30 +417,32 @@ if(!function_exists('fau_person_markup')) {
             $content .= '</div>';
         }
         $content .= '<ul class="person-info">';
-        if ($jobTitle)
+        if ( $jobTitle )
             $content .= '<li class="person-info-position"><span class="screen-reader-text">' . __('Tätigkeit', FAU_PERSON_TEXTDOMAIN) . ': </span><strong><span itemprop="jobTitle">' . $jobTitle . '</span></strong></li>';
-        if ($worksFor)
+        if ( $worksFor )
             $content .= '<li class="person-info-institution"><span class="screen-reader-text">' . __('Organisation', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="worksFor">' . $worksFor . '</span></li>';
-        if ($department)
+        if ( $department )
             $content .= '<li class="person-info-abteilung"><span class="screen-reader-text">' . __('Abteilung', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="worksFor">' . $department . '</span></li>';
-        if ($telephone)
+        if ( $telephone && !empty( $connection_only ) )
             $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="telephone">' . $telephone . '</span></li>';
-        if ($faxNumber)
+        if ( $faxNumber && !empty( $connection_only ) )
             $content .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>';
-        if ($email)
+        if ( $email && !empty( $connection_only ) )
             $content .= '<li class="person-info-email"><span class="screen-reader-text">' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="email" href="mailto:' . strtolower($email) . '">' . strtolower($email) . '</a></li>';
-        if ($url)
+        if ( $url )
             $content .= '<li class="person-info-www"><span class="screen-reader-text">' . __('Webseite', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="url" href="' . $url . '">' . $url . '</a></li>';
-        if (!empty($contactpoint)) {
+        if ( !empty( $contactpoint ) && !empty( $connection_only ) ) {
             $content .= $contactpoint;
         }
-        if ($workLocation)
+        if ( $workLocation && !empty( $connection_only ) )
             $content .= '<li class="person-info-room"><span class="screen-reader-text">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' </span><span itemprop="workLocation">' . $workLocation . '</span></li>';
-        if ($hoursAvailable)
+        if ( $hoursAvailable && !empty( $connection_only ) )
             $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable">' . $hoursAvailable . '</span></li>';
-        if ($pubs)
+        if ( $pubs )
             $content .= '<li class="person-info-pubs"><span class="screen-reader-text">' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $pubs . '</li>';
         $content .= '</ul>';
+        if ( !empty($connection_text) || !empty($connection_options) || !empty($connections) )
+            $content .= fau_person_connection( $connection_text, $connection_options, $connections );
         $content .= '</div>';
 
 
@@ -587,5 +589,87 @@ if(!function_exists('fau_person_sidebar')) {
         }
         return $content;
 
+    }
+    
+    function fau_person_connection( $connection_text, $connection_options, $connections ) {
+        $content = '';
+        $fullname = '';
+        $contactpoint = '';
+        if( $connection_text ) {
+            $content .= '<h3 itemprop="name">' . $connection_text . '</h3>';
+        }
+  
+        foreach ($connections as $key => $value) {			           
+            $connections[$key]['honorificPrefix'] ? $honorificPrefix = $connections[$key]['honorificPrefix'] : $honorificPrefix = '';
+            $connections[$key]['givenName'] ? $givenName = $connections[$key]['givenName'] : $givenName = '';
+            $connections[$key]['familyName'] ? $familyName = $connections[$key]['familyName'] : $familyName = '';
+            $connections[$key]['honorificSuffix'] ? $honorificSuffix = $connections[$key]['honorificSuffix'] : $honorificSuffix = '';
+            $connections[$key]['streetAddress'] ? $streetAddress = $connections[$key]['streetAddress'] : $streetAddress = '';
+            $connections[$key]['postalCode'] ? $postalCode = $connections[$key]['postalCode'] : $postalCode = '';
+            $connections[$key]['addressLocality'] ? $addressLocality = $connections[$key]['addressLocality'] : $addressLocality = '';
+            $connections[$key]['addressCountry'] ? $addressCountry = $connections[$key]['addressCountry'] : $addressCountry = '';
+            $connections[$key]['workLocation'] ? $workLocation = $connections[$key]['workLocation'] : $workLocation = '';
+            $connections[$key]['telephone'] ? $telephone = $connections[$key]['telephone'] : $telephone = '';
+            $connections[$key]['faxNumber'] ? $faxNumber = $connections[$key]['faxNumber'] : $faxNumber = '';
+            $connections[$key]['email'] ? $email = $connections[$key]['email'] : $email = '';
+            $connections[$key]['hoursAvailable'] ? $hoursAvailable = $connections[$key]['hoursAvailable'] : $hoursAvailable = ''; 
+            $connections[$key]['nr'] ? $nr = $connections[$key]['nr'] : $nr = '';             
+            
+            if( $honorificPrefix )            $fullname .= '<span itemprop="honorificPrefix">'.$honorificPrefix."</span> ";
+                if( $givenName || $familyName ) {
+                    if( $givenName )          $fullname .= '<span itemprop="givenName">'.$givenName."</span> ";
+                    if( $familyName )         $fullname .= '<span itemprop="familyName">'.$familyName."</span>";
+                } elseif ( !empty( get_the_title( $nr ) ) ) {
+                    $fullname .= get_the_title($nr);
+                }
+                if( $honorificSuffix ) 	$fullname .= ', '.$honorificSuffix;
+                
+                
+            if ($streetAddress || $postalCode || $addressLocality || $addressCountry || $workLocation ) {
+                $contactpoint .= '<li class="person-info-address"><span class="screen-reader-text">' . __('Adresse', FAU_PERSON_TEXTDOMAIN) . ': </span>';
+            if ($streetAddress) {
+                $contactpoint .= '<span class="person-info-street" itemprop="streetAddress">' . $streetAddress . '</span>';
+                if ($postalCode || $addressLocality) {
+                    $contactpoint .= ', ';
+                } elseif ($addressCountry) {
+                    $contactpoint .= ', ';
+                }
+            }
+            if ($postalCode || $addressLocality) {
+                $contactpoint .= '<span class="person-info-city">';
+                if ($postalCode)
+                    $contactpoint .= '<span itemprop="postalCode">' . $postalCode . '</span> ';
+                if ($addressLocality)
+                    $contactpoint .= '<span itemprop="addressLocality">' . $addressLocality . '</span>';
+                $contactpoint .= '</span>';
+                if ($addressCountry)
+                    $contactpoint .= ', ';
+            }
+            if ($addressCountry)
+                $contactpoint .= '<span class="person-info-country" itemprop="addressCountry">' . $addressCountry . '</span>';
+            if($streetAddress || $postalCode || $addressLocality || $addressCountry || $workLocation ) {
+                $contactpoint .= ', ';
+            }
+            if ($workLocation)
+                $contactpoint .= '<span class="person-info-room"><span class="screen-reader-text">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' </span><span itemprop="workLocation">' . $workLocation . '</span></span>';
+            }    
+            $contactpoint .= '</li>';
+            
+            $content .= '<ul class="person-info">';
+                $content .= '<li itemprop="name">' . $fullname . '</li>';
+            if ( $telephone && in_array( 'telephone', $connection_options ) )
+                $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="telephone">' . $telephone . '</span></li>';
+            if ( $faxNumber && in_array( 'faxNumber', $connection_options ) )
+                $content .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>';
+            if ( $email && in_array( 'email', $connection_options ) )
+                $content .= '<li class="person-info-email"><span class="screen-reader-text">' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="email" href="mailto:' . strtolower($email) . '">' . strtolower($email) . '</a></li>';
+            if ( !empty( $contactpoint ) && in_array( 'contactPoint', $connection_options ) )
+                $content .= $contactpoint;
+            if ( $hoursAvailable && in_array( 'hoursAvailable', $connection_options ) )
+                $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable">' . $hoursAvailable . '</span></li>';            $content .= '</ul>';
+            $content .= '</ul>';    
+                
+        }        
+        return $content;
     }
 }
