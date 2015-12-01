@@ -459,7 +459,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
     // Meta-Box um eine Kontaktperson oder -Einrichtung zuzuordnen
     $meta_boxes['fau_person_connection'] = array(
         'id' => 'fau_person_connection',
-        'title' => __( 'Verknüpfte Kontakte', FAU_PERSON_TEXTDOMAIN ),
+        'title' => __( 'Ansprechpartner / verknüpfte Kontakte', FAU_PERSON_TEXTDOMAIN ),
         'pages' => array('person'), // post type
         'context' => 'normal',
         'priority' => 'default',

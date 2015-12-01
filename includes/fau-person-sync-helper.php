@@ -1,8 +1,8 @@
 <?php
 
 class sync_helper {
-    //gibt die Werte der Person an, Inhalte abhängig von UnivIS, Übergabewerte: ID der Person, UnivIS-ID der Person, Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular
-    public static function get_fields( $id, $univis_id, $defaults ) {
+    //gibt die Werte der Person an, Inhalte abhängig von UnivIS, Übergabewerte: ID der Person, UnivIS-ID der Person, Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular, $ignore_connection=1 wenn die verknüpften Kontakte einer Person ignoriert werden sollen (z.B. wenn die Person selbst schon eine verknüpfte Kontaktperson ist)
+    public static function get_fields( $id, $univis_id, $defaults, $ignore_connection=0 ) {
         $univis_sync = 0;
         $person = array();
         if( $univis_id && class_exists( 'Univis_Data' ) ) {
@@ -133,11 +133,12 @@ class sync_helper {
             }
             $fields[$key] = $value;  
         }
-        $connections = get_post_meta($id, 'fau_person_connection_id', true);
-        if( $connections ) {    
+        if( !$ignore_connection ) 
+            $connections = get_post_meta($id, 'fau_person_connection_id', true);
+        if( !empty( $connections ) ) {    
             $connection = array();
             foreach( $connections as $ckey => $cvalue ) {
-                $connection_fields[$ckey] = sync_helper::get_fields($cvalue, get_post_meta($cvalue, 'fau_person_univis_id', true), 0);
+                $connection_fields[$ckey] = sync_helper::get_fields($cvalue, get_post_meta($cvalue, 'fau_person_univis_id', true), 0, 1);
                 $connection_fields[$ckey]['nr'] = $cvalue;
                 //_rrze_debug($connection_fields);
             }
