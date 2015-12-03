@@ -33,11 +33,20 @@
         
         $shortlist = '';    
         $sidebar = '';
+        $compactindex = '';
         $page = '';
         $list = '';
         $showvia = '';
         if ( !empty( $format ) ) {         
-            //name, sidebar, index, page, plain, 
+            //format-Parameter: 
+            //name (Alternativ shortlist, $shortlist = 1), 
+            //liste ($list = 1 und $showlist = 1), wie Name nur mit Aufzählungszeichen, 
+            //sidebar ($showsidebar, $sidebar, $showabteilung, $showtitle, $showsuffix, $showtelefon, $showmail, $showwebsite, $showdescription, $showthumb = 1), 
+            //index (keine Formatangabe, default-Wert), 
+            //page (Alternativ full, $page = 1), 
+            //plain, 
+            //table,
+            //accordion,
             if( $format == 'name' || $format == 'shortlist' )   $shortlist = 1;
             if( $format == 'sidebar' ) {
                 $showsidebar = 1;
@@ -60,10 +69,32 @@
                 $showthumb = 1;
             }
             if( $format == 'full' || $format == 'page' )        $page = 1;
-            if( $format == 'liste' ) {
+            if( $format == 'liste'  || $format == 'listentry' ) {
                 $list = 1;
                 $showlist = 1;
             }
+            if( $format == 'plain' ) {
+                $showlist = 0;
+                $showinstitution = 0;   
+                $showabteilung = 0;  
+                $showposition = 0;
+                $showtitle = 0;    
+                $showsuffix = 0;  
+                $showaddress = 0;            
+                $showroom = 0;  
+                $showtelefon = 0;             
+                $showfax = 0;
+                $showmobile = 0;
+                $showmail = 0; 
+                $showwebsite = 0;            
+                $showlink = 0;
+                $showdescription = 0;
+                $showoffice = 0;
+                $showpubs = 0;
+                $showthumb = 0;         
+                $showvia = 0;
+            }          
+            if( $format == 'kompakt' || $format == 'compactindex' )       $compactindex = 1;
         }     
         //Wenn neue Felder dazukommen, hier die Anzeigeoptionen auch mit einstellen
         if (!empty($show)) {
@@ -111,8 +142,8 @@
             if( in_array( 'ansprechpartner', $hide ) )  $showvia = 0;
         }
                 
-        if (empty($id)) {
-            if (empty($slug)) {
+        if ( empty( $id ) ) {
+            if ( empty( $slug ) ) {
                 return '<p>' . sprintf(__('Bitte geben Sie den Titel oder die ID des Kontakteintrags an.', FAU_PERSON_TEXTDOMAIN), $slug) . '</p>';
             } else {
                 $posts = get_posts(array('name' => $slug, 'post_type' => 'person', 'post_status' => 'publish'));
@@ -125,20 +156,22 @@
             }
         }
 
-        if (!empty($id)) {
+        if ( !empty( $id ) ) {
 
-            $list_ids = explode(',', $id);
             if ( $shortlist ) {
                 $liste = '<span class="person liste-person" itemscope itemtype="http://schema.org/Person">';
-            } elseif ( $page ) {
-                $liste = '';
+            //} elseif ( $page ) {
+            //    $liste = '';
             } elseif ( $list ) {
                 $liste = '<ul class="person liste-person" itemscope itemtype="http://schema.org/Person">';
-                $liste .= "\n";              
+                $liste .= "\n";    
             } else {
-                $liste = '<p>';
+                $liste = '';
+                // Herausgenommen da vermutlich nicht nötig
+                //$liste = '<p>';
             }
 
+            $list_ids = explode(',', $id);
             $number = count($list_ids);   
             $i = 1;
             foreach ($list_ids as $value) {
@@ -155,6 +188,8 @@
                         $content .= "</li>\n";
                     } elseif ( $sidebar ) {
                         $liste .= fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia);
+                    } elseif ( $compactindex ) {
+                        $liste .= fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex);  
                     } else {
                         $liste .= fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia);
                     }
@@ -173,7 +208,9 @@
                 if ( $post->post_content ) $content = wpautop( $post->post_content );  
                 $liste .= $content;
             } else {
-                $liste .= "</p>\n";                
+                $liste .= '';
+                //herausgenommen da vermutlich nicht nötig
+                //$liste .= "</p>\n";                
             } 
             return $liste;
             
@@ -232,7 +269,7 @@
 
 if(!function_exists('fau_person_markup')) {
 
-    function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia) {
+    function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex=0) {
         $fields = sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true), 0 );
         extract($fields);
         if( $showvia !== 0 && $connections )                    $showvia = 1;
@@ -292,7 +329,8 @@ if(!function_exists('fau_person_markup')) {
             $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
         
                     
-        $content = '<div class="person content-person" itemscope itemtype="http://schema.org/Person">';			
+        $content = '<div class="person content-person" itemscope itemtype="http://schema.org/Person">';	
+        if( $compactindex )     $content .= '<div class= "compactindex';
         $content .= '<div class="row">';
 
         if($showthumb) {
@@ -361,6 +399,7 @@ if(!function_exists('fau_person_markup')) {
             $content .= '</div>';
         }
         $content .= '</div>';
+        if( $compactindex )     $content .= '</div>';
         $content .= '</div>';
         return $content;
     }
