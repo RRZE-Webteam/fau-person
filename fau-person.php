@@ -88,7 +88,8 @@ class FAU_Person {
         
         add_action( 'init', array (__CLASS__, 'register_standort_post_type' ) );
         //add_action( 'restrict_manage_posts', array( $this, 'standort_restrict_manage_posts' ) );
-        
+
+        add_action('admin_menu' , array( $this, 'person_menu_subpages' )); 
         add_action( 'admin_menu', array( $this, 'add_help_tabs' ) );
         add_action( 'admin_menu', array( $this, 'add_options_pages' ) );
         add_action( 'admin_init', array( $this, 'admin_init' ) );
@@ -108,8 +109,7 @@ class FAU_Person {
         
         //Excerpt-Meta-Box umbenennen
         add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));
-        
-        add_action('admin_menu' , array( $this, 'person_menu_subpages' ));        
+              
           
     }
 
@@ -517,6 +517,7 @@ public function adding_custom_meta_boxes( $post ) {
     }    
     
     public function person_menu_subpages() {
+        //remove_submenu_page('edit.php?post_type=person', 'load-post-new.php');
         // Personen mit oder ohne bestimmte Funktionen. Andere Ansprechpartner (aus der Rubrik Kontakt) und Standorte können diesen zugeordnet werden
         add_submenu_page('edit.php?post_type=person', __('Person hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neue Person', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_person', array( $this, 'add_person_types' ));
         // Kontakte, z.B. Vorzimmer, Sekretariat, Abteilungen. Hier sind Ansprechpartner aus den Personen zuordenbar, wird direkt über CPT angezeigt
