@@ -170,7 +170,7 @@
                 $liste .= "</ul>\n";
             } elseif ( $page ) {
                 $post = get_post( $id );
-                if ( $post->post_content ) $content = wpautop($post->post_content);  
+                if ( $post->post_content ) $content = wpautop( $post->post_content );  
                 $liste .= $content;
             } else {
                 $liste .= "</p>\n";                
@@ -235,7 +235,9 @@ if(!function_exists('fau_person_markup')) {
     function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia) {
         $fields = sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true), 0 );
         extract($fields);
-        if( $showvia !== 0 && $connections )        $showvia = 1;
+        if( $showvia !== 0 && $connections )                    $showvia = 1;
+        if( $showvia === 0 && !empty( $connection_only ) )      $connection_only = '';
+ 
 	$type = get_post_meta($id, 'fau_person_typ', true);
 
         if( $link ) {
@@ -500,7 +502,9 @@ if(!function_exists('fau_person_sidebar')) {
 
             $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
             extract($fields);
-
+            if( $showvia !== 0 && $connections )                    $showvia = 1;
+            if( $showvia === 0 && !empty( $connection_only ) )      $connection_only = '';
+            
             if( $link ) {
                 $personlink = $link;
             } else {
@@ -583,7 +587,7 @@ if(!function_exists('fau_person_sidebar')) {
             if ($workLocation && $showoffice && empty( $connection_only ) )
                 $content .= '<li class="person-info-room"><span class="screen-reader-text">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' </span><span itemprop="workLocation">' . $workLocation . '</span></li>';
             $content .= '</ul>';
-            if ( !empty($connection_text) || !empty($connection_options) || !empty($connections) )
+            if ( ( !empty($connection_text) || !empty($connection_options) || !empty($connections) ) && $showvia===1  )
                 $content .= fau_person_connection( $connection_text, $connection_options, $connections );
             if ($description && $showdescription)
                 $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $description . '</div>';
