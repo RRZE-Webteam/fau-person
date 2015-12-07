@@ -173,19 +173,6 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
         'show_names' => true, // Show field names on the left
         'fields' => array(
             array(
-                'name' => __('Typ des Eintrags', FAU_PERSON_TEXTDOMAIN),
-                //'desc' => __('Bei Einrichtungen und Pseudonymen wird die Bezeichnung angezeigt, ansonsten Vor- und Nachname.', FAU_PERSON_TEXTDOMAIN),
-                'type' => 'select',
-                'options' => array('realperson' => __('Person (geschlechtsneutral)', FAU_PERSON_TEXTDOMAIN),
-                    'realmale' => __('Männliche Person', FAU_PERSON_TEXTDOMAIN),
-                    'realfemale' => __('Weibliche Person', FAU_PERSON_TEXTDOMAIN),
-                    'einrichtung' => __('Einrichtung', FAU_PERSON_TEXTDOMAIN),
-                    'pseudo' => __('Pseudonym', FAU_PERSON_TEXTDOMAIN),
-                ),
-                'id' => $prefix . 'typ',
-                'default' => $default_fau_person_typ
-            ),
-            array(
                 'name' => __('Titel (Präfix)', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
                 'type' => 'select',
@@ -277,7 +264,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'options' => array(
                     'erl' => __('Uni-intern, Standort Erlangen', FAU_PERSON_TEXTDOMAIN),
                     'nbg' => __('Uni-intern, Standort Nürnberg', FAU_PERSON_TEXTDOMAIN),
-                    'standard' => __('Außerhalb der Universität', FAU_PERSON_TEXTDOMAIN)
+                    'standard' => __('Allgemeine Rufnummer', FAU_PERSON_TEXTDOMAIN)
                 )
             ),
             array(
@@ -420,6 +407,19 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
         'priority' => 'default',
         'show_names' => true, // Show field names on the left
         'fields' => array(
+            array(
+                'name' => __('Typ des Eintrags', FAU_PERSON_TEXTDOMAIN),
+                //'desc' => __('Bei Einrichtungen und Pseudonymen wird die Bezeichnung angezeigt, ansonsten Vor- und Nachname.', FAU_PERSON_TEXTDOMAIN),
+                'type' => 'select',
+                'options' => array('realperson' => __('Person (allgemein)', FAU_PERSON_TEXTDOMAIN),
+                    'realmale' => __('Person (männlich)', FAU_PERSON_TEXTDOMAIN),
+                    'realfemale' => __('Person (weiblich)', FAU_PERSON_TEXTDOMAIN),
+                    'einrichtung' => __('Einrichtung', FAU_PERSON_TEXTDOMAIN),
+                    'pseudo' => __('Pseudonym', FAU_PERSON_TEXTDOMAIN),
+                ),
+                'id' => $prefix . 'typ',
+                'default' => $default_fau_person_typ
+            ),
             array(
                 'name' => __('Zugeordneter Standort', FAU_PERSON_TEXTDOMAIN),
                 //'desc' => 'Der Standort, von dem die Daten angezeigt werden sollen.',
