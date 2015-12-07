@@ -105,7 +105,8 @@ class FAU_Person {
         add_filter( 'manage_person_posts_columns', array( $this, 'change_columns' ));
         add_action( 'manage_person_posts_custom_column', array( $this, 'custom_columns'), 10, 2 ); 
         // Sortierung der zusätzlichen Spalte
-        //add_filter( 'manage_edit-person_sortable_columns', array( $this, 'sortable_columns' ));
+        add_filter( 'manage_edit-person_sortable_columns', array( $this, 'sortable_columns' ));
+        add_action( 'pre_get_posts', array( $this, 'custom_columns_orderby') );
         
         //Excerpt-Meta-Box umbenennen
         add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));
@@ -645,16 +646,16 @@ public function adding_custom_meta_boxes( $post ) {
                 $typ = get_post_meta( $post_id, 'fau_person_typ', true);
                 switch ( $typ ) {
                     case 'realperson':
-                        $typ = __('Person (geschlechtsneutral)', FAU_PERSON_TEXTDOMAIN);
+                        $typ = __('Person (allgemein)', FAU_PERSON_TEXTDOMAIN);
                         break;
                     case 'realmale':
-                        $typ = __('Männliche Person', FAU_PERSON_TEXTDOMAIN);
+                        $typ = __('Person (männlich)', FAU_PERSON_TEXTDOMAIN);
                         break;
                     case 'realfemale':
-                        $typ = __('Weibliche Person', FAU_PERSON_TEXTDOMAIN);
+                        $typ = __('Person (weiblich)', FAU_PERSON_TEXTDOMAIN);
                         break;
                     case 'pseudo':
-                        $typ = __('Pseudonym', FAU_PERSON_TEXTDOMAIN);
+                        $typ = __('Einrichtung (Pseudonym)', FAU_PERSON_TEXTDOMAIN);
                         break;
                     case 'einrichtung':
                         $typ = __('Einrichtung', FAU_PERSON_TEXTDOMAIN);
@@ -666,13 +667,26 @@ public function adding_custom_meta_boxes( $post ) {
     }
     
     // Make these columns sortable
-    public function sortable_columns() {
-	return array(
-	    //'title' => 'title',
+    public function sortable_columns( $columns ) {
+	$columns = array(
+	    'title' => 'title',
 	    'typ' => 'typ',
-	    //'date' => 'date'
+	    'date' => 'date'
 	);
+        return $columns;
     }	
+    
+    public function custom_columns_orderby( $query ) {
+        if( ! is_admin() )
+            return;
+ 
+        $orderby = $query->get( 'orderby' );
+ 
+        if( 'typ' == $orderby ) {
+            $query->set('meta_key','fau_person_typ');
+            $query->set('orderby','meta_value');
+        }        
+    }
     
     public function include_template_function($template_path) {
         global $post;
