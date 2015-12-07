@@ -79,12 +79,43 @@ class sync_helper {
         foreach( $fields_univis_location as $key => $value ) {
             if( $univis_sync && array_key_exists( 'locations', $person ) && array_key_exists( 'location', $person['locations'][0] ) ) {
                 $person_location = $person['locations'][0]['location'][0];
-                $value = self::sync_univis( $id, $person_location, $key, $value, $defaults );
+                
+                if($key == 'telephone' && !$defaults) {
+                    $phone_number = self::sync_univis( $id, $person_location, $key, $value, $defaults );
+                    switch ( get_post_meta($id, 'fau_person_telephone_select', true) ) {
+                        case 'erl':
+                            $value = self::correct_phone_number($phone_number, 'erl');
+                            break;
+                        case 'nbg':
+                            $value = self::correct_phone_number($phone_number, 'nbg');                        
+                            break;
+                        default:
+                            $value = $phone_number;                        
+                            break;
+                    }                    
+                } else {
+                    $value = self::sync_univis( $id, $person_location, $key, $value, $defaults );
+                }
             } else {
                 if( $defaults ) {
                     $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);
                 } else {
-                    $value = get_post_meta($id, 'fau_person_'.$key, true);
+                    if($key == 'telephone') {
+                        $phone_number = get_post_meta($id, 'fau_person_'.$key, true);
+                        switch ( get_post_meta($id, 'fau_person_telephone_select', true) ) {
+                        case 'erl':
+                            $value = self::correct_phone_number($phone_number, 'erl');
+                            break;
+                        case 'nbg':
+                            $value = self::correct_phone_number($phone_number, 'nbg');                        
+                            break;
+                        default:
+                            $value = $phone_number;                        
+                            break;
+                        }
+                    } else {                    
+                        $value = get_post_meta($id, 'fau_person_'.$key, true);
+                    }
                 }
             }
             $fields[$key] = $value;
@@ -140,7 +171,6 @@ class sync_helper {
             foreach( $connections as $ckey => $cvalue ) {
                 $connection_fields[$ckey] = sync_helper::get_fields($cvalue, get_post_meta($cvalue, 'fau_person_univis_id', true), 0, 1);
                 $connection_fields[$ckey]['nr'] = $cvalue;
-                //_rrze_debug($connection_fields);
             }
             foreach ($connection_fields as $key => $value) {    
                 foreach( $fields_connection as $fckey => $fcvalue ) {
@@ -202,6 +232,29 @@ class sync_helper {
             }
         }
         return $val;        
+    }
+    
+    public static function correct_phone_number( $phone_number, $location ) {
+        $phone_data = preg_replace( '/\D/', '', $phone_number );
+        switch( $location ) {
+            case 'erl':
+                $vorwahl = '+49 9131 85-';
+                if( strlen($phone_data) == 5 ) {
+                    $phone_number = $vorwahl . $phone_data;
+                } elseif ( strlen($phone_data) > 5 && strpos( $phone_data, '913185') !== FALSE ) {
+                    $phone_number = $vorwahl . substr($phone_data, -5);
+                }
+                break;
+            case 'nbg':
+                $vorwahl = '+49 911 5302-';
+                if( strlen($phone_data) == 3 ) {
+                    $phone_number = $vorwahl . $phone_data;
+                } elseif ( strlen($phone_data) > 3 && strpos( $phone_data, '9115302') !== FALSE ) {
+                    $phone_number = $vorwahl . substr($phone_data, -3);
+                } 
+                break;
+        }
+        return $phone_number;
     }
 
        
