@@ -4,7 +4,7 @@
  Plugin Name: FAU Person
  Plugin URI: https://github.com/RRZE-Webteam/fau-person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 1.3.0
+ * Version: 2.0
  * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -191,27 +191,40 @@ public function adding_custom_meta_boxes( $post ) {
     }
     
    public function get_contactdata( $connection=0 ) {      
-         $args = array(
+        $args = array(
             'post_type' => 'person',
-            'numberposts' => -1
+            'numberposts' => -1,
+            'meta_key' => 'fau_person_typ'
         );
 
 	$personlist = get_posts($args);
-      
+
         if( $personlist ) {  
             foreach( $personlist as $key => $value) {
                 $personlist[$key] = (array) $personlist[$key];
-                $name = $personlist[$key]['post_title'];
-                if(strpos($name, ' ')) {
-                    $lastname = ltrim(strrchr($name, ' '));
+                if( get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realperson' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realmale' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realfemale' ) {
+                    $name = $personlist[$key]['post_title'];
+                    if( ltrim( strpos( $name, ' ' ) ) ) {
+                        $lastname = ltrim( strrchr( $name, ' ' ) );
+                        $firstname = ltrim( str_replace( $lastname, '', $name ) );
+                    } else {
+                        $lastname = $name;
+                        $firstname = '';
+                    }
                 } else {
-                    $lastname = $name;
+                    $lastname = $personlist[$key]['post_title'];
+                    $firstname = '';
                 }
                 $personlist[$key]['lastname'] = $lastname;
+                $personlist[$key]['firstname'] = $firstname;
             }
+ 
             $personlist = $this->array_orderby( $personlist, "lastname", SORT_ASC );
+        
             foreach( $personlist as $key => $value) {
-                $contactselect[ $personlist[$key]['ID'] ] = $personlist[$key]['ID'] . ', ' . $personlist[$key]['post_title'];                
+                $fullname = $personlist[$key]['ID'] . ': ' . $personlist[$key]['lastname'];
+                if( !empty( $personlist[$key]['firstname'] ) )  $fullname .= ', ' . $personlist[$key]['firstname'];          
+                $contactselect[ $personlist[$key]['ID'] ] = $fullname;
             }
             if ( $connection ) {
                 $contactselect = array( '0' => __('Kein Kontakt ausgewählt.', FAU_PERSON_TEXTDOMAIN) ) + $contactselect;
@@ -559,9 +572,10 @@ public function adding_custom_meta_boxes( $post ) {
     }
     
     private static function add_shortcodes() {     
-        add_shortcode('person', 'fau_person' );
-        add_shortcode('persons', 'fau_persons');
-        add_shortcode('standort', 'fau_person');
+        add_shortcode( 'person', 'fau_person' );
+        add_shortcode( 'kontakt', 'fau_person' );
+        add_shortcode( 'persons', 'fau_persons' );
+        add_shortcode( 'standort', 'fau_person' );
     }
 
     public static function register_person_post_type() {
