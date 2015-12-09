@@ -23,9 +23,9 @@ Funktionsweise:
 #####Shortcode person (css-Klassen an FAU-Webauftritt angepasst)
 ######Beispiel:  
 Kontakte können mit Angabe der WordPress-ID abgerufen werden:
-[person id="12345"]
+[kontakt id="12345"] (oder [person id="12345"])
 
-(alternativ auch Angabe des Titels des eingetragenen Kontaktes möglich, aber nicht empfehlenswert, da nicht zuverlässig - hier Max Mustermann: [person slug='Max Mustermann'])  
+(alternativ auch Angabe des Titels des eingetragenen Kontaktes möglich, aber nicht empfehlenswert, da nicht zuverlässig - hier Max Mustermann: [kontakt slug='Max Mustermann'])  
 
 Eingabe mehrerer ids möglich (kommasepariert, z. B. id="42, 44, 56") für die Anzeige mehrerer Personen mit gleichen Shortcode-Parametern     
 
@@ -34,19 +34,31 @@ Eingabe mehrerer ids möglich (kommasepariert, z. B. id="42, 44, 56") für die A
 - show (nur anzugeben, wenn ein zusätzliches Feld zu den Standardfeldern angezeigt werden soll), hide (nur anzugeben, wenn die Anzeige eines Standardfeldes nicht gewünscht ist)    
 Folgende Werte können eingegeben werden:    
 kurzbeschreibung, organisation, abteilung, position, titel, suffix, adresse, raum, telefon, fax, mobil, mail, webseite, mehrlink, kurzauszug, sprechzeiten, publikationen, bild     
-Beispiel: [person id="12345" show="adresse, raum, sprechzeiten" hide="position, telefon"]    
+Beispiel: [kontakt id="12345" show="adresse, raum, sprechzeiten" hide="position, telefon"]    
 
 - format: je nach Wert unterscheidet sich die Ausgabedarstellung und die angezeigten Standardparameter:    
 name: Ausgabe von Titel, Vorname, Nachname und Suffix (sofern vorhanden) im Fließtext mit Link auf die Kontaktseite der Person    
 page: vollständige Ausgabe des ganzen Kontaktes wie bei der Kontakt-Einzelseite, die Parameter show und hide haben hierauf keinen Einfluss    
 sidebar: Ausgabe wie bei der Anzeige in der Sidebar im Theme    
 liste: Ausgabe der Namen mit Listenpunkten, unten drunter Kurzbeschreibung    
-Beispiel: [person id="42, 44, 56" format="name"]
+Beispiel: [kontakt id="42, 44, 56" format="name"]
 
 #####Vorlage zur Singledarstellung: templates/single-person.php
 kann gerne ins eigene Theme übernommen und daran angepasst werden, beigefügte Vorlage ist an FAU-Fakultätsthemes angepasst
 Es wird zuerst im Theme geschaut, ob eine single-person.php vorhanden ist, wenn ja wird die genommen, ansonsten die vom Plugin
 
+####Version 2.0:
+
+- Alternativ auch Shortcode kontakt statt person verwendbar      
+- Zusätzlich zu den Personen können auch Standortdaten als Eingabehilfe angegeben werden
+- Erweiterung um Ansprechpartner (verknüpfte Kontakte), Anzeigeoptionen im Kontakteingabeformular einstellbar, im Shortcode werden diese anhand der dort ausgewählten Optionen standardmäßig angezeigt, ausblendbar über hide="ansprechpartner"    
+- Sortierung der Auswahlbox zur ID-Findung optimiert nach Personen und Einrichtungen       
+- Telefonnummern werden bei Auswahl von uni-internen Standorten korrekt formatiert (auch nur Angabe der Durchwahl möglich, auch bei Anzeige der UnivIS-Daten soweit möglich), bei Auswahl "Allgemeine Rufnummer" wird einfach der Feldinhalt unformatiert angezeigt     
+- Anzeige der Adresse auch von einem vorhandenen Standort aus möglich    
+
+####Version 1.3:
+
+- Für die UnivIS-Anbindung ist kein zusätzliches Plugin mehr nötig    
 
 ####Version 1.2.9:
 
