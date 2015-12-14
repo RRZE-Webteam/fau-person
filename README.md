@@ -22,8 +22,8 @@ Funktionsweise:
 
 #####Shortcode person (css-Klassen an FAU-Webauftritt angepasst)
 ######Beispiel:  
-Kontakte können mit Angabe der WordPress-ID abgerufen werden:
-[kontakt id="12345"] (oder [person id="12345"])
+Kontakte können mit Angabe der WordPress-Kontakt-ID abgerufen werden:
+[kontakt id="12345"], ehemals [person id="12345"]
 
 (alternativ auch Angabe des Titels des eingetragenen Kontaktes möglich, aber nicht empfehlenswert, da nicht zuverlässig - hier Max Mustermann: [kontakt slug='Max Mustermann'])  
 
