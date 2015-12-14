@@ -1,9 +1,10 @@
 <?php
 
 /**
- * Plugin Name: FAU Person
+ Plugin Name: FAU Person
+ Plugin URI: https://github.com/RRZE-Webteam/fau-person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 1.3.0
+ * Version: 2.0
  * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -32,8 +33,11 @@ register_deactivation_hook(__FILE__, array('FAU_Person', 'deactivation'));
 
 require_once('includes/fau-person-sync-helper.php'); 
 require_once('shortcodes/fau-person-shortcodes.php');     
+require_once('includes/fau-standort-sync-helper.php'); 
+require_once('shortcodes/fau-standort-shortcodes.php');  
 //require_once('metaboxes/fau-person-metaboxes.php');
 require_once('widgets/fau-person-widget.php');
+
 
 
 
@@ -81,6 +85,11 @@ class FAU_Person {
         add_action( 'init', array (__CLASS__, 'register_person_post_type' ) );
         add_action( 'init', array( $this, 'register_persons_taxonomy' ) );
         add_action( 'restrict_manage_posts', array( $this, 'person_restrict_manage_posts' ) );
+        
+        add_action( 'init', array (__CLASS__, 'register_standort_post_type' ) );
+        //add_action( 'restrict_manage_posts', array( $this, 'standort_restrict_manage_posts' ) );
+
+        add_action('admin_menu' , array( $this, 'person_menu_subpages' )); 
         add_action( 'admin_menu', array( $this, 'add_help_tabs' ) );
         add_action( 'admin_menu', array( $this, 'add_options_pages' ) );
         add_action( 'admin_init', array( $this, 'admin_init' ) );
@@ -89,33 +98,60 @@ class FAU_Person {
 	add_action( 'admin_init', array($this, 'person_shortcodes_rte_button' ) );     
         
         add_filter( 'single_template', array( $this, 'include_template_function' ) );
-
-        self::add_shortcodes();
-       
+        
+        self::add_shortcodes();        
+        
+        // Kontakttyp als zusätzliche Spalte in Übersicht
+        add_filter( 'manage_person_posts_columns', array( $this, 'change_columns' ));
+        add_action( 'manage_person_posts_custom_column', array( $this, 'custom_columns'), 10, 2 ); 
+        // Sortierung der zusätzlichen Spalte
+        add_filter( 'manage_edit-person_sortable_columns', array( $this, 'sortable_columns' ));
+        add_action( 'pre_get_posts', array( $this, 'custom_columns_orderby') );
+        
         //Excerpt-Meta-Box umbenennen
-        add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));        
+        add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));
+              
+          
     }
+
+    
+public function adding_custom_meta_boxes( $post ) {
+    add_meta_box( 
+        'my-meta-box',
+        __( 'My Meta Box' ),
+        'render_my_meta_box',
+        'post',
+        'normal',
+        'default'
+    );
+}
+ 
     
     public static function activation() {
 
         self::version_compare();
         
         self::register_person_post_type();
+        self::register_standort_post_type();
         flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind
 
         self::$options = self::get_options();  
         
         // CPT-Capabilities für die Administrator-Rolle zuweisen
         // 
-        $caps = self::get_caps('person');
-        self::add_caps('administrator', $caps);
+        $caps_person = self::get_caps('person');
+        self::add_caps('administrator', $caps_person);
+        $caps_standort = self::get_caps('standort');
+        self::add_caps('administrator', $caps_standort);
         //self::add_caps('editor', $caps);       
     }
     
     public static function deactivation() {       
         // CPT-Capabilities aus der Administrator-Rolle entfernen
-            $caps = self::get_caps('person');
-            self::remove_caps('administrator', $caps);
+            $caps_person = self::get_caps('person');
+            self::remove_caps('administrator', $caps_person);
+            $caps_standort = self::get_caps('standort');
+            self::remove_caps('administrator', $caps_standort);
             //self::remove_caps('editor', $caps);
             flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind
     
@@ -154,33 +190,70 @@ class FAU_Person {
         return $options;
     }
     
-   public function get_contactdata() {      
-         $args = array(
+   public function get_contactdata( $connection=0 ) {      
+        $args = array(
             'post_type' => 'person',
-            'numberposts' => -1
+            'numberposts' => -1,
+            'meta_key' => 'fau_person_typ'
         );
 
 	$personlist = get_posts($args);
-      
+
         if( $personlist ) {  
             foreach( $personlist as $key => $value) {
-                $personlist[$key] = (array)$personlist[$key];
-                $name = $personlist[$key]['post_title'];
-                if(strpos($name, ' ')) {
-                    $lastname = ltrim(strrchr($name, ' '));
+                $personlist[$key] = (array) $personlist[$key];
+                if( get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realperson' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realmale' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realfemale' ) {
+                    $name = $personlist[$key]['post_title'];
+                    if( ltrim( strpos( $name, ' ' ) ) ) {
+                        $lastname = ltrim( strrchr( $name, ' ' ) );
+                        $firstname = ltrim( str_replace( $lastname, '', $name ) );
+                    } else {
+                        $lastname = $name;
+                        $firstname = '';
+                    }
                 } else {
-                    $lastname = $name;
+                    $lastname = $personlist[$key]['post_title'];
+                    $firstname = '';
                 }
                 $personlist[$key]['lastname'] = $lastname;
+                $personlist[$key]['firstname'] = $firstname;
             }
+ 
             $personlist = $this->array_orderby( $personlist, "lastname", SORT_ASC );
+        
             foreach( $personlist as $key => $value) {
-                $contactselect[] = $personlist[$key]['ID'] . ', ' . $personlist[$key]['post_title'];                
-            }   
+                $fullname = $personlist[$key]['ID'] . ': ' . $personlist[$key]['lastname'];
+                if( !empty( $personlist[$key]['firstname'] ) )  $fullname .= ', ' . $personlist[$key]['firstname'];          
+                $contactselect[ $personlist[$key]['ID'] ] = $fullname;
+            }
+            if ( $connection ) {
+                $contactselect = array( '0' => __('Kein Kontakt ausgewählt.', FAU_PERSON_TEXTDOMAIN) ) + $contactselect;
+            }
         } else {
-            $contactselect = __('Sie haben noch keine Kontakte eingepflegt.', FAU_PERSON_TEXTDOMAIN);
+            $contactselect[0] = __('Noch keine Kontakte eingepflegt.', FAU_PERSON_TEXTDOMAIN);
         }
         return $contactselect;  
+    }
+    
+    public function get_standortdata() {      
+         $args = array(
+            'post_type' => 'standort',
+            'numberposts' => -1
+        );
+
+	$standortlist = get_posts($args);
+        if( $standortlist ) {  
+            foreach( $standortlist as $key => $value) {
+                $standortlist[$key] = (array) $standortlist[$key];   
+                $standortselect[ $standortlist[$key]['ID'] ] = $standortlist[$key]['post_title'];
+            }                                                
+            asort($standortselect);
+            $standortselect = array( '0' => __('Kein Standort ausgewählt.', FAU_PERSON_TEXTDOMAIN) ) + $standortselect;
+
+        } else {
+            $standortselect[0] = __('Noch kein Standort eingepflegt.', FAU_PERSON_TEXTDOMAIN);
+        }
+        return $standortselect;  
     }
     
     private static function get_caps($cap_type) {
@@ -253,34 +326,41 @@ class FAU_Person {
 
         $content_overview = array(
             '<p><strong>' . __('Einbindung der Kontakt-Visitenkarte über Shortcode', FAU_PERSON_TEXTDOMAIN) . '</strong></p>',
-            '<p>' . __('Binden Sie die gewünschten Kontaktdaten mit dem Shortcode [person] mit folgenden Parametern auf Ihren Seiten oder Beiträgen ein:', FAU_PERSON_TEXTDOMAIN) . '</p>',
+            '<p>' . __('Binden Sie die gewünschten Kontaktdaten mit dem Shortcode [kontakt] mit folgenden Parametern auf Ihren Seiten oder Beiträgen ein:', FAU_PERSON_TEXTDOMAIN) . '</p>',
             '<ol>',
             '<li>' . __('zwingend:', FAU_PERSON_TEXTDOMAIN),
             '<ul>',
-            '<li>slug: ' . __('Titel des Kontakteintrags', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>id: ' . __('ID des Kontakteintrags (erkennbar in der Metabox "Kontaktinformationen" auf den Seiten)', FAU_PERSON_TEXTDOMAIN) . '</li>',
             '</ul>', 
             '</li>',
-            '<li>' . __('optional, wird standardmäßig angezeigt (wenn keine Anzeige gewünscht ist, Parameter=0 eingeben):', FAU_PERSON_TEXTDOMAIN),           
+            '<li>' . __('format="..." (optional), je nach Wert unterscheiden sich die Ausgabedarstellung und die angezeigten Standardparameter:', FAU_PERSON_TEXTDOMAIN),        
             '<ul>',
-            '<li>showtelefon: ' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>showtitle: ' . __('Titel (Präfix)', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>showsuffix: ' . __('Abschluss (Suffix)', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>showposition: ' . __('Position/Funktion', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>showinstitution: ' . __('Institution/Abteilung', FAU_PERSON_TEXTDOMAIN) . '</li>',      
-            '<li>showmail: ' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>name: ' . __('Ausgabe von Titel, Vorname, Nachname und Suffix (sofern vorhanden) im Fließtext mit Link auf die Kontaktseite der Person', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>page: ' . __('vollständige Ausgabe des ganzen Kontaktes wie bei der Kontakt-Einzelseite, die Parameter show und hide haben hierauf keinen Einfluss', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>sidebar: ' . __('Ausgabe wie bei der Anzeige in der Sidebar im Theme', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>liste: ' . __('Ausgabe der Namen mit Listenpunkten, unten drunter Kurzbeschreibung', FAU_PERSON_TEXTDOMAIN) . '</li>',
             '</ul>',
             '</li>',
-            '<li>' . __('optional, wird standardmäßig nicht angezeigt (wenn Anzeige gewünscht ist, Parameter=1 eingeben):', FAU_PERSON_TEXTDOMAIN),           
+            '<li>' . __('show="..." bzw. hide="..." (optional), wenn ein zusätzliches Feld zu den Standardfeldern angezeigt werden soll bzw. die Anzeige eines Standardfeldes nicht gewünscht ist:', FAU_PERSON_TEXTDOMAIN),    
             '<ul>',
-            '<li>showfax: ' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>showwebsite: ' . __('URL', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>showaddress: ' . __('Adressangaben', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>showroom: ' . __('Zimmernummer', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>showdescription: ' . __('Feld Freitext', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>extended: ' . __('alle vorherigen Angaben', FAU_PERSON_TEXTDOMAIN) . '</li>',  
-            '<li>showthumb: ' . __('Personenbild', FAU_PERSON_TEXTDOMAIN) . '</li>',            
-            '<li>showpubs: ' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>showoffice: ' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . '</li>', 
+            '<li>kurzbeschreibung: ' . __('Standardanzeige bei format="liste" (wennn das Feld leer ist wird dann der Anfang des Inhaltsbereiches angezeigt)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>organisation: ' . __('Standardanzeige ohne format-Angabe, bei format="page" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>abteilung: ' . __('Standardanzeige ohne format-Angabe, bei format="page" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>postition: ' . __('Standardanzeige ohne format-Angabe, bei format="page" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>titel: ' . __('Standardanzeige ohne format-Angabe, bei format="name", "page", "sidebar", "liste" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',      
+            '<li>suffix: ' . __('Standardanzeige ohne format-Angabe, bei format="name", "page", "sidebar", "liste" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>adresse: ' . __('Standardanzeige bei format="page" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>raum: ' . __('Standardanzeige bei format="page" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>telefon: ' . __('Standardanzeige ohne format-Angabe, bei format="page", "sidebar" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>fax: ' . __('Standardanzeige bei format="page" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>mobil: ' . __('keine Standardanzeige', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>mail: ' . __('Standardanzeige ohne format-Angabe, bei format="page", "sidebar" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',  
+            '<li>webseite: ' . __('Standardanzeige bei format="page", "sidebar" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',            
+            '<li>mehrlink: ' . __('keine Standardanzeige', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>kurzauszug: ' . __('Standardanzeige bei format="sidebar" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>', 
+            '<li>sprechzeiten: ' . __('Standardanzeige bei format="page"', FAU_PERSON_TEXTDOMAIN) . '</li>',            
+            '<li>publikationen: ' . __('Standardanzeige bei format="page"', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>bild: ' . __('Standardanzeige bei format="page", "sidebar" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>', 
             '</ul>',
             '</li>',            
             '</ol>',
@@ -369,31 +449,32 @@ class FAU_Person {
                     echo __('Es konnten keine Daten zur Person gefunden werden. Bitte verändern Sie Ihre Suchwerte und stellen Sie sicher, dass das Plugin Univis-Data aktiviert ist.', FAU_PERSON_TEXTDOMAIN);
                 } else {
                     $person = $this->array_orderby($person,"lastname", SORT_ASC, "firstname", SORT_ASC );
+                    $no_univis_data = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
                     foreach($person as $key=>$value) {
                         if(array_key_exists('locations', $person[$key]) && array_key_exists('location', $person[$key]['locations'][0]) && array_key_exists('email', $person[$key]['locations'][0]['location'][0])) {
                             $email = $person[$key]['locations'][0]['location'][0]['email'];
                         } else {
-                            $email = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
+                            $email = $no_univis_data;
                         }
                         if(array_key_exists('id', $person[$key])) {
                             $id = $person[$key]['id'];
                         } else {
-                            $id = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
+                            $id = $no_univis_data;
                         }
                         if(array_key_exists('firstname', $person[$key])) {
                             $firstname = $person[$key]['firstname'];
                         } else {
-                            $firstname = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
+                            $firstname = __('Vorname', FAU_PERSON_TEXTDOMAIN) . ": " . $no_univis_data . ", ";
                         }
                         if(array_key_exists('lastname', $person[$key])) {
                             $lastname = $person[$key]['lastname'];
                         } else {
-                            $lastname = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
+                            $lastname = __('Nachname', FAU_PERSON_TEXTDOMAIN) . ": " . $no_univis_data;
                         }
                         if(array_key_exists('orgname', $person[$key])) {
                             $orgname = $person[$key]['orgname'];
                         } else {
-                            $orgname = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
+                            $orgname = $no_univis_data;
                         }
                         //echo sprintf(__('UnivIS-ID %1$s: %2$s %3$s, E-Mail: %4$s, Organisation: %5$s', FAU_PERSON_TEXTDOMAIN), $id, $firstname, $lastname, $email, $orgname);
                         echo 'UnivIS-ID '. $id . ': '. $firstname . ' ' . $lastname . ', E-Mail: ' . $email. ', Organisation: ' . $orgname;
@@ -434,7 +515,8 @@ class FAU_Person {
     public function help_menu_search_univis_id() {
 
         $content_overview = array(
-            '<p><strong>' . __('Zuordnung von Personen und Kontakten zu verschiedenen Kategorien', FAU_PERSON_TEXTDOMAIN) . '</strong></p>',
+            '<p>' . __('Geben Sie hier den Vor- oder den Nachnamen der Person ein. Es kann auch beides oder nur Namensteile eingegeben werden. Bitte beachten Sie, dass Umlaute bei der Eingabe aufgelöst werden müssen.', FAU_PERSON_TEXTDOMAIN) . '</p>',
+            '<p>' . __('Mit <i>Person suchen</i> erhalten Sie eine Auflistung aller möglichen Personen. Suchen Sie die richtige Person aus der Liste heraus, markieren Sie die UnivIS-ID, kopieren Sie diese mit Strg+C und fügen Sie dann beim entsprechenden Kontakt im Feld <i>UnivIS-ID</i> ein.', FAU_PERSON_TEXTDOMAIN) . '</p>',
         );
 
         $help_tab_overview = array(
@@ -447,7 +529,7 @@ class FAU_Person {
         
         $screen = get_current_screen();
 
-        if ($screen->id != 'edit-persons_category') {
+        if ($screen->id != 'person_page_search-univis-id') {
             return;
         }
 
@@ -456,13 +538,52 @@ class FAU_Person {
         $screen->set_help_sidebar($help_sidebar);
     }    
     
+    public function person_menu_subpages() {
+        //remove_submenu_page('edit.php?post_type=person', 'load-post-new.php');
+        // Personen mit oder ohne bestimmte Funktionen. Andere Ansprechpartner (aus der Rubrik Kontakt) und Standorte können diesen zugeordnet werden
+        add_submenu_page('edit.php?post_type=person', __('Person hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neue Person', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_person', array( $this, 'add_person_types' ));
+        // Kontakte, z.B. Vorzimmer, Sekretariat, Abteilungen. Hier sind Ansprechpartner aus den Personen zuordenbar, wird direkt über CPT angezeigt
+        add_submenu_page('edit.php?post_type=person', __('Einrichtung hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neue Einrichtung', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_einrichtung', array( $this, 'add_person_types' ));
+        // Zentrale Adressen, können in Personen und Kontakte übernommen werden
+        add_submenu_page('edit.php?post_type=person', __('Standort hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neuer Standort', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_standort', array( $this, 'add_person_types' ));
+        add_action('load-person_page_new_person', array( $this, 'person_menu' ));
+        add_action('load-person_page_new_einrichtung', array( $this, 'einrichtung_menu' ));
+        add_action('load-person_page_new_standort', array( $this, 'standort_menu' ));
+    }
+    
+    public function add_person_types() {
+        //wp_redirect( admin_url( 'post-new.php?post_type=standort' ) );
+            //add_action( 'load-person_page_konakt', array( $this, 'adding_custom_meta_boxes' ));  
+    }
+    
+    public function person_menu() {
+        wp_redirect( admin_url( 'post-new.php?post_type=person' ) );
+        //$metaboxes = array();
+        //do_action('cmb_meta_boxes', $metaboxes);
+    }
+
+    public function einrichtung_menu() {
+        wp_redirect( admin_url( 'post-new.php?post_type=person&fau_person_typ=einrichtung' ) );
+        //$metaboxes = array();
+        //do_action('cmb_meta_boxes', $metaboxes);
+    }
+    
+    public function standort_menu() {
+        wp_redirect( admin_url( 'post-new.php?post_type=standort' ) );
+        //$metaboxes = array();
+        //do_action('cmb_meta_boxes', $metaboxes);
+    }    
+
+    
     public static function register_widgets() {
-            register_widget( 'FAUPersonWidget' );
+        register_widget( 'FAUPersonWidget' );
     }
     
     private static function add_shortcodes() {     
-        add_shortcode('person', 'fau_person' );
-        add_shortcode('persons', 'fau_persons');
+        add_shortcode( 'person', 'fau_person' );
+        add_shortcode( 'kontakt', 'fau_person' );
+        add_shortcode( 'persons', 'fau_persons' );
+        add_shortcode( 'standort', 'fau_person' );
     }
 
     public static function register_person_post_type() {
@@ -470,6 +591,11 @@ class FAU_Person {
         register_post_type('person', $person_args);
     }
 
+    public static function register_standort_post_type() {
+        require_once('posttypes/fau-standort-posttype.php');
+        register_post_type('standort', $standort_args);
+    }
+    
     public function register_persons_taxonomy() {
         register_taxonomy(
                 'persons_category', //The name of the taxonomy. Name should be in slug form (must not contain capital letters or spaces).
@@ -523,6 +649,66 @@ class FAU_Person {
         }
     }
     
+    // Change the columns for the edit CPT screen
+    public function change_columns( $cols ) {
+	$cols = array(
+	    'cb' => '<input type="checkbox" />',
+	    'title' => __( 'Neuer Titel', FAU_PERSON_TEXTDOMAIN ),
+            'typ' => __( 'Typ', FAU_PERSON_TEXTDOMAIN ),
+            'date' => __( 'Datum', FAU_PERSON_TEXTDOMAIN )
+
+	);
+
+	return $cols;
+    }
+
+    public function custom_columns( $column, $post_id ) {
+	switch ( $column ) {
+	    case "typ":
+                $typ = get_post_meta( $post_id, 'fau_person_typ', true);
+                switch ( $typ ) {
+                    case 'realperson':
+                        $typ = __('Person (allgemein)', FAU_PERSON_TEXTDOMAIN);
+                        break;
+                    case 'realmale':
+                        $typ = __('Person (männlich)', FAU_PERSON_TEXTDOMAIN);
+                        break;
+                    case 'realfemale':
+                        $typ = __('Person (weiblich)', FAU_PERSON_TEXTDOMAIN);
+                        break;
+                    case 'pseudo':
+                        $typ = __('Einrichtung (Pseudonym)', FAU_PERSON_TEXTDOMAIN);
+                        break;
+                    case 'einrichtung':
+                        $typ = __('Einrichtung', FAU_PERSON_TEXTDOMAIN);
+                        break;
+                }
+                echo $typ;
+                break;
+	}
+    }
+    
+    // Make these columns sortable
+    public function sortable_columns( $columns ) {
+	$columns = array(
+	    'title' => 'title',
+	    'typ' => 'typ',
+	    'date' => 'date'
+	);
+        return $columns;
+    }	
+    
+    public function custom_columns_orderby( $query ) {
+        if( ! is_admin() )
+            return;
+ 
+        $orderby = $query->get( 'orderby' );
+ 
+        if( 'typ' == $orderby ) {
+            $query->set('meta_key','fau_person_typ');
+            $query->set('orderby','meta_value');
+        }        
+    }
     
     public function include_template_function($template_path) {
         global $post;
@@ -534,6 +720,17 @@ class FAU_Person {
                     $template_path = $theme_file;
                 } else {
                     $template_path = FAU_PERSON_ROOT . '/templates/single-person.php';                    
+                }
+            //}
+        }
+        if ($post->post_type == 'standort') {
+            //if (is_single()) {
+                // checks if the file exists in the theme first,
+                // otherwise serve the file from the plugin
+                if ($theme_file = locate_template(array('single-standort.php'))) {
+                    $template_path = $theme_file;
+                } else {
+                    $template_path = FAU_PERSON_ROOT . '/templates/single-standort.php';                    
                 }
             //}
         }
@@ -552,6 +749,15 @@ class FAU_Person {
         }
     }    
     
+    //Überprüft bei neuen Seiten ob Person oder Einrichtung eingegeben wird, abhängig vom Feldtyp fau_person_typ
+    public static function default_fau_person_typ( ) {     
+        if(isset($_GET["fau_person_typ"]) && $_GET["fau_person_typ"] == 'einrichtung') {
+            $default_fau_person_typ = 'einrichtung';
+        } else {
+            $default_fau_person_typ = 'realperson';
+        }
+        return $default_fau_person_typ;
+    }
     
     //Legt die in UnivIS hinterlegten Werte in einem Array ab, Feldbezeichnungen
     public function univis_defaults( ) {
@@ -561,6 +767,16 @@ class FAU_Person {
                 $univis_id = get_post_meta($id, 'fau_person_univis_id', true);
                 $univis_default = sync_helper::get_fields($id, $univis_id, 1);
                 return $univis_default;
+            }
+    }
+    
+    public function standort_defaults( ) {
+            $id = cmb_Meta_Box::get_object_id();
+            $post = get_post($id);
+            if( !is_null( $post ) && $post->post_type === 'person' && get_post_meta($id, 'fau_person_standort_id', true)) {
+                $standort_id = get_post_meta($id, 'fau_person_standort_id', true);
+                $standort_default = standort_sync_helper::get_fields($id, $standort_id, 1);
+                return $standort_default;        
             }
     }
     

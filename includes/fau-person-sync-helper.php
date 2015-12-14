@@ -1,14 +1,14 @@
 <?php
 
 class sync_helper {
-    //gibt die Werte der Person an, Inhalte abhängig von UnivIS, Übergabewerte: ID der Person, UnivIS-ID der Person, Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular
-    public static function get_fields( $id, $univis_id, $defaults ) {
+    //gibt die Werte der Person an, Inhalte abhängig von UnivIS, Übergabewerte: ID der Person, UnivIS-ID der Person, Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular, $ignore_connection=1 wenn die verknüpften Kontakte einer Person ignoriert werden sollen (z.B. wenn die Person selbst schon eine verknüpfte Kontaktperson ist)
+    public static function get_fields( $id, $univis_id, $defaults, $ignore_connection=0 ) {
         $univis_sync = 0;
         $person = array();
         if( $univis_id && class_exists( 'Univis_Data' ) ) {
             $person = self::get_univisdata( $univis_id );
             $univis_sync = 1;
-        }
+        } 
         $fields = array();
         $fields_univis = array(
             'department' => 'orgname',
@@ -45,6 +45,25 @@ class sync_helper {
         $fields_exception = array(
             'postalCode' => '',
         );            
+        $fields_connection = array(
+            'connection_text' => '',
+            'connection_only' => '',
+            'connection_options' => array(),
+            'connection_honorificPrefix' => 'honorificPrefix',
+            'connection_givenName' => 'givenName',
+            'connection_familyName' => 'familyName',
+            'connection_honorificSuffix' => 'honorificSuffix',
+            'connection_streetAddress' => 'streetAddress',
+            'connection_postalCode' => 'postalCode',
+            'connection_addressLocality' => 'addressLocality',
+            'connection_addressCountry' => 'addressCountry',  
+            'connection_workLocation' => 'workLocation',
+            'connection_telephone' => 'telephone',
+            'connection_faxNumber' => 'faxNumber',         
+            'connection_email' => 'email',
+            'connection_hoursAvailable' => 'hoursAvailable',
+            'connection_nr' => 'nr',
+        );
         foreach( $fields_univis as $key => $value ) {
             if( $univis_sync && array_key_exists( $value, $person ) ) {
                 $value = self::sync_univis( $id, $person, $key, $value, $defaults ); 
@@ -60,12 +79,43 @@ class sync_helper {
         foreach( $fields_univis_location as $key => $value ) {
             if( $univis_sync && array_key_exists( 'locations', $person ) && array_key_exists( 'location', $person['locations'][0] ) ) {
                 $person_location = $person['locations'][0]['location'][0];
-                $value = self::sync_univis( $id, $person_location, $key, $value, $defaults );
+                
+                if($key == 'telephone' && !$defaults) {
+                    $phone_number = self::sync_univis( $id, $person_location, $key, $value, $defaults );
+                    switch ( get_post_meta($id, 'fau_person_telephone_select', true) ) {
+                        case 'erl':
+                            $value = self::correct_phone_number($phone_number, 'erl');
+                            break;
+                        case 'nbg':
+                            $value = self::correct_phone_number($phone_number, 'nbg');                        
+                            break;
+                        default:
+                            $value = $phone_number;                        
+                            break;
+                    }                    
+                } else {
+                    $value = self::sync_univis( $id, $person_location, $key, $value, $defaults );
+                }
             } else {
                 if( $defaults ) {
                     $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);
                 } else {
-                    $value = get_post_meta($id, 'fau_person_'.$key, true);
+                    if($key == 'telephone') {
+                        $phone_number = get_post_meta($id, 'fau_person_'.$key, true);
+                        switch ( get_post_meta($id, 'fau_person_telephone_select', true) ) {
+                        case 'erl':
+                            $value = self::correct_phone_number($phone_number, 'erl');
+                            break;
+                        case 'nbg':
+                            $value = self::correct_phone_number($phone_number, 'nbg');                        
+                            break;
+                        default:
+                            $value = $phone_number;                        
+                            break;
+                        }
+                    } else {                    
+                        $value = get_post_meta($id, 'fau_person_'.$key, true);
+                    }
                 }
             }
             $fields[$key] = $value;
@@ -114,6 +164,32 @@ class sync_helper {
             }
             $fields[$key] = $value;  
         }
+        if( !$ignore_connection ) 
+            $connections = get_post_meta($id, 'fau_person_connection_id', true);
+        if( !empty( $connections ) ) {    
+            $connection = array();
+            foreach( $connections as $ckey => $cvalue ) {
+                $connection_fields[$ckey] = sync_helper::get_fields($cvalue, get_post_meta($cvalue, 'fau_person_univis_id', true), 0, 1);
+                $connection_fields[$ckey]['nr'] = $cvalue;
+            }
+            foreach ($connection_fields as $key => $value) {    
+                foreach( $fields_connection as $fckey => $fcvalue ) {
+                    if( $fckey == 'connection_text' || $fckey == 'connection_only' || $fckey == 'connection_options' ) {
+                        $value = get_post_meta($id, 'fau_person_'.$fckey, true);
+                        $fields[$fckey] = $value;                   
+                    } else {
+                        $value = $connection_fields[$key][$fcvalue];
+                        $connection[$key][$fcvalue] = $value; 
+                    }
+                }                    
+            }
+            $fields['connections'] = $connection;
+        }
+
+        if( !$defaults && !get_post_meta($id, 'fau_person_univis_sync', true) ) {
+            $fields_standort = standort_sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_standort_id', true), 0 );
+            $fields = array_merge( $fields, $fields_standort );
+        }
         return $fields;
     }
 
@@ -156,6 +232,33 @@ class sync_helper {
             }
         }
         return $val;        
+    }
+    
+    public static function correct_phone_number( $phone_number, $location ) {
+        $phone_data = preg_replace( '/\D/', '', $phone_number );
+        switch( $location ) {
+            case 'erl':
+                $vorwahl = '+49 9131 85-';
+                if( strlen($phone_data) == 5 ) {
+                    $phone_number = $vorwahl . $phone_data;
+                } elseif (strlen($phone_data) == 7 && strpos( $phone_data, '85') === 0 ) {
+                    $phone_number = $vorwahl . substr($phone_data, -5);
+                } elseif ( strlen($phone_data) > 7 && strpos( $phone_data, '913185') !== FALSE ) {
+                    $phone_number = $vorwahl . substr($phone_data, -5);
+                }
+                break;
+            case 'nbg':
+                $vorwahl = '+49 911 5302-';
+                if( strlen($phone_data) == 3 ) {
+                    $phone_number = $vorwahl . $phone_data;
+                } elseif (strlen($phone_data) == 7 && strpos( $phone_data, '5302') === 0 ) {
+                    $phone_number = $vorwahl . substr($phone_data, -3);
+                } elseif ( strlen($phone_data) > 7 && strpos( $phone_data, '9115302') !== FALSE ) {
+                    $phone_number = $vorwahl . substr($phone_data, -3);
+                } 
+                break;
+        }
+        return $phone_number;
     }
 
        
