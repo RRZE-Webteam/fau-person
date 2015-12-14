@@ -326,34 +326,41 @@ public function adding_custom_meta_boxes( $post ) {
 
         $content_overview = array(
             '<p><strong>' . __('Einbindung der Kontakt-Visitenkarte über Shortcode', FAU_PERSON_TEXTDOMAIN) . '</strong></p>',
-            '<p>' . __('Binden Sie die gewünschten Kontaktdaten mit dem Shortcode [person] mit folgenden Parametern auf Ihren Seiten oder Beiträgen ein:', FAU_PERSON_TEXTDOMAIN) . '</p>',
+            '<p>' . __('Binden Sie die gewünschten Kontaktdaten mit dem Shortcode [kontakt] mit folgenden Parametern auf Ihren Seiten oder Beiträgen ein:', FAU_PERSON_TEXTDOMAIN) . '</p>',
             '<ol>',
             '<li>' . __('zwingend:', FAU_PERSON_TEXTDOMAIN),
             '<ul>',
-            '<li>slug: ' . __('Titel des Kontakteintrags', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>id: ' . __('ID des Kontakteintrags (erkennbar in der Metabox "Kontaktinformationen" auf den Seiten)', FAU_PERSON_TEXTDOMAIN) . '</li>',
             '</ul>', 
             '</li>',
-            '<li>' . __('optional, wird standardmäßig angezeigt (wenn keine Anzeige gewünscht ist, Parameter=0 eingeben):', FAU_PERSON_TEXTDOMAIN),           
+            '<li>' . __('format="..." (optional), je nach Wert unterscheiden sich die Ausgabedarstellung und die angezeigten Standardparameter:', FAU_PERSON_TEXTDOMAIN),        
             '<ul>',
-            '<li>showtelefon: ' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>showtitle: ' . __('Titel (Präfix)', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>showsuffix: ' . __('Abschluss (Suffix)', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>showposition: ' . __('Position/Funktion', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>showinstitution: ' . __('Institution/Abteilung', FAU_PERSON_TEXTDOMAIN) . '</li>',      
-            '<li>showmail: ' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>name: ' . __('Ausgabe von Titel, Vorname, Nachname und Suffix (sofern vorhanden) im Fließtext mit Link auf die Kontaktseite der Person', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>page: ' . __('vollständige Ausgabe des ganzen Kontaktes wie bei der Kontakt-Einzelseite, die Parameter show und hide haben hierauf keinen Einfluss', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>sidebar: ' . __('Ausgabe wie bei der Anzeige in der Sidebar im Theme', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>liste: ' . __('Ausgabe der Namen mit Listenpunkten, unten drunter Kurzbeschreibung', FAU_PERSON_TEXTDOMAIN) . '</li>',
             '</ul>',
             '</li>',
-            '<li>' . __('optional, wird standardmäßig nicht angezeigt (wenn Anzeige gewünscht ist, Parameter=1 eingeben):', FAU_PERSON_TEXTDOMAIN),           
+            '<li>' . __('show="..." bzw. hide="..." (optional), wenn ein zusätzliches Feld zu den Standardfeldern angezeigt werden soll bzw. die Anzeige eines Standardfeldes nicht gewünscht ist:', FAU_PERSON_TEXTDOMAIN),    
             '<ul>',
-            '<li>showfax: ' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>showwebsite: ' . __('URL', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>showaddress: ' . __('Adressangaben', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>showroom: ' . __('Zimmernummer', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>showdescription: ' . __('Feld Freitext', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>extended: ' . __('alle vorherigen Angaben', FAU_PERSON_TEXTDOMAIN) . '</li>',  
-            '<li>showthumb: ' . __('Personenbild', FAU_PERSON_TEXTDOMAIN) . '</li>',            
-            '<li>showpubs: ' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) . '</li>',
-            '<li>showoffice: ' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . '</li>', 
+            '<li>kurzbeschreibung: ' . __('Standardanzeige bei format="liste" (wennn das Feld leer ist wird dann der Anfang des Inhaltsbereiches angezeigt)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>organisation: ' . __('Standardanzeige ohne format-Angabe, bei format="page" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>abteilung: ' . __('Standardanzeige ohne format-Angabe, bei format="page" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>postition: ' . __('Standardanzeige ohne format-Angabe, bei format="page" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>titel: ' . __('Standardanzeige ohne format-Angabe, bei format="name", "page", "sidebar", "liste" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',      
+            '<li>suffix: ' . __('Standardanzeige ohne format-Angabe, bei format="name", "page", "sidebar", "liste" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>adresse: ' . __('Standardanzeige bei format="page" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>raum: ' . __('Standardanzeige bei format="page" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>telefon: ' . __('Standardanzeige ohne format-Angabe, bei format="page", "sidebar" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>fax: ' . __('Standardanzeige bei format="page" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>mobil: ' . __('keine Standardanzeige', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>mail: ' . __('Standardanzeige ohne format-Angabe, bei format="page", "sidebar" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',  
+            '<li>webseite: ' . __('Standardanzeige bei format="page", "sidebar" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>',            
+            '<li>mehrlink: ' . __('keine Standardanzeige', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>kurzauszug: ' . __('Standardanzeige bei format="sidebar" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>', 
+            '<li>sprechzeiten: ' . __('Standardanzeige bei format="page"', FAU_PERSON_TEXTDOMAIN) . '</li>',            
+            '<li>publikationen: ' . __('Standardanzeige bei format="page"', FAU_PERSON_TEXTDOMAIN) . '</li>',
+            '<li>bild: ' . __('Standardanzeige bei format="page", "sidebar" (und bei Widget)', FAU_PERSON_TEXTDOMAIN) . '</li>', 
             '</ul>',
             '</li>',            
             '</ol>',
@@ -508,7 +515,8 @@ public function adding_custom_meta_boxes( $post ) {
     public function help_menu_search_univis_id() {
 
         $content_overview = array(
-            '<p><strong>' . __('Zuordnung von Personen und Kontakten zu verschiedenen Kategorien', FAU_PERSON_TEXTDOMAIN) . '</strong></p>',
+            '<p>' . __('Geben Sie hier den Vor- oder den Nachnamen der Person ein. Es kann auch beides oder nur Namensteile eingegeben werden. Bitte beachten Sie, dass Umlaute bei der Eingabe aufgelöst werden müssen.', FAU_PERSON_TEXTDOMAIN) . '</p>',
+            '<p>' . __('Mit <i>Person suchen</i> erhalten Sie eine Auflistung aller möglichen Personen. Suchen Sie die richtige Person aus der Liste heraus, markieren Sie die UnivIS-ID, kopieren Sie diese mit Strg+C und fügen Sie dann beim entsprechenden Kontakt im Feld <i>UnivIS-ID</i> ein.', FAU_PERSON_TEXTDOMAIN) . '</p>',
         );
 
         $help_tab_overview = array(
@@ -521,7 +529,7 @@ public function adding_custom_meta_boxes( $post ) {
         
         $screen = get_current_screen();
 
-        if ($screen->id != 'edit-persons_category') {
+        if ($screen->id != 'person_page_search-univis-id') {
             return;
         }
 
