@@ -241,7 +241,9 @@ class sync_helper {
                 $vorwahl = '+49 9131 85-';
                 if( strlen($phone_data) == 5 ) {
                     $phone_number = $vorwahl . $phone_data;
-                } elseif ( strlen($phone_data) > 5 && strpos( $phone_data, '913185') !== FALSE ) {
+                } elseif (strlen($phone_data) == 7 && strpos( $phone_data, '85') === 0 ) {
+                    $phone_number = $vorwahl . substr($phone_data, -5);
+                } elseif ( strlen($phone_data) > 7 && strpos( $phone_data, '913185') !== FALSE ) {
                     $phone_number = $vorwahl . substr($phone_data, -5);
                 }
                 break;
@@ -249,7 +251,9 @@ class sync_helper {
                 $vorwahl = '+49 911 5302-';
                 if( strlen($phone_data) == 3 ) {
                     $phone_number = $vorwahl . $phone_data;
-                } elseif ( strlen($phone_data) > 3 && strpos( $phone_data, '9115302') !== FALSE ) {
+                } elseif (strlen($phone_data) == 7 && strpos( $phone_data, '5302') === 0 ) {
+                    $phone_number = $vorwahl . substr($phone_data, -3);
+                } elseif ( strlen($phone_data) > 7 && strpos( $phone_data, '9115302') !== FALSE ) {
                     $phone_number = $vorwahl . substr($phone_data, -3);
                 } 
                 break;
