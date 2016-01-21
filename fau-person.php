@@ -60,6 +60,8 @@ class FAU_Person {
 
     private $search_univis_id_page = null;
     
+    private $sidebar_options_page = null;
+    
     public static function instance() {
 
         if (null == self::$instance) {
@@ -89,7 +91,7 @@ class FAU_Person {
         add_action( 'init', array (__CLASS__, 'register_standort_post_type' ) );
         //add_action( 'restrict_manage_posts', array( $this, 'standort_restrict_manage_posts' ) );
 
-        add_action('admin_menu' , array( $this, 'person_menu_subpages' )); 
+        add_action( 'admin_menu' , array( $this, 'person_menu_subpages' )); 
         add_action( 'admin_menu', array( $this, 'add_help_tabs' ) );
         add_action( 'admin_menu', array( $this, 'add_options_pages' ) );
         add_action( 'admin_init', array( $this, 'admin_init' ) );
@@ -417,6 +419,9 @@ public function adding_custom_meta_boxes( $post ) {
                 
         $this->search_univis_id_page = add_submenu_page('edit.php?post_type=person', __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'search-univis-id', array( $this, 'search_univis_id' ));
         add_action('load-' . $this->search_univis_id_page, array($this, 'help_menu_search_univis_id'));
+        
+        $this->sidebar_options_page = add_submenu_page('edit.php?post_type=person', __('Anzeigeoptionen', FAU_PERSON_TEXTDOMAIN), __('Anzeigeoptionen', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'sidebar-options', array( $this, 'sidebar_options' ));
+        add_action('load-' . $this->sidebar_options_page, array($this, 'help_menu_sidebar_options'));        
     }
 
     public function search_univis_id() {
@@ -537,6 +542,94 @@ public function adding_custom_meta_boxes( $post ) {
 
         $screen->set_help_sidebar($help_sidebar);
     }    
+
+    public function sidebar_options() {
+
+        ?>
+        <div class="wrap">
+            <?php screen_icon(); ?>
+            <h2><?php echo esc_html(__('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN)); ?></h2>
+
+            <form method="post">
+                <?php
+                settings_fields('search_univis_id_options');
+                do_settings_sections('search_univis_id_options');
+                submit_button(esc_html(__('Person suchen', FAU_PERSON_TEXTDOMAIN)));
+                ?>
+            </form>            
+        </div>
+        <div class="wrap">
+            <?php
+                settings_fields('find_univis_id_options');
+                do_settings_sections('find_univis_id_options');
+                if(empty($person)) {
+                    echo __('Es konnten keine Daten zur Person gefunden werden. Bitte verändern Sie Ihre Suchwerte und stellen Sie sicher, dass das Plugin Univis-Data aktiviert ist.', FAU_PERSON_TEXTDOMAIN);
+                } else {
+                    $person = $this->array_orderby($person,"lastname", SORT_ASC, "firstname", SORT_ASC );
+                    $no_univis_data = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
+                    foreach($person as $key=>$value) {
+                        if(array_key_exists('locations', $person[$key]) && array_key_exists('location', $person[$key]['locations'][0]) && array_key_exists('email', $person[$key]['locations'][0]['location'][0])) {
+                            $email = $person[$key]['locations'][0]['location'][0]['email'];
+                        } else {
+                            $email = $no_univis_data;
+                        }
+                        if(array_key_exists('id', $person[$key])) {
+                            $id = $person[$key]['id'];
+                        } else {
+                            $id = $no_univis_data;
+                        }
+                        if(array_key_exists('firstname', $person[$key])) {
+                            $firstname = $person[$key]['firstname'];
+                        } else {
+                            $firstname = __('Vorname', FAU_PERSON_TEXTDOMAIN) . ": " . $no_univis_data . ", ";
+                        }
+                        if(array_key_exists('lastname', $person[$key])) {
+                            $lastname = $person[$key]['lastname'];
+                        } else {
+                            $lastname = __('Nachname', FAU_PERSON_TEXTDOMAIN) . ": " . $no_univis_data;
+                        }
+                        if(array_key_exists('orgname', $person[$key])) {
+                            $orgname = $person[$key]['orgname'];
+                        } else {
+                            $orgname = $no_univis_data;
+                        }
+                        //echo sprintf(__('UnivIS-ID %1$s: %2$s %3$s, E-Mail: %4$s, Organisation: %5$s', FAU_PERSON_TEXTDOMAIN), $id, $firstname, $lastname, $email, $orgname);
+                        echo 'UnivIS-ID '. $id . ': '. $firstname . ' ' . $lastname . ', E-Mail: ' . $email. ', Organisation: ' . $orgname;
+                        echo "<br>";
+                    }
+                }
+            ?>
+        </div>
+        <?php
+            delete_transient(self::search_univis_id_transient);
+    }
+    
+    
+    public function help_menu_sidebar_options() {
+
+        $content_overview = array(
+            '<p>' . __('Geben Sie hier den Vor- oder den Nachnamen der Person ein. Es kann auch beides oder nur Namensteile eingegeben werden. Bitte beachten Sie, dass Umlaute bei der Eingabe aufgelöst werden müssen.', FAU_PERSON_TEXTDOMAIN) . '</p>',
+            '<p>' . __('Mit <i>Person suchen</i> erhalten Sie eine Auflistung aller möglichen Personen. Suchen Sie die richtige Person aus der Liste heraus, markieren Sie die UnivIS-ID, kopieren Sie diese mit Strg+C und fügen Sie dann beim entsprechenden Kontakt im Feld <i>UnivIS-ID</i> ein.', FAU_PERSON_TEXTDOMAIN) . '</p>',
+        );
+
+        $help_tab_overview = array(
+            'id' => 'overview',
+            'title' => __('Übersicht', FAU_PERSON_TEXTDOMAIN),
+            'content' => implode(PHP_EOL, $content_overview),
+        );
+
+        $help_sidebar = sprintf('<p><strong>%1$s:</strong></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">%2$s</a></p>', __('Für mehr Information', FAU_PERSON_TEXTDOMAIN), __('RRZE-Webteam in Github', FAU_PERSON_TEXTDOMAIN));
+        
+        $screen = get_current_screen();
+
+        if ($screen->id != 'person_page_sidebar-options') {
+            return;
+        }
+
+        $screen->add_help_tab($help_tab_overview);
+
+        $screen->set_help_sidebar($help_sidebar);
+    }        
     
     public function person_menu_subpages() {
         //remove_submenu_page('edit.php?post_type=person', 'load-post-new.php');
