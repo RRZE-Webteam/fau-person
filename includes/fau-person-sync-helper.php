@@ -243,9 +243,9 @@ class sync_helper {
                     $phone_number = $vorwahl . $phone_data;
                 } elseif (strlen($phone_data) == 7 && strpos( $phone_data, '85') === 0 ) {
                     $phone_number = $vorwahl . substr($phone_data, -5);
-                } elseif ( strlen($phone_data) > 7 && strpos( $phone_data, '913185') !== FALSE ) {
+                } elseif ( strlen($phone_data) == 12 && strpos( $phone_data, '913185') !== FALSE ) {
                     $phone_number = $vorwahl . substr($phone_data, -5);
-                }
+                } 
                 break;
             case 'nbg':
                 $vorwahl = '+49 911 5302-';
@@ -253,7 +253,7 @@ class sync_helper {
                     $phone_number = $vorwahl . $phone_data;
                 } elseif (strlen($phone_data) == 7 && strpos( $phone_data, '5302') === 0 ) {
                     $phone_number = $vorwahl . substr($phone_data, -3);
-                } elseif ( strlen($phone_data) > 7 && strpos( $phone_data, '9115302') !== FALSE ) {
+                } elseif ( strlen($phone_data) == 11 && strpos( $phone_data, '9115302') !== FALSE ) {
                     $phone_number = $vorwahl . substr($phone_data, -3);
                 } 
                 break;
