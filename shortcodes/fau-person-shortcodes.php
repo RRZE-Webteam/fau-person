@@ -536,13 +536,14 @@ if(!function_exists('fau_person_shortlist')) {
  }
  
 if(!function_exists('fau_person_sidebar')) {
+    // von Widget, also Sidebar über Fakultätsthemes - Ansprechpartner: fau_person_sidebar($id, $title, list 0, inst 1, abtielung 1, posi 1, titel 1, suffix 1, addresse 1, raum 1, tele 1, fax 1, handy 0,                                                                  mail 1, url 1, mehrlink 0, kurzauszug 1, office 0, pubs 0, bild 1, via 0)
     function fau_person_sidebar($id, $title, $showlist=0, $showinstitution=0, $showabteilung=0, $showposition=0, $showtitle=0, $showsuffix=0, $showaddress=0, $showroom=0, $showtelefon=0, $showfax=0, $showmobile=0, $showmail=0, $showwebsite=0, $showlink=0, $showdescription=0, $showoffice=0, $showpubs=0, $showthumb=0, $showvia=0) {
         if (!empty($id)) {
             $post = get_post($id);
-
+            
             $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
             extract($fields);
-            if( $showvia !== 0 && $connections )                    $showvia = 1;
+            if( $showvia !== 0 && !empty( $connections ) )                    $showvia = 1;
             if( $showvia === 0 && !empty( $connection_only ) )      $connection_only = '';
             
             if( $link ) {
@@ -624,7 +625,7 @@ if(!function_exists('fau_person_sidebar')) {
                 $content .= '<li class="person-info-www"><span class="screen-reader-text">' . __('Webseite', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="url" href="' . $url . '">' . $url . '</a></li>';
             if (!empty($contactpoint) && empty( $connection_only ) )
                 $content .= $contactpoint;
-            if ($workLocation && $showoffice && empty( $connection_only ) )
+            if ($workLocation && $showroom && empty( $connection_only ) )
                 $content .= '<li class="person-info-room"><span class="screen-reader-text">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' </span><span itemprop="workLocation">' . $workLocation . '</span></li>';
             $content .= '</ul>';
             if ( ( !empty($connection_text) || !empty($connection_options) || !empty($connections) ) && $showvia===1  )
