@@ -244,7 +244,7 @@
             "showtelefon" => TRUE,
             "extended" => FALSE,
             "showmobile" => FALSE,
-            //"showvia" => 0,
+            "showvia" => 0,
                         ), $atts));
 
         $category = get_term_by('slug', $category, 'persons_category');
