@@ -47,6 +47,12 @@ Beispiel: [kontakt id="42, 44, 56" format="name"]
 kann gerne ins eigene Theme übernommen und daran angepasst werden, beigefügte Vorlage ist an FAU-Fakultätsthemes angepasst
 Es wird zuerst im Theme geschaut, ob eine single-person.php vorhanden ist, wenn ja wird die genommen, ansonsten die vom Plugin
 
+####Version 2.0.1: Diverse Bugfixes
+
+- Fehlende Raumanzeige in Sidebar ergänzt      
+- Fehler bei Telefonnummernkorrektur behoben    
+- Notices bei Shortcode persons korrigiert    
+
 ####Version 2.0:
 
 - Alternativ auch Shortcode kontakt statt person verwendbar      
