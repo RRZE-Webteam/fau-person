@@ -4,7 +4,7 @@
  Plugin Name: FAU Person
  Plugin URI: https://github.com/RRZE-Webteam/fau-person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 2.0
+ * Version: 2.0.1
  * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -630,6 +630,43 @@ public function adding_custom_meta_boxes( $post ) {
 
         $screen->set_help_sidebar($help_sidebar);
     }        
+    
+    public function person_menu_subpages() {
+        //remove_submenu_page('edit.php?post_type=person', 'load-post-new.php');
+        // Personen mit oder ohne bestimmte Funktionen. Andere Ansprechpartner (aus der Rubrik Kontakt) und Standorte können diesen zugeordnet werden
+        add_submenu_page('edit.php?post_type=person', __('Person hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neue Person', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_person', array( $this, 'add_person_types' ));
+        // Kontakte, z.B. Vorzimmer, Sekretariat, Abteilungen. Hier sind Ansprechpartner aus den Personen zuordenbar, wird direkt über CPT angezeigt
+        add_submenu_page('edit.php?post_type=person', __('Einrichtung hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neue Einrichtung', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_einrichtung', array( $this, 'add_person_types' ));
+        // Zentrale Adressen, können in Personen und Kontakte übernommen werden
+        add_submenu_page('edit.php?post_type=person', __('Standort hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neuer Standort', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_standort', array( $this, 'add_person_types' ));
+        add_action('load-person_page_new_person', array( $this, 'person_menu' ));
+        add_action('load-person_page_new_einrichtung', array( $this, 'einrichtung_menu' ));
+        add_action('load-person_page_new_standort', array( $this, 'standort_menu' ));
+    }
+    
+    public function add_person_types() {
+        //wp_redirect( admin_url( 'post-new.php?post_type=standort' ) );
+            //add_action( 'load-person_page_konakt', array( $this, 'adding_custom_meta_boxes' ));  
+    }
+    
+    public function person_menu() {
+        wp_redirect( admin_url( 'post-new.php?post_type=person' ) );
+        //$metaboxes = array();
+        //do_action('cmb_meta_boxes', $metaboxes);
+    }
+
+    public function einrichtung_menu() {
+        wp_redirect( admin_url( 'post-new.php?post_type=person&fau_person_typ=einrichtung' ) );
+        //$metaboxes = array();
+        //do_action('cmb_meta_boxes', $metaboxes);
+    }
+    
+    public function standort_menu() {
+        wp_redirect( admin_url( 'post-new.php?post_type=standort' ) );
+        //$metaboxes = array();
+        //do_action('cmb_meta_boxes', $metaboxes);
+    }    
+
     
     public function person_menu_subpages() {
         //remove_submenu_page('edit.php?post_type=person', 'load-post-new.php');
