@@ -377,7 +377,7 @@ if(!function_exists('fau_person_markup')) {
         if (($extended || $showaddress) && !empty($contactpoint)  && empty( $connection_only ) ) 
             $content .= $contactpoint;
         if (($extended || $showroom) && $workLocation  && empty( $connection_only ) )
-            $content .= '<li class="person-info-room"><span class="screen-reader-text">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' </span><span itemprop="workLocation">' . $workLocation . '</span></li>';
+            $content .= '<li class="person-info-room"><span itemprop="workLocation">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' ' . $workLocation . '</span></li>';
         if ($showoffice && $hoursAvailable  && empty( $connection_only ) )
             $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable">' . $hoursAvailable . '</span></li>';
         if ($showpubs && $pubs)
@@ -481,7 +481,7 @@ if(!function_exists('fau_person_markup')) {
             $content .= $contactpoint;
         }
         if ( $workLocation && empty( $connection_only ) )
-            $content .= '<li class="person-info-room"><span class="screen-reader-text">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' </span><span itemprop="workLocation">' . $workLocation . '</span></li>';
+            $content .= '<li class="person-info-room"><span itemprop="workLocation">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' ' . $workLocation . '</span></li>';
         if ( $hoursAvailable && empty( $connection_only ) )
             $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable">' . $hoursAvailable . '</span></li>';
         if ( $pubs )
@@ -693,7 +693,7 @@ if(!function_exists('fau_person_sidebar')) {
                 $contactpoint .= ', ';
             }
             if ( $workLocation )
-                $contactpoint .= '<span class="person-info-room"><span class="screen-reader-text">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' </span><span itemprop="workLocation">' . $workLocation . '</span></span>';
+                $contactpoint .= '<span class="person-info-room" itemprop="workLocation">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' ' . $workLocation . '</span>';
             }    
             $contactpoint .= '</li>';
             
