@@ -482,6 +482,7 @@ public function adding_custom_meta_boxes( $post ) {
                             $orgname = $no_univis_data;
                         }
                         //echo sprintf(__('UnivIS-ID %1$s: %2$s %3$s, E-Mail: %4$s, Organisation: %5$s', FAU_PERSON_TEXTDOMAIN), $id, $firstname, $lastname, $email, $orgname);
+                        //$output = __('UnivIS-ID', FAU_PERSON_TEXTDOMAIN) . ' '. $id . ': '. $firstname . ' ' . $lastname . ', ' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . ': ' . $email. ', ' . __('Organisation', FAU_PERSON_TEXTDOMAIN) . ': ' . $orgname;
                         echo 'UnivIS-ID '. $id . ': '. $firstname . ' ' . $lastname . ', E-Mail: ' . $email. ', Organisation: ' . $orgname;
                         echo "<br>";
                     }
