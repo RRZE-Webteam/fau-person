@@ -93,8 +93,9 @@ class FAU_Person {
 
         add_action( 'admin_menu' , array( $this, 'person_menu_subpages' )); 
         add_action( 'admin_menu', array( $this, 'add_help_tabs' ) );
-        add_action( 'admin_menu', array( $this, 'add_options_pages' ) );
+
         add_action( 'admin_init', array( $this, 'admin_init' ) );
+        add_action( 'admin_menu', array( $this, 'add_options_pages' ) );
         add_action( 'widgets_init', array( __CLASS__, 'register_widgets' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_script' ) );
 	add_action( 'admin_init', array($this, 'person_shortcodes_rte_button' ) );     
@@ -177,7 +178,21 @@ public function adding_custom_meta_boxes( $post ) {
     }
 
     private static function default_options() {
-        $options = array();
+        $options = array(
+            'sidebar' => array(
+                'position' => true,
+                'organisation' => true,
+                'abteilung' => true,
+                'adresse' => true,
+                'telefon' => true,
+                'fax' => true,
+                'mail' => true,
+                'webseite' => true,
+                'sprechzeiten' => true,
+                'kurzauszug' => true,
+            ),
+                
+        );
                 
         return $options; // Standard-Array für zukünftige Optionen
     }
@@ -494,13 +509,21 @@ public function adding_custom_meta_boxes( $post ) {
     }
 
     public function admin_init() {
+        register_setting('sidebar_options', self::option_name, array($this, 'options_validate'));
+        
+        add_settings_section('sidebar_section', __('Geben Sie an, welche Daten in der Sidebar angezeigt werden sollen (format="sidebar" im Shortcode bzw. Feld Ansprechpartner in den FAU-Themes):', FAU_PERSON_TEXTDOMAIN), '__return_false', 'sidebar_options');
 
+        add_settings_field('sidebar_first', __('Vorname', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar_first'), 'sidebar_options', 'sidebar_section');
+
+        
+        
         add_settings_section('search_univis_id_section', __('Bitte geben Sie den Vor- und Nachnamen der Person ein, von der Sie die UnivIS-ID benötigen.', FAU_PERSON_TEXTDOMAIN), '__return_false', 'search_univis_id_options');
 
         add_settings_field('univis_id_firstname', __('Vorname', FAU_PERSON_TEXTDOMAIN), array($this, 'univis_id_firstname'), 'search_univis_id_options', 'search_univis_id_section');
         add_settings_field('univis_id_givenname', __('Nachname', FAU_PERSON_TEXTDOMAIN), array($this, 'univis_id_givenname'), 'search_univis_id_options', 'search_univis_id_section');
       
         add_settings_section('find_univis_id_section', __('Folgende Daten wurden in UnivIS gefunden:', FAU_PERSON_TEXTDOMAIN), '__return_false', 'find_univis_id_options');
+        
     }
     
     public function univis_id_firstname() {
@@ -517,6 +540,13 @@ public function adding_custom_meta_boxes( $post ) {
         
         <?php
     }       
+
+    public function sidebar_first() {
+        $options = $this->get_options();
+        ?>
+        <input type='checkbox' name="<?php printf('%s[sidebar][position]', self::option_name); ?>" <?php checked($options['sidebar']['position'], true); ?>><p class="description"><?php _e('Position', FAU_PERSON_TEXTDOMAIN); ?></p>
+        <?php
+    }
     
     public function help_menu_search_univis_id() {
 
@@ -544,65 +574,28 @@ public function adding_custom_meta_boxes( $post ) {
         $screen->set_help_sidebar($help_sidebar);
     }    
 
+    public function options_validate($input) {
+        $defaults = $this->default_options();
+        $options = $this->get_options;
+        $input['sidebar']['position'] = isset($input['sidebar']['position']) ? true : false;        
+        return $input;
+    }
+    
     public function sidebar_options() {
-
         ?>
         <div class="wrap">
             <?php screen_icon(); ?>
-            <h2><?php echo esc_html(__('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN)); ?></h2>
+            <h2><?php echo esc_html(__('Anzeigeoptionen', FAU_PERSON_TEXTDOMAIN)); ?></h2>
 
             <form method="post">
                 <?php
-                settings_fields('search_univis_id_options');
-                do_settings_sections('search_univis_id_options');
-                submit_button(esc_html(__('Person suchen', FAU_PERSON_TEXTDOMAIN)));
+                settings_fields('sidebar_options');
+                do_settings_sections('sidebar_options');
+                submit_button(esc_html(__('Änderungen speichern', FAU_PERSON_TEXTDOMAIN)));
                 ?>
             </form>            
         </div>
-        <div class="wrap">
-            <?php
-                settings_fields('find_univis_id_options');
-                do_settings_sections('find_univis_id_options');
-                if(empty($person)) {
-                    echo __('Es konnten keine Daten zur Person gefunden werden. Bitte verändern Sie Ihre Suchwerte und stellen Sie sicher, dass das Plugin Univis-Data aktiviert ist.', FAU_PERSON_TEXTDOMAIN);
-                } else {
-                    $person = $this->array_orderby($person,"lastname", SORT_ASC, "firstname", SORT_ASC );
-                    $no_univis_data = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
-                    foreach($person as $key=>$value) {
-                        if(array_key_exists('locations', $person[$key]) && array_key_exists('location', $person[$key]['locations'][0]) && array_key_exists('email', $person[$key]['locations'][0]['location'][0])) {
-                            $email = $person[$key]['locations'][0]['location'][0]['email'];
-                        } else {
-                            $email = $no_univis_data;
-                        }
-                        if(array_key_exists('id', $person[$key])) {
-                            $id = $person[$key]['id'];
-                        } else {
-                            $id = $no_univis_data;
-                        }
-                        if(array_key_exists('firstname', $person[$key])) {
-                            $firstname = $person[$key]['firstname'];
-                        } else {
-                            $firstname = __('Vorname', FAU_PERSON_TEXTDOMAIN) . ": " . $no_univis_data . ", ";
-                        }
-                        if(array_key_exists('lastname', $person[$key])) {
-                            $lastname = $person[$key]['lastname'];
-                        } else {
-                            $lastname = __('Nachname', FAU_PERSON_TEXTDOMAIN) . ": " . $no_univis_data;
-                        }
-                        if(array_key_exists('orgname', $person[$key])) {
-                            $orgname = $person[$key]['orgname'];
-                        } else {
-                            $orgname = $no_univis_data;
-                        }
-                        //echo sprintf(__('UnivIS-ID %1$s: %2$s %3$s, E-Mail: %4$s, Organisation: %5$s', FAU_PERSON_TEXTDOMAIN), $id, $firstname, $lastname, $email, $orgname);
-                        echo 'UnivIS-ID '. $id . ': '. $firstname . ' ' . $lastname . ', E-Mail: ' . $email. ', Organisation: ' . $orgname;
-                        echo "<br>";
-                    }
-                }
-            ?>
-        </div>
         <?php
-            delete_transient(self::search_univis_id_transient);
     }
     
     
