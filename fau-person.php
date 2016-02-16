@@ -193,6 +193,7 @@ class FAU_Person {
     private static function get_options() {
         $defaults = self::default_options();
         $options = (array) get_option(self::option_name);
+        
         //Umstellung auf mehrdimensionales Array wegen Sidebar
         foreach ($options as $key => $value) {
             if(is_array($options[$key])) {
@@ -540,7 +541,7 @@ class FAU_Person {
         //register_setting('sidebar_options', self::option_name, array($this, 'options_validate'));
         
         add_settings_section('sidebar_section', __('Geben Sie an, welche Daten in der Sidebar angezeigt werden sollen (format="sidebar" im Shortcode bzw. Feld Ansprechpartner in den FAU-Themes):', FAU_PERSON_TEXTDOMAIN), '__return_false', 'sidebar_options');
-        add_settings_field('sidebar_position', __('Position', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar_position'), 'sidebar_options', 'sidebar_section');
+        /*add_settings_field('sidebar_position', __('Position', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar_position'), 'sidebar_options', 'sidebar_section');
         add_settings_field('sidebar_organisation', __('Organisation', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar_organisation'), 'sidebar_options', 'sidebar_section');
         add_settings_field('sidebar_abteilung', __('Abteilung', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar_abteilung'), 'sidebar_options', 'sidebar_section');
         add_settings_field('sidebar_adresse', __('Adresse', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar_adresse'), 'sidebar_options', 'sidebar_section');
@@ -550,8 +551,28 @@ class FAU_Person {
         add_settings_field('sidebar_webseite', __('Webseite', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar_webseite'), 'sidebar_options', 'sidebar_section');
         add_settings_field('sidebar_sprechzeiten', __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar_sprechzeiten'), 'sidebar_options', 'sidebar_section');
         add_settings_field('sidebar_kurzauszug', __('Kurzauszug', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar_kurzauszug'), 'sidebar_options', 'sidebar_section');
+        */
+        add_settings_field('sidebar', __('Sidebar', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar'), 'sidebar_options', 'sidebar_section');
     }
 
+    public function sidebar() {
+        $defaults = $this->default_options();
+        $options = $this->get_options();
+        ?>
+        <label for="<?php printf('%s[sidebar][position]', self::option_name); ?>"><input id="<?php printf('%s[sidebar][position]', self::option_name); ?>" type='checkbox' name="<?php printf('%s[sidebar][position]', self::option_name); ?>" <?php checked($options['sidebar']['position'], 1); ?>><?php _e('Position', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][organisation]', self::option_name); ?>"><input type='checkbox' name="<?php printf('%s[sidebar][organisation]', self::option_name); ?>" <?php checked($options['sidebar']['organisation'], 1); ?>><?php _e('Organisation', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][abteilung]', self::option_name); ?>"><input type='checkbox' name="<?php printf('%s[sidebar][abteilung]', self::option_name); ?>" <?php checked($options['sidebar']['abteilung'], 1); ?>><?php _e('Abteilung', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][adresse]', self::option_name); ?>"><input type='checkbox' name="<?php printf('%s[sidebar][adresse]', self::option_name); ?>" <?php checked($options['sidebar']['adresse'], 1); ?>><?php _e('Adresse', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][telefon]', self::option_name); ?>"><input type='checkbox' name="<?php printf('%s[sidebar][telefon]', self::option_name); ?>" <?php checked($options['sidebar']['telefon'], 1); ?>><?php _e('Telefon', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][fax]', self::option_name); ?>"><input type='checkbox' name="<?php printf('%s[sidebar][fax]', self::option_name); ?>" <?php checked($options['sidebar']['fax'], 1); ?>><?php _e('Fax', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][mail]', self::option_name); ?>"><input type='checkbox' name="<?php printf('%s[sidebar][mail]', self::option_name); ?>" <?php checked($options['sidebar']['mail'], 1); ?>><?php _e('Mail', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][webseite]', self::option_name); ?>"><input type='checkbox' name="<?php printf('%s[sidebar][webseite]', self::option_name); ?>" <?php checked($options['sidebar']['webseite'], 1); ?>><?php _e('Webseite', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][sprechzeiten]', self::option_name); ?>"><input type='checkbox' name="<?php printf('%s[sidebar][sprechzeiten]', self::option_name); ?>" <?php checked($options['sidebar']['sprechzeiten'], 1); ?>><?php _e('Sprechzeiten', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][kurzauszug]', self::option_name); ?>"><input type='checkbox' name="<?php printf('%s[sidebar][kurzauszug]', self::option_name); ?>" <?php checked($options['sidebar']['kurzauszug'], 1); ?>><?php _e('Kurzauszug', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+
+        <?php         
+    }
+    
     public function sidebar_position() {
         $defaults = $this->default_options();
         $options = $this->get_options();
@@ -563,7 +584,6 @@ class FAU_Person {
     public function sidebar_organisation() {
         $defaults = $this->default_options();
         $options = $this->get_options();
-        //_rrze_debug($defaults);
         ?>
         <input type='checkbox' name="<?php printf('%s[sidebar][organisation]', self::option_name); ?>" <?php checked($options['sidebar']['organisation'], 1); ?>>
         <?php 
