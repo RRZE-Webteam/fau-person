@@ -200,24 +200,16 @@ public function adding_custom_meta_boxes( $post ) {
 
     private static function get_options() {
         $defaults = self::default_options();
-        
         $options = (array) get_option(self::option_name);
         //Umstellung auf mehrdimensionales Array
-        //options sidebar => Array
         foreach ($options as $key => $value) {
-            if(is_array($value)) {
-                //Array position => true
-                foreach ($value as $subkey => $subvalue) {
-                    $subkey = wp_parse_args($subkey, $defaults[$key]);
-                    $subkey = array_intersect_key($subkey, $defaults[$key]);                       
-                }             
-                _rrze_debug($subkey);
+            if(is_array($options[$key])) {
+                $options[$key] = wp_parse_args($options[$key], $defaults[$key]);
+                $options[$key] = array_intersect_key($options[$key], $defaults[$key]);       
             }
-            //_rrze_debug($defaults[$key]);
-            $key = wp_parse_args($key, $defaults);
-            $key = array_intersect_key($key, $defaults);
+        $options = wp_parse_args($options, $defaults);    
+        $options = array_intersect_key($options, $defaults);
         }
-                _rrze_debug($options);
         return $options;
     }
     
@@ -442,24 +434,17 @@ public function adding_custom_meta_boxes( $post ) {
     }   
     
     public function add_options_pages() {
+        //Umgehen von register_setting für die Suche-Seite, da register_setting nur für Standard-Settings-Seiten funktioniert!!!        
         $defaults = $this->default_options();
         $options = $this->get_options();
-        //Umgehen von register_setting für die Suche-Seite, da register_setting nur für Standard-Settings-Seiten funktioniert!!!
         $input = isset($_POST[self::option_name]) ? $_POST[self::option_name] : null;
         set_transient(self::search_univis_id_transient, $input, 30);
-        //_rrze_debug($options);
-        //_rrze_debug($defaults);
-        if( isset($_POST['submit']) ) {
-            foreach( $_POST[self::option_name]['sidebar'] as $key => $value ) {
-                $input = isset($key) ? 1 : 0;
-                $options['sidebar'][$key] = $input;       
+        if( isset( $_POST['submit'] ) ) {
+            foreach( $defaults['sidebar'] as $key => $value ) {
+                $input = isset($_POST[self::option_name]['sidebar'][$key]) ? 1 : 0;
+                $options['sidebar'][$key] = $input;    
             }
-            update_option(self::option_name, $options); 
-        /*} else {
-            foreach( $options['sidebar'] as $key => $value ) {
-                $input = isset($key) ? 1 : 0;
-                $options['sidebar'][$key] = $input;       
-            }  */          
+            update_option(self::option_name, $options);   
         }
 
         $this->search_univis_id_page = add_submenu_page('edit.php?post_type=person', __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'search-univis-id', array( $this, 'search_univis_id' ));
