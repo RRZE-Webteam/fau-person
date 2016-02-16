@@ -51,20 +51,20 @@
             if( $format == 'sidebar' ) {
                 $showsidebar = 1;
                 $sidebar = 1;
-                $showinstitution = 0;
+                $showinstitution = 1;
                 $showabteilung = 1;
-                $showposition = 0;
+                $showposition = 1;
                 $showtitle = 1;
                 $showsuffix = 1;
-                $showaddress = 0;
-                $showroom = 0;
+                $showaddress = 1;
+                $showroom = 1;
                 $showtelefon = 1;
-                $showfax = 0;
+                $showfax = 1;
                 $showmobile = 0;
                 $showmail = 1;
                 $showwebsite = 1;
                 $showdescription = 1;
-                $showoffice = 0;
+                $showoffice = 1;
                 $showpubs = 0;
                 $showthumb = 1;
             }
@@ -543,6 +543,12 @@ if(!function_exists('fau_person_sidebar')) {
             
             $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
             extract($fields);
+            
+            // Welche Felder sollen in der Sidebar angezeigt werden?
+            $options = get_option(FAU_Person::option_name)['sidebar'];
+            
+            
+            
             if( $showvia !== 0 && !empty( $connections ) )                    $showvia = 1;
             if( $showvia === 0 && !empty( $connection_only ) )      $connection_only = '';
             
@@ -552,7 +558,7 @@ if(!function_exists('fau_person_sidebar')) {
                 $personlink = get_permalink( $id );
             }
             
-            if( $showaddress ) {
+            if( $showaddress && $options['adresse'] ) {
                 if ( $streetAddress || $postalCode || $addressLocality || $addressCountry ) {
                     $contactpoint = '<li class="person-info-address"><span class="screen-reader-text">' . __('Adresse', FAU_PERSON_TEXTDOMAIN) . ': <br></span>';
                     if ( $streetAddress ) {
@@ -616,28 +622,28 @@ if(!function_exists('fau_person_sidebar')) {
             $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
             $content .= '</h3>' . "\n";
             $content .= '<ul class="person-info">' . "\n";
-            if ($jobTitle && $showposition)
+            if ($jobTitle && $showposition && $options['position'])
                 $content .= '<li class="person-info-position"><span class="screen-reader-text">' . __('Tätigkeit', FAU_PERSON_TEXTDOMAIN) . ': </span><strong><span itemprop="jobTitle">' . $jobTitle . '</span></strong></li>' . "\n";
-            if ($worksFor && $showinstitution)
+            if ($worksFor && $showinstitution && $options['organisation'])
                 $content .= '<li class="person-info-institution"><span class="screen-reader-text">' . __('Organisation', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="worksFor">' . $worksFor . '</span></li>' . "\n";
-            if ($department && $showabteilung)
+            if ($department && $showabteilung && $options['abteilung'])
                 $content .= '<li class="person-info-abteilung"><span class="screen-reader-text">' . __('Abteilung', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="department">' . $department . '</span></li>' . "\n";
             if (!empty($contactpoint) && empty( $connection_only ) )
                 $content .= $contactpoint;            
-            if ($telephone && $showtelefon && empty( $connection_only ) )
+            if ($telephone && $showtelefon && empty( $connection_only ) && $options['telefon'] )
                 $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="telephone">' . $telephone . '</span></li>' . "\n";
-            if ($faxNumber && $showfax && empty( $connection_only ) )
+            if ($faxNumber && $showfax && empty( $connection_only )  && $options['fax'] )
                 $content .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>' . "\n";
-            if ($email && $showmail && empty( $connection_only ) )
+            if ($email && $showmail && empty( $connection_only ) && $options['mail'] )
                 $content .= '<li class="person-info-email"><span class="screen-reader-text">' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="email" href="mailto:' . strtolower($email) . '">' . strtolower($email) . '</a></li>' . "\n";
-            if ($url && $showwebsite)
+            if ($url && $showwebsite && $options['webseite'])
                 $content .= '<li class="person-info-www"><span class="screen-reader-text">' . __('Webseite', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="url" href="' . $url . '">' . $url . '</a></li>' . "\n";
-            if ($hoursAvailable && $showoffice  && empty( $connection_only ) )
+            if ($hoursAvailable && $showoffice  && empty( $connection_only ) && $options['sprechzeiten'] )
                 $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable">' . $hoursAvailable . '</span></li>';
             $content .= '</ul>' . "\n";
             if ( ( !empty($connection_text) || !empty($connection_options) || !empty($connections) ) && $showvia===1  )
                 $content .= fau_person_connection( $connection_text, $connection_options, $connections );
-            if ($description && $showdescription)
+            if ( $description && $showdescription && $options['kurzauszug'] )
                 $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $description . '</div>' . "\n";
             $content .= '</div>' . "\n";
             $content .= '</div>' . "\n";

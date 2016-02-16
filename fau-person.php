@@ -76,7 +76,6 @@ class FAU_Person {
         define('FAU_PERSON_FILE_PATH', FAU_PERSON_ROOT . '/' . basename(__FILE__));
         define('FAU_PERSON_URL', plugins_url('/', __FILE__));
         define('FAU_PERSON_TEXTDOMAIN', self::textdomain);
-
         
         load_plugin_textdomain(self::textdomain, false, sprintf('%s/languages/', dirname(plugin_basename(__FILE__))));
         
@@ -113,23 +112,19 @@ class FAU_Person {
         add_action( 'pre_get_posts', array( $this, 'custom_columns_orderby') );
         
         //Excerpt-Meta-Box umbenennen
-        add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));
-              
-          
+        add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));        
     }
-
     
-public function adding_custom_meta_boxes( $post ) {
-    add_meta_box( 
-        'my-meta-box',
-        __( 'My Meta Box' ),
-        'render_my_meta_box',
-        'post',
-        'normal',
-        'default'
-    );
-}
- 
+    public function adding_custom_meta_boxes( $post ) {
+        add_meta_box( 
+            'my-meta-box',
+            __( 'My Meta Box' ),
+            'render_my_meta_box',
+            'post',
+            'normal',
+            'default'
+        );
+    }
     
     public static function activation() {
 
@@ -157,8 +152,7 @@ public function adding_custom_meta_boxes( $post ) {
             $caps_standort = self::get_caps('standort');
             self::remove_caps('administrator', $caps_standort);
             //self::remove_caps('editor', $caps);
-            flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind
-    
+            flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind   
     }
 
     private static function version_compare() {
@@ -191,17 +185,15 @@ public function adding_custom_meta_boxes( $post ) {
                 'webseite' => true,
                 'sprechzeiten' => true,
                 'kurzauszug' => true,
-            ),
-                
-        );
-                
+            ),                
+        );               
         return $options; // Standard-Array für zukünftige Optionen
     }
 
     private static function get_options() {
         $defaults = self::default_options();
         $options = (array) get_option(self::option_name);
-        //Umstellung auf mehrdimensionales Array
+        //Umstellung auf mehrdimensionales Array wegen Sidebar
         foreach ($options as $key => $value) {
             if(is_array($options[$key])) {
                 $options[$key] = wp_parse_args($options[$key], $defaults[$key]);
