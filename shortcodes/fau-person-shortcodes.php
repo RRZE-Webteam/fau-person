@@ -94,7 +94,25 @@
                 $showthumb = 0;         
                 $showvia = 0;
             }          
-            if( $format == 'kompakt' || $format == 'compactindex' )       $compactindex = 1;
+            if( $format == 'kompakt' || $format == 'compactindex' )  {
+                $compactindex = 1;
+                $showinstitution = 0;
+                $showabteilung = 0;
+                $showposition = 1;
+                $showtitle = 1;
+                $showsuffix = 1;
+                $showaddress = 1;
+                $showroom = 0;
+                $showtelefon = 1;
+                $showfax = 0;
+                $showmobile = 0;
+                $showmail = 1;
+                $showwebsite = 0;
+                $showdescription = 0;
+                $showoffice = 0;
+                $showpubs = 0;
+                $showthumb = 1;
+            }
         }     
         // Wenn neue Felder dazukommen, hier die Anzeigeoptionen auch mit einstellen
         if (!empty($show)) {
@@ -273,7 +291,7 @@ if(!function_exists('fau_person_markup')) {
     function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex=0) {
         $fields = sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true), 0 );
         extract($fields);
-        if( $showvia !== 0 && $connections )                    $showvia = 1;
+        if( $showvia !== 0 && !empty($connections) )                    $showvia = 1;
         if( $showvia === 0 && !empty( $connection_only ) )      $connection_only = '';
  
 	$type = get_post_meta($id, 'fau_person_typ', true);
@@ -331,7 +349,7 @@ if(!function_exists('fau_person_markup')) {
         
                     
         $content = '<div class="person content-person" itemscope itemtype="http://schema.org/Person">';	
-        if( $compactindex )     $content .= '<div class= "compactindex';
+        if( $compactindex )     $content .= '<div class="compactindex">';
         $content .= '<div class="row">';
 
         if($showthumb) {

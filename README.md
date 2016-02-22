@@ -47,6 +47,10 @@ Beispiel: [kontakt id="42, 44, 56" format="name"]
 kann gerne ins eigene Theme übernommen und daran angepasst werden, beigefügte Vorlage ist an FAU-Fakultätsthemes angepasst
 Es wird zuerst im Theme geschaut, ob eine single-person.php vorhanden ist, wenn ja wird die genommen, ansonsten die vom Plugin
 
+####Version 2.0.2: Format kompakt ergänzt
+
+- Shortcode-Format kompakt angepasst: Darstellung wie Standardausgabe mit Rahmen, soll im Theme jedoch auf die volle Breite ergänzt werden. Default-Anzeigewerte: Bild, vollständiger Name, Position, Telefon, Mail, Adresse       
+
 ####Version 2.0.1: Diverse Bugfixes
 
 - Fehlende Raumanzeige in Sidebar ergänzt      
