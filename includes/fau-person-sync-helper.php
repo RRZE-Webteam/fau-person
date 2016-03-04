@@ -280,7 +280,7 @@ class UnivIS_Data {
     
     protected static $univis_api_url = 'http://univis.uni-erlangen.de/prg';
     
-    protected static $transient_expiration = 2 * WEEK_IN_SECONDS;
+    protected static $transient_expiration = WEEK_IN_SECONDS;
     
     protected static $timeout = DAY_IN_SECONDS;
     
