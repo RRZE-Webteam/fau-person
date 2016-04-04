@@ -4,7 +4,7 @@
  Plugin Name: FAU Person
  Plugin URI: https://github.com/RRZE-Webteam/fau-person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 2.0.2
+ * Version: 2.1
  * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -185,6 +185,7 @@ class FAU_Person {
                 'webseite' => true,
                 'sprechzeiten' => true,
                 'kurzauszug' => true,
+                'bild' => true,
             ),                
         );               
         return $options; // Standard-Array für zukünftige Optionen
@@ -540,19 +541,8 @@ class FAU_Person {
     public function options_init() {
         //register_setting('sidebar_options', self::option_name, array($this, 'options_validate'));
         
-        add_settings_section('sidebar_section', __('Geben Sie an, welche Daten in der Sidebar angezeigt werden sollen (format="sidebar" im Shortcode bzw. Feld Ansprechpartner in den FAU-Themes):', FAU_PERSON_TEXTDOMAIN), '__return_false', 'sidebar_options');
-        /*add_settings_field('sidebar_position', __('Position', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar_position'), 'sidebar_options', 'sidebar_section');
-        add_settings_field('sidebar_organisation', __('Organisation', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar_organisation'), 'sidebar_options', 'sidebar_section');
-        add_settings_field('sidebar_abteilung', __('Abteilung', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar_abteilung'), 'sidebar_options', 'sidebar_section');
-        add_settings_field('sidebar_adresse', __('Adresse', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar_adresse'), 'sidebar_options', 'sidebar_section');
-        add_settings_field('sidebar_telefon', __('Telefon', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar_telefon'), 'sidebar_options', 'sidebar_section');
-        add_settings_field('sidebar_fax', __('Fax', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar_fax'), 'sidebar_options', 'sidebar_section');
-        add_settings_field('sidebar_mail', __('Mail', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar_mail'), 'sidebar_options', 'sidebar_section');
-        add_settings_field('sidebar_webseite', __('Webseite', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar_webseite'), 'sidebar_options', 'sidebar_section');
-        add_settings_field('sidebar_sprechzeiten', __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar_sprechzeiten'), 'sidebar_options', 'sidebar_section');
-        add_settings_field('sidebar_kurzauszug', __('Kurzauszug', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar_kurzauszug'), 'sidebar_options', 'sidebar_section');
-        */
-        add_settings_field('sidebar', __('Sidebar', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar'), 'sidebar_options', 'sidebar_section');
+        add_settings_section('sidebar_section', __('Geben Sie an, welche Daten angezeigt werden sollen:', FAU_PERSON_TEXTDOMAIN), '__return_false', 'sidebar_options');
+        add_settings_field('sidebar', __('in der Sidebar (Feld Ansprechpartner in den FAU-Themes) und im Widget', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar'), 'sidebar_options', 'sidebar_section');
     }
 
     public function sidebar() {
@@ -569,90 +559,11 @@ class FAU_Person {
         <label for="<?php printf('%s[sidebar][webseite]', self::option_name); ?>"><input type='checkbox' name="<?php printf('%s[sidebar][webseite]', self::option_name); ?>" <?php checked($options['sidebar']['webseite'], 1); ?>><?php _e('Webseite', FAU_PERSON_TEXTDOMAIN); ?></label><br>
         <label for="<?php printf('%s[sidebar][sprechzeiten]', self::option_name); ?>"><input type='checkbox' name="<?php printf('%s[sidebar][sprechzeiten]', self::option_name); ?>" <?php checked($options['sidebar']['sprechzeiten'], 1); ?>><?php _e('Sprechzeiten', FAU_PERSON_TEXTDOMAIN); ?></label><br>
         <label for="<?php printf('%s[sidebar][kurzauszug]', self::option_name); ?>"><input type='checkbox' name="<?php printf('%s[sidebar][kurzauszug]', self::option_name); ?>" <?php checked($options['sidebar']['kurzauszug'], 1); ?>><?php _e('Kurzauszug', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][bild]', self::option_name); ?>"><input type='checkbox' name="<?php printf('%s[sidebar][bild]', self::option_name); ?>" <?php checked($options['sidebar']['bild'], 1); ?>><?php _e('Bild', FAU_PERSON_TEXTDOMAIN); ?></label><br>
 
         <?php         
     }
-    
-    public function sidebar_position() {
-        $defaults = $this->default_options();
-        $options = $this->get_options();
-        ?>
-        <input type='checkbox' name="<?php printf('%s[sidebar][position]', self::option_name); ?>" <?php checked($options['sidebar']['position'], 1); ?>>
-        <?php 
-    }
-    
-    public function sidebar_organisation() {
-        $defaults = $this->default_options();
-        $options = $this->get_options();
-        ?>
-        <input type='checkbox' name="<?php printf('%s[sidebar][organisation]', self::option_name); ?>" <?php checked($options['sidebar']['organisation'], 1); ?>>
-        <?php 
-    }
-    
-    public function sidebar_abteilung() {
-        $defaults = $this->default_options();
-        $options = $this->get_options();
-        ?>
-        <input type='checkbox' name="<?php printf('%s[sidebar][abteilung]', self::option_name); ?>" <?php checked($options['sidebar']['abteilung'], 1); ?>>
-        <?php 
-    }
-    
-    public function sidebar_adresse() {
-        $defaults = $this->default_options();
-        $options = $this->get_options();
-        ?>
-        <input type='checkbox' name="<?php printf('%s[sidebar][adresse]', self::option_name); ?>" <?php checked($options['sidebar']['adresse'], 1); ?>>
-        <?php 
-    }
-    
-    public function sidebar_telefon() {
-        $defaults = $this->default_options();
-        $options = $this->get_options();
-        ?>
-        <input type='checkbox' name="<?php printf('%s[sidebar][telefon]', self::option_name); ?>" <?php checked($options['sidebar']['telefon'], 1); ?>>
-        <?php 
-    }
-    
-    public function sidebar_fax() {
-        $defaults = $this->default_options();
-        $options = $this->get_options();
-        ?>
-        <input type='checkbox' name="<?php printf('%s[sidebar][fax]', self::option_name); ?>" <?php checked($options['sidebar']['fax'], 1); ?>>
-        <?php 
-    }
-    
-    public function sidebar_mail() {
-        $defaults = $this->default_options();
-        $options = $this->get_options();
-        ?>
-        <input type='checkbox' name="<?php printf('%s[sidebar][mail]', self::option_name); ?>" <?php checked($options['sidebar']['mail'], 1); ?>>
-        <?php 
-    }
-    
-    public function sidebar_webseite() {
-        $defaults = $this->default_options();
-        $options = $this->get_options();
-        ?>
-        <input type='checkbox' name="<?php printf('%s[sidebar][webseite]', self::option_name); ?>" <?php checked($options['sidebar']['webseite'], 1); ?>>
-        <?php 
-    }
-    
-    public function sidebar_sprechzeiten() {
-        $defaults = $this->default_options();
-        $options = $this->get_options();
-        ?>
-        <input type='checkbox' name="<?php printf('%s[sidebar][sprechzeiten]', self::option_name); ?>" <?php checked($options['sidebar']['sprechzeiten'], 1); ?>>
-        <?php 
-    }
-    
-    public function sidebar_kurzauszug() {
-        $defaults = $this->default_options();
-        $options = $this->get_options();
-        ?>
-        <input type='checkbox' name="<?php printf('%s[sidebar][kurzauszug]', self::option_name); ?>" <?php checked($options['sidebar']['kurzauszug'], 1); ?>>
-        <?php 
-    }
-    
+         
     public function help_menu_search_univis_id() {
 
         $content_overview = array(
