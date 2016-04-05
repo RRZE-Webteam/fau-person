@@ -6,10 +6,7 @@
             extract(shortcode_atts(array(
             "slug" => FALSE,
             "id" => FALSE,
-            "showaddress" => TRUE,
-            "showlist" => FALSE,
-            "showthumb" => FALSE,
-            //"format" => '',
+            "format" => '',
             "show" => '', 
             "hide" => '',
                         ), $atts));
@@ -17,7 +14,14 @@
         $sidebar = '';
         $page = '';
         $list = '';
-        if ( !empty( $format ) ) {         
+        $showaddress = '';
+        $showlist = '';
+        $showthumb = '';
+        $showsidebar = '';
+        $name = '';
+        $shortlist = '';
+        if ( !empty( $format ) ) {      
+            if( $format == 'name' || $format == 'shortlist' )   $shortlist = 1;
             if( $format == 'sidebar' ) {
                 $showsidebar = 1;
                 $sidebar = 1;
@@ -48,14 +52,14 @@
 
         if (empty($id)) {
             if (empty($slug)) {
-                return '<p>' . sprintf(__('Bitte geben Sie den Titel oder die ID des Kontakteintrags an.', FAU_PERSON_TEXTDOMAIN), $slug) . '</p>';
+                return '<p>' . sprintf(__('Bitte geben Sie den Titel oder die ID des Standorteintrags an.', FAU_PERSON_TEXTDOMAIN), $slug) . '</p>';
             } else {
                 $posts = get_posts(array('name' => $slug, 'post_type' => 'person', 'post_status' => 'publish'));
                 if ($posts) {
                     $post = $posts[0];
                     $id = $post->ID;
                 } else {
-                    return '<p>' . sprintf(__('Es konnte kein Kontakteintrag mit dem angegebenen Titel %s gefunden werden. Versuchen Sie statt dessen die Angabe der ID des Kontakteintrags.', FAU_PERSON_TEXTDOMAIN), $slug) . '</p>';
+                    return '<p>' . sprintf(__('Es konnte kein Standorteintrag mit dem angegebenen Titel %s gefunden werden. Versuchen Sie statt dessen die Angabe der ID des Kontakteintrags.', FAU_PERSON_TEXTDOMAIN), $slug) . '</p>';
                 }
             }
         }
@@ -63,9 +67,7 @@
         if (!empty($id)) {
 
             $list_ids = explode(',', $id);
-            if ( $shortlist ) {
-                $liste = '<span class="person liste-person" itemscope itemtype="http://schema.org/Person">';
-            } elseif ( $page ) {
+            if ( $page ) {
                 $liste = '';
             } elseif ( $list ) {
                 $liste = '<ul class="person liste-person" itemscope itemtype="http://schema.org/Person">';
@@ -78,20 +80,21 @@
             $i = 1;
             foreach ($list_ids as $value) {
                 $post = get_post($value);
-                if ($post && $post->post_type == 'person') {
+                
+                if ($post && $post->post_type == 'standort') {
                     if ( $page ) {
-                        $liste .= fau_person_page($value);
+                        $liste .= fau_standort_page($value);
                     } elseif ( $shortlist ) {
-                        $liste .= fau_person_shortlist($value, $showlist);
+                        $liste .= fau_standort_shortlist($value, $showlist);
                         if( $i < $number )  $liste .= ", ";
                     } elseif ( $list ) {
                         $liste .= '<li class="person-info">'."\n";
-                        $liste .= fau_person_shortlist($value, $showlist);
+                        $liste .= fau_standort_shortlist($value, $showlist);
                         $content .= "</li>\n";
-                    } elseif ( $sidebar ) {
-                        $liste .= fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb);
-                    } else {
-                        $liste .= fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile);
+                    } elseif ( $sidebar ) { 
+                        $liste .= fau_standort_sidebar($value, 0, $showlist, $showaddress, $showthumb);
+                    } else { 
+                        $liste .= fau_standort_markup($value, $showaddress, $showlist, $showsidebar, $showthumb);
                     }
                 } else {
                     $liste .=  sprintf(__('Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $value);
@@ -99,9 +102,7 @@
                 }
                 $i++;
             }
-            if ( $shortlist  ) {
-                $liste .= "</span>";
-            } elseif ( $list ) {
+            if ( $list ) {
                 $liste .= "</ul>\n";
             } elseif ( $page ) {
                 $post = get_post( $id );
@@ -117,9 +118,9 @@
 
 }
 
-if(!function_exists('fau_person_markup')) {
+if(!function_exists('fau_standort_markup')) {
 
-    function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile) {
+    function fau_standort_markup($id, $showaddress, $showlist, $showsidebar, $showthumb) {
         $fields = sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true), 0 );
         extract($fields);
         
@@ -165,17 +166,9 @@ if(!function_exists('fau_person_markup')) {
         }
         
         $fullname = '';
-        if($showtitle && $honorificPrefix)                      
-            $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
-        if($givenName || $familyName) {
-                    if($givenName)          $fullname .= '<span itemprop="givenName">'.$givenName."</span> ";
-                    if($familyName)         $fullname .= '<span itemprop="familyName">'.$familyName."</span>";
-        } elseif( !empty( get_the_title($id) ) ) {                                                
+        if( !empty( get_the_title($id) ) ) {                                                
             $fullname .= get_the_title($id);
-        }
-        if($showsuffix && $honorificSuffix)                     
-            $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
-        
+        }        
                     
         $content = '<div class="person content-person" itemscope itemtype="http://schema.org/Person">';			
         $content .= '<div class="row">';
@@ -206,41 +199,14 @@ if(!function_exists('fau_person_markup')) {
         $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
         $content .= '</h3>';
         $content .= '<ul class="person-info">';
-        if ($showposition && $jobTitle)
-            $content .= '<li class="person-info-position"><span class="screen-reader-text">' . __('Tätigkeit', FAU_PERSON_TEXTDOMAIN) . ': </span><strong><span itemprop="jobTitle">' . $jobTitle . '</span></strong></li>';
-        if ($showinstitution && $worksFor)
-            $content .= '<li class="person-info-institution"><span class="screen-reader-text">' . __('Organisation', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="worksFor">' . $worksFor . '</span></li>';
-        if ($showabteilung && $department)
-            $content .= '<li class="person-info-abteilung"><span class="screen-reader-text">' . __('Abteilung', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="department">' . $department . '</span></li>';
-        if ($showtelefon && $telephone)
-            $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="telephone">' . $telephone . '</span></li>';
-        if (($extended || $showfax) && $faxNumber)
-            $content .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>';
-        if ($showmail && $email)
-            $content .= '<li class="person-info-email"><span class="screen-reader-text">' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="email" href="mailto:' . strtolower($email) . '">' . strtolower($email) . '</a></li>';
-        if (($extended || $showwebsite) && $url)
-            $content .= '<li class="person-info-www"><span class="screen-reader-text">' . __('Webseite', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="url" href="' . $url . '">' . $url . '</a></li>';
-        if (($extended || $showaddress) && !empty($contactpoint)) 
+        if ($showaddress && !empty($contactpoint)) 
             $content .= $contactpoint;
-        if (($extended || $showroom) && $workLocation)
-            $content .= '<li class="person-info-room"><span class="screen-reader-text">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' </span><span itemprop="workLocation">' . $workLocation . '</span></li>';
-        if ($showoffice && $hoursAvailable)
-            $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable">' . $hoursAvailable . '</span></li>';
-        if ($showpubs && $pubs)
-            $content .= '<li class="person-info-pubs"><span class="screen-reader-text">' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $pubs . '</li>';
         $content .= '</ul>';
 
         $content .= '</div>';
-        if (($showlist && $excerpt) || (($showsidebar || $extended) && $description) || ($showlink && $personlink)) {
+        if ( ($showlist || $showsidebar) && isset($excerpt) ) {
             $content .= '<div class="span3">';
-            if ($showlist && $excerpt)
-                $content .= '<div class="person-info-description"><p>' . $excerpt . '</p></div>';
-            if (($extended || $showsidebar) && $description)
-                $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $description . '</div>';
-            if ($showlink && $personlink) {
-                $content .= '<div class="person-info-more"><a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" class="person-read-more" href="' . $personlink . '">';
-                $content .= __('Mehr', FAU_PERSON_TEXTDOMAIN) . ' ›</a></div>';
-            }
+            $content .= '<div class="person-info-description"><p>' . $excerpt . '</p></div>';
             $content .= '</div>';
         }
         $content .= '</div>';
@@ -332,14 +298,14 @@ if(!function_exists('fau_standort_shortlist')) {
                 }
                 $content .= '<span class="person-info">';
                 $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
-                if( $showlist && $excerpt )                                  $content .= "<br>".$excerpt;    
+                if( $showlist && isset($excerpt) )                                  $content .= "<br>".$excerpt;    
                 $content .= '</span>';
             return $content;
     }
  }
  
 if(!function_exists('fau_standort_sidebar')) {
-    function fau_standort_sidebar($id, $title, $showlist=0, $showinstitution=0, $showabteilung=0, $showposition=0, $showtitle=0, $showsuffix=0, $showaddress=0, $showroom=0, $showtelefon=0, $showfax=0, $showmobile=0, $showmail=0, $showwebsite=0, $showlink=0, $showdescription=0, $showoffice=0, $showpubs=0, $showthumb=0) {
+    function fau_standort_sidebar($id, $title, $showlist=0, $showaddress=0, $showthumb=0) {
             if (!empty($id)) {
             $post = get_post($id);
 
@@ -380,14 +346,9 @@ if(!function_exists('fau_standort_sidebar')) {
             }
 
             $fullname = '';
-            if ($honorificPrefix && $showtitle)           $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
-            if($givenName || $familyName) {
-                if($givenName)              $fullname .= '<span itemprop="givenName">'.$givenName."</span> ";
-                if($familyName)             $fullname .= '<span itemprop="familyName">'.$familyName."</span>";
-            } elseif( !empty( get_the_title($id) ) ) {                                                
+            if( !empty( get_the_title($id) ) ) {                                                
                 $fullname .= get_the_title($id);
             }
-            if ($honorificSuffix && $showsuffix)           $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
             
             $content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
             
@@ -409,27 +370,9 @@ if(!function_exists('fau_standort_sidebar')) {
             $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
             $content .= '</h3>';
             $content .= '<ul class="person-info">';
-            if ($jobTitle && $showposition)
-                $content .= '<li class="person-info-position"><span class="screen-reader-text">' . __('Tätigkeit', FAU_PERSON_TEXTDOMAIN) . ': </span><strong><span itemprop="jobTitle">' . $jobTitle . '</span></strong></li>';
-            if ($worksFor && $showinstitution)
-                $content .= '<li class="person-info-institution"><span class="screen-reader-text">' . __('Organisation', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="worksFor">' . $worksFor . '</span></li>';
-            if ($department && $showabteilung)
-                $content .= '<li class="person-info-abteilung"><span class="screen-reader-text">' . __('Abteilung', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="department">' . $department . '</span></li>';
-            if ($telephone && $showtelefon)
-                $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="telephone">' . $telephone . '</span></li>';
-            if ($faxNumber && $showfax)
-                $content .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>';
-            if ($email && $showmail)
-                $content .= '<li class="person-info-email"><span class="screen-reader-text">' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="email" href="mailto:' . strtolower($email) . '">' . strtolower($email) . '</a></li>';
-            if ($url && $showwebsite)
-                $content .= '<li class="person-info-www"><span class="screen-reader-text">' . __('Webseite', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="url" href="' . $url . '">' . $url . '</a></li>';
             if (!empty($contactpoint))
                 $content .= $contactpoint;
-            if ($workLocation && $showoffice)
-                $content .= '<li class="person-info-room"><span class="screen-reader-text">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' </span><span itemprop="workLocation">' . $workLocation . '</span></li>';
             $content .= '</ul>';
-            if ($description && $showdescription)
-                $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $description . '</div>';
             $content .= '</div>';
             $content .= '</div>';
 
