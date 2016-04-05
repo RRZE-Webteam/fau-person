@@ -203,7 +203,7 @@
                     } elseif ( $list ) {
                         $liste .= '<li class="person-info">'."\n";
                         $liste .= fau_person_shortlist($value, $showlist);
-                        $content .= "</li>\n";
+                        $liste .= "</li>\n";
                     } elseif ( $sidebar ) {
                         $liste .= fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia);
                     } elseif ( $compactindex ) {
@@ -262,9 +262,145 @@
             "showtelefon" => TRUE,
             "extended" => FALSE,
             "showmobile" => FALSE,
-            "showvia" => 0,
-                        ), $atts));
+//            "showvia" => 0,
+            "format" => '',
+            "show" => '', 
+            "hide" => '',
+                        ), $atts));        
 
+        $content = '';
+
+        $shortlist = '';    
+        $sidebar = '';
+        $compactindex = '';
+        $page = '';
+        $list = '';
+        $showvia = '';
+        $inhalt = '';
+        if ( !empty( $format ) ) {         
+            //format-Parameter: 
+            //name (Alternativ shortlist, $shortlist = 1), 
+            //liste ($list = 1 und $showlist = 1), wie Name nur mit Aufzählungszeichen, 
+            //sidebar ($showsidebar, $sidebar, $showabteilung, $showtitle, $showsuffix, $showtelefon, $showmail, $showwebsite, $showdescription, $showthumb = 1), 
+            //index (keine Formatangabe, default-Wert), 
+            //page (Alternativ full, $page = 1), 
+            //plain, 
+            //table,
+            //accordion,
+            if( $format == 'name' || $format == 'shortlist' )   $shortlist = 1;
+            if( $format == 'sidebar' ) {
+                $showsidebar = 1;
+                $sidebar = 1;
+                $showinstitution = 1;
+                $showabteilung = 1;
+                $showposition = 1;
+                $showtitle = 1;
+                $showsuffix = 1;
+                $showaddress = 1;
+                $showroom = 1;
+                $showtelefon = 1;
+                $showfax = 1;
+                $showmobile = 0;
+                $showmail = 1;
+                $showwebsite = 1;
+                $showdescription = 1;
+                $showoffice = 1;
+                $showpubs = 0;
+                $showthumb = 1;
+            }
+            if( $format == 'full' || $format == 'page' )        $page = 1;
+            if( $format == 'liste'  || $format == 'listentry' ) {
+                $list = 1;
+                $showlist = 1;
+            }
+            if( $format == 'plain' ) {
+                $showlist = 0;
+                $showinstitution = 0;   
+                $showabteilung = 0;  
+                $showposition = 0;
+                $showtitle = 0;    
+                $showsuffix = 0;  
+                $showaddress = 0;            
+                $showroom = 0;  
+                $showtelefon = 0;             
+                $showfax = 0;
+                $showmobile = 0;
+                $showmail = 0; 
+                $showwebsite = 0;            
+                $showlink = 0;
+                $showdescription = 0;
+                $showoffice = 0;
+                $showpubs = 0;
+                $showthumb = 0;         
+                $showvia = 0;
+            }          
+            if( $format == 'kompakt' || $format == 'compactindex' )  {
+                $compactindex = 1;
+                $showinstitution = 0;
+                $showabteilung = 0;
+                $showposition = 1;
+                $showtitle = 1;
+                $showsuffix = 1;
+                $showaddress = 1;
+                $showroom = 0;
+                $showtelefon = 1;
+                $showfax = 0;
+                $showmobile = 0;
+                $showmail = 1;
+                $showwebsite = 0;
+                $showdescription = 0;
+                $showoffice = 0;
+                $showpubs = 0;
+                $showthumb = 1;
+            }
+        }     
+        // Wenn neue Felder dazukommen, hier die Anzeigeoptionen auch mit einstellen
+        if (!empty($show)) {
+            $show = explode(', ', $show);                                       // schema.org-Bezeichnungen = Variablenname
+            if( in_array( 'kurzbeschreibung', $show ) ) $showlist = 1;          //
+            if( in_array( 'organisation', $show ) )     $showinstitution = 1;   // $worksFor
+            if( in_array( 'abteilung', $show ) )        $showabteilung = 1;     // $department
+            if( in_array( 'position', $show ) )         $showposition = 1;      // $jobTitle
+            if( in_array( 'titel', $show ) )            $showtitle = 1;         // $honorificPrefix
+            if( in_array( 'suffix', $show ) )           $showsuffix = 1;        // $honorificSuffix
+            if( in_array( 'adresse', $show ) )          $showaddress = 1;       // $streetAddress, $postalCode, $addressLocality, $addressCountry   
+            if( in_array( 'raum', $show ) )             $showroom = 1;          // $workLocation
+            if( in_array( 'telefon', $show ) )          $showtelefon = 1;       // $telephone   
+            if( in_array( 'fax', $show ) )              $showfax = 1;           // $faxNumber
+            if( in_array( 'mobil', $show ) )            $showmobile = 1;        // $mobilePhone
+            if( in_array( 'mail', $show ) )             $showmail = 1;          // $email
+            if( in_array( 'webseite', $show ) )         $showwebsite = 1;       // $url  
+            if( in_array( 'mehrlink', $show ) )         $showlink = 1;          // $link
+            if( in_array( 'kurzauszug', $show ) )       $showdescription = 1;   // $description (erscheint bei Sidebar)
+            if( in_array( 'sprechzeiten', $show ) )     $showoffice = 1;        // $hoursAvailable
+            if( in_array( 'publikationen', $show ) )    $showpubs = 1;          //
+            if( in_array( 'bild', $show ) )             $showthumb = 1;         //
+            if( in_array( 'ansprechpartner', $show ) )  $showvia = 1;           //
+        }    
+        if ( !empty( $hide ) ) {
+            $hide = explode(', ', $hide);
+            if( in_array( 'kurzbeschreibung', $hide ) ) $showlist = 0;
+            if( in_array( 'organisation', $hide ) )     $showinstitution = 0;   
+            if( in_array( 'abteilung', $hide ) )        $showabteilung = 0;  
+            if( in_array( 'position', $hide ) )         $showposition = 0;
+            if( in_array( 'titel', $hide ) )            $showtitle = 0;    
+            if( in_array( 'suffix', $hide ) )           $showsuffix = 0;  
+            if( in_array( 'adresse', $hide ) )          $showaddress = 0;            
+            if( in_array( 'raum', $hide ) )             $showroom = 0;  
+            if( in_array( 'telefon', $hide ) )          $showtelefon = 0;             
+            if( in_array( 'fax', $hide ) )              $showfax = 0;
+            if( in_array( 'mobil', $hide ) )            $showmobile = 0;
+            if( in_array( 'mail', $hide ) )             $showmail = 0; 
+            if( in_array( 'webseite', $hide ) )         $showwebsite = 0;            
+            if( in_array( 'mehrlink', $hide ) )         $showlink = 0;
+            if( in_array( 'kurzauszug', $hide ) )       $showdescription = 0;
+            if( in_array( 'sprechzeiten', $hide ) )     $showoffice = 0;
+            if( in_array( 'publikationen', $hide ) )    $showpubs = 0;
+            if( in_array( 'bild', $hide ) )             $showthumb = 0;         
+            if( in_array( 'ansprechpartner', $hide ) )  $showvia = 0;
+        }
+                
+        
         $category = get_term_by('slug', $category, 'persons_category');
 
         $posts = get_posts(array('post_type' => 'person', 'post_status' => 'publish', 'numberposts' => 1000, 'orderby' => 'title', 'order' => 'ASC', 'tax_query' => array(
@@ -275,12 +411,66 @@
                 )
             ), 'suppress_filters' => false));
 
-        $content = '';
+        if ($posts) {
+            $number = count($posts);
+            $i = 1;
+                if ( $shortlist ) {
+                    $content = '<span class="person liste-person" itemscope itemtype="http://schema.org/Person">';
+                //} elseif ( $page ) {
+                //    $liste = '';
+                } elseif ( $list ) {
+                    $content = '<ul class="person liste-person" itemscope itemtype="http://schema.org/Person">';
+                    $content .= "\n";    
+                } else {
+                    $content = '';
+                    // Herausgenommen da vermutlich nicht nötig
+                    //$liste = '<p>';
+                }            
+            foreach ($posts as $post) {            
 
-        foreach ($posts as $post) {
-            $content .= fau_person_markup($post->ID, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia);
+                $value = $post->ID;
+                if ( $page ) {
+                        $content .= fau_person_page($value);
+                    } elseif ( $shortlist ) {
+                        $content .= fau_person_shortlist($value, $showlist);
+                        if( $i < $number )  $content .= ", ";
+                    } elseif ( $list ) {
+                        $content .= '<li class="person-info">'."\n";
+                        $content .= fau_person_shortlist($value, $showlist);
+                        $content .= "</li>\n";
+                    } elseif ( $sidebar ) {
+                        $content .= fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia);
+                    } elseif ( $compactindex ) {
+                        $content .= fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex);  
+                    } else {
+                        $content .= fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia);
+                    }
+                    $i++;
+                    
+            }        
+            if ( $shortlist  ) {
+                $content .= "</span>";
+            } elseif ( $list ) {
+                $content .= "</ul>\n";
+            } elseif ( $page ) {
+                $post = get_post( $post->ID );
+                if ( $post->post_content ) $inhalt = wpautop( $post->post_content );  
+                $content .= $inhalt;
+            } else {
+                $content .= '';
+                //herausgenommen da vermutlich nicht nötig
+                //$liste .= "</p>\n";                
+            } 
+
+        
+        
+
+            
+
+        } else {
+            return '<p>' . sprintf(__('Es konnten kein Kontakte in der Kategorie %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $category) . '</p>';            
         }
-
+        
         return $content;
     }
 
