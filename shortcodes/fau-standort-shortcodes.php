@@ -59,7 +59,7 @@
                     $post = $posts[0];
                     $id = $post->ID;
                 } else {
-                    return '<p>' . sprintf(__('Es konnte kein Standorteintrag mit dem angegebenen Titel %s gefunden werden. Versuchen Sie statt dessen die Angabe der ID des Kontakteintrags.', FAU_PERSON_TEXTDOMAIN), $slug) . '</p>';
+                    return '<p>' . sprintf(__('Es konnte kein Standorteintrag mit dem angegebenen Titel %s gefunden werden. Versuchen Sie statt dessen die Angabe der ID des Standorteintrags.', FAU_PERSON_TEXTDOMAIN), $slug) . '</p>';
                 }
             }
         }

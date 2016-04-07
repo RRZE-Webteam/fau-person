@@ -542,7 +542,7 @@ class FAU_Person {
         //register_setting('sidebar_options', self::option_name, array($this, 'options_validate'));
         
         add_settings_section('sidebar_section', __('Geben Sie an, welche Daten angezeigt werden sollen:', FAU_PERSON_TEXTDOMAIN), '__return_false', 'sidebar_options');
-        add_settings_field('sidebar', __('in der Sidebar (Feld Ansprechpartner in den FAU-Themes) und im Widget', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar'), 'sidebar_options', 'sidebar_section');
+        add_settings_field('sidebar', __('Im Widget (bei den FAU-Themes auch in der Sidebar, wenn der Kontakt über das Feld "Auswahl Ansprechpartner" in der Metabox "Sidebar" gewählt wird)', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar'), 'sidebar_options', 'sidebar_section');
     }
 
     public function sidebar() {

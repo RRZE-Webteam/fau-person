@@ -468,7 +468,7 @@
             
 
         } else {
-            return '<p>' . sprintf(__('Es konnten kein Kontakte in der Kategorie %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $category) . '</p>';            
+            return '<p>' . sprintf(__('Es konnten keine Kontakte in der Kategorie %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $category) . '</p>';            
         }
         
         return $content;

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FAU-Person\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-04 17:04+0100\n"
+"POT-Creation-Date: 2016-04-07 10:03+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: RRZE-Webteam\n"
@@ -88,7 +88,7 @@ msgid ""
 "Binden Sie die gewünschten Kontaktdaten mit dem Shortcode [kontakt] mit "
 "folgenden Parametern auf Ihren Seiten oder Beiträgen ein:"
 msgstr ""
-"To insert contact informations on your pages oder posts use the shortcode "
+"To insert contact informations on your pages oder posts use the short code "
 "[kontakt] with one of the following parameters:"
 
 #: ../fau-person.php:348
@@ -257,39 +257,39 @@ msgid "Geben Sie an, welche Daten angezeigt werden sollen:"
 msgstr "Which data should be shown?"
 
 #: ../fau-person.php:545
-msgid "in der Sidebar (Feld Ansprechpartner in den FAU-Themes) und im Widget"
-msgstr "In sidebar (only in FAU-Themes) and in widget"
+msgid ""
+"Im Widget (bei den FAU-Themes auch in der Sidebar, wenn der Kontakt über das "
+"Feld \"Auswahl Ansprechpartner\" in der Metabox \"Sidebar\" gewählt wird)"
+msgstr ""
+"In widget (if you are using a FAU-Theme additionally in the sidebar, if you "
+"choose the contact in the metabox \"Sidebar\")"
 
 #: ../fau-person.php:552
 msgid "Position"
 msgstr "Job title"
 
 #: ../fau-person.php:553 ../includes/fau-person-metaboxes.php:142
-#: ../shortcodes/fau-person-shortcodes.php:384
-#: ../shortcodes/fau-person-shortcodes.php:487
-#: ../shortcodes/fau-person-shortcodes.php:641
-#: ../shortcodes/fau-standort-shortcodes.php:212
-#: ../shortcodes/fau-standort-shortcodes.php:415
+#: ../shortcodes/fau-person-shortcodes.php:574
+#: ../shortcodes/fau-person-shortcodes.php:677
+#: ../shortcodes/fau-person-shortcodes.php:831
 msgid "Organisation"
 msgstr "Organization"
 
 #: ../fau-person.php:554 ../includes/fau-person-metaboxes.php:149
-#: ../shortcodes/fau-person-shortcodes.php:386
-#: ../shortcodes/fau-person-shortcodes.php:489
-#: ../shortcodes/fau-person-shortcodes.php:643
-#: ../shortcodes/fau-standort-shortcodes.php:214
-#: ../shortcodes/fau-standort-shortcodes.php:417
+#: ../shortcodes/fau-person-shortcodes.php:576
+#: ../shortcodes/fau-person-shortcodes.php:679
+#: ../shortcodes/fau-person-shortcodes.php:833
 msgid "Abteilung"
 msgstr "Working group"
 
 #: ../fau-person.php:555 ../includes/fau-person-metaboxes.php:488
-#: ../shortcodes/fau-person-shortcodes.php:314
-#: ../shortcodes/fau-person-shortcodes.php:437
-#: ../shortcodes/fau-person-shortcodes.php:576
-#: ../shortcodes/fau-person-shortcodes.php:690
-#: ../shortcodes/fau-standort-shortcodes.php:143
-#: ../shortcodes/fau-standort-shortcodes.php:267
-#: ../shortcodes/fau-standort-shortcodes.php:357
+#: ../shortcodes/fau-person-shortcodes.php:504
+#: ../shortcodes/fau-person-shortcodes.php:627
+#: ../shortcodes/fau-person-shortcodes.php:766
+#: ../shortcodes/fau-person-shortcodes.php:880
+#: ../shortcodes/fau-standort-shortcodes.php:144
+#: ../shortcodes/fau-standort-shortcodes.php:233
+#: ../shortcodes/fau-standort-shortcodes.php:323
 msgid "Adresse"
 msgstr "Address"
 
@@ -307,20 +307,17 @@ msgid "Mail"
 msgstr "Email"
 
 #: ../fau-person.php:559 ../includes/fau-person-metaboxes.php:310
-#: ../shortcodes/fau-person-shortcodes.php:394
-#: ../shortcodes/fau-person-shortcodes.php:497
-#: ../shortcodes/fau-person-shortcodes.php:653
-#: ../shortcodes/fau-standort-shortcodes.php:222
-#: ../shortcodes/fau-standort-shortcodes.php:425
+#: ../shortcodes/fau-person-shortcodes.php:584
+#: ../shortcodes/fau-person-shortcodes.php:687
+#: ../shortcodes/fau-person-shortcodes.php:843
 msgid "Webseite"
 msgstr "Website"
 
 #: ../fau-person.php:560 ../includes/fau-person-metaboxes.php:492
-#: ../shortcodes/fau-person-shortcodes.php:400
-#: ../shortcodes/fau-person-shortcodes.php:504
-#: ../shortcodes/fau-person-shortcodes.php:655
-#: ../shortcodes/fau-person-shortcodes.php:731
-#: ../shortcodes/fau-standort-shortcodes.php:228
+#: ../shortcodes/fau-person-shortcodes.php:590
+#: ../shortcodes/fau-person-shortcodes.php:694
+#: ../shortcodes/fau-person-shortcodes.php:845
+#: ../shortcodes/fau-person-shortcodes.php:921
 msgid "Sprechzeiten"
 msgstr "Office hours"
 
@@ -642,12 +639,10 @@ msgid "Land"
 msgstr "Country"
 
 #: ../includes/fau-person-metaboxes.php:253
-#: ../shortcodes/fau-person-shortcodes.php:398
-#: ../shortcodes/fau-person-shortcodes.php:502
 #: ../shortcodes/fau-person-shortcodes.php:588
-#: ../shortcodes/fau-person-shortcodes.php:715
-#: ../shortcodes/fau-standort-shortcodes.php:226
-#: ../shortcodes/fau-standort-shortcodes.php:429
+#: ../shortcodes/fau-person-shortcodes.php:692
+#: ../shortcodes/fau-person-shortcodes.php:778
+#: ../shortcodes/fau-person-shortcodes.php:905
 msgid "Raum"
 msgstr "Room"
 
@@ -707,12 +702,10 @@ msgstr "Social media"
 
 #: ../includes/fau-person-metaboxes.php:303
 #: ../includes/fau-person-metaboxes.php:491
-#: ../shortcodes/fau-person-shortcodes.php:392
-#: ../shortcodes/fau-person-shortcodes.php:495
-#: ../shortcodes/fau-person-shortcodes.php:651
-#: ../shortcodes/fau-person-shortcodes.php:727
-#: ../shortcodes/fau-standort-shortcodes.php:220
-#: ../shortcodes/fau-standort-shortcodes.php:423
+#: ../shortcodes/fau-person-shortcodes.php:582
+#: ../shortcodes/fau-person-shortcodes.php:685
+#: ../shortcodes/fau-person-shortcodes.php:841
+#: ../shortcodes/fau-person-shortcodes.php:917
 msgid "E-Mail"
 msgstr "Email"
 
@@ -985,12 +978,10 @@ msgid "standort"
 msgstr "standort"
 
 #: ../shortcodes/fau-person-shortcodes.php:165
-#: ../shortcodes/fau-standort-shortcodes.php:51
 msgid "Bitte geben Sie den Titel oder die ID des Kontakteintrags an."
 msgstr "Please enter the title oder ID of the Contact entry."
 
 #: ../shortcodes/fau-person-shortcodes.php:172
-#: ../shortcodes/fau-standort-shortcodes.php:58
 #, php-format
 msgid ""
 "Es konnte kein Kontakteintrag mit dem angegebenen Titel %s gefunden werden. "
@@ -1000,71 +991,78 @@ msgstr ""
 "of the contact information instead."
 
 #: ../shortcodes/fau-person-shortcodes.php:215
-#: ../shortcodes/fau-standort-shortcodes.php:97
+#: ../shortcodes/fau-standort-shortcodes.php:100
 #, php-format
 msgid ""
 "Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden."
 msgstr "We could not find any entry with the given search term %s."
 
-#: ../shortcodes/fau-person-shortcodes.php:357
-#: ../shortcodes/fau-person-shortcodes.php:378
-#: ../shortcodes/fau-person-shortcodes.php:415
-#: ../shortcodes/fau-person-shortcodes.php:549
-#: ../shortcodes/fau-person-shortcodes.php:627
-#: ../shortcodes/fau-person-shortcodes.php:635
-#: ../shortcodes/fau-standort-shortcodes.php:185
-#: ../shortcodes/fau-standort-shortcodes.php:206
-#: ../shortcodes/fau-standort-shortcodes.php:241
-#: ../shortcodes/fau-standort-shortcodes.php:334
-#: ../shortcodes/fau-standort-shortcodes.php:401
-#: ../shortcodes/fau-standort-shortcodes.php:409
+#: ../shortcodes/fau-person-shortcodes.php:471
+#, php-format
+msgid "Es konnten keine Kontakte in der Kategorie %s gefunden werden."
+msgstr "We could not find any entry in the category %s."
+
+#: ../shortcodes/fau-person-shortcodes.php:547
+#: ../shortcodes/fau-person-shortcodes.php:568
+#: ../shortcodes/fau-person-shortcodes.php:605
+#: ../shortcodes/fau-person-shortcodes.php:739
+#: ../shortcodes/fau-person-shortcodes.php:817
+#: ../shortcodes/fau-person-shortcodes.php:825
+#: ../shortcodes/fau-standort-shortcodes.php:178
+#: ../shortcodes/fau-standort-shortcodes.php:199
+#: ../shortcodes/fau-standort-shortcodes.php:300
+#: ../shortcodes/fau-standort-shortcodes.php:362
+#: ../shortcodes/fau-standort-shortcodes.php:370
 #, php-format
 msgid "Weitere Informationen zu %s aufrufen"
 msgstr "Additional information for %s"
 
-#: ../shortcodes/fau-person-shortcodes.php:382
-#: ../shortcodes/fau-person-shortcodes.php:485
-#: ../shortcodes/fau-person-shortcodes.php:639
-#: ../shortcodes/fau-standort-shortcodes.php:210
-#: ../shortcodes/fau-standort-shortcodes.php:413
+#: ../shortcodes/fau-person-shortcodes.php:572
+#: ../shortcodes/fau-person-shortcodes.php:675
+#: ../shortcodes/fau-person-shortcodes.php:829
 msgid "Tätigkeit"
 msgstr "Job title"
 
-#: ../shortcodes/fau-person-shortcodes.php:388
-#: ../shortcodes/fau-person-shortcodes.php:491
-#: ../shortcodes/fau-person-shortcodes.php:647
-#: ../shortcodes/fau-person-shortcodes.php:723
-#: ../shortcodes/fau-standort-shortcodes.php:216
-#: ../shortcodes/fau-standort-shortcodes.php:419
+#: ../shortcodes/fau-person-shortcodes.php:578
+#: ../shortcodes/fau-person-shortcodes.php:681
+#: ../shortcodes/fau-person-shortcodes.php:837
+#: ../shortcodes/fau-person-shortcodes.php:913
 msgid "Telefonnummer"
 msgstr "Phone number"
 
-#: ../shortcodes/fau-person-shortcodes.php:390
-#: ../shortcodes/fau-person-shortcodes.php:493
-#: ../shortcodes/fau-person-shortcodes.php:649
-#: ../shortcodes/fau-person-shortcodes.php:725
-#: ../shortcodes/fau-standort-shortcodes.php:218
-#: ../shortcodes/fau-standort-shortcodes.php:421
+#: ../shortcodes/fau-person-shortcodes.php:580
+#: ../shortcodes/fau-person-shortcodes.php:683
+#: ../shortcodes/fau-person-shortcodes.php:839
+#: ../shortcodes/fau-person-shortcodes.php:915
 msgid "Faxnummer"
 msgstr "Fax number"
 
-#: ../shortcodes/fau-person-shortcodes.php:402
-#: ../shortcodes/fau-person-shortcodes.php:506
-#: ../shortcodes/fau-standort-shortcodes.php:230
+#: ../shortcodes/fau-person-shortcodes.php:592
+#: ../shortcodes/fau-person-shortcodes.php:696
 msgid "Publikationen"
 msgstr "Publications"
 
-#: ../shortcodes/fau-person-shortcodes.php:413
-#: ../shortcodes/fau-person-shortcodes.php:660
-#: ../shortcodes/fau-standort-shortcodes.php:239
-#: ../shortcodes/fau-standort-shortcodes.php:432
+#: ../shortcodes/fau-person-shortcodes.php:603
+#: ../shortcodes/fau-person-shortcodes.php:850
 msgid "Beschreibung"
 msgstr "Short description"
 
-#: ../shortcodes/fau-person-shortcodes.php:416
-#: ../shortcodes/fau-standort-shortcodes.php:242
+#: ../shortcodes/fau-person-shortcodes.php:606
 msgid "Mehr"
 msgstr "More"
+
+#: ../shortcodes/fau-standort-shortcodes.php:55
+msgid "Bitte geben Sie den Titel oder die ID des Standorteintrags an."
+msgstr "Please enter the title oder ID of the Location entry."
+
+#: ../shortcodes/fau-standort-shortcodes.php:62
+#, php-format
+msgid ""
+"Es konnte kein Standorteintrag mit dem angegebenen Titel %s gefunden werden. "
+"Versuchen Sie statt dessen die Angabe der ID des Standorteintrags."
+msgstr ""
+"We could not find any entry with the given search term %s. Try to use the ID "
+"of the location information instead."
 
 #: ../widgets/fau-person-widget.php:8
 msgid "Kontakt-Visitenkarte"
@@ -1081,6 +1079,10 @@ msgstr "Academical title"
 #: ../widgets/fau-person-widget.php:34
 msgid "Kontakt"
 msgstr "Contact"
+
+#~ msgid ""
+#~ "in der Sidebar (Feld Ansprechpartner in den FAU-Themes) und im Widget"
+#~ msgstr "In sidebar (only in FAU-Themes) and in widget"
 
 #~ msgid "keine Angabe"
 #~ msgstr "No Select"
@@ -1143,9 +1145,6 @@ msgstr "Contact"
 
 #~ msgid "Wohnort"
 #~ msgstr "City"
-
-#~ msgid "Es konnte kein Kontakteintrag gefunden werden."
-#~ msgstr "We could not find any entry."
 
 #, fuzzy
 #~ msgid "showtitle: Titel (Präfix)"
