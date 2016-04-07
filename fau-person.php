@@ -4,7 +4,7 @@
  Plugin Name: FAU Person
  Plugin URI: https://github.com/RRZE-Webteam/fau-person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 2.0.2
+ * Version: 2.1
  * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -60,6 +60,8 @@ class FAU_Person {
 
     private $search_univis_id_page = null;
     
+    private $sidebar_options_page = null;
+    
     public static function instance() {
 
         if (null == self::$instance) {
@@ -74,7 +76,6 @@ class FAU_Person {
         define('FAU_PERSON_FILE_PATH', FAU_PERSON_ROOT . '/' . basename(__FILE__));
         define('FAU_PERSON_URL', plugins_url('/', __FILE__));
         define('FAU_PERSON_TEXTDOMAIN', self::textdomain);
-
         
         load_plugin_textdomain(self::textdomain, false, sprintf('%s/languages/', dirname(plugin_basename(__FILE__))));
         
@@ -89,10 +90,12 @@ class FAU_Person {
         add_action( 'init', array (__CLASS__, 'register_standort_post_type' ) );
         //add_action( 'restrict_manage_posts', array( $this, 'standort_restrict_manage_posts' ) );
 
-        add_action('admin_menu' , array( $this, 'person_menu_subpages' )); 
+        add_action( 'admin_menu' , array( $this, 'person_menu_subpages' )); 
         add_action( 'admin_menu', array( $this, 'add_help_tabs' ) );
-        add_action( 'admin_menu', array( $this, 'add_options_pages' ) );
+
         add_action( 'admin_init', array( $this, 'admin_init' ) );
+        add_action( 'admin_init', array( $this, 'options_init' ) );
+        add_action( 'admin_menu', array( $this, 'add_options_pages' ) );
         add_action( 'widgets_init', array( __CLASS__, 'register_widgets' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_script' ) );
 	add_action( 'admin_init', array($this, 'person_shortcodes_rte_button' ) );     
@@ -109,23 +112,19 @@ class FAU_Person {
         add_action( 'pre_get_posts', array( $this, 'custom_columns_orderby') );
         
         //Excerpt-Meta-Box umbenennen
-        add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));
-              
-          
+        add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));        
     }
-
     
-public function adding_custom_meta_boxes( $post ) {
-    add_meta_box( 
-        'my-meta-box',
-        __( 'My Meta Box' ),
-        'render_my_meta_box',
-        'post',
-        'normal',
-        'default'
-    );
-}
- 
+    public function adding_custom_meta_boxes( $post ) {
+        add_meta_box( 
+            'my-meta-box',
+            __( 'My Meta Box' ),
+            'render_my_meta_box',
+            'post',
+            'normal',
+            'default'
+        );
+    }
     
     public static function activation() {
 
@@ -153,8 +152,7 @@ public function adding_custom_meta_boxes( $post ) {
             $caps_standort = self::get_caps('standort');
             self::remove_caps('administrator', $caps_standort);
             //self::remove_caps('editor', $caps);
-            flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind
-    
+            flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind   
     }
 
     private static function version_compare() {
@@ -175,18 +173,37 @@ public function adding_custom_meta_boxes( $post ) {
     }
 
     private static function default_options() {
-        $options = array();
-                
+        $options = array(
+            'sidebar' => array(
+                'position' => true,
+                'organisation' => true,
+                'abteilung' => true,
+                'adresse' => true,
+                'telefon' => true,
+                'fax' => true,
+                'mail' => true,
+                'webseite' => true,
+                'sprechzeiten' => true,
+                'kurzauszug' => true,
+                'bild' => true,
+            ),                
+        );               
         return $options; // Standard-Array für zukünftige Optionen
     }
 
     private static function get_options() {
         $defaults = self::default_options();
-        
         $options = (array) get_option(self::option_name);
-        $options = wp_parse_args($options, $defaults);
+        
+        //Umstellung auf mehrdimensionales Array wegen Sidebar
+        foreach ($options as $key => $value) {
+            if(is_array($options[$key])) {
+                $options[$key] = wp_parse_args($options[$key], $defaults[$key]);
+                $options[$key] = array_intersect_key($options[$key], $defaults[$key]);       
+            }
+        $options = wp_parse_args($options, $defaults);    
         $options = array_intersect_key($options, $defaults);
-
+        }
         return $options;
     }
     
@@ -411,12 +428,24 @@ public function adding_custom_meta_boxes( $post ) {
     }   
     
     public function add_options_pages() {
-        //Umgehen von register_setting für die Suche-Seite
+        //Umgehen von register_setting für die Suche-Seite, da register_setting nur für Standard-Settings-Seiten funktioniert!!!        
+        $defaults = $this->default_options();
+        $options = $this->get_options();
         $input = isset($_POST[self::option_name]) ? $_POST[self::option_name] : null;
         set_transient(self::search_univis_id_transient, $input, 30);
-                
+        if( isset( $_POST['submit'] ) ) {
+            foreach( $defaults['sidebar'] as $key => $value ) {
+                $input = isset($_POST[self::option_name]['sidebar'][$key]) ? 1 : 0;
+                $options['sidebar'][$key] = $input;    
+            }
+            update_option(self::option_name, $options);   
+        }
+
         $this->search_univis_id_page = add_submenu_page('edit.php?post_type=person', __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'search-univis-id', array( $this, 'search_univis_id' ));
         add_action('load-' . $this->search_univis_id_page, array($this, 'help_menu_search_univis_id'));
+        
+        $this->sidebar_options_page = add_submenu_page('edit.php?post_type=person', __('Anzeigeoptionen', FAU_PERSON_TEXTDOMAIN), __('Anzeigeoptionen', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'sidebar-options', array( $this, 'sidebar_options' ));
+        add_action('load-' . $this->sidebar_options_page, array($this, 'help_menu_sidebar_options'));        
     }
 
     public function search_univis_id() {
@@ -477,6 +506,7 @@ public function adding_custom_meta_boxes( $post ) {
                             $orgname = $no_univis_data;
                         }
                         //echo sprintf(__('UnivIS-ID %1$s: %2$s %3$s, E-Mail: %4$s, Organisation: %5$s', FAU_PERSON_TEXTDOMAIN), $id, $firstname, $lastname, $email, $orgname);
+                        //$output = __('UnivIS-ID', FAU_PERSON_TEXTDOMAIN) . ' '. $id . ': '. $firstname . ' ' . $lastname . ', ' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . ': ' . $email. ', ' . __('Organisation', FAU_PERSON_TEXTDOMAIN) . ': ' . $orgname;
                         echo 'UnivIS-ID '. $id . ': '. $firstname . ' ' . $lastname . ', E-Mail: ' . $email. ', Organisation: ' . $orgname;
                         echo "<br>";
                     }
@@ -487,16 +517,13 @@ public function adding_custom_meta_boxes( $post ) {
             delete_transient(self::search_univis_id_transient);
     }
 
-    public function admin_init() {
-
+    public function admin_init() {       
         add_settings_section('search_univis_id_section', __('Bitte geben Sie den Vor- und Nachnamen der Person ein, von der Sie die UnivIS-ID benötigen.', FAU_PERSON_TEXTDOMAIN), '__return_false', 'search_univis_id_options');
-
         add_settings_field('univis_id_firstname', __('Vorname', FAU_PERSON_TEXTDOMAIN), array($this, 'univis_id_firstname'), 'search_univis_id_options', 'search_univis_id_section');
-        add_settings_field('univis_id_givenname', __('Nachname', FAU_PERSON_TEXTDOMAIN), array($this, 'univis_id_givenname'), 'search_univis_id_options', 'search_univis_id_section');
-      
+        add_settings_field('univis_id_givenname', __('Nachname', FAU_PERSON_TEXTDOMAIN), array($this, 'univis_id_givenname'), 'search_univis_id_options', 'search_univis_id_section');      
         add_settings_section('find_univis_id_section', __('Folgende Daten wurden in UnivIS gefunden:', FAU_PERSON_TEXTDOMAIN), '__return_false', 'find_univis_id_options');
     }
-    
+
     public function univis_id_firstname() {
         $transient = get_transient(self::search_univis_id_transient);
         ?>
@@ -505,13 +532,38 @@ public function adding_custom_meta_boxes( $post ) {
     }
 
     public function univis_id_givenname() {
-        $transient = get_transient(self::search_univis_id_transient);
+        $transient = get_transient(self::search_univis_id_transient);   
         ?>
-        <input type='text' name="<?php printf('%s[givenname]', self::option_name); ?>" value="<?php echo (isset($transient['givenname'])) ? $transient['givenname'] : NULL; ?>"><p class="description"><?php _e('Bitte keine Umlaute, sondern statt dessen ae, oe, ue, ss verwenden.', FAU_PERSON_TEXTDOMAIN); ?></p>
-        
+        <input type='text' name="<?php printf('%s[givenname]', self::option_name); ?>" value="<?php echo (isset($transient['givenname'])) ? $transient['givenname'] : NULL; ?>"><p class="description"><?php _e('Bitte keine Umlaute, sondern statt dessen ae, oe, ue, ss verwenden.', FAU_PERSON_TEXTDOMAIN); ?></p>        
         <?php
     }       
     
+    public function options_init() {
+        //register_setting('sidebar_options', self::option_name, array($this, 'options_validate'));
+        
+        add_settings_section('sidebar_section', __('Geben Sie an, welche Daten angezeigt werden sollen:', FAU_PERSON_TEXTDOMAIN), '__return_false', 'sidebar_options');
+        add_settings_field('sidebar', __('Im Widget (bei den FAU-Themes auch in der Sidebar, wenn der Kontakt über das Feld "Auswahl Ansprechpartner" in der Metabox "Sidebar" gewählt wird)', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar'), 'sidebar_options', 'sidebar_section');
+    }
+
+    public function sidebar() {
+        $defaults = $this->default_options();
+        $options = $this->get_options();
+        ?>
+        <label for="<?php printf('%s[sidebar][position]', self::option_name); ?>"><input type='checkbox' id="<?php printf('%s[sidebar][position]', self::option_name); ?>" name="<?php printf('%s[sidebar][position]', self::option_name); ?>" <?php checked($options['sidebar']['position'], 1); ?>><?php _e('Position', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][organisation]', self::option_name); ?>"><input type='checkbox' id="<?php printf('%s[sidebar][organisation]', self::option_name); ?>" name="<?php printf('%s[sidebar][organisation]', self::option_name); ?>"  <?php checked($options['sidebar']['organisation'], 1); ?>><?php _e('Organisation', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][abteilung]', self::option_name); ?>"><input type='checkbox' id="<?php printf('%s[sidebar][abteilung]', self::option_name); ?>" name="<?php printf('%s[sidebar][abteilung]', self::option_name); ?>"  <?php checked($options['sidebar']['abteilung'], 1); ?>><?php _e('Abteilung', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][adresse]', self::option_name); ?>"><input type='checkbox' id="<?php printf('%s[sidebar][adresse]', self::option_name); ?>" name="<?php printf('%s[sidebar][adresse]', self::option_name); ?>"  <?php checked($options['sidebar']['adresse'], 1); ?>><?php _e('Adresse', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][telefon]', self::option_name); ?>"><input type='checkbox' id="<?php printf('%s[sidebar][telefon]', self::option_name); ?>" name="<?php printf('%s[sidebar][telefon]', self::option_name); ?>"  <?php checked($options['sidebar']['telefon'], 1); ?>><?php _e('Telefon', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][fax]', self::option_name); ?>"><input type='checkbox' id="<?php printf('%s[sidebar][fax]', self::option_name); ?>" name="<?php printf('%s[sidebar][fax]', self::option_name); ?>"  <?php checked($options['sidebar']['fax'], 1); ?>><?php _e('Fax', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][mail]', self::option_name); ?>"><input type='checkbox' id="<?php printf('%s[sidebar][mail]', self::option_name); ?>" name="<?php printf('%s[sidebar][mail]', self::option_name); ?>"  <?php checked($options['sidebar']['mail'], 1); ?>><?php _e('Mail', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][webseite]', self::option_name); ?>"><input type='checkbox' id="<?php printf('%s[sidebar][webseite]', self::option_name); ?>" name="<?php printf('%s[sidebar][webseite]', self::option_name); ?>"  <?php checked($options['sidebar']['webseite'], 1); ?>><?php _e('Webseite', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][sprechzeiten]', self::option_name); ?>"><input type='checkbox' id="<?php printf('%s[sidebar][sprechzeiten]', self::option_name); ?>" name="<?php printf('%s[sidebar][sprechzeiten]', self::option_name); ?>"  <?php checked($options['sidebar']['sprechzeiten'], 1); ?>><?php _e('Sprechzeiten', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][kurzauszug]', self::option_name); ?>"><input type='checkbox' id="<?php printf('%s[sidebar][kurzauszug]', self::option_name); ?>" name="<?php printf('%s[sidebar][kurzauszug]', self::option_name); ?>"  <?php checked($options['sidebar']['kurzauszug'], 1); ?>><?php _e('Kurzauszug', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[sidebar][bild]', self::option_name); ?>"><input type='checkbox' id="<?php printf('%s[sidebar][bild]', self::option_name); ?>" name="<?php printf('%s[sidebar][bild]', self::option_name); ?>"  <?php checked($options['sidebar']['bild'], 1); ?>><?php _e('Bild', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+
+        <?php         
+    }
+         
     public function help_menu_search_univis_id() {
 
         $content_overview = array(
@@ -537,6 +589,54 @@ public function adding_custom_meta_boxes( $post ) {
 
         $screen->set_help_sidebar($help_sidebar);
     }    
+   
+    public function sidebar_options() {  
+
+        ?>
+        <div class="wrap">
+            <?php screen_icon(); ?>
+            <h2><?php echo esc_html(__('Anzeigeoptionen', FAU_PERSON_TEXTDOMAIN)); ?></h2>
+
+            <form method="post">
+                <?php
+                settings_fields('sidebar_options');
+                do_settings_sections('sidebar_options');
+                submit_button(esc_html(__('Änderungen speichern', FAU_PERSON_TEXTDOMAIN)));
+                //update_option($options['sidebar']['position'], isset($_POST['_fau_person']['sidebar']['position']) ? 1 : null);
+                ?>
+            </form>            
+        </div>
+        <?php         
+        
+        //$options['sidebar']['position'] = isset($_POST['_fau_person']['sidebar']['position']) ? 1 : null;
+    }
+    
+    
+    public function help_menu_sidebar_options() {
+
+        $content_overview = array(
+            '<p>' . __('Geben Sie hier den Vor- oder den Nachnamen der Person ein. Es kann auch beides oder nur Namensteile eingegeben werden. Bitte beachten Sie, dass Umlaute bei der Eingabe aufgelöst werden müssen.', FAU_PERSON_TEXTDOMAIN) . '</p>',
+            '<p>' . __('Mit <i>Person suchen</i> erhalten Sie eine Auflistung aller möglichen Personen. Suchen Sie die richtige Person aus der Liste heraus, markieren Sie die UnivIS-ID, kopieren Sie diese mit Strg+C und fügen Sie dann beim entsprechenden Kontakt im Feld <i>UnivIS-ID</i> ein.', FAU_PERSON_TEXTDOMAIN) . '</p>',
+        );
+
+        $help_tab_overview = array(
+            'id' => 'overview',
+            'title' => __('Übersicht', FAU_PERSON_TEXTDOMAIN),
+            'content' => implode(PHP_EOL, $content_overview),
+        );
+
+        $help_sidebar = sprintf('<p><strong>%1$s:</strong></p><p><a href="http://blogs.fau.de/webworking">RRZE-Webworking</a></p><p><a href="https://github.com/RRZE-Webteam">%2$s</a></p>', __('Für mehr Information', FAU_PERSON_TEXTDOMAIN), __('RRZE-Webteam in Github', FAU_PERSON_TEXTDOMAIN));
+        
+        $screen = get_current_screen();
+
+        if ($screen->id != 'person_page_sidebar-options') {
+            return;
+        }
+
+        $screen->add_help_tab($help_tab_overview);
+
+        $screen->set_help_sidebar($help_sidebar);
+    }        
     
     public function person_menu_subpages() {
         //remove_submenu_page('edit.php?post_type=person', 'load-post-new.php');
@@ -573,7 +673,6 @@ public function adding_custom_meta_boxes( $post ) {
         //$metaboxes = array();
         //do_action('cmb_meta_boxes', $metaboxes);
     }    
-
     
     public static function register_widgets() {
         register_widget( 'FAUPersonWidget' );
@@ -583,7 +682,7 @@ public function adding_custom_meta_boxes( $post ) {
         add_shortcode( 'person', 'fau_person' );
         add_shortcode( 'kontakt', 'fau_person' );
         add_shortcode( 'persons', 'fau_persons' );
-        add_shortcode( 'standort', 'fau_person' );
+        add_shortcode( 'standort', 'fau_standort' );
     }
 
     public static function register_person_post_type() {

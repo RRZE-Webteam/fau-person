@@ -100,7 +100,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
     $standortselect = $this->get_standortdata();
     $univis_default = $this->univis_defaults();  
     if( !class_exists( 'Univis_Data' ) ) {
-        $univis_sync = __('<p class="cmb_metabox_description">Es können aktuell keine Daten aus UnivIS angezeigt werden. Bitte überprüfen Sie, ob Sie das Plugin univis-data installiert und aktiviert haben.</p>', FAU_PERSON_TEXTDOMAIN);
+        $univis_sync = '<p class="cmb_metabox_description">' . __('Es können aktuell keine Daten aus UnivIS angezeigt werden. Bitte überprüfen Sie, ob Sie das Plugin univis-data installiert und aktiviert haben.', FAU_PERSON_TEXTDOMAIN) . '</p>';
     } else {
         $univis_sync = '';
     }
@@ -229,7 +229,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
             array(
                 'name' => __('Postleitzahl', FAU_PERSON_TEXTDOMAIN),
                 //'desc' => 'Wenn der Ort aus UnivIS übernommen werden soll bitte leer lassen!',
-                'desc' => 'Nur 5-stellige Zahlen erlaubt.',
+                'desc' => __('Nur 5-stellige Zahlen erlaubt.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text_small',
                 'id' => $prefix . 'postalCode',
                 'sanitization_cb' => 'validate_plz',
@@ -373,7 +373,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
             ),
             array(
                 'name' => __('UnivIS-Daten in Ausgabe anzeigen', FAU_PERSON_TEXTDOMAIN),
-                'desc' => 'Titel (Präfix), Vorname, Nachname, Titel (Suffix), Organisation bzw. Abteilung, Position/Funktion, Adresse, Telefon- und Telefaxnummer, E-Mail, Webseite. Die hier in diesen Feldern eingegebenen Werte werden in der Ausgabe nicht angezeigt.',
+                'desc' => __('Titel (Präfix), Vorname, Nachname, Abschluss (Suffix), Organisation bzw. Abteilung, Position/Funktion, Adresse, Telefon- und Telefaxnummer, E-Mail, Webseite. Die hier in diesen Feldern eingegebenen Werte werden in der Ausgabe nicht angezeigt.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'checkbox',
                 'id' => $prefix . 'univis_sync',
                 'before' => $univis_sync,
@@ -381,7 +381,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
             ),
             array(
                 'name' => __('UnivIS-OrgNr', FAU_PERSON_TEXTDOMAIN),
-                'desc' => 'Aktuell können noch keine Einrichtungsdaten aus UnivIS übernommen werden.',
+                'desc' => __('Aktuell können noch keine Einrichtungsdaten aus UnivIS übernommen werden.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text',
                 'id' => $prefix . 'univis_org_nr',
                 'show_on_cb' => 'show_on_einrichtung'
@@ -429,7 +429,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
             ),
             array(
                 'name' => __('Standort-Daten in Ausgabe anzeigen', FAU_PERSON_TEXTDOMAIN),
-                'desc' => 'Straße, Postleitzahl, Ort, Land. Die hier in diesen Feldern eingegebenen Werte werden in der Ausgabe nicht angezeigt.',
+                'desc' => __('Straße, Postleitzahl, Ort, Land. Die hier in diesen Feldern eingegebenen Werte werden in der Ausgabe nicht angezeigt.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'checkbox',
                 'id' => $prefix . 'standort_sync',
                 //'before' => $standort_sync,
@@ -494,7 +494,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
             ),
             array(
                 'name' => __('Eigene Daten ausblenden', FAU_PERSON_TEXTDOMAIN),
-                'desc' => 'Ausschließlich die verknüpften Kontakte werden in der Ausgabe angezeigt.',
+                'desc' => __('Ausschließlich die verknüpften Kontakte werden in der Ausgabe angezeigt.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'checkbox',
                 'id' => $prefix . 'connection_only',
                 //'before' => $standort_sync,
@@ -523,7 +523,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
             array(
                 'name' => __('Postleitzahl', FAU_PERSON_TEXTDOMAIN),
                 //'desc' => 'Wenn der Ort aus UnivIS übernommen werden soll bitte leer lassen!',
-                'desc' => 'Nur 5-stellige Zahlen erlaubt.',
+                'desc' => __('Nur 5-stellige Zahlen erlaubt.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text_small',
                 'id' => $prefix . 'postalCode',
                 'sanitization_cb' => 'validate_plz',

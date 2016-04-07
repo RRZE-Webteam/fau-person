@@ -47,6 +47,14 @@ Beispiel: [kontakt id="42, 44, 56" format="name"]
 kann gerne ins eigene Theme übernommen und daran angepasst werden, beigefügte Vorlage ist an FAU-Fakultätsthemes angepasst
 Es wird zuerst im Theme geschaut, ob eine single-person.php vorhanden ist, wenn ja wird die genommen, ansonsten die vom Plugin
 
+####Version 2.1:     
+
+- Anzuzeigende Punkte in der Sidebar einstellbar über Untermenüpunkt "Anzeigeoptionen"    
+- "Raum" wird automatisch bei der Ausgabe bei der Raumnummer hinzugefügt    
+- Ausgabe von Kategorien möglich über den Shortcode [persons category="kategorieslug"], optional auch mit format=***name, page, kompakt, sidebar*** (gleiche Formatierung wie bei Shortcode person)    
+- Bugfixes bzgl. Anzeige der Standortdaten über Shortcode standort    
+- Ergänzung der Übersetzung ins Britisch-Englisch    
+
 ####Version 2.0.2: Format kompakt ergänzt
 
 - Shortcode-Format kompakt angepasst: Darstellung wie Standardausgabe mit Rahmen, soll im Theme jedoch auf die volle Breite ergänzt werden. Default-Anzeigewerte: Bild, vollständiger Name, Position, Telefon, Mail, Adresse       
