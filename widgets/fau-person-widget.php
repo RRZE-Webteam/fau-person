@@ -60,7 +60,7 @@ class FAUPersonWidget extends WP_Widget {
         $id = empty($instance['id']) ? ' ' : $instance['id'];
         $title = empty($instance['title']) ? ' ' : $instance['title'];
         // Welche Felder sollen in der Sidebar angezeigt werden?
-        $options = get_option(FAU_Person::option_name)['sidebar'];
+        $options = FAU_Person::$options['sidebar'];
         // fau_person_sidebar($id, $title, list 0, inst 1, abtielung 1, posi 1, titel 1, suffix 1, addresse 1, raum 1, tele 1, fax 1, handy 0, mail 1, url 1, mehrlink 0, kurzauszug 1, office 1, pubs 0, bild 1, via 0)
         echo fau_person_sidebar($id, $title, 0, $options['organisation'], $options['abteilung'], $options['position'], 1, 1, $options['adresse'], 1, $options['telefon'], $options['fax'], 0, $options['mail'], $options['webseite'], 0, $options['kurzauszug'], $options['sprechzeiten'], 0, $options['bild'], 0);
         echo $after_widget;

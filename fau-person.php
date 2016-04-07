@@ -51,7 +51,7 @@ class FAU_Person {
     const search_univis_id_transient = 'sui_1k4fu7056Kl12a5';
     
     
-    protected static $options;
+    public static $options;
     
     public $contactselect;
     public $univis_default;
@@ -194,16 +194,22 @@ class FAU_Person {
     private static function get_options() {
         $defaults = self::default_options();
         $options = (array) get_option(self::option_name);
-        
+        if(!isset($options['sidebar'])) {
+            $options['sidebar'] = $defaults['sidebar'];
+            update_option(self::option_name, $options);    
+        }
+
         //Umstellung auf mehrdimensionales Array wegen Sidebar
         foreach ($options as $key => $value) {
             if(is_array($options[$key])) {
                 $options[$key] = wp_parse_args($options[$key], $defaults[$key]);
-                $options[$key] = array_intersect_key($options[$key], $defaults[$key]);       
+                $options[$key] = array_intersect_key($options[$key], $defaults[$key]);   
+               
             }
         $options = wp_parse_args($options, $defaults);    
         $options = array_intersect_key($options, $defaults);
         }
+        // _rrze_debug($options);
         return $options;
     }
     
@@ -431,8 +437,10 @@ class FAU_Person {
         //Umgehen von register_setting für die Suche-Seite, da register_setting nur für Standard-Settings-Seiten funktioniert!!!        
         $defaults = $this->default_options();
         $options = $this->get_options();
+
         $input = isset($_POST[self::option_name]) ? $_POST[self::option_name] : null;
         set_transient(self::search_univis_id_transient, $input, 30);
+
         if( isset( $_POST['submit'] ) ) {
             foreach( $defaults['sidebar'] as $key => $value ) {
                 $input = isset($_POST[self::option_name]['sidebar'][$key]) ? 1 : 0;
@@ -546,7 +554,7 @@ class FAU_Person {
     }
 
     public function sidebar() {
-        $defaults = $this->default_options();
+        //$defaults = $this->default_options();
         $options = $this->get_options();
         ?>
         <label for="<?php printf('%s[sidebar][position]', self::option_name); ?>"><input type='checkbox' id="<?php printf('%s[sidebar][position]', self::option_name); ?>" name="<?php printf('%s[sidebar][position]', self::option_name); ?>" <?php checked($options['sidebar']['position'], 1); ?>><?php _e('Position', FAU_PERSON_TEXTDOMAIN); ?></label><br>
