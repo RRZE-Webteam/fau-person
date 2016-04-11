@@ -540,7 +540,8 @@ if(!function_exists('fau_person_markup')) {
                     
         $content = '<div class="person content-person" itemscope itemtype="http://schema.org/Person">';	
         if( $compactindex )     $content .= '<div class="compactindex">';
-        $content .= '<div class="row">';
+        
+        if( !$compactindex && $showthumb )        $content .= '<div class="row">';
 
         if($showthumb) {
             $content .= '<div class="span1 span-small" itemprop="image">';	
@@ -563,7 +564,10 @@ if(!function_exists('fau_person_markup')) {
             $content .= '</a>';
             $content .= '</div>';
         }
-        $content .= '<div class="span3">';
+        
+        if( $compactindex )     $content .= '<div class="span6">';
+        if( !$compactindex && $showthumb)   $content .= '<div class="span3">';
+        if( !$compactindex && !$showthumb )     $content .= '<div class="span4">';
         $content .= '<h3>';        
         $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
         $content .= '</h3>';
@@ -607,7 +611,7 @@ if(!function_exists('fau_person_markup')) {
             }
             $content .= '</div>';
         }
-        $content .= '</div>';
+        if( !$compactindex || $showthumb )      $content .= '</div>';
         if( $compactindex )     $content .= '</div>';
         $content .= '</div>';
         return $content;
