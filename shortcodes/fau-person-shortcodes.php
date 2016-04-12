@@ -541,7 +541,7 @@ if(!function_exists('fau_person_markup')) {
         $content = '<div class="person content-person" itemscope itemtype="http://schema.org/Person">';	
         if( $compactindex )     $content .= '<div class="compactindex">';
         
-        if( !$compactindex && $showthumb )        $content .= '<div class="row">';
+        if( !$compactindex || $showthumb )        $content .= '<div class="row">';
 
         if($showthumb) {
             $content .= '<div class="span1 span-small" itemprop="image">';	
@@ -565,9 +565,15 @@ if(!function_exists('fau_person_markup')) {
             $content .= '</div>';
         }
         
-        if( $compactindex )     $content .= '<div class="span6">';
-        if( !$compactindex && $showthumb)   $content .= '<div class="span3">';
-        if( !$compactindex && !$showthumb )     $content .= '<div class="span4">';
+        if( $compactindex ) {
+            if( $showthumb )   $content .= '<div class="span6">';
+        } else {
+            if( $showthumb ) {
+                $content .= '<div class="span3">';
+            } else {
+                $content .= '<div class="span4">';
+            }
+        }  
         $content .= '<h3>';        
         $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
         $content .= '</h3>';
@@ -598,9 +604,9 @@ if(!function_exists('fau_person_markup')) {
         if ( (!empty($connection_text) || !empty($connection_options) || !empty($connections))  && $showvia===1 )
             $content .= fau_person_connection( $connection_text, $connection_options, $connections );
 
-        $content .= '</div>';
+        if( !($compactindex && $showthumb) )      $content .= '</div>';
         if (($showlist && $excerpt) || (($showsidebar || $extended) && $description) || ($showlink && $personlink)) {
-            $content .= '<div class="span3">';
+            if( !$compactindex )    $content .= '<div class="span3">';
             if ($showlist && $excerpt)
                 $content .= '<div class="person-info-description"><p>' . $excerpt . '</p></div>';
             if (($extended || $showsidebar) && $description)
@@ -609,8 +615,9 @@ if(!function_exists('fau_person_markup')) {
                 $content .= '<div class="person-info-more"><a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" class="person-read-more" href="' . $personlink . '">';
                 $content .= __('Mehr', FAU_PERSON_TEXTDOMAIN) . ' ›</a></div>';
             }
-            $content .= '</div>';
+            if( !$compactindex )    $content .= '</div>';
         }
+        if( $compactindex && $showthumb )      $content .= '</div>';
         if( !$compactindex || $showthumb )      $content .= '</div>';
         if( $compactindex )     $content .= '</div>';
         $content .= '</div>';
