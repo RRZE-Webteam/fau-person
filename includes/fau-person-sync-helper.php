@@ -24,10 +24,11 @@ class sync_helper {
             'email' => 'email',
             'url' => 'url',
             'streetAddress' => 'street',
-            'addressLocality' => 'ort',            
+            'addressLocality' => 'ort', 
+            'workLocation' => 'office', 
         );
         $fields_univis_officehours = array(
-            'workLocation' => 'office', 
+            //'workLocation' => 'office', 
         );
         $fields_univis_orgunits = array(
             'worksFor' => 'orgunit',            
