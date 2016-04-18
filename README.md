@@ -47,6 +47,10 @@ Beispiel: [kontakt id="42, 44, 56" format="name"]
 kann gerne ins eigene Theme übernommen und daran angepasst werden, beigefügte Vorlage ist an FAU-Fakultätsthemes angepasst
 Es wird zuerst im Theme geschaut, ob eine single-person.php vorhanden ist, wenn ja wird die genommen, ansonsten die vom Plugin
 
+####Version 2.1.2:     
+
+- Automatische Korrektur von Faxnummer        
+
 ####Version 2.1.1:     
 
 - Anzeige Format kompakt korrigiert    
