@@ -50,6 +50,7 @@ Es wird zuerst im Theme geschaut, ob eine single-person.php vorhanden ist, wenn 
 ####Version 2.1.1:     
 
 - Anzeige Format kompakt korrigiert    
+- Bugfix fehlende Raumanzeige    
 
 ####Version 2.1:     
 
