@@ -81,7 +81,7 @@ class sync_helper {
             if( $univis_sync && array_key_exists( 'locations', $person ) && array_key_exists( 'location', $person['locations'][0] ) ) {
                 $person_location = $person['locations'][0]['location'][0];
                 
-                if($key == 'telephone' && !$defaults) {
+                if(($key == 'telephone' || $key == 'faxNumber') && !$defaults) {
                     $phone_number = self::sync_univis( $id, $person_location, $key, $value, $defaults );
                     switch ( get_post_meta($id, 'fau_person_telephone_select', true) ) {
                         case 'erl':
@@ -101,7 +101,7 @@ class sync_helper {
                 if( $defaults ) {
                     $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);
                 } else {
-                    if($key == 'telephone') {
+                    if($key == 'telephone' || $key == 'faxNumber') {
                         $phone_number = get_post_meta($id, 'fau_person_'.$key, true);
                         switch ( get_post_meta($id, 'fau_person_telephone_select', true) ) {
                         case 'erl':
