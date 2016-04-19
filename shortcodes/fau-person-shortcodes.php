@@ -6,6 +6,7 @@
             extract(shortcode_atts(array(
             "slug" => FALSE,
             "id" => FALSE,
+            "category" => FALSE,
             "showlink" => FALSE,
             "showfax" => FALSE,
             "showwebsite" => FALSE,
@@ -31,6 +32,10 @@
             "showmobile" => FALSE,
                         ), $atts));
         
+        if( $category ) {
+            $liste = fau_persons( $atts, $content );
+            return $liste;
+        } else {
         $shortlist = '';    
         $sidebar = '';
         $compactindex = '';
@@ -231,7 +236,8 @@
                 //$liste .= "</p>\n";                
             } 
             return $liste;
-            
+                    
+        }
         }
     }
 
