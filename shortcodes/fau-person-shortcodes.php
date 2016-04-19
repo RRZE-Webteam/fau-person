@@ -121,7 +121,7 @@
         }     
         // Wenn neue Felder dazukommen, hier die Anzeigeoptionen auch mit einstellen
         if (!empty($show)) {
-            $show = explode(', ', $show);                                       // schema.org-Bezeichnungen = Variablenname
+            $show = array_map('trim', explode(',', $show));                                       // schema.org-Bezeichnungen = Variablenname
             if( in_array( 'kurzbeschreibung', $show ) ) $showlist = 1;          //
             if( in_array( 'organisation', $show ) )     $showinstitution = 1;   // $worksFor
             if( in_array( 'abteilung', $show ) )        $showabteilung = 1;     // $department
@@ -143,7 +143,7 @@
             if( in_array( 'ansprechpartner', $show ) )  $showvia = 1;           //
         }    
         if ( !empty( $hide ) ) {
-            $hide = explode(', ', $hide);
+            $hide = array_map('trim', explode(',', $hide));
             if( in_array( 'kurzbeschreibung', $hide ) ) $showlist = 0;
             if( in_array( 'organisation', $hide ) )     $showinstitution = 0;   
             if( in_array( 'abteilung', $hide ) )        $showabteilung = 0;  
@@ -194,7 +194,8 @@
                 //$liste = '<p>';
             }
 
-            $list_ids = explode(',', $id);
+            $list_ids = array_map('trim', explode(',', $id));
+            _rrze_debug($list_ids);
             $number = count($list_ids);   
             $i = 1;
             foreach ($list_ids as $value) {
@@ -362,7 +363,7 @@
         }     
         // Wenn neue Felder dazukommen, hier die Anzeigeoptionen auch mit einstellen
         if (!empty($show)) {
-            $show = explode(', ', $show);                                       // schema.org-Bezeichnungen = Variablenname
+            $show = array_map('trim', explode(',', $show));                                       // schema.org-Bezeichnungen = Variablenname
             if( in_array( 'kurzbeschreibung', $show ) ) $showlist = 1;          //
             if( in_array( 'organisation', $show ) )     $showinstitution = 1;   // $worksFor
             if( in_array( 'abteilung', $show ) )        $showabteilung = 1;     // $department
@@ -384,7 +385,7 @@
             if( in_array( 'ansprechpartner', $show ) )  $showvia = 1;           //
         }    
         if ( !empty( $hide ) ) {
-            $hide = explode(', ', $hide);
+            $hide = array_map('trim', explode(',', $hide));
             if( in_array( 'kurzbeschreibung', $hide ) ) $showlist = 0;
             if( in_array( 'organisation', $hide ) )     $showinstitution = 0;   
             if( in_array( 'abteilung', $hide ) )        $showabteilung = 0;  

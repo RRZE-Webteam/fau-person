@@ -37,13 +37,13 @@
         }     
         //Wenn neue Felder dazukommen, hier die Anzeigeoptionen auch mit einstellen
         if (!empty($show)) {
-            $show = explode(', ', $show);
+            $show = array_map('trim', explode(',', $show));
             if( in_array( 'kurzbeschreibung', $show ) ) $showlist = 1;  
             if( in_array( 'adresse', $show ) )          $showaddress = 1;            
             if( in_array( 'bild', $show ) )             $showthumb = 1;
         }    
         if ( !empty( $hide ) ) {
-            $hide = explode(', ', $hide);
+            $hide = array_map('trim', explode(',', $hide));
             if( in_array( 'kurzbeschreibung', $hide ) ) $showlist = 0;
             if( in_array( 'adresse', $hide ) )          $showaddress = 0;            
             if( in_array( 'bild', $hide ) )             $showthumb = 0;         
@@ -66,7 +66,7 @@
 
         if (!empty($id)) {
 
-            $list_ids = explode(',', $id);
+            $list_ids = array_map('trim', explode(',', $id));
             if ( $page ) {
                 $liste = '';
             } elseif ( $list ) {
