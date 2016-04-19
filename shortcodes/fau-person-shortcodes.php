@@ -195,7 +195,6 @@
             }
 
             $list_ids = array_map('trim', explode(',', $id));
-            _rrze_debug($list_ids);
             $number = count($list_ids);   
             $i = 1;
             foreach ($list_ids as $value) {
