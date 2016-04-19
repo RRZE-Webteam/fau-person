@@ -690,6 +690,7 @@ class FAU_Person {
         add_shortcode( 'person', 'fau_person' );
         add_shortcode( 'kontakt', 'fau_person' );
         add_shortcode( 'persons', 'fau_persons' );
+        add_shortcode( 'kontaktliste', 'fau_persons' );
         add_shortcode( 'standort', 'fau_standort' );
     }
 
