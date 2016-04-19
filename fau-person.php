@@ -4,7 +4,7 @@
  Plugin Name: FAU Person
  Plugin URI: https://github.com/RRZE-Webteam/fau-person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 2.1.1
+ * Version: 2.1.2
  * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -690,6 +690,7 @@ class FAU_Person {
         add_shortcode( 'person', 'fau_person' );
         add_shortcode( 'kontakt', 'fau_person' );
         add_shortcode( 'persons', 'fau_persons' );
+        add_shortcode( 'kontaktliste', 'fau_persons' );
         add_shortcode( 'standort', 'fau_standort' );
     }
 

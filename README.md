@@ -1,7 +1,7 @@
 WICHTIGE HINWEISE:
 - KONFLIKT MIT DEM PLUGIN RRZE-UNIVIS MÖGLICH! DIESES UNBEDINGT VORHER AUF MINDESTENS VERSION 1.0.4 UPDATEN!
 
-*** AB VERSION 1.3 IST DAS ZUSÄTZLICHE PLUGIN univis-data FÜR DIE UNIVIS-ANBINDUNG NICHT MEHR NÖTIG! Um Konfliket zu vermeiden, muss univis-data deinstalliert werden!!! ***
+*** AB VERSION 1.3 IST DAS ZUSÄTZLICHE PLUGIN univis-data FÜR DIE UNIVIS-ANBINDUNG NICHT MEHR NÖTIG! Um Konflikte zu vermeiden, muss univis-data deinstalliert werden!!! ***
 
 fau-person
 ============
@@ -20,14 +20,15 @@ Funktionsweise:
 - format="shortlist" für Auflistung von Titel (Präfix), Vorname, Nachname, Suffix, ggf. Kurzauszug (bei showlist=1)    
 - Eingabefeld für allgemeinen Text (z.B. Lebenslauf, WYSIWYG-Editor), Kurzbeschreibung für Listenanzeige (falls im Shortcode showlist=1 gewählt ist) und Kurzauszug für Sidebaranzeige (falls im Shortcode showsidebar=1 gewählt ist)
 
-#####Shortcode person (css-Klassen an FAU-Webauftritt angepasst)
+#####Shortcode kontakt (css-Klassen an FAU-Webauftritt angepasst)
 ######Beispiel:  
 Kontakte können mit Angabe der WordPress-Kontakt-ID abgerufen werden:
 [kontakt id="12345"], ehemals [person id="12345"]
 
 (alternativ auch Angabe des Titels des eingetragenen Kontaktes möglich, aber nicht empfehlenswert, da nicht zuverlässig - hier Max Mustermann: [kontakt slug='Max Mustermann'])  
 
-Eingabe mehrerer ids möglich (kommasepariert, z. B. id="42, 44, 56") für die Anzeige mehrerer Personen mit gleichen Shortcode-Parametern     
+Eingabe mehrerer ids möglich (kommasepariert, z. B. id="42, 44, 56") für die Anzeige mehrerer Kontakte mit gleichen Shortcode-Parametern     
+Für die Anzeige mehrerer Kontakte über Kontakt-Kategorien kann auch Kategorie-Slug gewählt werden (hier alle-leute): [kontakt category="alle-leute"] oder [kontaktliste category="alle-leute"]    
 
 
 ######optionale Parameter (Parameter aus früheren Versionen funktionieren noch):  
@@ -46,6 +47,12 @@ Beispiel: [kontakt id="42, 44, 56" format="name"]
 #####Vorlage zur Singledarstellung: templates/single-person.php
 kann gerne ins eigene Theme übernommen und daran angepasst werden, beigefügte Vorlage ist an FAU-Fakultätsthemes angepasst
 Es wird zuerst im Theme geschaut, ob eine single-person.php vorhanden ist, wenn ja wird die genommen, ansonsten die vom Plugin
+
+####Version 2.1.2:     
+
+- Automatische Korrektur der Faxnummer (zusätzlich zur Telefonnummer) an das internationale Format, wenn die Option "uni-intern" ausgewählt ist        
+- Wenn mehrere Werte innerhalb eines Shortcode-Parameters angegeben werden, können diese nur mit Komma oder mit Komma und Leerstelle getrennt werden     
+- Shortcode für Ausgabe von Personenlisten über Kategorien angepasst: [kontaktliste category="slugname-der-Kategorie"] oder [kontakt category="slugname-der-Kategorie"]    
 
 ####Version 2.1.1:     
 

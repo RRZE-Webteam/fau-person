@@ -257,7 +257,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'after' => $univis_default['workLocation'] 
             ),
             array(
-                'name' => __('Standort Telefonanschluss', FAU_PERSON_TEXTDOMAIN),
+                'name' => __('Standort Telefon- und Faxanschluss', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
                 'type' => 'radio',
                 'id' => $prefix . 'telephone_select',
