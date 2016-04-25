@@ -10,7 +10,7 @@ get_header(); ?>
                     <?php 
                     $id = $post->ID;
 
-		    echo fau_person_page($id);
+		    echo FAU_Person_Shortcodes::fau_person_page($id);
                     the_content();
 			?>
           

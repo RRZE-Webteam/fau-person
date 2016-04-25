@@ -687,11 +687,11 @@ class FAU_Person {
     }
     
     private static function add_shortcodes() {     
-        add_shortcode( 'person', 'fau_person' );
-        add_shortcode( 'kontakt', 'fau_person' );
-        add_shortcode( 'persons', 'fau_persons' );
-        add_shortcode( 'kontaktliste', 'fau_persons' );
-        add_shortcode( 'standort', 'fau_standort' );
+        add_shortcode( 'person', array( 'FAU_Person_Shortcodes', 'fau_person' ) );
+        add_shortcode( 'kontakt', array( 'FAU_Person_Shortcodes', 'fau_person' ) );
+        add_shortcode( 'persons', array( 'FAU_Person_Shortcodes', 'fau_persons' ) );
+        add_shortcode( 'kontaktliste', array( 'FAU_Person_Shortcodes', 'fau_persons' ) );
+        add_shortcode( 'standort', array( 'FAU_Standort_Shortcodes', 'fau_standort' ) );
     }
 
     public static function register_person_post_type() {

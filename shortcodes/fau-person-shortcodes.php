@@ -34,7 +34,7 @@ class FAU_Person_Shortcodes {
                         ), $atts));
         
         if( $category ) {
-            $liste = fau_persons( $atts, $content );
+            $liste = self::fau_persons( $atts, $content );
             return $liste;
         } else {
         $shortlist = '';    
@@ -202,20 +202,20 @@ class FAU_Person_Shortcodes {
                 $post = get_post($value);
                 if ($post && $post->post_type == 'person') {
                     if ( $page ) {
-                        $liste .= fau_person_page($value);
+                        $liste .= self::fau_person_page($value);
                     } elseif ( $shortlist ) {
-                        $liste .= fau_person_shortlist($value, $showlist);
+                        $liste .= self::fau_person_shortlist($value, $showlist);
                         if( $i < $number )  $liste .= ", ";
                     } elseif ( $list ) {
                         $liste .= '<li class="person-info">'."\n";
-                        $liste .= fau_person_shortlist($value, $showlist);
+                        $liste .= self::fau_person_shortlist($value, $showlist);
                         $liste .= "</li>\n";
                     } elseif ( $sidebar ) {
-                        $liste .= fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia);
+                        $liste .= self::fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia);
                     } elseif ( $compactindex ) {
-                        $liste .= fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex);  
+                        $liste .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex);  
                     } else {
-                        $liste .= fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia);
+                        $liste .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia);
                     }
                 } else {
                     $liste .=  sprintf(__('Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $value);
@@ -434,20 +434,20 @@ class FAU_Person_Shortcodes {
 
                 $value = $post->ID;
                 if ( $page ) {
-                        $content .= fau_person_page($value);
+                        $content .= self::fau_person_page($value);
                     } elseif ( $shortlist ) {
-                        $content .= fau_person_shortlist($value, $showlist);
+                        $content .= self::fau_person_shortlist($value, $showlist);
                         if( $i < $number )  $content .= ", ";
                     } elseif ( $list ) {
                         $content .= '<li class="person-info">'."\n";
-                        $content .= fau_person_shortlist($value, $showlist);
+                        $content .= self::fau_person_shortlist($value, $showlist);
                         $content .= "</li>\n";
                     } elseif ( $sidebar ) {
-                        $content .= fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia);
+                        $content .= self::fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia);
                     } elseif ( $compactindex ) {
-                        $content .= fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex);  
+                        $content .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex);  
                     } else {
-                        $content .= fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia);
+                        $content .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia);
                     }
                     $i++;
                     
@@ -604,7 +604,7 @@ class FAU_Person_Shortcodes {
             $content .= '<li class="person-info-pubs"><span class="screen-reader-text">' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $pubs . '</li>';
         $content .= '</ul>';
         if ( (!empty($connection_text) || !empty($connection_options) || !empty($connections))  && $showvia===1 )
-            $content .= fau_person_connection( $connection_text, $connection_options, $connections );
+            $content .= self::fau_person_connection( $connection_text, $connection_options, $connections );
 
         if( !($compactindex && $showthumb) )      $content .= '</div>';
         if (($showlist && $excerpt) || (($showsidebar || $extended) && $description) || ($showlink && $personlink)) {
@@ -707,7 +707,7 @@ class FAU_Person_Shortcodes {
             $content .= '<li class="person-info-pubs"><span class="screen-reader-text">' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $pubs . '</li>';
         $content .= '</ul>';
         if ( !empty($connection_text) || !empty($connection_options) || !empty($connections) )
-            $content .= fau_person_connection( $connection_text, $connection_options, $connections );
+            $content .= self::fau_person_connection( $connection_text, $connection_options, $connections );
         $content .= '</div>';
 
         //	    if (($options['plugin_fau_person_headline'] != 'jobTitle') && ($position)) 
@@ -855,7 +855,7 @@ class FAU_Person_Shortcodes {
                 $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable">' . $hoursAvailable . '</span></li>';
             $content .= '</ul>' . "\n";
             if ( ( !empty($connection_text) || !empty($connection_options) || !empty($connections) ) && $showvia===1  )
-                $content .= fau_person_connection( $connection_text, $connection_options, $connections );
+                $content .= self::fau_person_connection( $connection_text, $connection_options, $connections );
             if ( $description && $showdescription )
                 $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $description . '</div>' . "\n";
             $content .= '</div>' . "\n";
