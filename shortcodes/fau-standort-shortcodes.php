@@ -1,5 +1,11 @@
 <?php
 
+ if(!function_exists('fau_standort_page')) { 
+    function fau_standort_page( $id ) {
+        return FAU_Standort_Shortcodes::fau_standort_page( $id );
+    }
+ }  
+
 class FAU_Standort_Shortcodes {
 
     public static function fau_standort( $atts, $content = null) {

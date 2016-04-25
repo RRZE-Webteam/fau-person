@@ -1,5 +1,11 @@
 <?php
 
+ if(!function_exists('fau_person_page')) { 
+    function fau_person_page( $id ) {
+        return FAU_Person_Shortcodes::fau_person_page( $id );
+    }
+ }  
+
 class FAU_Person_Shortcodes {
 
 
