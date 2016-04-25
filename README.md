@@ -48,6 +48,19 @@ Beispiel: [kontakt id="42, 44, 56" format="name"]
 kann gerne ins eigene Theme übernommen und daran angepasst werden, beigefügte Vorlage ist an FAU-Fakultätsthemes angepasst
 Es wird zuerst im Theme geschaut, ob eine single-person.php vorhanden ist, wenn ja wird die genommen, ansonsten die vom Plugin
 
+####Version 2.1.3:     
+
+- Bugfix Sidebaranzeigeoptionen    
+- Interne Codeoptimierungen, wichtig für Themeentwickler: in single-person.php und single-standort.php muss die Zeile 
+    echo fau_person_page($id);     
+    auf     
+    echo FAU_Person_Shortcodes::fau_person_page($id);    
+    bzw.    
+    echo fau_standort_page($id);     
+    auf    
+    echo FAU_Standort_Shortcodes::fau_standort_page($id);    
+    angepasst werden. 
+
 ####Version 2.1.2:     
 
 - Automatische Korrektur der Faxnummer (zusätzlich zur Telefonnummer) an das internationale Format, wenn die Option "uni-intern" ausgewählt ist        

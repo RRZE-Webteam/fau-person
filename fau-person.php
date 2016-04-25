@@ -4,7 +4,7 @@
  Plugin Name: FAU Person
  Plugin URI: https://github.com/RRZE-Webteam/fau-person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 2.1.2
+ * Version: 2.1.3
  * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -441,7 +441,7 @@ class FAU_Person {
         $input = isset($_POST[self::option_name]) ? $_POST[self::option_name] : null;
         set_transient(self::search_univis_id_transient, $input, 30);
 
-        if( isset( $_POST['submit'] ) ) {
+        if( isset( $_POST['fau-person-options'] ) ) {
             foreach( $defaults['sidebar'] as $key => $value ) {
                 $input = isset($_POST[self::option_name]['sidebar'][$key]) ? 1 : 0;
                 $options['sidebar'][$key] = $input;    
@@ -474,7 +474,7 @@ class FAU_Person {
                 <?php
                 settings_fields('search_univis_id_options');
                 do_settings_sections('search_univis_id_options');
-                submit_button(esc_html(__('Person suchen', FAU_PERSON_TEXTDOMAIN)));
+                submit_button(esc_html(__('Person suchen', FAU_PERSON_TEXTDOMAIN)), 'primary', 'fau-person-search');
                 ?>
             </form>            
         </div>
@@ -482,7 +482,7 @@ class FAU_Person {
             <?php
                 settings_fields('find_univis_id_options');
                 do_settings_sections('find_univis_id_options');
-                if(empty($person)) {
+                if(empty($person) || empty($person[0])) {
                     echo __('Es konnten keine Daten zur Person gefunden werden. Bitte verändern Sie Ihre Suchwerte und stellen Sie sicher, dass das Plugin Univis-Data aktiviert ist.', FAU_PERSON_TEXTDOMAIN);
                 } else {
                     $person = $this->array_orderby($person,"lastname", SORT_ASC, "firstname", SORT_ASC );
@@ -609,7 +609,7 @@ class FAU_Person {
                 <?php
                 settings_fields('sidebar_options');
                 do_settings_sections('sidebar_options');
-                submit_button(esc_html(__('Änderungen speichern', FAU_PERSON_TEXTDOMAIN)));
+                submit_button(esc_html(__('Änderungen speichern', FAU_PERSON_TEXTDOMAIN)), 'primary', 'fau-person-options');
                 //update_option($options['sidebar']['position'], isset($_POST['_fau_person']['sidebar']['position']) ? 1 : null);
                 ?>
             </form>            
@@ -687,11 +687,11 @@ class FAU_Person {
     }
     
     private static function add_shortcodes() {     
-        add_shortcode( 'person', 'fau_person' );
-        add_shortcode( 'kontakt', 'fau_person' );
-        add_shortcode( 'persons', 'fau_persons' );
-        add_shortcode( 'kontaktliste', 'fau_persons' );
-        add_shortcode( 'standort', 'fau_standort' );
+        add_shortcode( 'person', array( 'FAU_Person_Shortcodes', 'fau_person' ) );
+        add_shortcode( 'kontakt', array( 'FAU_Person_Shortcodes', 'fau_person' ) );
+        add_shortcode( 'persons', array( 'FAU_Person_Shortcodes', 'fau_persons' ) );
+        add_shortcode( 'kontaktliste', array( 'FAU_Person_Shortcodes', 'fau_persons' ) );
+        add_shortcode( 'standort', array( 'FAU_Standort_Shortcodes', 'fau_standort' ) );
     }
 
     public static function register_person_post_type() {

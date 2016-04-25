@@ -1,8 +1,14 @@
 <?php
 
+ if(!function_exists('fau_standort_page')) { 
+    function fau_standort_page( $id ) {
+        return FAU_Standort_Shortcodes::fau_standort_page( $id );
+    }
+ }  
 
- if(!function_exists('fau_standort')) {   
-    function fau_standort( $atts, $content = null) {
+class FAU_Standort_Shortcodes {
+
+    public static function fau_standort( $atts, $content = null) {
             extract(shortcode_atts(array(
             "slug" => FALSE,
             "id" => FALSE,
@@ -83,18 +89,18 @@
                 
                 if ($post && $post->post_type == 'standort') {
                     if ( $page ) {
-                        $liste .= fau_standort_page($value);
+                        $liste .= self::fau_standort_page($value);
                     } elseif ( $shortlist ) {
-                        $liste .= fau_standort_shortlist($value, $showlist);
+                        $liste .= self::fau_standort_shortlist($value, $showlist);
                         if( $i < $number )  $liste .= ", ";
                     } elseif ( $list ) {
                         $liste .= '<li class="person-info">'."\n";
-                        $liste .= fau_standort_shortlist($value, $showlist);
+                        $liste .= self::fau_standort_shortlist($value, $showlist);
                         $content .= "</li>\n";
                     } elseif ( $sidebar ) { 
-                        $liste .= fau_standort_sidebar($value, 0, $showlist, $showaddress, $showthumb);
+                        $liste .= self::fau_standort_sidebar($value, 0, $showlist, $showaddress, $showthumb);
                     } else { 
-                        $liste .= fau_standort_markup($value, $showaddress, $showlist, $showsidebar, $showthumb);
+                        $liste .= self::fau_standort_markup($value, $showaddress, $showlist, $showsidebar, $showthumb);
                     }
                 } else {
                     $liste .=  sprintf(__('Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $value);
@@ -114,13 +120,10 @@
             return $liste;
             
         }
-    }
 
 }
 
-if(!function_exists('fau_standort_markup')) {
-
-    function fau_standort_markup($id, $showaddress, $showlist, $showsidebar, $showthumb) {
+    public static function fau_standort_markup($id, $showaddress, $showlist, $showsidebar, $showthumb) {
         $fields = sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true), 0 );
         extract($fields);
         
@@ -212,12 +215,10 @@ if(!function_exists('fau_standort_markup')) {
         $content .= '</div>';
         $content .= '</div>';
         return $content;
-    }
 
 }
 
- if(!function_exists('fau_standort_page')) {
-    function fau_standort_page($id) {
+    public static function fau_standort_page($id) {
  
      	$content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
         
@@ -271,10 +272,9 @@ if(!function_exists('fau_standort_markup')) {
 
         return $content;
     } 
- }    
   
-if(!function_exists('fau_standort_shortlist')) {
-    function fau_standort_shortlist($id, $showlist) {	
+  
+    public static function fau_standort_shortlist($id, $showlist) {	
         
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
         extract($fields);
@@ -302,10 +302,9 @@ if(!function_exists('fau_standort_shortlist')) {
                 $content .= '</span>';
             return $content;
     }
- }
+
  
-if(!function_exists('fau_standort_sidebar')) {
-    function fau_standort_sidebar($id, $title, $showlist=0, $showaddress=0, $showthumb=0) {
+    public static function fau_standort_sidebar($id, $title, $showlist=0, $showaddress=0, $showthumb=0) {
             if (!empty($id)) {
             $post = get_post($id);
 

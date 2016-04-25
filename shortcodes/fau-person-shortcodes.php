@@ -1,8 +1,15 @@
 <?php
 
+ if(!function_exists('fau_person_page')) { 
+    function fau_person_page( $id ) {
+        return FAU_Person_Shortcodes::fau_person_page( $id );
+    }
+ }  
 
- if(!function_exists('fau_person')) {   
-    function fau_person( $atts, $content = null) {
+class FAU_Person_Shortcodes {
+
+
+    public static function fau_person( $atts, $content = null) {
             extract(shortcode_atts(array(
             "slug" => FALSE,
             "id" => FALSE,
@@ -33,7 +40,7 @@
                         ), $atts));
         
         if( $category ) {
-            $liste = fau_persons( $atts, $content );
+            $liste = self::fau_persons( $atts, $content );
             return $liste;
         } else {
         $shortlist = '';    
@@ -201,20 +208,20 @@
                 $post = get_post($value);
                 if ($post && $post->post_type == 'person') {
                     if ( $page ) {
-                        $liste .= fau_person_page($value);
+                        $liste .= self::fau_person_page($value);
                     } elseif ( $shortlist ) {
-                        $liste .= fau_person_shortlist($value, $showlist);
+                        $liste .= self::fau_person_shortlist($value, $showlist);
                         if( $i < $number )  $liste .= ", ";
                     } elseif ( $list ) {
                         $liste .= '<li class="person-info">'."\n";
-                        $liste .= fau_person_shortlist($value, $showlist);
+                        $liste .= self::fau_person_shortlist($value, $showlist);
                         $liste .= "</li>\n";
                     } elseif ( $sidebar ) {
-                        $liste .= fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia);
+                        $liste .= self::fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia);
                     } elseif ( $compactindex ) {
-                        $liste .= fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex);  
+                        $liste .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex);  
                     } else {
-                        $liste .= fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia);
+                        $liste .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia);
                     }
                 } else {
                     $liste .=  sprintf(__('Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $value);
@@ -241,11 +248,8 @@
         }
     }
 
-}
 
-
- if(!function_exists('fau_persons')) {
-    function fau_persons($atts, $content = null) {
+    public static function fau_persons($atts, $content = null) {
         extract(shortcode_atts(array(
             "category" => 'category',
             "showlink" => FALSE,
@@ -436,20 +440,20 @@
 
                 $value = $post->ID;
                 if ( $page ) {
-                        $content .= fau_person_page($value);
+                        $content .= self::fau_person_page($value);
                     } elseif ( $shortlist ) {
-                        $content .= fau_person_shortlist($value, $showlist);
+                        $content .= self::fau_person_shortlist($value, $showlist);
                         if( $i < $number )  $content .= ", ";
                     } elseif ( $list ) {
                         $content .= '<li class="person-info">'."\n";
-                        $content .= fau_person_shortlist($value, $showlist);
+                        $content .= self::fau_person_shortlist($value, $showlist);
                         $content .= "</li>\n";
                     } elseif ( $sidebar ) {
-                        $content .= fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia);
+                        $content .= self::fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia);
                     } elseif ( $compactindex ) {
-                        $content .= fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex);  
+                        $content .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex);  
                     } else {
-                        $content .= fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia);
+                        $content .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia);
                     }
                     $i++;
                     
@@ -480,11 +484,9 @@
         return $content;
     }
 
-}
 
-if(!function_exists('fau_person_markup')) {
 
-    function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex=0) {
+    public static function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex=0) {
         $fields = sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true), 0 );
         extract($fields);
         if( $showvia !== 0 && !empty($connections) )                    $showvia = 1;
@@ -608,7 +610,7 @@ if(!function_exists('fau_person_markup')) {
             $content .= '<li class="person-info-pubs"><span class="screen-reader-text">' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $pubs . '</li>';
         $content .= '</ul>';
         if ( (!empty($connection_text) || !empty($connection_options) || !empty($connections))  && $showvia===1 )
-            $content .= fau_person_connection( $connection_text, $connection_options, $connections );
+            $content .= self::fau_person_connection( $connection_text, $connection_options, $connections );
 
         if( !($compactindex && $showthumb) )      $content .= '</div>';
         if (($showlist && $excerpt) || (($showsidebar || $extended) && $description) || ($showlink && $personlink)) {
@@ -630,10 +632,8 @@ if(!function_exists('fau_person_markup')) {
         return $content;
     }
 
-}
 
- if(!function_exists('fau_person_page')) {
-    function fau_person_page($id) {
+    public static function fau_person_page($id) {
  
      	$content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
@@ -713,7 +713,7 @@ if(!function_exists('fau_person_markup')) {
             $content .= '<li class="person-info-pubs"><span class="screen-reader-text">' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $pubs . '</li>';
         $content .= '</ul>';
         if ( !empty($connection_text) || !empty($connection_options) || !empty($connections) )
-            $content .= fau_person_connection( $connection_text, $connection_options, $connections );
+            $content .= self::fau_person_connection( $connection_text, $connection_options, $connections );
         $content .= '</div>';
 
         //	    if (($options['plugin_fau_person_headline'] != 'jobTitle') && ($position)) 
@@ -721,10 +721,10 @@ if(!function_exists('fau_person_markup')) {
 
         return $content;
     } 
- }    
+ 
   
-if(!function_exists('fau_person_shortlist')) {
-    function fau_person_shortlist($id, $showlist) {	
+
+    public static function fau_person_shortlist($id, $showlist) {	
         
         
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
@@ -758,11 +758,10 @@ if(!function_exists('fau_person_shortlist')) {
                 $content .= '</span>';
             return $content;
     }
- }
+
  
-if(!function_exists('fau_person_sidebar')) {
     // von Widget, also Sidebar über Fakultätsthemes - Ansprechpartner: fau_person_sidebar($id, $title, list 0, inst 1, abtielung 1, posi 1, titel 1, suffix 1, addresse 1, raum 1, tele 1, fax 1, handy 0,                                                                  mail 1, url 1, mehrlink 0, kurzauszug 1, office 0, pubs 0, bild 1, via 0)
-    function fau_person_sidebar($id, $title, $showlist=0, $showinstitution=0, $showabteilung=0, $showposition=0, $showtitle=0, $showsuffix=0, $showaddress=0, $showroom=0, $showtelefon=0, $showfax=0, $showmobile=0, $showmail=0, $showwebsite=0, $showlink=0, $showdescription=0, $showoffice=0, $showpubs=0, $showthumb=0, $showvia=0) {
+    public static function fau_person_sidebar($id, $title, $showlist=0, $showinstitution=0, $showabteilung=0, $showposition=0, $showtitle=0, $showsuffix=0, $showaddress=0, $showroom=0, $showtelefon=0, $showfax=0, $showmobile=0, $showmail=0, $showwebsite=0, $showlink=0, $showdescription=0, $showoffice=0, $showpubs=0, $showthumb=0, $showvia=0) {
         if (!empty($id)) {
             $post = get_post($id);
             
@@ -862,7 +861,7 @@ if(!function_exists('fau_person_sidebar')) {
                 $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable">' . $hoursAvailable . '</span></li>';
             $content .= '</ul>' . "\n";
             if ( ( !empty($connection_text) || !empty($connection_options) || !empty($connections) ) && $showvia===1  )
-                $content .= fau_person_connection( $connection_text, $connection_options, $connections );
+                $content .= self::fau_person_connection( $connection_text, $connection_options, $connections );
             if ( $description && $showdescription )
                 $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $description . '</div>' . "\n";
             $content .= '</div>' . "\n";
@@ -874,7 +873,7 @@ if(!function_exists('fau_person_sidebar')) {
 
     }
     
-    function fau_person_connection( $connection_text, $connection_options, $connections ) {
+    public static function fau_person_connection( $connection_text, $connection_options, $connections ) {
         $content = '';
         if( $connection_text ) {
             $content .= '<h3 itemprop="name">' . $connection_text . '</h3>';
