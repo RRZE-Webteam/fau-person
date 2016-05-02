@@ -91,7 +91,7 @@ class sync_helper {
                             $value = self::correct_phone_number($phone_number, 'nbg');                        
                             break;
                         default:
-                            $value = $phone_number;                        
+                            $value = self::correct_phone_number($phone_number, 'standard');                        
                             break;
                     }                    
                 } else {
@@ -111,7 +111,7 @@ class sync_helper {
                             $value = self::correct_phone_number($phone_number, 'nbg');                        
                             break;
                         default:
-                            $value = $phone_number;                        
+                            $value = self::correct_phone_number($phone_number, 'standard');                        
                             break;
                         }
                     } else {                    
@@ -236,28 +236,80 @@ class sync_helper {
     }
     
     public static function correct_phone_number( $phone_number, $location ) {
-        $phone_data = preg_replace( '/\D/', '', $phone_number );
-        switch( $location ) {
-            case 'erl':
-                $vorwahl = '+49 9131 85-';
-                if( strlen($phone_data) == 5 ) {
-                    $phone_number = $vorwahl . $phone_data;
-                } elseif (strlen($phone_data) == 7 && strpos( $phone_data, '85') === 0 ) {
-                    $phone_number = $vorwahl . substr($phone_data, -5);
-                } elseif ( strlen($phone_data) == 12 && strpos( $phone_data, '913185') !== FALSE ) {
-                    $phone_number = $vorwahl . substr($phone_data, -5);
-                } 
-                break;
-            case 'nbg':
-                $vorwahl = '+49 911 5302-';
-                if( strlen($phone_data) == 3 ) {
-                    $phone_number = $vorwahl . $phone_data;
-                } elseif (strlen($phone_data) == 7 && strpos( $phone_data, '5302') === 0 ) {
-                    $phone_number = $vorwahl . substr($phone_data, -3);
-                } elseif ( strlen($phone_data) == 11 && strpos( $phone_data, '9115302') !== FALSE ) {
-                    $phone_number = $vorwahl . substr($phone_data, -3);
-                } 
-                break;
+        if( ( strpos( $phone_number, '+49 9131 85-' ) !== 0 ) && ( strpos( $phone_number, '+49 911 5302-' ) !== 0 ) ) {
+            if( !preg_match( '/\+49 [1-9][0-9]{3,6} [0-9]+/', $phone_number ) ) {
+                $phone_data = preg_replace( '/\D/', '', $phone_number );
+                $vorwahl_erl = '+49 9131 85-';
+                $vorwahl_nbg = '+49 911 5302-';
+                switch( $location ) {
+                    case 'erl':
+                        if( strlen( $phone_data ) == 5 ) {
+                            $phone_number = $vorwahl_erl . $phone_data;
+                        } elseif (strlen( $phone_data ) == 7 && strpos( $phone_data, '85') === 0 ) {
+                            $phone_number = $vorwahl_erl . substr(  $phone_data, -5);
+                        } elseif ( strlen( $phone_data ) == 12 && strpos( $phone_data, '913185') !== FALSE ) {
+                            $phone_number = $vorwahl_erl . substr( $phone_data, -5);
+                        } 
+                        break;
+                    case 'nbg':
+                        if( strlen( $phone_data ) == 3 ) {
+                            $phone_number = $vorwahl_nbg . $phone_data;
+                        } elseif ( strlen( $phone_data ) == 7 && strpos( $phone_data, '5302') === 0 ) {
+                            $phone_number = $vorwahl_nbg . substr( $phone_data, -3);
+                        } elseif ( strlen( $phone_data ) == 11 && strpos( $phone_data, '9115302') !== FALSE ) {
+                            $phone_number = $vorwahl_nbg . substr( $phone_data, -3);
+                        } 
+                        break;
+                    case 'standard':
+                        switch( strlen( $phone_data ) ) {
+                            case '3':
+                                $phone_number = $vorwahl_nbg . $phone_data;
+                                break;
+                            case '5':
+                                $phone_number = $vorwahl_erl . $phone_data;
+                                break;
+                            case '7':
+                                if( strpos( $phone_data, '85' ) === 0 )  {
+                                    $phone_number = $vorwahl_erl . substr( $phone_data, -5 );
+                                    break;
+                                }
+                                if( strpos( $phone_data, '5302' ) === 0 ) {
+                                    $phone_number = $vorwahl_nbg . substr( $phone_data, -3 );
+                                    break;
+                                } 
+                            case '9':
+                                if( strpos( $phone_data, '0685' ) === 0 )  {
+                                    $phone_number = $vorwahl_erl . substr( $phone_data, -5 );
+                                    break;
+                                }
+                                if( strpos( $phone_data, '065302' ) === 0 ) {
+                                    $phone_number = $vorwahl_nbg . substr( $phone_data, -3 );
+                                    break;
+                                } 
+                            default:
+                                if( strpos( $phone_data, '9115302' ) !== FALSE ) {
+                                    $phone_number = $vorwahl_nbg . substr( $phone_data, -3 );
+                                    break;
+                                    //dringend noch überprüfen, dass alles hinten dran nur 3 Zeichen hat!!!
+                                }  
+                                if( strpos( $phone_data, '913185' ) !== FALSE )  {
+                                    $phone_number = $vorwahl_erl . substr( $phone_data, -5 );
+                                    break;
+                                    //dringend noch überprüfen, dass alles hinten dran nur 5 Zeichen hat!!!
+                                }
+                            /*default:
+                                if( strpos( $phone_data, '0' ) === 0 ) {
+                                    $phone_number = '+49 ' . substr( $phone_data, 1 );
+                                    break;
+                                } elseif( strpos( $phone_number, '+' ) === 0 ) {
+                                    break;
+                                } else {
+                                    $phone_number = '+49 9131' . $phone_number;
+                                }*/
+                        }
+                
+                }        
+            }
         }
         return $phone_number;
     }

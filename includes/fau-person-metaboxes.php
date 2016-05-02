@@ -265,7 +265,8 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                     'erl' => __('Uni-intern, Standort Erlangen', FAU_PERSON_TEXTDOMAIN),
                     'nbg' => __('Uni-intern, Standort Nürnberg', FAU_PERSON_TEXTDOMAIN),
                     'standard' => __('Allgemeine Rufnummer', FAU_PERSON_TEXTDOMAIN)
-                )
+                ),
+                'default' => 'standard'
             ),
             array(
                 'name' => __('Telefon', FAU_PERSON_TEXTDOMAIN),
