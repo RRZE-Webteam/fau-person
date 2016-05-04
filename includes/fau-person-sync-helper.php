@@ -287,25 +287,22 @@ class sync_helper {
                                     break;
                                 } 
                             default:
+                                                                add_action( 'admin_notices', array( 'FAU_Person', 'admin_notice_phone_number' ) );
                                 if( strpos( $phone_data, '9115302' ) !== FALSE ) {
-                                    $phone_number = $vorwahl_nbg . substr( $phone_data, -3 );
-                                    break;
-                                    //dringend noch überprüfen, dass alles hinten dran nur 3 Zeichen hat!!!
+                                    $durchwahl = explode( '9115302', $phone_data );
+                                    if( strlen( $durchwahl[1] ) ===  3 ) {
+                                        $phone_number = $vorwahl_nbg . substr( $phone_data, -3 );
+                                        break;
+                                    }
                                 }  
                                 if( strpos( $phone_data, '913185' ) !== FALSE )  {
-                                    $phone_number = $vorwahl_erl . substr( $phone_data, -5 );
-                                    break;
-                                    //dringend noch überprüfen, dass alles hinten dran nur 5 Zeichen hat!!!
+                                    $durchwahl = explode( '913185', $phone_data );
+                                    if( strlen( $durchwahl[1] ) ===  5 ) {
+                                        $phone_number = $vorwahl_erl . substr( $phone_data, -5 );
+                                        break;
+                                    }
                                 }
-                            /*default:
-                                if( strpos( $phone_data, '0' ) === 0 ) {
-                                    $phone_number = '+49 ' . substr( $phone_data, 1 );
-                                    break;
-                                } elseif( strpos( $phone_number, '+' ) === 0 ) {
-                                    break;
-                                } else {
-                                    $phone_number = '+49 9131' . $phone_number;
-                                }*/
+
                         }
                 
                 }        

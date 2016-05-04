@@ -98,7 +98,7 @@ class FAU_Person {
         add_action( 'admin_menu', array( $this, 'add_options_pages' ) );
         add_action( 'widgets_init', array( __CLASS__, 'register_widgets' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_script' ) );
-	add_action( 'admin_init', array($this, 'person_shortcodes_rte_button' ) );     
+	add_action( 'admin_init', array( $this, 'person_shortcodes_rte_button' ) );    
         
         add_filter( 'single_template', array( $this, 'include_template_function' ) );
         
@@ -312,6 +312,16 @@ class FAU_Person {
             $role->remove_cap($cap);
         }        
     }    
+    
+    public function admin_notice_phone_number() {
+        _rrze_debug("hallo");
+    ?>
+        <div class="notice notice-warning">
+            <p><?php _e( 'Bitte korrigieren Sie das Format der Telefonnummer, die Anzeige ist so nicht einheitlich!', FAU_PERSON_TEXTDOMAIN ); ?></p>
+        </div>
+        <?php
+    }
+
     
     public function add_help_tabs() {
         add_action('load-post-new.php', array($this, 'help_menu_new_person'));
