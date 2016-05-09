@@ -287,7 +287,8 @@ class sync_helper {
                                     break;
                                 } 
                             default:
-                                                                add_action( 'admin_notices', array( 'FAU_Person', 'admin_notice_phone_number' ) );
+                                _rrze_debug("Hallo2");
+                                add_action( 'network_admin_notices', array( 'FAU_Person', 'admin_notice_phone_number' ) );
                                 if( strpos( $phone_data, '9115302' ) !== FALSE ) {
                                     $durchwahl = explode( '9115302', $phone_data );
                                     if( strlen( $durchwahl[1] ) ===  3 ) {
