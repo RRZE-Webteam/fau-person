@@ -314,7 +314,6 @@ class FAU_Person {
     }    
     
     public function admin_notice_phone_number() {
-        _rrze_debug("hallo");
     ?>
         <div class="notice notice-warning">
             <p><?php _e( 'Bitte korrigieren Sie das Format der Telefonnummer, die Anzeige ist so nicht einheitlich!', FAU_PERSON_TEXTDOMAIN ); ?></p>

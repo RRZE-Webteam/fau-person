@@ -50,6 +50,8 @@ function show_on_person( $field ) {
     return $person;
 }
 
+
+
 /*    
 function univis_id_notice() {
         ?><div id="message" class="updated"><p><?php _e('Bitte geben Sie eine gültige UnivIS-ID (8-stellige Zahl) ein.', self::textdomain) ?></p></div><?php

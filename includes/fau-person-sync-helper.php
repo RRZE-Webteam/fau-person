@@ -1,5 +1,7 @@
 <?php
 
+//callback-Funktion für Telefonnummer-Admin-Notice ist nötig
+
 class sync_helper {
     //gibt die Werte der Person an, Inhalte abhängig von UnivIS, Übergabewerte: ID der Person, UnivIS-ID der Person, Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular, $ignore_connection=1 wenn die verknüpften Kontakte einer Person ignoriert werden sollen (z.B. wenn die Person selbst schon eine verknüpfte Kontaktperson ist)
     public static function get_fields( $id, $univis_id, $defaults, $ignore_connection=0 ) {
@@ -80,7 +82,7 @@ class sync_helper {
         foreach( $fields_univis_location as $key => $value ) {
             if( $univis_sync && array_key_exists( 'locations', $person ) && array_key_exists( 'location', $person['locations'][0] ) ) {
                 $person_location = $person['locations'][0]['location'][0];
-                
+                _rrze_debug($person_location);
                 if(($key == 'telephone' || $key == 'faxNumber') && !$defaults) {
                     $phone_number = self::sync_univis( $id, $person_location, $key, $value, $defaults );
                     switch ( get_post_meta($id, 'fau_person_telephone_select', true) ) {
@@ -241,7 +243,7 @@ class sync_helper {
                 $phone_data = preg_replace( '/\D/', '', $phone_number );
                 $vorwahl_erl = '+49 9131 85-';
                 $vorwahl_nbg = '+49 911 5302-';
-                switch( $location ) {
+                switch( $location ) {                 
                     case 'erl':
                         if( strlen( $phone_data ) == 5 ) {
                             $phone_number = $vorwahl_erl . $phone_data;
@@ -287,8 +289,6 @@ class sync_helper {
                                     break;
                                 } 
                             default:
-                                _rrze_debug("Hallo2");
-                                add_action( 'network_admin_notices', array( 'FAU_Person', 'admin_notice_phone_number' ) );
                                 if( strpos( $phone_data, '9115302' ) !== FALSE ) {
                                     $durchwahl = explode( '9115302', $phone_data );
                                     if( strlen( $durchwahl[1] ) ===  3 ) {
@@ -303,6 +303,7 @@ class sync_helper {
                                         break;
                                     }
                                 }
+                                add_action( 'admin_notices', array( 'FAU_Person', 'admin_notice_phone_number' ) );
 
                         }
                 
