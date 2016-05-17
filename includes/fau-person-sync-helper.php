@@ -82,7 +82,6 @@ class sync_helper {
         foreach( $fields_univis_location as $key => $value ) {
             if( $univis_sync && array_key_exists( 'locations', $person ) && array_key_exists( 'location', $person['locations'][0] ) ) {
                 $person_location = $person['locations'][0]['location'][0];
-                _rrze_debug($person_location);
                 if(($key == 'telephone' || $key == 'faxNumber') && !$defaults) {
                     $phone_number = self::sync_univis( $id, $person_location, $key, $value, $defaults );
                     switch ( get_post_meta($id, 'fau_person_telephone_select', true) ) {
@@ -113,7 +112,7 @@ class sync_helper {
                             $value = self::correct_phone_number($phone_number, 'nbg');                        
                             break;
                         default:
-                            $value = self::correct_phone_number($phone_number, 'standard');                        
+                            $value = self::correct_phone_number($phone_number, 'standard');  
                             break;
                         }
                     } else {                    
@@ -121,6 +120,7 @@ class sync_helper {
                     }
                 }
             }
+            //add_action( 'admin_notices', array( 'FAU_Person', 'admin_notice_phone_number' ) );
             $fields[$key] = $value;
         }
         foreach( $fields_univis_officehours as $key => $value ) {
@@ -239,7 +239,7 @@ class sync_helper {
     
     public static function correct_phone_number( $phone_number, $location ) {
         if( ( strpos( $phone_number, '+49 9131 85-' ) !== 0 ) && ( strpos( $phone_number, '+49 911 5302-' ) !== 0 ) ) {
-            if( !preg_match( '/\+49 [1-9][0-9]{3,6} [0-9]+/', $phone_number ) ) {
+            if( !preg_match( '/\+49 [1-9][0-9]{1,4} [1-9][0-9]+/', $phone_number ) ) {
                 $phone_data = preg_replace( '/\D/', '', $phone_number );
                 $vorwahl_erl = '+49 9131 85-';
                 $vorwahl_nbg = '+49 911 5302-';
@@ -268,23 +268,18 @@ class sync_helper {
                                 $phone_number = $vorwahl_nbg . $phone_data;
                                 break;
                             case '5':
+                                if( strpos( $phone_data, '06' ) === 0 ) {
+                                    $phone_number = $vorwahl_nbg . substr( $phone_data, -3 );
+                                    break;
+                                }                                 
                                 $phone_number = $vorwahl_erl . $phone_data;
                                 break;
                             case '7':
-                                if( strpos( $phone_data, '85' ) === 0 )  {
+                                if( strpos( $phone_data, '85' ) === 0 || strpos( $phone_data, '06' ) === 0 )  {
                                     $phone_number = $vorwahl_erl . substr( $phone_data, -5 );
                                     break;
                                 }
                                 if( strpos( $phone_data, '5302' ) === 0 ) {
-                                    $phone_number = $vorwahl_nbg . substr( $phone_data, -3 );
-                                    break;
-                                } 
-                            case '9':
-                                if( strpos( $phone_data, '0685' ) === 0 )  {
-                                    $phone_number = $vorwahl_erl . substr( $phone_data, -5 );
-                                    break;
-                                }
-                                if( strpos( $phone_data, '065302' ) === 0 ) {
                                     $phone_number = $vorwahl_nbg . substr( $phone_data, -3 );
                                     break;
                                 } 
@@ -304,7 +299,7 @@ class sync_helper {
                                     }
                                 }
                                 add_action( 'admin_notices', array( 'FAU_Person', 'admin_notice_phone_number' ) );
-
+                                
                         }
                 
                 }        

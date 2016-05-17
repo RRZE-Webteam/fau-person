@@ -313,10 +313,10 @@ class FAU_Person {
         }        
     }    
     
-    public function admin_notice_phone_number() {
+    public static function admin_notice_phone_number() {
     ?>
         <div class="notice notice-warning">
-            <p><?php _e( 'Bitte korrigieren Sie das Format der Telefonnummer, die Anzeige ist so nicht einheitlich!', FAU_PERSON_TEXTDOMAIN ); ?></p>
+            <p><?php _e( 'Bitte korrigieren Sie das Format der Telefon- oder Faxnummer, die Anzeige ist nicht einheitlich!', FAU_PERSON_TEXTDOMAIN ); ?></p>
         </div>
         <?php
     }
