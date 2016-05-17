@@ -19,6 +19,11 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 Versionsänderungen:
 ===================
 
+####Version 2.1.4:
+
+- changelog.txt hinzugefügt    
+- Automatische Telefonnummernausgabe optimiert, wird bei Eingabe ins Formular gleich mit korrigiert    
+
 ####Version 2.1.3:     
 
 - Bugfix Sidebaranzeigeoptionen    
