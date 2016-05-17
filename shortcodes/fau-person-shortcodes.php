@@ -533,7 +533,7 @@ class FAU_Person_Shortcodes {
             $contactpoint .= '</li>';                                                
         }
         
-        $fullname = '';
+        $fullname = '<span itemprop="name">';
         if($showtitle && $honorificPrefix)                      
             $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
         if($givenName || $familyName) {
@@ -544,6 +544,7 @@ class FAU_Person_Shortcodes {
         }
         if($showsuffix && $honorificSuffix)                     
             $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
+        $fullname .= '</span>';
         
                     
         $content = '<div class="person content-person" itemscope itemtype="http://schema.org/Person">';	
@@ -641,7 +642,7 @@ class FAU_Person_Shortcodes {
         extract($fields);
         
         if ($streetAddress || $postalCode || $addressLocality || $addressCountry) {
-            $contactpoint = '<li class="person-info-address"><span class="screen-reader-text">' . __('Adresse', FAU_PERSON_TEXTDOMAIN) . ': <br></span>';
+            $contactpoint = '<li class="person-info-address" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><span class="screen-reader-text">' . __('Adresse', FAU_PERSON_TEXTDOMAIN) . ': <br></span>';
             if ($streetAddress) {
                 $contactpoint .= '<span class="person-info-street" itemprop="streetAddress">' . $streetAddress . '</span>';
                 if ($postalCode || $addressLocality) {
@@ -743,7 +744,7 @@ class FAU_Person_Shortcodes {
                 $personlink = get_permalink( $id );
             }
             $content = '';			           
-		$fullname = '';
+		$fullname = '<span itemprop="name">';
 		if($honorificPrefix)            $fullname .= '<span itemprop="honorificPrefix">'.$honorificPrefix."</span> ";
                 if($givenName || $familyName) {
                     if($givenName)          $fullname .= '<span itemprop="givenName">'.$givenName."</span> ";
@@ -752,6 +753,7 @@ class FAU_Person_Shortcodes {
                     $fullname .= get_the_title($id);
                 }
                 if($honorificSuffix) 	$fullname .= ', '.$honorificSuffix;
+                $fullname .= '</span>';
                 $content .= '<span class="person-info">';
                 $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
                 if( $showlist && isset($excerpt) )                                  $content .= "<br>".$excerpt;    
@@ -779,7 +781,7 @@ class FAU_Person_Shortcodes {
             
             if( $showaddress ) {
                 if ( $streetAddress || $postalCode || $addressLocality || $addressCountry ) {
-                    $contactpoint = '<li class="person-info-address"><span class="screen-reader-text">' . __('Adresse', FAU_PERSON_TEXTDOMAIN) . ': <br></span>';
+                    $contactpoint = '<li class="person-info-address" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><span class="screen-reader-text">' . __('Adresse', FAU_PERSON_TEXTDOMAIN) . ': <br></span>';
                     if ( $streetAddress ) {
                         $contactpoint .= '<span class="person-info-street" itemprop="streetAddress">' . $streetAddress . '</span>';
                         if ( $workLocation ) {
@@ -811,7 +813,7 @@ class FAU_Person_Shortcodes {
                 }
             }
 
-            $fullname = '';
+            $fullname = '<span itemprop="name">';
             if ($honorificPrefix && $showtitle)           $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
             if($givenName || $familyName) {
                 if($givenName)              $fullname .= '<span itemprop="givenName">'.$givenName."</span> ";
@@ -820,6 +822,7 @@ class FAU_Person_Shortcodes {
                 $fullname .= get_the_title($id);
             }
             if ($honorificSuffix && $showsuffix)           $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
+            $fullname .= '</span>';
             
             $content = '<div class="person" itemscope itemtype="http://schema.org/Person">' . "\n";
             
