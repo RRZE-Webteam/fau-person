@@ -1,0 +1,141 @@
+Kompatibilitätshinweise:
+========================
+- KONFLIKT MIT DEM PLUGIN RRZE-UNIVIS MÖGLICH! DIESES UNBEDINGT VORHER AUF MINDESTENS VERSION 1.0.4 UPDATEN!
+*** AB VERSION 1.3 IST DAS ZUSÄTZLICHE PLUGIN univis-data FÜR DIE UNIVIS-ANBINDUNG NICHT MEHR NÖTIG! Um Konflikte zu vermeiden, muss univis-data deinstalliert werden!!! ***
+
+Aus früheren Versionen des Plugins funktionieren auch noch folgende Shortcodes:
+[person id="326"]    
+[person slug="Max Mustermann"] (Titel des eingetragenen Kontaktes möglich, aber nicht empfehlenswert, da nicht zuverlässig - hier Max Mustermann)     
+[persons category="alle-leute"]     
+[person id="326" showlink=1 showfax=1 showwebsite=1 showaddress=1 showroom=1 showdescription=1 extended=1]
+[persons category="alle-leute" showlink=1 showfax=1 showwebsite=1 showaddress=1 showroom=1 showdescription=1 extended=1]
+- default = TRUE, d.h. nur anzugeben wenn Anzeige nicht gewünscht ist (z.B. showtelefon=0):  
+showtelefon, showtitle, showsuffix, showposition, showinstitution, showmail, showabteilung    
+- default = FALSE, d.h. nur anzugeben wenn Anzeige gewünscht ist (z.B. showfax=1):
+showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist, showsidebar, showthumb, showpubs, showoffice, showlink, extended (fasst alle Parameter mit * zusammen, so dass nur extended=1 angegeben werden muss)
+- format = full (Anzeige wie bei einer Kontakt-Einzelseite)
+
+
+Versionsänderungen:
+===================
+
+####Version 2.1.4:
+
+- changelog.txt hinzugefügt    
+- Automatische Telefonnummernausgabe optimiert, wird bei Eingabe ins Formular gleich mit korrigiert    
+
+####Version 2.1.3:     
+
+- Bugfix Sidebaranzeigeoptionen    
+- Interne Codeoptimierungen, wichtig für Themeentwickler: in single-person.php und single-standort.php muss die Zeile 
+    echo fau_person_page($id);     
+    auf     
+    echo FAU_Person_Shortcodes::fau_person_page($id);    
+    bzw.    
+    echo fau_standort_page($id);     
+    auf    
+    echo FAU_Standort_Shortcodes::fau_standort_page($id);    
+    angepasst werden. 
+
+####Version 2.1.2:     
+
+- Automatische Korrektur der Faxnummer (zusätzlich zur Telefonnummer) an das internationale Format, wenn die Option "uni-intern" ausgewählt ist        
+- Wenn mehrere Werte innerhalb eines Shortcode-Parameters angegeben werden, können diese nur mit Komma oder mit Komma und Leerstelle getrennt werden     
+- Shortcode für Ausgabe von Personenlisten über Kategorien angepasst: [kontaktliste category="slugname-der-Kategorie"] oder [kontakt category="slugname-der-Kategorie"]    
+
+####Version 2.1.1:     
+
+- Anzeige Format kompakt korrigiert    
+- Bugfix fehlende Raumanzeige    
+
+####Version 2.1:     
+
+- Anzuzeigende Punkte in der Sidebar einstellbar über Untermenüpunkt "Anzeigeoptionen"    
+- "Raum" wird automatisch bei der Ausgabe bei der Raumnummer hinzugefügt    
+- Ausgabe von Kategorien möglich über den Shortcode [persons category="kategorieslug"], optional auch mit format=***name, page, kompakt, sidebar*** (gleiche Formatierung wie bei Shortcode person)    
+- Bugfixes bzgl. Anzeige der Standortdaten über Shortcode standort    
+- Ergänzung der Übersetzung ins Britisch-Englisch    
+
+####Version 2.0.2: Format kompakt ergänzt
+
+- Shortcode-Format kompakt angepasst: Darstellung wie Standardausgabe mit Rahmen, soll im Theme jedoch auf die volle Breite ergänzt werden. Default-Anzeigewerte: Bild, vollständiger Name, Position, Telefon, Mail, Adresse       
+
+####Version 2.0.1: Diverse Bugfixes
+
+- Fehlende Raumanzeige in Sidebar ergänzt      
+- Fehler bei Telefonnummernkorrektur behoben    
+- Notices bei Shortcode persons korrigiert    
+
+####Version 2.0:
+
+- Alternativ auch Shortcode kontakt statt person verwendbar      
+- Zusätzlich zu den Personen können auch Standortdaten als Eingabehilfe angegeben werden
+- Erweiterung um Ansprechpartner (verknüpfte Kontakte), Anzeigeoptionen im Kontakteingabeformular einstellbar, im Shortcode werden diese anhand der dort ausgewählten Optionen standardmäßig angezeigt, ausblendbar über hide="ansprechpartner"    
+- Sortierung der Auswahlbox zur ID-Findung optimiert nach Personen und Einrichtungen       
+- Telefonnummern werden bei Auswahl von uni-internen Standorten korrekt formatiert (auch nur Angabe der Durchwahl möglich, auch bei Anzeige der UnivIS-Daten soweit möglich), bei Auswahl "Allgemeine Rufnummer" wird einfach der Feldinhalt unformatiert angezeigt     
+- Anzeige der Adresse auch von einem vorhandenen Standort aus möglich    
+
+####Version 1.3:
+
+- Für die UnivIS-Anbindung ist kein zusätzliches Plugin mehr nötig    
+
+####Version 1.2.9:
+
+- Trennung von Name und Suffix mit Komma      
+- Formatierung des Content-Feldes bei Ausgabe über Shortcode     
+
+####Version 1.2.8:
+
+- Korrektur des Anzeige-Formats page (Content ergänzt)      
+- Anpassung des Anzeige-Formats sidebar über shortcode (Titel, vollständiger Name bzw. Kontakttitel, Suffix, Telefon, Mail, Webseite, Kurzauszug, Bild)       
+
+####Version 1.2.7:
+
+- Bugfixes (fehlende Anzeige Mehr-Link, falsche Einbindung des Kurzauszugs in Sidebar)      
+
+####Version 1.2.6:
+
+- fehlendes schließendes div ergänzt in Einzeldarstellung     
+
+####Version 1.2.5:
+
+- Auf Kontakt-Detailseite und für Shortcodes mit format="page" doppelte Anzeige der Position entfernt (als Überschrift h2 weg)     
+- UnivIS-ID (8-stellige Zahl) und PLZ (5-stellige Zahl) bei Eingabe validiert    
+
+####Version 1.2.4:
+
+- fehlende Rechte auf "Suche nach UnivIS-ID"-Seite ergänzt     
+- Sortierung der verfügbaren Kontakte nach Nachname in der Metabox "Kontaktinformationen" bei Seiten und Beiträgen    
+
+####Version 1.2.3:
+
+- fehlenden Widget-Titel hinzugefügt    
+
+####Version 1.2.2:
+
+- fehlerhafter Umbruch nach Shortcode-Parameter format="name" korrigiert    
+- TinyMCE-Unterstützung eingebaut (jetzt auch über „Werkzeuge“ Shortcode auswählbar)    
+- Hinweistext zu Telefax-Nummer geändert    
+
+####Version 1.2.1:
+
+- Beschleunigter Abruf der Daten bei Anschluss an UnivIS: Über das Plugin univis-data werden in den Tabellen wp_univis und wp_univismeta alle UnivIS-Daten zwischengespeichert.    
+
+####Version 1.1.2:
+
+- doppelte Anzeige der PLZ bei Einbindung aus UnivIS beseitigt    
+- Name der Person verlinkt auf ausführliche Kontaktseite der Person, es sei denn, ein anderer "Mehr"-Link ist im Kontakt hinterlegt, dann wird auf diesen verlinkt: Eingabe des "Mehr"-Links in den Bereich "Social Media" verschoben    
+- Shortcode-Parameter ergänzt:    
+-- show und hide: um Einzelwerte anzeigen zu lassen oder auszublenden (Werte entsprechen den Bezeichnungen der Felder bei im Kontakteingabeformular). Mit show werden die entsprechenden Werte angezeigt, mit hide verborgen:    
+   kurzbeschreibung, organisation, abteilung, position, titel, suffix, adresse, raum, telefon, fax, mobil, mail, webseite, mehrlink, kurzauszug, sprechzeiten, publikationen, bild     
+   Beispiel: [person id="12345" show="adresse, raum, sprechzeiten" hide="position, telefon"]    
+-- format: um verschiedene Ausgabeformate zu erhalten (je nachdem auch entsprechende Felder ein- oder ausgeblendet)    
+   name: Ausgabe von Titel, Vorname, Nachname und Suffix (sofern vorhanden) im Fließtext mit Link auf die Kontaktseite der Person    
+   page: vollständige Ausgabe des ganzen Kontaktes wie bei der Kontakt-Einzelseite, die Parameter show und hide haben hierauf keinen Einfluss    
+   sidebar: Ausgabe wie bei der Anzeige in der Sidebar im Theme    
+   liste: Ausgabe der Namen mit Listenpunkten, unten drunter Kurzbeschreibung    
+
+####Version 1.1.0:
+
+- UnivIS-Schnittstelle ergänzt: Bei Eingabe der UnivIS-ID der Person und Aktivieren von "Daten aus UnivIS anzeigen" werden in der Ausgabe die Daten angezeigt, die in UnivIS hinterlegt sind. Die entsprechenden Werte werden unterhalb der Felder angezeigt. Außerdem ist die Suche nach der UnivIS-ID in einem Unterpunkt möglich.    
+

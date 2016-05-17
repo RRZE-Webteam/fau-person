@@ -17,13 +17,20 @@ add_action('init', function() {
 
 
 function validate_univis_id( $str ) {   
-    if( ctype_digit( $str ) && strlen( $str ) == 8 ) 
+    if( ctype_digit( $str ) && strlen( $str ) == 8 )
         return $str;
 }
 
 function validate_plz( $str ) {   
     if( ctype_digit( $str ) && strlen( $str ) == 5 ) 
         return $str;
+}
+
+function validate_number( $str ) {
+    $location = get_post_meta( cmb_Meta_Box::get_object_id(), 'fau_person_telephone_select', true );
+    $str = sync_helper::correct_phone_number( $str, $location );
+    add_action( 'admin_notices', array( 'FAU_Person', 'admin_notice_phone_number' ) );
+    return $str;
 }
 
 //Anzeigen des Feldes nur bei Einrichtungen
@@ -49,6 +56,8 @@ function show_on_person( $field ) {
     }
     return $person;
 }
+
+
 
 /*    
 function univis_id_notice() {
@@ -265,13 +274,15 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                     'erl' => __('Uni-intern, Standort Erlangen', FAU_PERSON_TEXTDOMAIN),
                     'nbg' => __('Uni-intern, Standort Nürnberg', FAU_PERSON_TEXTDOMAIN),
                     'standard' => __('Allgemeine Rufnummer', FAU_PERSON_TEXTDOMAIN)
-                )
+                ),
+                'default' => 'standard'
             ),
             array(
                 'name' => __('Telefon', FAU_PERSON_TEXTDOMAIN),
                 'desc' => __('Bitte geben Sie uni-interne Nummern für Erlangen in der internationalen Form +49 9131 85-22222 und für Nürnberg in der internationalen Form +49 911 5302-555 an.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text',
                 'id' => $prefix . 'telephone',
+                'sanitization_cb' => 'validate_number',
                 'after' => $univis_default['telephone'] 
             ),
             array(
@@ -279,6 +290,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'desc' => __('Bitte geben Sie uni-interne Nummern für Erlangen in der internationalen Form +49 9131 85-22222 und für Nürnberg in der internationalen Form +49 911 5302-555 an, uni-externe Nummern in der internationalen Form +49 9131 1111111.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text',
                 'id' => $prefix . 'faxNumber',
+                'sanitization_cb' => 'validate_number',
                 'after' => $univis_default['faxNumber'] 
             ),
             array(

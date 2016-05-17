@@ -1,5 +1,7 @@
 <?php
 
+//callback-Funktion für Telefonnummer-Admin-Notice ist nötig
+
 class sync_helper {
     //gibt die Werte der Person an, Inhalte abhängig von UnivIS, Übergabewerte: ID der Person, UnivIS-ID der Person, Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular, $ignore_connection=1 wenn die verknüpften Kontakte einer Person ignoriert werden sollen (z.B. wenn die Person selbst schon eine verknüpfte Kontaktperson ist)
     public static function get_fields( $id, $univis_id, $defaults, $ignore_connection=0 ) {
@@ -80,7 +82,6 @@ class sync_helper {
         foreach( $fields_univis_location as $key => $value ) {
             if( $univis_sync && array_key_exists( 'locations', $person ) && array_key_exists( 'location', $person['locations'][0] ) ) {
                 $person_location = $person['locations'][0]['location'][0];
-                
                 if(($key == 'telephone' || $key == 'faxNumber') && !$defaults) {
                     $phone_number = self::sync_univis( $id, $person_location, $key, $value, $defaults );
                     switch ( get_post_meta($id, 'fau_person_telephone_select', true) ) {
@@ -91,7 +92,7 @@ class sync_helper {
                             $value = self::correct_phone_number($phone_number, 'nbg');                        
                             break;
                         default:
-                            $value = $phone_number;                        
+                            $value = self::correct_phone_number($phone_number, 'standard');                        
                             break;
                     }                    
                 } else {
@@ -111,7 +112,7 @@ class sync_helper {
                             $value = self::correct_phone_number($phone_number, 'nbg');                        
                             break;
                         default:
-                            $value = $phone_number;                        
+                            $value = self::correct_phone_number($phone_number, 'standard');  
                             break;
                         }
                     } else {                    
@@ -119,6 +120,7 @@ class sync_helper {
                     }
                 }
             }
+            //add_action( 'admin_notices', array( 'FAU_Person', 'admin_notice_phone_number' ) );
             $fields[$key] = $value;
         }
         foreach( $fields_univis_officehours as $key => $value ) {
@@ -236,28 +238,72 @@ class sync_helper {
     }
     
     public static function correct_phone_number( $phone_number, $location ) {
-        $phone_data = preg_replace( '/\D/', '', $phone_number );
-        switch( $location ) {
-            case 'erl':
-                $vorwahl = '+49 9131 85-';
-                if( strlen($phone_data) == 5 ) {
-                    $phone_number = $vorwahl . $phone_data;
-                } elseif (strlen($phone_data) == 7 && strpos( $phone_data, '85') === 0 ) {
-                    $phone_number = $vorwahl . substr($phone_data, -5);
-                } elseif ( strlen($phone_data) == 12 && strpos( $phone_data, '913185') !== FALSE ) {
-                    $phone_number = $vorwahl . substr($phone_data, -5);
-                } 
-                break;
-            case 'nbg':
-                $vorwahl = '+49 911 5302-';
-                if( strlen($phone_data) == 3 ) {
-                    $phone_number = $vorwahl . $phone_data;
-                } elseif (strlen($phone_data) == 7 && strpos( $phone_data, '5302') === 0 ) {
-                    $phone_number = $vorwahl . substr($phone_data, -3);
-                } elseif ( strlen($phone_data) == 11 && strpos( $phone_data, '9115302') !== FALSE ) {
-                    $phone_number = $vorwahl . substr($phone_data, -3);
-                } 
-                break;
+        if( ( strpos( $phone_number, '+49 9131 85-' ) !== 0 ) && ( strpos( $phone_number, '+49 911 5302-' ) !== 0 ) ) {
+            if( !preg_match( '/\+49 [1-9][0-9]{1,4} [1-9][0-9]+/', $phone_number ) ) {
+                $phone_data = preg_replace( '/\D/', '', $phone_number );
+                $vorwahl_erl = '+49 9131 85-';
+                $vorwahl_nbg = '+49 911 5302-';
+                switch( $location ) {                 
+                    case 'erl':
+                        if( strlen( $phone_data ) == 5 ) {
+                            $phone_number = $vorwahl_erl . $phone_data;
+                        } elseif (strlen( $phone_data ) == 7 && strpos( $phone_data, '85') === 0 ) {
+                            $phone_number = $vorwahl_erl . substr(  $phone_data, -5);
+                        } elseif ( strlen( $phone_data ) == 12 && strpos( $phone_data, '913185') !== FALSE ) {
+                            $phone_number = $vorwahl_erl . substr( $phone_data, -5);
+                        } 
+                        break;
+                    case 'nbg':
+                        if( strlen( $phone_data ) == 3 ) {
+                            $phone_number = $vorwahl_nbg . $phone_data;
+                        } elseif ( strlen( $phone_data ) == 7 && strpos( $phone_data, '5302') === 0 ) {
+                            $phone_number = $vorwahl_nbg . substr( $phone_data, -3);
+                        } elseif ( strlen( $phone_data ) == 11 && strpos( $phone_data, '9115302') !== FALSE ) {
+                            $phone_number = $vorwahl_nbg . substr( $phone_data, -3);
+                        } 
+                        break;
+                    case 'standard':
+                        switch( strlen( $phone_data ) ) {
+                            case '3':
+                                $phone_number = $vorwahl_nbg . $phone_data;
+                                break;
+                            case '5':
+                                if( strpos( $phone_data, '06' ) === 0 ) {
+                                    $phone_number = $vorwahl_nbg . substr( $phone_data, -3 );
+                                    break;
+                                }                                 
+                                $phone_number = $vorwahl_erl . $phone_data;
+                                break;
+                            case '7':
+                                if( strpos( $phone_data, '85' ) === 0 || strpos( $phone_data, '06' ) === 0 )  {
+                                    $phone_number = $vorwahl_erl . substr( $phone_data, -5 );
+                                    break;
+                                }
+                                if( strpos( $phone_data, '5302' ) === 0 ) {
+                                    $phone_number = $vorwahl_nbg . substr( $phone_data, -3 );
+                                    break;
+                                } 
+                            default:
+                                if( strpos( $phone_data, '9115302' ) !== FALSE ) {
+                                    $durchwahl = explode( '9115302', $phone_data );
+                                    if( strlen( $durchwahl[1] ) ===  3 ) {
+                                        $phone_number = $vorwahl_nbg . substr( $phone_data, -3 );
+                                        break;
+                                    }
+                                }  
+                                if( strpos( $phone_data, '913185' ) !== FALSE )  {
+                                    $durchwahl = explode( '913185', $phone_data );
+                                    if( strlen( $durchwahl[1] ) ===  5 ) {
+                                        $phone_number = $vorwahl_erl . substr( $phone_data, -5 );
+                                        break;
+                                    }
+                                }
+                                add_action( 'admin_notices', array( 'FAU_Person', 'admin_notice_phone_number' ) );
+                                
+                        }
+                
+                }        
+            }
         }
         return $phone_number;
     }
