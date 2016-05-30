@@ -173,7 +173,7 @@ class FAU_Standort_Shortcodes {
             $fullname .= get_the_title($id);
         }        
                     
-        $content = '<div class="person content-person" itemscope itemtype="http://schema.org/Person">';			
+        $content = '<div class="person content-person" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';			
         $content .= '<div class="row">';
 
         if($showthumb) {
@@ -220,7 +220,7 @@ class FAU_Standort_Shortcodes {
 
     public static function fau_standort_page($id) {
  
-     	$content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
+     	$content = '<div class="person" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
         
         $fields = standort_sync_helper::get_fields($id, get_post_meta($id, 'fau_person_standort_id', true), 0);
         extract($fields);
@@ -349,7 +349,7 @@ class FAU_Standort_Shortcodes {
                 $fullname .= get_the_title($id);
             }
             
-            $content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
+            $content = '<div class="person" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
             
             if (!empty($title)) 
                 $content .= '<h2 class="small">' . $title . '</h2>';
