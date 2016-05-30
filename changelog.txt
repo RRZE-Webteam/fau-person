@@ -18,6 +18,10 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 
 Versionsänderungen:
 ===================
+####Version 2.1.5:
+
+- itemprop="name" hinzugefügt
+
 
 ####Version 2.1.4:
 
