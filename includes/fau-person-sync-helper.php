@@ -288,15 +288,25 @@ class sync_helper {
                                     $durchwahl = explode( '9115302', $phone_data );
                                     if( strlen( $durchwahl[1] ) ===  3 ) {
                                         $phone_number = $vorwahl_nbg . substr( $phone_data, -3 );
-                                        break;
                                     }
+                                    break;
                                 }  
                                 if( strpos( $phone_data, '913185' ) !== FALSE )  {
                                     $durchwahl = explode( '913185', $phone_data );
                                     if( strlen( $durchwahl[1] ) ===  5 ) {
                                         $phone_number = $vorwahl_erl . substr( $phone_data, -5 );
-                                        break;
                                     }
+                                    break;
+                                }
+                                if( strpos( $phone_data, '09131' ) === 0 || strpos( $phone_data, '499131' ) === 0 ) {
+                                    $durchwahl = explode( '9131', $phone_data );
+                                    $phone_number = "+49 9131 " . $durchwahl[1];
+                                    break;
+                                }
+                                if( strpos( $phone_data, '0911' ) === 0 || strpos( $phone_data, '49911' ) === 0 ) {
+                                    $durchwahl = explode( '911', $phone_data );
+                                    $phone_number = "+49 911 " . $durchwahl[1];
+                                    break;
                                 }
                                 add_action( 'admin_notices', array( 'FAU_Person', 'admin_notice_phone_number' ) );
                                 
