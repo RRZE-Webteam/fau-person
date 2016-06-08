@@ -18,10 +18,15 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 
 Versionsänderungen:
 ===================
+
+####Version 2.1.6:
+
+- Eingabehinweise ergänzt
+
 ####Version 2.1.5:
 
 - itemprop="name" hinzugefügt
-
+- Ausgaben nach schema.org verbessert
 
 ####Version 2.1.4:
 

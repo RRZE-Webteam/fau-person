@@ -353,7 +353,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
             ),
             array(
                 'name' => __('Sprech- bzw. Öffnungszeiten', FAU_PERSON_TEXTDOMAIN),
-                'desc' => '',
+                'desc' => __('Zur Formatierung können HTML-Befehle verwendet werden (z.B. &lt;br&gt; für Zeilenumbruch).', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'textarea_small',
                 'id' => $prefix . 'hoursAvailable'
             ),
