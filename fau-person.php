@@ -4,7 +4,7 @@
  Plugin Name: FAU Person
  Plugin URI: https://github.com/RRZE-Webteam/fau-person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 2.1.6
+ * Version: 2.1.7
  * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -44,10 +44,15 @@ require_once('widgets/fau-person-widget.php');
 
 class FAU_Person {
 
+    //******** Mit neuer Version auch hier aktualisieren!!! ***********
+    const version = '2.1.7';
+    
     const option_name = '_fau_person';
+    const version_option_name = '_fau_person_version';
+
     const textdomain = 'fau-person';
-    const php_version = '5.3'; // Minimal erforderliche PHP-Version
-    const wp_version = '4.0'; // Minimal erforderliche WordPress-Version
+    const php_version = '5.4'; // Minimal erforderliche PHP-Version
+    const wp_version = '4.5'; // Minimal erforderliche WordPress-Version
     const search_univis_id_transient = 'sui_1k4fu7056Kl12a5';
     
     
@@ -78,9 +83,11 @@ class FAU_Person {
         define('FAU_PERSON_TEXTDOMAIN', self::textdomain);
         
         load_plugin_textdomain(self::textdomain, false, sprintf('%s/languages/', dirname(plugin_basename(__FILE__))));
-        
-        self::$options = self::get_options();       
 
+        self::$options = self::get_options();   
+        
+        self::update_version();
+        
         include_once( plugin_dir_path(__FILE__) . 'includes/fau-person-metaboxes.php' );
 
         add_action( 'init', array (__CLASS__, 'register_person_post_type' ) );
@@ -172,6 +179,16 @@ class FAU_Person {
         }
     }
 
+    private static function update_version() {
+        $version = get_option(self::version_option_name, '0');
+        
+        if (version_compare($version, self::version, '<')) {
+            // Hier muss der Code rein, wenn sich bei den bestehenden Optionen was ändert (z.B. Anpassungen in der Struktur)
+        }
+        
+        update_option(self::version_option_name, self::version);
+    }
+    
     private static function default_options() {
         $options = array(
             'sidebar' => array(
@@ -209,7 +226,6 @@ class FAU_Person {
         $options = wp_parse_args($options, $defaults);    
         $options = array_intersect_key($options, $defaults);
         }
-        // _rrze_debug($options);
         return $options;
     }
     
