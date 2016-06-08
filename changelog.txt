@@ -19,6 +19,11 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 Versionsänderungen:
 ===================
 
+####Version 2.1.7:
+
+- allgemeine Rufnummer mit Vorwahl 09131 oder 0911 wird automatisch korrigiert    
+- update_version() ergänzt
+
 ####Version 2.1.6:
 
 - Eingabehinweise ergänzt

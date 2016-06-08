@@ -555,6 +555,8 @@ class FAU_Person_Shortcodes {
         if($showthumb) {
             $content .= '<div class="span1 span-small" itemprop="image">';	
             $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">';
+            _rrze_debug(get_post($id));
+                        _rrze_debug(has_post_thumbnail($id));
             if (has_post_thumbnail($id)) {
                 $content .= get_the_post_thumbnail($id, 'person-thumb-bigger');
             } else {
@@ -566,7 +568,8 @@ class FAU_Person_Shortcodes {
                     $bild = plugin_dir_url( __FILE__ ) .'../images/platzhalter-organisation.png';
                 } else {
                     $bild = plugin_dir_url( __FILE__ ) .'../images/platzhalter-unisex.png';
-                }				    
+                }		
+                       // _rrze_debug ($bild);
 		if ($bild) 
                     $content .=  '<img src="'.$bild.'" width="90" height="120" alt="">';
             }
