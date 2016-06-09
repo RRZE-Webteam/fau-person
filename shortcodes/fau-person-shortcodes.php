@@ -555,8 +555,7 @@ class FAU_Person_Shortcodes {
         if($showthumb) {
             $content .= '<div class="span1 span-small" itemprop="image">';	
             $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">';
-            _rrze_debug(get_post($id));
-                        _rrze_debug(has_post_thumbnail($id));
+            
             if (has_post_thumbnail($id)) {
                 $content .= get_the_post_thumbnail($id, 'person-thumb-bigger');
             } else {
