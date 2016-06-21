@@ -1,7 +1,7 @@
 <?php
 
 
-
+if (!class_exists('FAUPersonWidget')) {
 class FAUPersonWidget extends WP_Widget {
     public function __construct() {
         parent::__construct(
@@ -66,4 +66,5 @@ class FAUPersonWidget extends WP_Widget {
         echo $after_widget;
     }
 
+}
 }

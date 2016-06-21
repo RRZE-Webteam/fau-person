@@ -4,7 +4,7 @@
  Plugin Name: FAU Person
  Plugin URI: https://github.com/RRZE-Webteam/fau-person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 2.1.7
+ * Version: 2.1.8
  * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -36,7 +36,6 @@ require_once('shortcodes/fau-person-shortcodes.php');
 require_once('includes/fau-standort-sync-helper.php'); 
 require_once('shortcodes/fau-standort-shortcodes.php');  
 //require_once('metaboxes/fau-person-metaboxes.php');
-require_once('widgets/fau-person-widget.php');
 
 
 
@@ -45,7 +44,7 @@ require_once('widgets/fau-person-widget.php');
 class FAU_Person {
 
     //******** Mit neuer Version auch hier aktualisieren!!! ***********
-    const version = '2.1.7';
+    const version = '2.1.8';
     
     const option_name = '_fau_person';
     const version_option_name = '_fau_person_version';
@@ -55,7 +54,7 @@ class FAU_Person {
     const wp_version = '4.5'; // Minimal erforderliche WordPress-Version
     const search_univis_id_transient = 'sui_1k4fu7056Kl12a5';
     
-    
+    protected static $oldfau_person_plugin = false;   
     public static $options;
     
     public $contactselect;
@@ -120,6 +119,17 @@ class FAU_Person {
         
         //Excerpt-Meta-Box umbenennen
         add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));        
+	
+	
+	
+		
+	// FAU-Theme + Alte FAU Plugin Personenfelder aktiv
+        if(wp_get_theme() == 'FAU') {
+            $themeoptions = get_option('fau_theme_options');
+            self::$oldfau_person_plugin = isset($themeoptions['advanced_activatefaupluginpersonen']) && $themeoptions['advanced_activatefaupluginpersonen'] ? true : false;
+        }
+		
+	
     }
     
     public function adding_custom_meta_boxes( $post ) {
@@ -708,13 +718,19 @@ class FAU_Person {
     }    
     
     public static function register_widgets() {
-        register_widget( 'FAUPersonWidget' );
+	if (!self::$oldfau_person_plugin) {
+	    require_once('widgets/fau-person-widget.php');
+	    register_widget( 'FAUPersonWidget' );
+	}
     }
     
     private static function add_shortcodes() {     
-        add_shortcode( 'person', array( 'FAU_Person_Shortcodes', 'fau_person' ) );
-        add_shortcode( 'kontakt', array( 'FAU_Person_Shortcodes', 'fau_person' ) );
-        add_shortcode( 'persons', array( 'FAU_Person_Shortcodes', 'fau_persons' ) );
+	
+	if (!self::$oldfau_person_plugin) {
+	    add_shortcode( 'person', array( 'FAU_Person_Shortcodes', 'fau_person' ) );
+	    add_shortcode( 'persons', array( 'FAU_Person_Shortcodes', 'fau_persons' ) );
+	}
+        add_shortcode( 'kontakt', array( 'FAU_Person_Shortcodes', 'fau_person' ) );       
         add_shortcode( 'kontaktliste', array( 'FAU_Person_Shortcodes', 'fau_persons' ) );
         add_shortcode( 'standort', array( 'FAU_Standort_Shortcodes', 'fau_standort' ) );
     }
