@@ -19,6 +19,21 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 Versionsänderungen:
 ===================
 
+####Version 2.1.8:
+
+- Abwärtskompatibilität mit der Nutzung des alten FAU Plugins und dessen Kontaktverwaltung eingebaut:
+  Wenn das Theme "FAU" ist und dort dioe alte Personenverwaltung aktiviert ist,
+  DANN wird dieses Plugin die Shortcodes "person" und "persons" NICHT bedienen, sondern
+  nur "kontakt" und "kontaktliste". Ausserdem wird das Widget aus diesem Plugin nicht
+  registriert, sondern das alte angezeigt.
+  Somit hat dann die Webredaktion die Möglichkeit, die alten Daten in die neuen Felder zu kopieren
+  ohne das es optisch eine Ämnderung ergibt. Die Webredaktion muss zum Anzeigen
+  der neuen Daten dann den Shortcode [kontakt] verwenden. Um das hiesige Widget zu aktivieren
+  muss dann allerdings das alte über die Theme-Settings dann abgeschaltet werden.
+
+  WICHTIG: Das Plugin fau-settings muss ebenfalls aktualisiert werden auf version 2.11.1!!!
+
+
 ####Version 2.1.7:
 
 - allgemeine Rufnummer mit Vorwahl 09131 oder 0911 wird automatisch korrigiert    
