@@ -4,7 +4,7 @@
  Plugin Name: FAU Person
  Plugin URI: https://github.com/RRZE-Webteam/fau-person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 2.1.8
+ * Version: 2.1.9
  * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -44,7 +44,7 @@ require_once('shortcodes/fau-standort-shortcodes.php');
 class FAU_Person {
 
     //******** Mit neuer Version auch hier aktualisieren!!! ***********
-    const version = '2.1.8';
+    const version = '2.1.9';
     
     const option_name = '_fau_person';
     const version_option_name = '_fau_person_version';
@@ -99,6 +99,8 @@ class FAU_Person {
         add_action( 'admin_menu' , array( $this, 'person_menu_subpages' )); 
         add_action( 'admin_menu', array( $this, 'add_help_tabs' ) );
 
+        add_action( 'init', array(__CLASS__, 'add_shortcodes' ) );
+        
         add_action( 'admin_init', array( $this, 'admin_init' ) );
         add_action( 'admin_init', array( $this, 'options_init' ) );
         add_action( 'admin_menu', array( $this, 'add_options_pages' ) );
@@ -106,9 +108,7 @@ class FAU_Person {
         add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_script' ) );
 	add_action( 'admin_init', array( $this, 'person_shortcodes_rte_button' ) );    
         
-        add_filter( 'single_template', array( $this, 'include_template_function' ) );
-        
-        self::add_shortcodes();        
+        add_filter( 'single_template', array( $this, 'include_template_function' ) );     
         
         // Kontakttyp als zusätzliche Spalte in Übersicht
         add_filter( 'manage_person_posts_columns', array( $this, 'change_columns' ));
@@ -724,7 +724,7 @@ class FAU_Person {
 	}
     }
     
-    private static function add_shortcodes() {     
+    public static function add_shortcodes() {     
 	
 	if (!self::$oldfau_person_plugin) {
 	    add_shortcode( 'person', array( 'FAU_Person_Shortcodes', 'fau_person' ) );
