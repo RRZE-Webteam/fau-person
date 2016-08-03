@@ -3,7 +3,7 @@
 $person_labels = array(
     'name' => _x('Kontakte', 'Post Type General Name', self::textdomain),
     'singular_name' => _x('Kontakt', 'Post Type Singular Name', self::textdomain),
-    'menu_name' => __('Kontakt', self::textdomain),
+    'menu_name' => __('Kontakte', self::textdomain),
     'parent_item_colon' => __('Übergeordneter Kontakt', self::textdomain),
     'all_items' => __('Alle Kontakte', self::textdomain),
     'view_item' => __('Kontakt ansehen', self::textdomain),
