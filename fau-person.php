@@ -108,7 +108,8 @@ class FAU_Person {
         add_action( 'admin_enqueue_scripts', array( $this, 'add_admin_script' ) );
 	add_action( 'admin_init', array( $this, 'person_shortcodes_rte_button' ) );    
         
-        add_filter( 'single_template', array( $this, 'include_template_function' ) );     
+        add_filter( 'single_template', array( $this, 'include_single_template' ) );     
+        add_filter( 'archive_template', array( $this, 'include_archive_template' ) );         
         
         // Kontakttyp als zusätzliche Spalte in Übersicht
         add_filter( 'manage_person_posts_columns', array( $this, 'change_columns' ));
@@ -859,7 +860,7 @@ class FAU_Person {
         }        
     }
     
-    public function include_template_function($template_path) {
+    public function include_single_template($template_path) {
         global $post;
         if ($post->post_type == 'person') {
             //if (is_single()) {
@@ -885,6 +886,33 @@ class FAU_Person {
         }
         return $template_path;
     }    
+    
+    public function include_archive_template($template_path) {
+        global $post;
+        if ($post->post_type == 'person') {
+            //if (is_single()) {
+                // checks if the file exists in the theme first,
+                // otherwise serve the file from the plugin
+                if ($theme_file = locate_template(array('archive-person.php'))) {
+                    $template_path = $theme_file;
+                } else {
+                    $template_path = FAU_PERSON_ROOT . '/templates/archive-person.php';                    
+                }
+            //}
+        }
+        if ($post->post_type == 'standort') {
+            //if (is_single()) {
+                // checks if the file exists in the theme first,
+                // otherwise serve the file from the plugin
+                if ($theme_file = locate_template(array('archive-standort.php'))) {
+                    $template_path = $theme_file;
+                } else {
+                    $template_path = FAU_PERSON_ROOT . '/templates/archive-standort.php';                    
+                }
+            //}
+        }
+        return $template_path;
+    }        
 
     public function person_post_types_admin_order($wp_query) {
         if (is_admin()) {
