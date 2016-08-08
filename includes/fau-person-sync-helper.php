@@ -44,6 +44,7 @@ class sync_helper {
             'link' => '',
             'hoursAvailable' => '',
             'description' => '',
+            'mobilePhone' => '',
         );
         $fields_exception = array(
             'postalCode' => '',

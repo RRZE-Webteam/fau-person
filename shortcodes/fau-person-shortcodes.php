@@ -597,6 +597,8 @@ class FAU_Person_Shortcodes {
             $content .= '<li class="person-info-abteilung"><span class="screen-reader-text">' . __('Abteilung', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="department">' . $department . '</span></li>';
         if ($showtelefon && $telephone  && empty( $connection_only ) )
             $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="telephone">' . $telephone . '</span></li>';
+        if ($showmobile && $mobilePhone  && empty( $connection_only ) )
+            $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Mobil', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="mobilePhone">' . $mobilePhone . '</span></li>';
         if (($extended || $showfax) && $faxNumber  && empty( $connection_only ) )
             $content .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>';
         if ($showmail && $email  && empty( $connection_only ) )
@@ -699,6 +701,8 @@ class FAU_Person_Shortcodes {
             $content .= '<li class="person-info-abteilung"><span class="screen-reader-text">' . __('Abteilung', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="worksFor">' . $department . '</span></li>';
         if ( $telephone && empty( $connection_only ) )
             $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="telephone">' . $telephone . '</span></li>';
+        if ( $mobilePhone && empty( $connection_only ) )
+            $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Mobil', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="mobilePhone">' . $mobilePhone . '</span></li>';
         if ( $faxNumber && empty( $connection_only ) )
             $content .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>';
         if ( $email && empty( $connection_only ) )
@@ -856,6 +860,8 @@ class FAU_Person_Shortcodes {
                 $content .= $contactpoint;            
             if ( $telephone && $showtelefon && empty( $connection_only ) )
                 $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="telephone">' . $telephone . '</span></li>' . "\n";
+            if ( $mobilePhone && $showmobile && empty( $connection_only ) )
+                $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Mobil', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="mobilePhone">' . $mobilePhone . '</span></li>' . "\n";
             if ( $faxNumber && $showfax && empty( $connection_only ) )
                 $content .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>' . "\n";
             if ( $email && $showmail && empty( $connection_only ) )
