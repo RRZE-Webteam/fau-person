@@ -4,7 +4,7 @@
  Plugin Name: FAU Person
  Plugin URI: https://github.com/RRZE-Webteam/fau-person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 2.1.9
+ * Version: 2.1.10
  * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -44,7 +44,7 @@ require_once('shortcodes/fau-standort-shortcodes.php');
 class FAU_Person {
 
     //******** Mit neuer Version auch hier aktualisieren!!! ***********
-    const version = '2.1.9';
+    const version = '2.1.10';
     
     const option_name = '_fau_person';
     const version_option_name = '_fau_person_version';
@@ -121,7 +121,7 @@ class FAU_Person {
         //Excerpt-Meta-Box umbenennen
         add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));        
 	
-	
+	add_filter( 'parse_query', array( $this, 'taxonomy_filter_post_type_request' ) );	
 	
 		
 	// FAU-Theme + Alte FAU Plugin Personenfelder aktiv
@@ -781,7 +781,9 @@ class FAU_Person {
     
     public function person_restrict_manage_posts() {
         global $typenow;
-        if ($typenow == "person") {
+        $post_types = get_post_types( array( '_builtin' => false ) );
+        if ( in_array( $typenow, $post_types ) ) {
+//if ($typenow == "person") {
             $filters = get_object_taxonomies($typenow);
             foreach ($filters as $tax_slug) {
                 $tax_obj = get_taxonomy($tax_slug);
@@ -795,6 +797,21 @@ class FAU_Person {
                     'show_count' => true,
                     'hide_if_empty' => true
                 ));
+            }
+        }
+    }
+    
+    public function taxonomy_filter_post_type_request( $query ) {
+	global $pagenow, $typenow;
+        if ( 'edit.php' == $pagenow ) {
+            $filters = get_object_taxonomies( $typenow );
+
+            foreach ( $filters as $tax_slug ) {
+                $var = &$query->query_vars[$tax_slug];
+                if ( isset( $var ) ) {
+                    $term = get_term_by( 'id', $var, $tax_slug );
+                    if ( !empty( $term ) )      $var = $term->slug;
+                }
             }
         }
     }

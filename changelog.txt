@@ -19,6 +19,12 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 Versionsänderungen:
 ===================
 
+####Version 2.1.10:    
+
+- Archiv-Seite für /person    
+- Filtern nach Kontakt-Kategorien möglich        
+
+
 ####Version 2.1.9:
 
 - Bugfix für Abwärtskompatibilität mit dem alten FAU Plugin     
