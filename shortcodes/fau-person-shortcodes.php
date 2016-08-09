@@ -487,7 +487,10 @@ class FAU_Person_Shortcodes {
 
 
     public static function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex=0) {
+        
+        // Hole die Feldinhalte (in der Klasse sync_helper wird gesteuert, was aus UnivIS angezeigt werden soll und was nicht)
         $fields = sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true), 0 );
+        // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
         extract($fields);
         if( $showvia !== 0 && !empty($connections) )                    $showvia = 1;
         if( $showvia === 0 && !empty( $connection_only ) )      $connection_only = '';
@@ -640,9 +643,10 @@ class FAU_Person_Shortcodes {
 
     public static function fau_person_page($id) {
  
-     	$content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
-        $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
-
+     	$content = '<div class="person" itemscope itemtype="http://schema.org/Person">';        
+        // Hole die Feldinhalte (in der Klasse sync_helper wird gesteuert, was aus UnivIS angezeigt werden soll und was nicht)
+        $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);        
+        // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
         extract($fields);
         
         if ($streetAddress || $postalCode || $addressLocality || $addressCountry) {
@@ -733,8 +737,9 @@ class FAU_Person_Shortcodes {
 
     public static function fau_person_shortlist($id, $showlist) {	
         
-        
+        // Hole die Feldinhalte (in der Klasse sync_helper wird gesteuert, was aus UnivIS angezeigt werden soll und was nicht)        
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+        // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
         extract($fields);
         
             if( get_post_field( 'post_excerpt', $id ) ) {
@@ -772,8 +777,10 @@ class FAU_Person_Shortcodes {
     public static function fau_person_sidebar($id, $title, $showlist=0, $showinstitution=0, $showabteilung=0, $showposition=0, $showtitle=0, $showsuffix=0, $showaddress=0, $showroom=0, $showtelefon=0, $showfax=0, $showmobile=0, $showmail=0, $showwebsite=0, $showlink=0, $showdescription=0, $showoffice=0, $showpubs=0, $showthumb=0, $showvia=0) {
         if (!empty($id)) {
             $post = get_post($id);
-            
+
+            // Hole die Feldinhalte (in der Klasse sync_helper wird gesteuert, was aus UnivIS angezeigt werden soll und was nicht)            
             $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+            // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
             extract($fields);           
             
             if( $showvia !== 0 && !empty( $connections ) )                    $showvia = 1;
