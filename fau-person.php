@@ -109,7 +109,7 @@ class FAU_Person {
 	add_action( 'admin_init', array( $this, 'person_shortcodes_rte_button' ) );    
         
         add_filter( 'single_template', array( $this, 'include_single_template' ) );     
-        add_filter( 'archive_template', array( $this, 'include_archive_template' ) );         
+        //add_filter( 'archive_template', array( $this, 'include_archive_template' ) );         
         
         // Kontakttyp als zusätzliche Spalte in Übersicht
         add_filter( 'manage_person_posts_columns', array( $this, 'change_columns' ));
