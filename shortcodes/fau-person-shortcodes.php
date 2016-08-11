@@ -126,9 +126,7 @@ class FAU_Person_Shortcodes {
                 $showthumb = 1;
             }
         }     
-            _rrze_debug($extended);
         if ( $extended == 1 ) {
-
             $showlist = 1;
             $showinstitution = 0;
             $showfax = 0;
@@ -418,7 +416,13 @@ class FAU_Person_Shortcodes {
             if( in_array( 'bild', $hide ) )             $showthumb = 0;         
             if( in_array( 'ansprechpartner', $hide ) )  $showvia = 0;
         }
-                
+        if ( $extended == 1 ) {
+            $showlist = 1;
+            $showinstitution = 0;
+            $showfax = 0;
+            $showwebsite = 0;
+            $showthumb = 1;
+        }                
         
         $category = get_term_by('slug', $category, 'persons_category');
 
@@ -620,11 +624,11 @@ class FAU_Person_Shortcodes {
             $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="telephone">' . $telephone . '</span></li>';
         if ($showmobile && $mobilePhone  && empty( $connection_only ) )
             $content .= '<li class="person-info-mobile"><span class="screen-reader-text">' . __('Mobil', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="mobilePhone">' . $mobilePhone . '</span></li>';
-        if (($extended || $showfax) && $faxNumber  && empty( $connection_only ) )
+        if ($showfax && $faxNumber  && empty( $connection_only ) )
             $content .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>';
         if ($showmail && $email  && empty( $connection_only ) )
             $content .= '<li class="person-info-email"><span class="screen-reader-text">' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="email" href="mailto:' . strtolower($email) . '">' . strtolower($email) . '</a></li>';
-        if (($extended || $showwebsite) && $url)
+        if ($showwebsite && $url)
             $content .= '<li class="person-info-www"><span class="screen-reader-text">' . __('Webseite', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="url" href="' . $url . '">' . $url . '</a></li>';
         if ($showpubs && $pubs)
             $content .= '<li class="person-info-pubs"><span class="screen-reader-text">' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $pubs . '</li>';
