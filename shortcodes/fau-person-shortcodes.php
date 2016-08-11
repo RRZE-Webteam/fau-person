@@ -126,6 +126,15 @@ class FAU_Person_Shortcodes {
                 $showthumb = 1;
             }
         }     
+            _rrze_debug($extended);
+        if ( $extended == 1 ) {
+
+            $showlist = 1;
+            $showinstitution = 0;
+            $showfax = 0;
+            $showwebsite = 0;
+            $showthumb = 1;
+        }
         // Wenn neue Felder dazukommen, hier die Anzeigeoptionen auch mit einstellen
         if (!empty($show)) {
             $show = array_map('trim', explode(',', $show));                                       // schema.org-Bezeichnungen = Variablenname
