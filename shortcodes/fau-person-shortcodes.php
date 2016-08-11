@@ -126,6 +126,13 @@ class FAU_Person_Shortcodes {
                 $showthumb = 1;
             }
         }     
+        if ( $extended == 1 ) {
+            $showlist = 1;
+            $showinstitution = 0;
+            $showfax = 0;
+            $showwebsite = 0;
+            $showthumb = 1;
+        }
         // Wenn neue Felder dazukommen, hier die Anzeigeoptionen auch mit einstellen
         if (!empty($show)) {
             $show = array_map('trim', explode(',', $show));                                       // schema.org-Bezeichnungen = Variablenname
@@ -409,7 +416,13 @@ class FAU_Person_Shortcodes {
             if( in_array( 'bild', $hide ) )             $showthumb = 0;         
             if( in_array( 'ansprechpartner', $hide ) )  $showvia = 0;
         }
-                
+        if ( $extended == 1 ) {
+            $showlist = 1;
+            $showinstitution = 0;
+            $showfax = 0;
+            $showwebsite = 0;
+            $showthumb = 1;
+        }                
         
         $category = get_term_by('slug', $category, 'persons_category');
 
@@ -487,7 +500,10 @@ class FAU_Person_Shortcodes {
 
 
     public static function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex=0) {
+        
+        // Hole die Feldinhalte (in der Klasse sync_helper wird gesteuert, was aus UnivIS angezeigt werden soll und was nicht)
         $fields = sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true), 0 );
+        // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
         extract($fields);
         if( $showvia !== 0 && !empty($connections) )                    $showvia = 1;
         if( $showvia === 0 && !empty( $connection_only ) )      $connection_only = '';
@@ -507,16 +523,23 @@ class FAU_Person_Shortcodes {
             if ( $post->post_content )      
                 $excerpt = wp_trim_excerpt($post->post_content);
         }         
-            
+                  
         if($streetAddress || $postalCode || $addressLocality || $addressCountry) {
-            $contactpoint = '<li class="person-info-address"><span class="screen-reader-text">'.__('Adresse',FAU_PERSON_TEXTDOMAIN).': <br></span>';            
+            $contactpoint = '<li class="person-info-address" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><span class="screen-reader-text">' . __('Adresse', FAU_PERSON_TEXTDOMAIN) . ': <br></span>';            
             if($streetAddress) {
                 $contactpoint .= '<span class="person-info-street" itemprop="streetAddress">'.$streetAddress.'</span>';
-                if( $postalCode || $addressLocality )  {
+                if ( $workLocation ) {
                     $contactpoint .= '<br>';
-                } elseif( $addressCountry ) {
+                } elseif ( $postalCode || $addressLocality )  {
+                    $contactpoint .= '<br>';
+                } elseif ( $addressCountry ) {
                     $contactpoint .= '<br>';
                 }                    
+            }
+            if ( $workLocation && ( $extended || $showroom ) ) {
+                $contactpoint .= '<span class="person-info-room" itemprop="workLocation" itemscope itemtype="http://schema.org/Person">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' ' . $workLocation . '</span>'; 
+                if ( $postalCode || $addressLocality || $addressCountry )
+                    $contactpoint .= '<br>';                            
             }
             if($postalCode || $addressLocality) {
                 $contactpoint .= '<span class="person-info-city">';
@@ -532,7 +555,7 @@ class FAU_Person_Shortcodes {
                 $contactpoint .= '<span class="person-info-country" itemprop="addressCountry">'.$addressCountry.'</span>';
             $contactpoint .= '</li>';                                                
         }
-        
+             
         $fullname = '<span itemprop="name">';
         if($showtitle && $honorificPrefix)                      
             $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
@@ -575,7 +598,7 @@ class FAU_Person_Shortcodes {
             $content .= '</a>';
             $content .= '</div>';
         }
-        
+  
         if( $compactindex ) {
             if( $showthumb )   $content .= '<div class="span6">';
         } else {
@@ -595,20 +618,18 @@ class FAU_Person_Shortcodes {
             $content .= '<li class="person-info-institution"><span class="screen-reader-text">' . __('Organisation', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="worksFor">' . $worksFor . '</span></li>';
         if ($showabteilung && $department)
             $content .= '<li class="person-info-abteilung"><span class="screen-reader-text">' . __('Abteilung', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="department">' . $department . '</span></li>';
+        if (($extended || $showaddress) && !empty($contactpoint)  && empty( $connection_only ) ) 
+            $content .= $contactpoint;
         if ($showtelefon && $telephone  && empty( $connection_only ) )
             $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="telephone">' . $telephone . '</span></li>';
-        if (($extended || $showfax) && $faxNumber  && empty( $connection_only ) )
+        if ($showmobile && $mobilePhone  && empty( $connection_only ) )
+            $content .= '<li class="person-info-mobile"><span class="screen-reader-text">' . __('Mobil', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="mobilePhone">' . $mobilePhone . '</span></li>';
+        if ($showfax && $faxNumber  && empty( $connection_only ) )
             $content .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>';
         if ($showmail && $email  && empty( $connection_only ) )
             $content .= '<li class="person-info-email"><span class="screen-reader-text">' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="email" href="mailto:' . strtolower($email) . '">' . strtolower($email) . '</a></li>';
-        if (($extended || $showwebsite) && $url)
+        if ($showwebsite && $url)
             $content .= '<li class="person-info-www"><span class="screen-reader-text">' . __('Webseite', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="url" href="' . $url . '">' . $url . '</a></li>';
-        if (($extended || $showaddress) && !empty($contactpoint)  && empty( $connection_only ) ) 
-            $content .= $contactpoint;
-        if (($extended || $showroom) && $workLocation  && empty( $connection_only ) )
-            $content .= '<li class="person-info-room"><span itemprop="workLocation" itemscope itemtype="http://schema.org/Person">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' ' . $workLocation . '</span></li>';
-        if ($showoffice && $hoursAvailable  && empty( $connection_only ) )
-            $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</span></li>';
         if ($showpubs && $pubs)
             $content .= '<li class="person-info-pubs"><span class="screen-reader-text">' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $pubs . '</li>';
         $content .= '</ul>';
@@ -618,6 +639,12 @@ class FAU_Person_Shortcodes {
         if( !($compactindex && $showthumb) )      $content .= '</div>';
         if (($showlist && $excerpt) || (($showsidebar || $extended) && $description) || ($showlink && $personlink)) {
             if( !$compactindex )    $content .= '<div class="span3">';
+            if ($showoffice && $hoursAvailable  && empty( $connection_only ) ) {
+                $content .= '<ul class="person-info">';
+                $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</span></li>';
+                $content .= '</ul>';
+            }
+
             if ($showlist && $excerpt)
                 $content .= '<div class="person-info-description"><p>' . $excerpt . '</p></div>';
             if (($extended || $showsidebar) && $description)
@@ -638,9 +665,10 @@ class FAU_Person_Shortcodes {
 
     public static function fau_person_page($id) {
  
-     	$content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
-        $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
-
+     	$content = '<div class="person" itemscope itemtype="http://schema.org/Person">';        
+        // Hole die Feldinhalte (in der Klasse sync_helper wird gesteuert, was aus UnivIS angezeigt werden soll und was nicht)
+        $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);        
+        // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
         extract($fields);
         
         if ($streetAddress || $postalCode || $addressLocality || $addressCountry) {
@@ -699,6 +727,8 @@ class FAU_Person_Shortcodes {
             $content .= '<li class="person-info-abteilung"><span class="screen-reader-text">' . __('Abteilung', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="worksFor">' . $department . '</span></li>';
         if ( $telephone && empty( $connection_only ) )
             $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="telephone">' . $telephone . '</span></li>';
+        if ( $mobilePhone && empty( $connection_only ) )
+            $content .= '<li class="person-info-mobile"><span class="screen-reader-text">' . __('Mobil', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="mobilePhone">' . $mobilePhone . '</span></li>';
         if ( $faxNumber && empty( $connection_only ) )
             $content .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>';
         if ( $email && empty( $connection_only ) )
@@ -729,8 +759,9 @@ class FAU_Person_Shortcodes {
 
     public static function fau_person_shortlist($id, $showlist) {	
         
-        
+        // Hole die Feldinhalte (in der Klasse sync_helper wird gesteuert, was aus UnivIS angezeigt werden soll und was nicht)        
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+        // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
         extract($fields);
         
             if( get_post_field( 'post_excerpt', $id ) ) {
@@ -768,8 +799,10 @@ class FAU_Person_Shortcodes {
     public static function fau_person_sidebar($id, $title, $showlist=0, $showinstitution=0, $showabteilung=0, $showposition=0, $showtitle=0, $showsuffix=0, $showaddress=0, $showroom=0, $showtelefon=0, $showfax=0, $showmobile=0, $showmail=0, $showwebsite=0, $showlink=0, $showdescription=0, $showoffice=0, $showpubs=0, $showthumb=0, $showvia=0) {
         if (!empty($id)) {
             $post = get_post($id);
-            
+
+            // Hole die Feldinhalte (in der Klasse sync_helper wird gesteuert, was aus UnivIS angezeigt werden soll und was nicht)            
             $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+            // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
             extract($fields);           
             
             if( $showvia !== 0 && !empty( $connections ) )                    $showvia = 1;
@@ -856,6 +889,8 @@ class FAU_Person_Shortcodes {
                 $content .= $contactpoint;            
             if ( $telephone && $showtelefon && empty( $connection_only ) )
                 $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="telephone">' . $telephone . '</span></li>' . "\n";
+            if ( $mobilePhone && $showmobile && empty( $connection_only ) )
+                $content .= '<li class="person-info-mobile"><span class="screen-reader-text">' . __('Mobil', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="mobilePhone">' . $mobilePhone . '</span></li>' . "\n";
             if ( $faxNumber && $showfax && empty( $connection_only ) )
                 $content .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>' . "\n";
             if ( $email && $showmail && empty( $connection_only ) )
@@ -930,8 +965,10 @@ class FAU_Person_Shortcodes {
             $content .= '<ul class="person-info">';
                 $content .= '<li itemprop="name">' . $fullname . '</li>';
             if ( $connection_options ) {
-                if ( $telephone && in_array( 'telephone', $connection_options ) )
+                if ( $telephone && in_array( 'telephone', $connection_options ) ) {
                     $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="telephone">' . $telephone . '</span></li>';
+                    $content .= '<li class="person-info-mobile"><span class="screen-reader-text">' . __('Mobiltelefon', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="mobilePhone">' . $mobilePhone . '</span></li>';
+                }
                 if ( $faxNumber && in_array( 'faxNumber', $connection_options ) )
                     $content .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>';
                 if ( $email && in_array( 'email', $connection_options ) )
