@@ -637,7 +637,7 @@ class FAU_Person_Shortcodes {
             $content .= self::fau_person_connection( $connection_text, $connection_options, $connections );
 
         if( !($compactindex && $showthumb) )      $content .= '</div>';
-        if (($showlist && $excerpt) || (($showsidebar || $extended) && $description) || ($showlink && $personlink)) {
+        if (($showlist && isset($excerpt)) || (($showsidebar || $extended) && $description) || ($showlink && $personlink)) {
             if( !$compactindex )    $content .= '<div class="span3">';
             if ($showoffice && $hoursAvailable  && empty( $connection_only ) ) {
                 $content .= '<ul class="person-info">';
@@ -645,7 +645,7 @@ class FAU_Person_Shortcodes {
                 $content .= '</ul>';
             }
 
-            if ($showlist && $excerpt)
+            if ($showlist && isset($excerpt))
                 $content .= '<div class="person-info-description"><p>' . $excerpt . '</p></div>';
             if (($extended || $showsidebar) && $description)
                 $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $description . '</div>';
@@ -965,10 +965,10 @@ class FAU_Person_Shortcodes {
             $content .= '<ul class="person-info">';
                 $content .= '<li itemprop="name">' . $fullname . '</li>';
             if ( $connection_options ) {
-                if ( $telephone && in_array( 'telephone', $connection_options ) ) {
+                if ( $telephone && in_array( 'telephone', $connection_options ) )
                     $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="telephone">' . $telephone . '</span></li>';
+                if ( isset($mobilePhone) && in_array( 'telephone', $connection_options ) ) 
                     $content .= '<li class="person-info-mobile"><span class="screen-reader-text">' . __('Mobiltelefon', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="mobilePhone">' . $mobilePhone . '</span></li>';
-                }
                 if ( $faxNumber && in_array( 'faxNumber', $connection_options ) )
                     $content .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>';
                 if ( $email && in_array( 'email', $connection_options ) )
