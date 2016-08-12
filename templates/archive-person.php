@@ -11,8 +11,8 @@ get_header();
                     <div class="span8">
                     <?php 
                     $id = $post->ID;
-
-		    echo FAU_Person_Shortcodes::fau_person_shortlist($id, 0);
+                echo FAU_Person_Shortcodes::fau_person(array('id'=> $post->ID )); 
+		    //echo FAU_Person_Shortcodes::fau_person_shortlist($id, 0);
                     //the_content();
 			?>
           
@@ -22,8 +22,8 @@ get_header();
         </div>
     <?php endwhile; ?>
     <div class="navigation">
-        <div class="alignleft"><?php previous_posts_link( sprintf( '&laquo; %s', __('Vorherige Kontakte', FAU_PERSON_TEXTDOMAIN ) ) ); ?></div>
-        <div class="alignright"><?php next_posts_link( sprintf( '&raquo; %s', __('Weitere Kontakte', FAU_PERSON_TEXTDOMAIN ) ) ); ?></div>
+        <div class="nav-previous"><?php previous_posts_link( sprintf( '&laquo; %s', __('Vorherige Kontakte', FAU_PERSON_TEXTDOMAIN ) ) ); ?></div>
+        <div class="nav-next"><?php next_posts_link( sprintf( '&raquo; %s', __('Weitere Kontakte', FAU_PERSON_TEXTDOMAIN ) ) ); ?></div>
     </div>
     <?php else : ?>
         <h2 class="center"><?php _e( 'Nichts gefunden', FAU_PERSON_TEXTDOMAIN) ?></h2>
