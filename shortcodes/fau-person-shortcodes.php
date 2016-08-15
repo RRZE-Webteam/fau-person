@@ -483,15 +483,10 @@ class FAU_Person_Shortcodes {
                 $content .= '';
                 //herausgenommen da vermutlich nicht nötig
                 //$liste .= "</p>\n";                
-            } 
-
-        
-        
-
-            
+            }             
 
         } else {
-            return '<p>' . sprintf(__('Es konnten keine Kontakte in der Kategorie %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $category) . '</p>';            
+            $content = '<p>' . sprintf(__('Es konnten keine Kontakte in der Kategorie %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $category->slug) . '</p>';            
         }
         
         return $content;
