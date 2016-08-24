@@ -632,7 +632,7 @@ class FAU_Person_Shortcodes {
             $content .= self::fau_person_connection( $connection_text, $connection_options, $connections );
 
         if( !($compactindex && $showthumb) )      $content .= '</div>';
-        if (($showlist && isset($excerpt)) || (($showsidebar || $extended) && $description) || ($showlink && $personlink)) {
+        if (($showoffice && $hoursAvailable  && empty( $connection_only )) || ($showlist && isset($excerpt)) || (($showsidebar || $extended) && $description) || ($showlink && $personlink)) {
             if( !$compactindex )    $content .= '<div class="span3">';
             if ($showoffice && $hoursAvailable  && empty( $connection_only ) ) {
                 $content .= '<ul class="person-info">';
