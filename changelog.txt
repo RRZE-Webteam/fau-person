@@ -19,6 +19,13 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 Versionsänderungen:
 ===================
 
+####Version 2.1.12:
+
+- Bugfix #157 bei der Anzeige der Personenseite:
+  Kontaktpersonen besser formatiert.
+- Bugfix #153 bei Anzeige von Kontakten ohne Bild
+  
+    
 ####Version 2.1.11:    
 
 - Bugfix für Einbindung leere Kategorie    
