@@ -649,7 +649,7 @@ class FAU_Person_Shortcodes {
             if( !$compactindex )    $content .= '</div><div class="span3">';
             if ($showoffice && $hoursAvailable  && empty( $connection_only ) ) {
                 $content .= '<ul class="person-info">';
-                $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</span></li>';
+                $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><div itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</div></li>';
                 $content .= '</ul>';
             }
 
@@ -661,7 +661,6 @@ class FAU_Person_Shortcodes {
                 $content .= '<div class="person-info-more"><a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" class="person-read-more" href="' . $personlink . '">';
                 $content .= __('Mehr', FAU_PERSON_TEXTDOMAIN) . ' ›</a></div>';
             }
-            if( !$compactindex )    $content .= '</div>';
         }
 	
 	
