@@ -924,7 +924,7 @@ class FAU_Person_Shortcodes {
             if ( $url && $showwebsite )
                 $content .= '<li class="person-info-www"><span class="screen-reader-text">' . __('Webseite', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="url" href="' . $url . '">' . $url . '</a></li>' . "\n";
             if ( $hoursAvailable && $showoffice  && empty( $connection_only ) )
-                $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</span></li>';
+                $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><div itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</div></li>';
             $content .= '</ul>' . "\n";
             if ( ( !empty($connection_text) || !empty($connection_options) || !empty($connections) ) && $showvia===1  )
                 $content .= self::fau_person_connection( $connection_text, $connection_options, $connections );
@@ -988,25 +988,28 @@ class FAU_Person_Shortcodes {
             $contactpoint .= '</li>';
             
 	    $contactlist .= '<li itemprop="name" itemscope itemtype="http://schema.org/Person">' . $fullname;
+	   
 		if ( $connection_options ) {
-		    
-		    $contactlist .= '<ul class="person-info">';
-		    
+		    $cinfo = '';
+
 		    if ( $telephone && in_array( 'telephone', $connection_options ) )
-			$content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="telephone">' . $telephone . '</span></li>';
+			$cinfo .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="telephone">' . $telephone . '</span></li>';
 		    if ( isset($mobilePhone) && in_array( 'telephone', $connection_options ) ) 
-			$content .= '<li class="person-info-mobile"><span class="screen-reader-text">' . __('Mobiltelefon', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="mobilePhone">' . $mobilePhone . '</span></li>';
+			$cinfo .= '<li class="person-info-mobile"><span class="screen-reader-text">' . __('Mobiltelefon', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="mobilePhone">' . $mobilePhone . '</span></li>';
 		    if ( $faxNumber && in_array( 'faxNumber', $connection_options ) )
-			$content .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>';
+			$cinfo .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>';
 		    if ( $email && in_array( 'email', $connection_options ) )
-			$content .= '<li class="person-info-email"><span class="screen-reader-text">' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="email" href="mailto:' . strtolower($email) . '">' . strtolower($email) . '</a></li>';
+			$cinfo .= '<li class="person-info-email"><span class="screen-reader-text">' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="email" href="mailto:' . strtolower($email) . '">' . strtolower($email) . '</a></li>';
 		    if ( !empty( $contactpoint ) && in_array( 'contactPoint', $connection_options ) )
-			$content .= $contactpoint;
+			$cinfo .= $contactpoint;
 		    if ( $hoursAvailable && in_array( 'hoursAvailable', $connection_options ) )
-			$content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</span></li>';
-	
-		    $contactlist .= '</ul>';
+			$cinfo .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</span></li>';
 		    
+		    if (!empty($cinfo)) {
+			$contactlist .= '<ul class="person-info">';
+			$contactlist .= $cinfo;
+			$contactlist .= '</ul>';
+		    }
 		}
 	    $contactlist .= '</li>';
         }       

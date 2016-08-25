@@ -19,6 +19,12 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 Versionsänderungen:
 ===================
 
+
+####Version 2.1.13:
+
+- Bugfix #159: Leere Zwischenüberschrift in Sidebar
+- Bei Sprechzeitenausgabe wird Content in div anstelle span ausgegeben, da sonst invalides HTML 
+
 ####Version 2.1.12:
 
 - Bugfix #157 bei der Anzeige der Personenseite:
