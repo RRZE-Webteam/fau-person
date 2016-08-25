@@ -23,7 +23,9 @@ Versionsänderungen:
 ####Version 2.1.13:
 
 - Bugfix #159: Leere Zwischenüberschrift in Sidebar
-- Bei Sprechzeitenausgabe wird Content in div anstelle span ausgegeben, da sonst invalides HTML 
+- Bei Sprechzeitenausgabe wird Content in div anstelle span ausgegeben, da sonst invalides HTML
+- Bild in widget nun parametrisierbar über Parameter bild. 
+   Default in FAU-Einrichtungen: Bild in kleiner Inline-Sidebar = 0. 
 
 ####Version 2.1.12:
 
