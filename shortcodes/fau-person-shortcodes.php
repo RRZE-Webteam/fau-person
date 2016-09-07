@@ -769,7 +769,7 @@ class FAU_Person_Shortcodes {
 	$post = get_post( $id );
         if ( $post->post_content ) {
 	   $content .= '<div class="desc" itemprop="description">';
-	   $content .= $post->post_content; 
+	   $content .= do_shortcode($post->post_content); 
 	   $content .= '</div>';
 	}
         $content .= '</div>';

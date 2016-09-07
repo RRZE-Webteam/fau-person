@@ -18,7 +18,8 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 
 Versionsänderungen:
 ===================
-
+####Version 2.1.14:
+- Shortcodes in Description bei Page Ausgabe erlaubt
 
 ####Version 2.1.13:
 
