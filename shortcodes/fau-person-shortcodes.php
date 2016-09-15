@@ -240,10 +240,6 @@ class FAU_Person_Shortcodes {
                 $liste .= "</span>";
             } elseif ( $list ) {
                 $liste .= "</ul>\n";
-            } elseif ( $page ) {
-                $post = get_post( $id );
-                if ( $post->post_content ) $content = wpautop( $post->post_content );  
-                $liste .= $content;
             } else {
                 $liste .= '';
                 //herausgenommen da vermutlich nicht nötig
