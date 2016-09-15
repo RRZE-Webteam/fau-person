@@ -18,6 +18,12 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 
 Versionsänderungen:
 ===================
+####Version 2.1.16:     
+- Nochmal Bugfix #170: Doppelte Inhaltsausgabe bei format=page auch für Ausgabe der Kategorie    
+
+####Version 2.1.15:     
+- Bugfix #170: Doppelte Inhaltsausgabe bei format=page    
+
 ####Version 2.1.14:
 - Shortcodes in Description bei Page Ausgabe erlaubt
 
