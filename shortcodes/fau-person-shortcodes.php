@@ -82,8 +82,10 @@ class FAU_Person_Shortcodes {
                     $showpubs = 0;
                     $showthumb = 1;
                 }
-                if ($format == 'full' || $format == 'page')
+                if ($format == 'full' || $format == 'page') {
                     $page = 1;
+                    $showname = 0;
+                }
                 if ($format == 'liste' || $format == 'listentry') {
                     $list = 1;
                     $showlist = 1;
@@ -177,6 +179,8 @@ class FAU_Person_Shortcodes {
                     $showthumb = 1;         //
                 if (in_array('ansprechpartner', $show))
                     $showvia = 1;           //
+                if (in_array('name', $show))
+                    $showname = 1;           // bei format="page" Anzeige des Namens über den Daten
             }
             if (!empty($hide)) {
                 $hide = array_map('trim', explode(',', $hide));
@@ -218,6 +222,8 @@ class FAU_Person_Shortcodes {
                     $showthumb = 0;
                 if (in_array('ansprechpartner', $hide))
                     $showvia = 0;
+                if (in_array('name', $show))
+                    $showname = 0;           // bei format="page" Anzeige des Namens über den Daten
             }
 
             if (empty($id)) {
@@ -252,7 +258,7 @@ class FAU_Person_Shortcodes {
                     $post = get_post($value);
                     if ($post && $post->post_type == 'person') {
                         if ($page) {
-                            $liste .= self::fau_person_page($value);
+                            $liste .= self::fau_person_page($value, $showname);
                         } elseif ($shortlist) {
                             $liste .= self::fau_person_shortlist($value, $showlist);
                             if ($i < $number)
@@ -359,6 +365,7 @@ class FAU_Person_Shortcodes {
             }
             if ($format == 'full' || $format == 'page')
                 $page = 1;
+                $showname = 0;
             if ($format == 'liste' || $format == 'listentry') {
                 $list = 1;
                 $showlist = 1;
@@ -445,6 +452,8 @@ class FAU_Person_Shortcodes {
                 $showthumb = 1;         //
             if (in_array('ansprechpartner', $show))
                 $showvia = 1;           //
+            if (in_array('name', $show))
+                $showname = 1;           // bei format="page" Anzeige des Namens über den Daten
         }
         if (!empty($hide)) {
             $hide = array_map('trim', explode(',', $hide));
@@ -486,6 +495,8 @@ class FAU_Person_Shortcodes {
                 $showthumb = 0;
             if (in_array('ansprechpartner', $hide))
                 $showvia = 0;
+            if (in_array('name', $show))
+                $showname = 0;           // bei format="page" Anzeige des Namens über den Daten
         }
         if ($extended == 1) {
             $showlist = 1;
@@ -523,7 +534,7 @@ class FAU_Person_Shortcodes {
             foreach ($posts as $post) {
                 $value = $post->ID;
                 if ($page) {
-                    $content .= self::fau_person_page($value);
+                    $content .= self::fau_person_page($value, $showname);
                 } elseif ($shortlist) {
                     $content .= self::fau_person_shortlist($value, $showlist);
                     if ($i < $number)
@@ -614,21 +625,8 @@ class FAU_Person_Shortcodes {
             $contactpoint .= '</li>';
         }
 
-        $fullname = '<span itemprop="name">';
-        if ($showtitle && $honorificPrefix)
-            $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
-        if ($givenName || $familyName) {
-            if ($givenName)
-                $fullname .= '<span itemprop="givenName">' . $givenName . "</span> ";
-            if ($familyName)
-                $fullname .= '<span itemprop="familyName">' . $familyName . "</span>";
-        } elseif (!empty(get_the_title($id))) {
-            $fullname .= get_the_title($id);
-        }
-        if ($showsuffix && $honorificSuffix)
-            $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
-        $fullname .= '</span>';
-
+        
+        $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix);
 
         $content = '<div class="person content-person" itemscope itemtype="http://schema.org/Person">';
         if ($compactindex)
@@ -739,7 +737,7 @@ class FAU_Person_Shortcodes {
         return $content;
     }
 
-    public static function fau_person_page($id) {
+    public static function fau_person_page($id, $showname=0) {
 
         $content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
         // Hole die Feldinhalte (in der Klasse sync_helper wird gesteuert, was aus UnivIS angezeigt werden soll und was nicht)
@@ -775,21 +773,12 @@ class FAU_Person_Shortcodes {
         if ((strlen($url) > 4) && (strpos($url, "http") === false)) {
             $url = 'http://' . $url;
         }
-        //$content = '';
+        
+        if ( $showname ) {
+            $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1);
+            $content .= '<h2>' . $fullname . '</h2>';
+        }
 
-        $fullname = '';
-        if ($honorificPrefix)
-            $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
-        if ($givenName)
-            $fullname .= '<span itemprop="givenName">' . $givenName . '</span> ';
-        if ($familyName)
-            $fullname .= '<span itemprop="familyName">' . $familyName . '</span>';
-        if ($honorificSuffix)
-            $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
-
-
-        $content .= '<h2 itemprop="name">' . $fullname . '</h2>';
-        $post = get_post($id);
         if (has_post_thumbnail($id)) {
             $content .= '<div itemprop="image" class="alignright">'; 
             $content .= get_the_post_thumbnail($id, 'person-thumb-page');
@@ -863,20 +852,9 @@ class FAU_Person_Shortcodes {
             $personlink = get_permalink($id);
         }
         $content = '';
-        $fullname = '<span itemprop="name">';
-        if ($honorificPrefix)
-            $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . "</span> ";
-        if ($givenName || $familyName) {
-            if ($givenName)
-                $fullname .= '<span itemprop="givenName">' . $givenName . "</span> ";
-            if ($familyName)
-                $fullname .= '<span itemprop="familyName">' . $familyName . "</span>";
-        } elseif (!empty(get_the_title($id))) {
-            $fullname .= get_the_title($id);
-        }
-        if ($honorificSuffix)
-            $fullname .= ', ' . $honorificSuffix;
-        $fullname .= '</span>';
+        
+        $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1);
+
         $content .= '<span class="person-info">';
         $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
         if ($showlist && isset($excerpt))
@@ -942,20 +920,7 @@ class FAU_Person_Shortcodes {
                 }
             }
 
-            $fullname = '<span itemprop="name">';
-            if ($honorificPrefix && $showtitle)
-                $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
-            if ($givenName || $familyName) {
-                if ($givenName)
-                    $fullname .= '<span itemprop="givenName">' . $givenName . "</span> ";
-                if ($familyName)
-                    $fullname .= '<span itemprop="familyName">' . $familyName . "</span>";
-            } elseif (!empty(get_the_title($id))) {
-                $fullname .= get_the_title($id);
-            }
-            if ($honorificSuffix && $showsuffix)
-                $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
-            $fullname .= '</span>';
+            $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix);
 
             $content = '<div class="person" itemscope itemtype="http://schema.org/Person">' . "\n";
 
@@ -1016,21 +981,9 @@ class FAU_Person_Shortcodes {
         $contactlist = '';
         foreach ($connections as $key => $value) {
             extract($connections[$key]);
-            $fullname = '';
             $contactpoint = '';
-
-            if ($honorificPrefix)
-                $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . "</span> ";
-            if ($givenName || $familyName) {
-                if ($givenName)
-                    $fullname .= '<span itemprop="givenName">' . $givenName . "</span> ";
-                if ($familyName)
-                    $fullname .= '<span itemprop="familyName">' . $familyName . "</span>";
-            } elseif (!empty(get_the_title($nr))) {
-                $fullname .= get_the_title($nr);
-            }
-            if ($honorificSuffix)
-                $fullname .= ', ' . $honorificSuffix;
+     
+            $fullname = self::fullname_output($nr, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1);
 
             if ($streetAddress || $postalCode || $addressLocality || $addressCountry || $workLocation) {
                 $contactpoint .= '<li class="person-info-address" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><span class="screen-reader-text">' . __('Adresse', FAU_PERSON_TEXTDOMAIN) . ': </span>';
@@ -1062,7 +1015,7 @@ class FAU_Person_Shortcodes {
             }
             $contactpoint .= '</li>';
 
-            $contactlist .= '<li itemprop="name" itemscope itemtype="http://schema.org/Person">' . $fullname;
+            $contactlist .= '<li itemscope itemtype="http://schema.org/Person">' . $fullname;
 
             if ($connection_options) {
                 $cinfo = '';
@@ -1102,5 +1055,153 @@ class FAU_Person_Shortcodes {
 
         return $content;
     }
-
+    
+    public static function fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix) {
+        $fullname = '<span itemprop="name">';
+        if ($showtitle && $honorificPrefix)
+            $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
+        if ($givenName && $familyName) {
+            if ($givenName)
+                $fullname .= '<span itemprop="givenName">' . $givenName . "</span> ";
+            if ($familyName)
+                $fullname .= '<span itemprop="familyName">' . $familyName . "</span>";
+        } elseif (!empty(get_the_title($id))) {
+            $fullname .= get_the_title($id);
+        }
+        if ($showsuffix && $honorificSuffix)
+            $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
+        $fullname .= '</span>';
+        return $fullname;
+    }
+        
 }
+
+
+
+/*
+
+_sidebar:
+                if ($showaddress) {
+                if ($streetAddress || $postalCode || $addressLocality || $addressCountry) {
+                    $contactpoint = '<li class="person-info-address" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><span class="screen-reader-text">' . __('Adresse', FAU_PERSON_TEXTDOMAIN) . ': <br></span>';
+                    if ($streetAddress) {
+                        $contactpoint .= '<span class="person-info-street" itemprop="streetAddress">' . $streetAddress . '</span>';
+                        if ($workLocation) {
+                            $contactpoint .= '<br>';
+                        } elseif ($postalCode || $addressLocality) {
+                            $contactpoint .= '<br>';
+                        } elseif ($addressCountry) {
+                            $contactpoint .= '<br>';
+                        }
+                    }
+                    if ($workLocation && $showroom) {
+                        $contactpoint .= '<span class="person-info-room" itemprop="workLocation" itemscope itemtype="http://schema.org/Person">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' ' . $workLocation . '</span>';
+                        if ($postalCode || $addressLocality || $addressCountry)
+                            $contactpoint .= '<br>';
+                    }
+                    if ($postalCode || $addressLocality) {
+                        $contactpoint .= '<span class="person-info-city">';
+                        if ($postalCode)
+                            $contactpoint .= '<span itemprop="postalCode">' . $postalCode . '</span> ';
+                        if ($addressLocality)
+                            $contactpoint .= '<span itemprop="addressLocality">' . $addressLocality . '</span>';
+                        $contactpoint .= '</span>';
+                        if ($addressCountry)
+                            $contactpoint .= '<br>';
+                    }
+                    if ($addressCountry)
+                        $contactpoint .= '<span class="person-info-country" itemprop="addressCountry">' . $addressCountry . '</span>';
+                    $contactpoint .= '</li>' . "\n";
+                }
+            }
+            
+_markup:
+            if ($streetAddress || $postalCode || $addressLocality || $addressCountry) {
+            $contactpoint = '<li class="person-info-address" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><span class="screen-reader-text">' . __('Adresse', FAU_PERSON_TEXTDOMAIN) . ': <br></span>';
+            if ($streetAddress) {
+                $contactpoint .= '<span class="person-info-street" itemprop="streetAddress">' . $streetAddress . '</span>';
+                if ($workLocation) {
+                    $contactpoint .= '<br>';
+                } elseif ($postalCode || $addressLocality) {
+                    $contactpoint .= '<br>';
+                } elseif ($addressCountry) {
+                    $contactpoint .= '<br>';
+                }
+            }
+            if ($workLocation && ( $extended || $showroom )) {
+                $contactpoint .= '<span class="person-info-room" itemprop="workLocation" itemscope itemtype="http://schema.org/Person">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' ' . $workLocation . '</span>';
+                if ($postalCode || $addressLocality || $addressCountry)
+                    $contactpoint .= '<br>';
+            }
+            if ($postalCode || $addressLocality) {
+                $contactpoint .= '<span class="person-info-city">';
+                if ($postalCode)
+                    $contactpoint .= '<span itemprop="postalCode">' . $postalCode . '</span> ';
+                if ($addressLocality)
+                    $contactpoint .= '<span itemprop="addressLocality">' . $addressLocality . '</span>';
+                $contactpoint .= '</span>';
+                if ($addressCountry)
+                    $contactpoint .= '<br>';
+            }
+            if ($addressCountry)
+                $contactpoint .= '<span class="person-info-country" itemprop="addressCountry">' . $addressCountry . '</span>';
+            $contactpoint .= '</li>';
+        }
+        
+_connection:    
+                if ($streetAddress || $postalCode || $addressLocality || $addressCountry || $workLocation) {
+                $contactpoint .= '<li class="person-info-address" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><span class="screen-reader-text">' . __('Adresse', FAU_PERSON_TEXTDOMAIN) . ': </span>';
+                if ($streetAddress) {
+                    $contactpoint .= '<span class="person-info-street" itemprop="streetAddress">' . $streetAddress . '</span>';
+                    if ($postalCode || $addressLocality) {
+                        $contactpoint .= ', ';
+                    } elseif ($addressCountry) {
+                        $contactpoint .= ', ';
+                    }
+                }
+                if ($postalCode || $addressLocality) {
+                    $contactpoint .= '<span class="person-info-city">';
+                    if ($postalCode)
+                        $contactpoint .= '<span itemprop="postalCode">' . $postalCode . '</span> ';
+                    if ($addressLocality)
+                        $contactpoint .= '<span itemprop="addressLocality">' . $addressLocality . '</span>';
+                    $contactpoint .= '</span>';
+                    if ($addressCountry)
+                        $contactpoint .= ', ';
+                }
+                if ($addressCountry)
+                    $contactpoint .= '<span class="person-info-country" itemprop="addressCountry">' . $addressCountry . '</span>';
+                if ($streetAddress || $postalCode || $addressLocality || $addressCountry || $workLocation) {
+                    $contactpoint .= ', ';
+                }
+                if ($workLocation)
+                    $contactpoint .= '<span class="person-info-room" itemprop="workLocation" itemscope itemtype="http://schema.org/Person">' . __('Raum', FAU_PERSON_TEXTDOMAIN) . ' ' . $workLocation . '</span>';
+            }
+            $contactpoint .= '</li>';
+
+_page:    
+           if ($streetAddress || $postalCode || $addressLocality || $addressCountry) {
+            $contactpoint = '<li class="person-info-address" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><span class="screen-reader-text">' . __('Adresse', FAU_PERSON_TEXTDOMAIN) . ': <br></span>';
+            if ($streetAddress) {
+                $contactpoint .= '<span class="person-info-street" itemprop="streetAddress">' . $streetAddress . '</span>';
+                if ($postalCode || $addressLocality) {
+                    $contactpoint .= '<br>';
+                } elseif ($addressCountry) {
+                    $contactpoint .= '<br>';
+                }
+            }
+            if ($postalCode || $addressLocality) {
+                $contactpoint .= '<span class="person-info-city">';
+                if ($postalCode)
+                    $contactpoint .= '<span itemprop="postalCode">' . $postalCode . '</span> ';
+                if ($addressLocality)
+                    $contactpoint .= '<span itemprop="addressLocality">' . $addressLocality . '</span>';
+                $contactpoint .= '</span>';
+                if ($addressCountry)
+                    $contactpoint .= '<br>';
+            }
+            if ($addressCountry)
+                $contactpoint .= '<span class="person-info-country" itemprop="addressCountry">' . $addressCountry . '</span>';
+            $contactpoint .= '</li>';
+        }
+       */             
