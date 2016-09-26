@@ -1029,17 +1029,23 @@ class FAU_Person_Shortcodes {
                     if ( isset($city) ) {
                         $contactpoint .= $city;
                         if ( isset($country) ) {
-                            $contactpoint .= ', ' . $country . '</span>';
+                            $contactpoint .= ', ';
                         } elseif ( isset($room) ) {
                             $contactpoint .= '</span>, ';
                         } else {
                             $contactpoint .= '</span>';
                         }
-                    } 
-                    if ( $room ) {
-                        '<span class="person-info-room" itemprop="workLocation" itemscope itemtype="http://schema.org/Person">' . $room . '</span>';
+                    }  
+                    if ( isset($country) ) {
+                         $contactpoint .= $country . '</span>';
+                         if ( isset($room) ) {
+                             $contactpoint .= ', ';
+                         }
                     }
-                    break;
+                    if ( $room ) {
+                        $contactpoint .= '<span class="person-info-room" itemprop="workLocation" itemscope itemtype="http://schema.org/Person">' . $room . '</span>';
+                    }
+                    break;                    
                 default:   
                     if ( isset($street) ) {
                         $contactpoint .= '<div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">' . $street;
@@ -1055,6 +1061,11 @@ class FAU_Person_Shortcodes {
                         $contactpoint .= '<div class="person-info-room" itemprop="workLocation" itemscope itemtype="http://schema.org/Person">' . $room . '</div>';
                         if ( isset($city) || isset($country) ) 
                             $contactpoint .= '<div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';                            
+                    }
+                    if ( !isset($street) && !isset($room) ) {
+                        if ( isset($city) || isset($country) ) {
+                            $contactpoint .= '<div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
+                        }                       
                     }
                     if ( isset($city) ) {
                        $contactpoint .= $city;
@@ -1072,3 +1083,4 @@ class FAU_Person_Shortcodes {
     }
         
 }
+
