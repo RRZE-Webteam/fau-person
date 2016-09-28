@@ -814,7 +814,7 @@ class FAU_Person_Shortcodes {
         //Überprüfung zur Bildplatzierung in der Sidebar, ob ein FAU-Theme gewählt wurde und welches Template gewählt ist
         $active_theme = wp_get_theme();
         $active_theme = $active_theme->get( 'Name' );
-        if (in_array($active_theme, FAU_Person::fauthemes)) {
+        if (in_array($active_theme, FAU_Person::$fauthemes)) {
             $fautheme = 1;
             if( !is_page_template( array('page-templates/page-portal.php', 'page-templates/page-start.php', 'page-templates/page-start-sub.php'))  ) {
                 $small_sidebar = 1;
