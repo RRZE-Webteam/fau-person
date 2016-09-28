@@ -22,6 +22,7 @@ Versionsänderungen:
 - Nochmal Bugfix #170: Doppelte Inhaltsausgabe bei format=page auch für Ausgabe der Kategorie    
 - Überschrift bei format=page: Standardmäßig wird auf Ausgabe des Namens bzw. (wenn nicht dieser nicht vorhanden ist) Titels verzichtet, optional aber über show=name anzeigbar    
 - Bugfix #155: Fehlerhafte Anzeige von Raum und Adresse    
+- Bei schmaler Sidebar wird das Bild nicht mehr über, sondern nach dem Namen angezeigt    
 
 ####Version 2.1.15:     
 - Bugfix #170: Doppelte Inhaltsausgabe bei format=page    

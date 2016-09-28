@@ -9,7 +9,6 @@ if (!function_exists('fau_person_page')) {
 }
 
 class FAU_Person_Shortcodes {
-
     public static function fau_person($atts, $content = null) {
         extract(shortcode_atts(array(
             "slug" => FALSE,
@@ -812,6 +811,16 @@ class FAU_Person_Shortcodes {
     // muss noch eingebaut werden: Wenn shortcode mit sidebar zeige bild ja und wo?     if (theme(FAU-*)  && template =~    else { Bild anzeigen }   if (theme(FAU-*)  && template =~( page.php || page-subnav.php ) && (not option(zeige bild in sidebar)   ) { Zeige kein Bild }   else {       if  template =~( page.php || page-subnav.php )   { binde Bild NACH dem Namen ein} else {    Bild vor dem Namen anzeigen }   }
     
     public static function fau_person_sidebar($id, $title, $showlist = 0, $showinstitution = 0, $showabteilung = 0, $showposition = 0, $showtitle = 0, $showsuffix = 0, $showaddress = 0, $showroom = 0, $showtelefon = 0, $showfax = 0, $showmobile = 0, $showmail = 0, $showwebsite = 0, $showlink = 0, $showdescription = 0, $showoffice = 0, $showpubs = 0, $showthumb = 0, $showvia = 0) {
+        //Überprüfung zur Bildplatzierung in der Sidebar, ob ein FAU-Theme gewählt wurde und welches Template gewählt ist
+        $active_theme = wp_get_theme();
+        $active_theme = $active_theme->get( 'Name' );
+        if (in_array($active_theme, FAU_Person::fauthemes)) {
+            $fautheme = 1;
+            if( !is_page_template( array('page-templates/page-portal.php', 'page-templates/page-start.php', 'page-templates/page-start-sub.php'))  ) {
+                $small_sidebar = 1;
+            }
+        }
+        
         if (!empty($id)) {
             $post = get_post($id);
 
@@ -833,26 +842,38 @@ class FAU_Person_Shortcodes {
 
             $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix);
             $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'default' );
-
+            
+            if (has_post_thumbnail($id) && $showthumb) {
+                $sidebar_thumb = '<div class="span1" itemprop="image">';
+                $sidebar_thumb .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">';
+                $sidebar_thumb .= get_the_post_thumbnail($id, 'person-thumb');
+                $sidebar_thumb .= '</a>';
+                $sidebar_thumb .= '</div>' . "\n";
+            }
+            
             $content = '<div class="person" itemscope itemtype="http://schema.org/Person">' . "\n";
 
             if (!empty($title))
                 $content .= '<h2 class="small">' . $title . '</h2>' . "\n";
 
             $content .= '<div class="row">' . "\n";
-
-            if (has_post_thumbnail($id) && $showthumb) {
-                $content .= '<div class="span1" itemprop="image">';
-                $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">';
-                $content .= get_the_post_thumbnail($id, 'person-thumb');
-                $content .= '</a>';
-                $content .= '</div>' . "\n";
-            }
+            
+            if ( isset( $sidebar_thumb ) && !isset ( $small_sidebar ) ) {
+                $content .= $sidebar_thumb;
+            }            
 
             $content .= '<div class="span3">' . "\n";
             $content .= '<h3>';
             $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
             $content .= '</h3>' . "\n";
+            
+            if ( isset( $sidebar_thumb ) && isset ( $small_sidebar ) ) {
+                $content .= '</div>';
+                $content .= $sidebar_thumb;
+                $content .= '<div class="span3">';
+            }
+            
+            
             $content .= '<ul class="person-info">' . "\n";
             if ($jobTitle && $showposition)
                 $content .= '<li class="person-info-position"><span class="screen-reader-text">' . __('Tätigkeit', FAU_PERSON_TEXTDOMAIN) . ': </span><strong><span itemprop="jobTitle">' . $jobTitle . '</span></strong></li>' . "\n";

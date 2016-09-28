@@ -53,7 +53,8 @@ class FAU_Person {
     const php_version = '5.4'; // Minimal erforderliche PHP-Version
     const wp_version = '4.5'; // Minimal erforderliche WordPress-Version
     const search_univis_id_transient = 'sui_1k4fu7056Kl12a5';
-    
+    const fauthemes = array('FAU-Einrichtungen', 'FAU-Philfak', 'FAU-Natfak', 'FAU-RWFak', 'FAU-Medfak', 'FAU-Techfak');
+       
     protected static $oldfau_person_plugin = false;   
     public static $options;
     
