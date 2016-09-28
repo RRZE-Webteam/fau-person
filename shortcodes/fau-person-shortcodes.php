@@ -993,8 +993,6 @@ class FAU_Person_Shortcodes {
                         $contactpoint .= $street;
                         if ( isset($city) || isset($country) ) {       
                             $contactpoint .= '<br>';
-                        } elseif ( isset($room) ) {
-                            $contactpoint .= '</div><br>';
                         } else {
                             $contactpoint .= '</div>';
                         }
@@ -1002,13 +1000,14 @@ class FAU_Person_Shortcodes {
                     if ( isset($city) ) {
                         $contactpoint .= $city;
                         if ( isset($country) ) {
-                            $contactpoint .= '<br>' . $country . '</div>';
-                        } elseif ( isset($room) ) {
-                            $contactpoint .= '</div><br>';
+                            $contactpoint .= '<br>';
                         } else {
                             $contactpoint .= '</div>';
                         }
                     } 
+                    if ( isset($country) ) {
+                            $contactpoint .= $country . '</div>';                        
+                    }
                     if ( isset($room) ) {
                         $contactpoint .= '<div class="person-info-room" itemprop="workLocation" itemscope itemtype="http://schema.org/Person">' . $room . '</div>';
                     }
@@ -1042,7 +1041,7 @@ class FAU_Person_Shortcodes {
                              $contactpoint .= ', ';
                          }
                     }
-                    if ( $room ) {
+                    if ( isset($room) ) {
                         $contactpoint .= '<span class="person-info-room" itemprop="workLocation" itemscope itemtype="http://schema.org/Person">' . $room . '</span>';
                     }
                     break;                    
@@ -1070,10 +1069,13 @@ class FAU_Person_Shortcodes {
                     if ( isset($city) ) {
                        $contactpoint .= $city;
                         if ( isset($country) ) {
-                            $contactpoint .= '<br>' . $country . '</div>';
+                            $contactpoint .= '<br>';
                         } else {
                             $contactpoint .= '</div>';
                         }                        
+                    }
+                    if ( isset($country) ) {
+                        $contactpoint .= $country . '</div>';
                     }
             }                    
             $contactpoint .= '</li>' . "\n";
