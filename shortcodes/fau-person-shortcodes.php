@@ -88,6 +88,8 @@ class FAU_Person_Shortcodes {
                 if ($format == 'liste' || $format == 'listentry') {
                     $list = 1;
                     $showlist = 1;
+                    $showtelefon = 0;
+                    $showmail = 0;
                 }
                 if ($format == 'plain') {
                     $showlist = 0;
@@ -221,7 +223,7 @@ class FAU_Person_Shortcodes {
                     $showthumb = 0;
                 if (in_array('ansprechpartner', $hide))
                     $showvia = 0;
-                if (in_array('name', $show))
+                if (in_array('name', $hide))
                     $showname = 0;           // bei format="page" Anzeige des Namens über den Daten
             }
 
@@ -259,12 +261,12 @@ class FAU_Person_Shortcodes {
                         if ($page) {
                             $liste .= self::fau_person_page($value, $showname);
                         } elseif ($shortlist) {
-                            $liste .= self::fau_person_shortlist($value, $showlist);
+                            $liste .= self::fau_person_shortlist($value, $showlist, 0, $showmail, $showtelefon);
                             if ($i < $number)
                                 $liste .= ", ";
                         } elseif ($list) {
                             $liste .= '<li class="person-info">' . "\n";
-                            $liste .= self::fau_person_shortlist($value, $showlist);
+                            $liste .= self::fau_person_shortlist($value, $showlist, 1, $showmail, $showtelefon);
                             $liste .= "</li>\n";
                         } elseif ($sidebar) {
                             $liste .= self::fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia);
@@ -368,6 +370,8 @@ class FAU_Person_Shortcodes {
             if ($format == 'liste' || $format == 'listentry') {
                 $list = 1;
                 $showlist = 1;
+                $showtelefon = 0;
+                $showmail = 0;
             }
             if ($format == 'plain') {
                 $showlist = 0;
@@ -535,12 +539,12 @@ class FAU_Person_Shortcodes {
                 if ($page) {
                     $content .= self::fau_person_page($value, $showname);
                 } elseif ($shortlist) {
-                    $content .= self::fau_person_shortlist($value, $showlist);
+                    $content .= self::fau_person_shortlist($value, $showlist, 0, $showmail, $showtelefon);
                     if ($i < $number)
                         $content .= ", ";
                 } elseif ($list) {
                     $content .= '<li class="person-info">' . "\n";
-                    $content .= self::fau_person_shortlist($value, $showlist);
+                    $content .= self::fau_person_shortlist($value, $showlist, 1, $showmail, $showtelefon);
                     $content .= "</li>\n";
                 } elseif ($sidebar) {
                     $content .= self::fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia);
@@ -708,6 +712,7 @@ class FAU_Person_Shortcodes {
     public static function fau_person_page($id, $showname=0) {
 
         $content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
+        $content = '<div class="page">';
         // Hole die Feldinhalte (in der Klasse sync_helper wird gesteuert, was aus UnivIS angezeigt werden soll und was nicht)
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
         // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
@@ -768,6 +773,7 @@ class FAU_Person_Shortcodes {
             $content .= '</div>';
         }
         $content .= '</div>';
+        $content .= '</div>';
 
         //	    if (($options['plugin_fau_person_headline'] != 'jobTitle') && ($position)) 
         //		$content .= '<li class="person-info-position"><span class="screen-reader-text">'.__('Tätigkeit','fau').': </span><strong><span itemprop="jobTitle">'.$jobTitle.'</span></strong></li>';
@@ -775,7 +781,7 @@ class FAU_Person_Shortcodes {
         return $content;
     }
 
-    public static function fau_person_shortlist($id, $showlist) {
+    public static function fau_person_shortlist($id, $showlist, $list=0, $showmail=0, $showtelefon=0) {
 
         // Hole die Feldinhalte (in der Klasse sync_helper wird gesteuert, was aus UnivIS angezeigt werden soll und was nicht)        
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
@@ -798,12 +804,19 @@ class FAU_Person_Shortcodes {
         $content = '';
         
         $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1);
-
+        if ( $list==1 )
+            $content .= '<div class="list">';
         $content .= '<span class="person-info">';
         $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
-        if ($showlist && isset($excerpt))
+        if ( $telephone && $showtelefon && empty( $connection_only ) && $list==1 )
+                $content .= ', <span class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="telephone">' . $telephone . '</span></span>';
+        if ( $email && $showmail && empty( $connection_only ) && $list==1  )
+                $content .= ', <span class="person-info-email"><span class="screen-reader-text">' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="email" href="mailto:' . strtolower($email) . '">' . strtolower($email) . '</a></span>';    
+        if ( $showlist && isset( $excerpt ) )
             $content .= "<br>" . $excerpt;
         $content .= '</span>';
+        if ( $list==1 )
+            $content .= '</div>';        
         return $content;
     }
 
@@ -852,7 +865,8 @@ class FAU_Person_Shortcodes {
             }
             
             $content = '<div class="person" itemscope itemtype="http://schema.org/Person">' . "\n";
-
+            $content .= '<div class="side">';
+                    
             if (!empty($title))
                 $content .= '<h2 class="small">' . $title . '</h2>' . "\n";
 
@@ -903,7 +917,7 @@ class FAU_Person_Shortcodes {
                 $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $description . '</div>' . "\n";
             $content .= '</div>' . "\n";
             $content .= '</div>' . "\n";
-
+            $content .= '</div>' . "\n";
             $content .= '</div>';
         }
         return $content;
