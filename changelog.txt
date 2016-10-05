@@ -18,9 +18,13 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 
 Versionsänderungen:
 ===================
+####Version 2.1.17:     
+- Bugfix #152: Erweiterung von format="liste", kommasepariert kann die Anzeige von Telefonnummer und/oder Mailadresse über die show-Parameter telefon und/oder mail ergänzt werden    
+- Enhancement #169: Format-Klassen ergänzt, für liste class="list", für sidebar class="side", für page class="page"    
+
 ####Version 2.1.16:     
 - Nochmal Bugfix #170: Doppelte Inhaltsausgabe bei format=page auch für Ausgabe der Kategorie    
-- Überschrift bei format=page: Standardmäßig wird auf Ausgabe des Namens bzw. (wenn nicht dieser nicht vorhanden ist) Titels verzichtet, optional aber über show=name anzeigbar    
+- Überschrift bei format="page": Standardmäßig wird auf Ausgabe des Namens bzw. (wenn nicht dieser nicht vorhanden ist) Titels verzichtet, optional aber über show="name" anzeigbar    
 - Bugfix #155: Fehlerhafte Anzeige von Raum und Adresse    
 - Bei schmaler Sidebar wird das Bild nicht mehr über, sondern nach dem Namen angezeigt    
 

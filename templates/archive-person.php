@@ -12,7 +12,7 @@ get_header();
                     <?php 
                     $id = $post->ID;
                 echo FAU_Person_Shortcodes::fau_person(array('id'=> $post->ID )); 
-		    //echo FAU_Person_Shortcodes::fau_person_shortlist($id, 0);
+		    //echo FAU_Person_Shortcodes::fau_person_shortlist($id, 0, 0, 0);
                     //the_content();
 			?>
           
