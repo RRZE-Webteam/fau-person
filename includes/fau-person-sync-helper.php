@@ -214,7 +214,7 @@ class sync_helper {
         } else {
          	$result = array();
         } 
-        
+      
         return (array) $result;
     }
     
@@ -525,6 +525,8 @@ class UnivIS_Data {
             if ($sxi->hasChildren()) {
                 $a[$sxi->key()][] = self::sxi2array($sxi->current());
             } elseif($sxi->key() === 'orgunit') {
+                $a[$sxi->key()][] = strval($sxi->current());
+            } elseif($sxi->key() === 'orgunit_en') {
                 $a[$sxi->key()][] = strval($sxi->current());
             } else {
                 $a[$sxi->key()] = strval($sxi->current());
