@@ -755,7 +755,7 @@ class FAU_Person_Shortcodes {
             $content .= $contactpoint;
         }
         if ($hoursAvailable && empty($connection_only))
-            $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</span></span></li>';
+            $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</span></li>';
         if ($pubs)
             $content .= '<li class="person-info-pubs"><span class="screen-reader-text">' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $pubs . '</li>';
         $content .= '</ul>';
@@ -768,7 +768,7 @@ class FAU_Person_Shortcodes {
         $post = get_post($id);
         if ($post->post_content) {
             $content .= '<div class="desc" itemprop="description">';
-            $content .= do_shortcode( $post->post_content );
+            $content .= wpautop( do_shortcode( $post->post_content ) );
             $content .= '</div>';
         }
         $content .= '</div>';
