@@ -18,6 +18,9 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 
 Versionsänderungen:
 ===================
+####Version 2.1.18:     
+- Bugfix #178: fehlender Name auf Kontakt-Einzelseite korrigiert        
+
 ####Version 2.1.17:     
 - Bugfix #152: Erweiterung von format="liste", kommasepariert kann die Anzeige von Telefonnummer und/oder Mailadresse über die show-Parameter telefon und/oder mail ergänzt werden    
 - Enhancement #169: Format-Klassen ergänzt, für liste class="list", für sidebar class="side", für page class="page"    

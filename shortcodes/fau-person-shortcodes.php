@@ -259,7 +259,7 @@ class FAU_Person_Shortcodes {
                     $post = get_post($value);
                     if ($post && $post->post_type == 'person') {
                         if ($page) {
-                            $liste .= self::fau_person_page($value, $showname);
+                            $liste .= self::fau_person_page($value, 1, $showname);
                         } elseif ($shortlist) {
                             $liste .= self::fau_person_shortlist($value, $showlist, 0, $showmail, $showtelefon);
                             if ($i < $number)
@@ -498,7 +498,7 @@ class FAU_Person_Shortcodes {
                 $showthumb = 0;
             if (in_array('ansprechpartner', $hide))
                 $showvia = 0;
-            if (in_array('name', $show))
+            if (in_array('name', $hide))
                 $showname = 0;           // bei format="page" Anzeige des Namens über den Daten
         }
         if ($extended == 1) {
@@ -537,7 +537,7 @@ class FAU_Person_Shortcodes {
             foreach ($posts as $post) {
                 $value = $post->ID;
                 if ($page) {
-                    $content .= self::fau_person_page($value, $showname);
+                    $content .= self::fau_person_page($value, 1, $showname);
                 } elseif ($shortlist) {
                     $content .= self::fau_person_shortlist($value, $showlist, 0, $showmail, $showtelefon);
                     if ($i < $number)
@@ -709,7 +709,7 @@ class FAU_Person_Shortcodes {
         return $content;
     }
 
-    public static function fau_person_page($id, $showname=0) {
+    public static function fau_person_page($id, $is_shortcode=0, $showname=0) {
 
         $content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
         $content = '<div class="page">';
@@ -721,8 +721,7 @@ class FAU_Person_Shortcodes {
         if ((strlen($url) > 4) && (strpos($url, "http") === false)) {
             $url = 'http://' . $url;
         }
-        
-        if ( $showname ) {
+        if ( !$is_shortcode || $showname ) {
             $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1);
             $content .= '<h2>' . $fullname . '</h2>';
         }
