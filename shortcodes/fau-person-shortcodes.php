@@ -712,7 +712,7 @@ class FAU_Person_Shortcodes {
     public static function fau_person_page($id, $is_shortcode=0, $showname=0) {
 
         $content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
-        $content = '<div class="page">';
+        $content .= '<div class="page">';
         // Hole die Feldinhalte (in der Klasse sync_helper wird gesteuert, was aus UnivIS angezeigt werden soll und was nicht)
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
         // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
