@@ -768,8 +768,6 @@ class FAU_Person_Shortcodes {
         $post = get_post($id);
         if ($post->post_content) {
             $content .= '<div class="desc" itemprop="description">' . PHP_EOL;
-            //$content .= do_shortcode( $post->post_content );
-            //$content .= wpautop( do_shortcode( $post->post_content ) );
             $content .= apply_filters( 'the_content', $post->post_content );
             $content .= '</div>';
         }
