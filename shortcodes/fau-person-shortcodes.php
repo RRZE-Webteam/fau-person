@@ -259,7 +259,7 @@ class FAU_Person_Shortcodes {
                     $post = get_post($value);
                     if ($post && $post->post_type == 'person') {
                         if ($page) {
-                            $liste .= self::fau_person_page($value, $showname);
+                            $liste .= self::fau_person_page($value, 1, $showname);
                         } elseif ($shortlist) {
                             $liste .= self::fau_person_shortlist($value, $showlist, 0, $showmail, $showtelefon);
                             if ($i < $number)
@@ -498,7 +498,7 @@ class FAU_Person_Shortcodes {
                 $showthumb = 0;
             if (in_array('ansprechpartner', $hide))
                 $showvia = 0;
-            if (in_array('name', $show))
+            if (in_array('name', $hide))
                 $showname = 0;           // bei format="page" Anzeige des Namens über den Daten
         }
         if ($extended == 1) {
@@ -537,7 +537,7 @@ class FAU_Person_Shortcodes {
             foreach ($posts as $post) {
                 $value = $post->ID;
                 if ($page) {
-                    $content .= self::fau_person_page($value, $showname);
+                    $content .= self::fau_person_page($value, 1, $showname);
                 } elseif ($shortlist) {
                     $content .= self::fau_person_shortlist($value, $showlist, 0, $showmail, $showtelefon);
                     if ($i < $number)
@@ -709,10 +709,10 @@ class FAU_Person_Shortcodes {
         return $content;
     }
 
-    public static function fau_person_page($id, $showname=0) {
+    public static function fau_person_page($id, $is_shortcode=0, $showname=0) {
 
         $content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
-        $content = '<div class="page">';
+        $content .= '<div class="page">';
         // Hole die Feldinhalte (in der Klasse sync_helper wird gesteuert, was aus UnivIS angezeigt werden soll und was nicht)
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
         // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
@@ -721,8 +721,7 @@ class FAU_Person_Shortcodes {
         if ((strlen($url) > 4) && (strpos($url, "http") === false)) {
             $url = 'http://' . $url;
         }
-        
-        if ( $showname ) {
+        if ( !$is_shortcode || $showname ) {
             $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1);
             $content .= '<h2>' . $fullname . '</h2>';
         }
@@ -756,7 +755,7 @@ class FAU_Person_Shortcodes {
             $content .= $contactpoint;
         }
         if ($hoursAvailable && empty($connection_only))
-            $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</span></span></li>';
+            $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</span></li>';
         if ($pubs)
             $content .= '<li class="person-info-pubs"><span class="screen-reader-text">' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $pubs . '</li>';
         $content .= '</ul>';
@@ -768,8 +767,8 @@ class FAU_Person_Shortcodes {
 
         $post = get_post($id);
         if ($post->post_content) {
-            $content .= '<div class="desc" itemprop="description">';
-            $content .= do_shortcode( $post->post_content );
+            $content .= '<div class="desc" itemprop="description">' . PHP_EOL;
+            $content .= apply_filters( 'the_content', $post->post_content );
             $content .= '</div>';
         }
         $content .= '</div>';
