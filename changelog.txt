@@ -18,6 +18,9 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 
 Versionsänderungen:
 ===================
+####Version 2.1.19:     
+- Ergänzung lecturetyp es = Examensseminar             
+
 ####Version 2.1.18:     
 - Bugfix #178: fehlender Name auf Kontakt-Einzelseite korrigiert       
 - Formatierung Content-Ausgabe optimiert      
