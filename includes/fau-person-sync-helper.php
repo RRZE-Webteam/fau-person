@@ -138,13 +138,22 @@ class sync_helper {
             $fields[$key] = $value;
         }
         foreach( $fields_univis_orgunits as $key => $value ) {
-            if( array_key_exists( 'orgunits', $person ) ) {
-                $person_orgunits = $person['orgunits'][0]['orgunit'];
+            if ( get_locale() == 'en_GB' ) {
+                $orgunit = 'orgunit_en';
+                $orgunits = 'orgunit_ens';
+            } else {
+                $orgunit = 'orgunit';
+                $orgunits = 'orgunits';
+            }
+//            if( array_key_exists( 'orgunits', $person ) ) {
+//                $person_orgunits = $person['orgunits'][0]['orgunit'];
+            if( array_key_exists( $orgunits, $person ) ) {
+                $person_orgunits = $person[$orgunits][0][$orgunit];
                 $i = count($person_orgunits);
                 if($i>1) {
                     $i = count($person_orgunits)-2;
                 } 
-                $value = self::sync_univis( $id, $person_orgunits, $key, $i, $defaults );             
+                $value = self::sync_univis( $id, $person_orgunits, $key, $i, $defaults );  
             } else {
                 if( $defaults ) {
                     $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);
