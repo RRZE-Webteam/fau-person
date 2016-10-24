@@ -21,8 +21,8 @@ Versionsänderungen:
 ####Version 2.1.19:     
 - Ergänzung von lecturetypen ES (Examensseminar), KS (Kombiseminar), MAS (Masterseminar), GS (Grundseminar), AS (Aufbauseminar)                 
 - Issue #140: englische Ausgabe aus UnivIS (sofern vorhanden) für Organisation und Abteilung     
-- Bugfix: Anzeige von verknüpften Kontakten in Sidebar     
-
+- Bugfix: fehlende Anzeige von verknüpften Kontakten in Sidebar     
+- Issue #167: Kontakte auch in Navigation einbindbar    
 
 ####Version 2.1.18:     
 - Bugfix #178: fehlender Name auf Kontakt-Einzelseite korrigiert       
