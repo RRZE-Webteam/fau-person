@@ -20,6 +20,8 @@ Versionsänderungen:
 ===================
 ####Version 2.1.19:     
 - Ergänzung von lecturetypen ES (Examensseminar), KS (Kombiseminar), MAS (Masterseminar), GS (Grundseminar), AS (Aufbauseminar)                 
+- Issue #140: englische Ausgabe aus UnivIS (sofern vorhanden) für Organisation und Abteilung     
+- 
 
 
 ####Version 2.1.18:     

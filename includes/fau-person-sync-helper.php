@@ -70,6 +70,14 @@ class sync_helper {
         );
         foreach( $fields_univis as $key => $value ) {
             if( $univis_sync && array_key_exists( $value, $person ) ) {
+                if( $value == 'orgname' ) {
+                    $language = get_locale();
+                    if( strpos( $language, 'en_' ) === 0 && array_key_exists( 'orgname_en', $person ) ) {
+                        $value = 'orgname_en';
+                    } else {
+                        $value = 'orgname';                   
+                    }
+                }
                 $value = self::sync_univis( $id, $person, $key, $value, $defaults ); 
             } else {
                 if( $defaults ) {
@@ -138,15 +146,14 @@ class sync_helper {
             $fields[$key] = $value;
         }
         foreach( $fields_univis_orgunits as $key => $value ) {
-            if ( get_locale() == 'en_GB' ) {
+            $language = get_locale();
+            if( strpos( $language, 'en_' ) === 0 && array_key_exists( 'orgunit_ens', $person ) ) {
                 $orgunit = 'orgunit_en';
                 $orgunits = 'orgunit_ens';
             } else {
                 $orgunit = 'orgunit';
                 $orgunits = 'orgunits';
             }
-//            if( array_key_exists( 'orgunits', $person ) ) {
-//                $person_orgunits = $person['orgunits'][0]['orgunit'];
             if( array_key_exists( $orgunits, $person ) ) {
                 $person_orgunits = $person[$orgunits][0][$orgunit];
                 $i = count($person_orgunits);
