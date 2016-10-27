@@ -11,9 +11,7 @@ get_header(); ?>
                     $id = $post->ID;
 
 		    echo FAU_Standort_Shortcodes::fau_standort_page($id);
-                    the_content();
-			?>
-          
+                    ?>          
                     </div>
                 </div>
             </div>

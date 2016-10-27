@@ -18,6 +18,9 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 
 Versionsänderungen:
 ===================
+####Version 2.1.20:    
+- Einbindung der Übersichtsseite archive-person.php und archive-standort.php (je nach Bedarf in das eigene Theme zu kopieren und daran anzupassen)    
+
 ####Version 2.1.19:     
 - Ergänzung von lecturetypen ES (Examensseminar), KS (Kombiseminar), MAS (Masterseminar), GS (Grundseminar), AS (Aufbauseminar)                 
 - Issue #140: englische Ausgabe aus UnivIS (sofern vorhanden) für Organisation und Abteilung     
