@@ -357,6 +357,70 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'type' => 'textarea_small',
                 'id' => $prefix . 'hoursAvailable'
             ),
+            array(
+                'id' => $prefix . 'hoursAvailable_group',
+                'type' => 'group',
+                'desc' => __('Bitte geben Sie die Sprechzeiten an.', FAU_PERSON_TEXTDOMAIN),
+                'options' => array(
+                    'group_title' => __('Sprechzeit {#}', FAU_PERSON_TEXTDOMAIN),
+                    'add_button' => __('Weitere Sprechzeit einfügen', FAU_PERSON_TEXTDOMAIN),
+                    'remove_button' => __('Sprechzeit löschen', FAU_PERSON_TEXTDOMAIN),
+                    //'sortable' => true,
+                ),
+                'fields' => array(
+                    array(
+                        'name' =>  __('Wiederholung', FAU_PERSON_TEXTDOMAIN),
+                        'id' => 'unit',
+                        'type' => 'radio_inline',
+                        'options' => array(
+                            'daily' => __('täglich', FAU_PERSON_TEXTDOMAIN), 
+                            'weekly' => __('wöchentlich alle', FAU_PERSON_TEXTDOMAIN),
+                        )
+                    ),
+                    array(
+                        'name' =>  __('Wochen', FAU_PERSON_TEXTDOMAIN),
+                        'id' => 'week',
+                        'type' => 'text_small',
+                    ),
+                    array(
+                        'name' =>  __('am', FAU_PERSON_TEXTDOMAIN),
+                        'id' => 'day_of_the_week',
+                        'type' => 'multicheck',
+                        'options' => array(
+                            'mon' => __('Montag', FAU_PERSON_TEXTDOMAIN),
+                            'tue' => __('Dienstag', FAU_PERSON_TEXTDOMAIN),
+                            'wed' => __('Mittwoch', FAU_PERSON_TEXTDOMAIN),
+                            'thu' => __('Donnerstag', FAU_PERSON_TEXTDOMAIN),
+                            'fri' => __('Freitag', FAU_PERSON_TEXTDOMAIN),
+                            'sat' => __('Samstag', FAU_PERSON_TEXTDOMAIN),
+                            'sun' => __('Sonntag', FAU_PERSON_TEXTDOMAIN),
+                        )
+                    ),
+                    array(
+                        'name' =>  __('von', FAU_PERSON_TEXTDOMAIN),
+                        'id' => 'start',
+                        'type' => 'text_time',
+                        'time_format' => 'hh:ii',
+                    ),
+                    array(
+                        'name' =>  __('bis', FAU_PERSON_TEXTDOMAIN),
+                        'id' => 'end',
+                        'type' => 'text_time',
+                        'time_format' => 'hh:ii',
+                    ),
+                    array(
+                        'name' =>  __('Raum', FAU_PERSON_TEXTDOMAIN),
+                        'id' => 'room',
+                        'type' => 'text',
+                    ),
+                    array(
+                        'name' =>  __('Bemerkung', FAU_PERSON_TEXTDOMAIN),
+                        'id' => 'notice',
+                        'type' => 'text',
+                    ),
+                ),
+
+            ), 
             /*array(
                 'name' => __('Publikationen', FAU_PERSON_TEXTDOMAIN),
                 'desc' => '',
