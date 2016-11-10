@@ -30,7 +30,41 @@ class sync_helper {
             'workLocation' => 'office', 
         );
         $fields_univis_officehours = array(
-            //'workLocation' => 'office', 
+            /* von der UnivIS-Doku:
+             * repeat mode is encoded in a string
+             * syntax: <modechar><numbers><space><args>                  
+             * mode  description                  
+             * d     daily                  
+             * w     weekly
+             * m     monthly                  
+             * y     yearly                 
+             * b     block
+             * numbers: number of skips between repeats
+             * example:  "d2":      every second day
+             * weekly and monthly have additional arguments:  
+             * weekly: argument is comma-separated list of weekdays where event is repeated                  
+             * example:  "w3 1,2":  every third week on Monday and Tuesday                  
+             * also possible: „we“ and „wo"
+             * e = even calender week                  
+             * o = odd calender week                  
+             * monthly: argument has syntax "<submodechar><numbers>"                 
+             * submode description                  
+             * d       monthly by date                  
+             * w       monthly by week                  
+             * numbers: monthly by date: number of day (1-31)                  
+             * monthly by week: number of week (1-5,e,o))                  
+             * special case: 5 = last week of month                
+             * examples:  "m1 d23": on the 23rd day of every month
+             * "m2 w5":  in the last week of every second month
+             * Laut UnivIS-Live-Daten werden für die Sprechzeiten aber nur wöchentlich an verschiedenen Tagen, 2-wöchentlich und täglich verwendet. Sollte noch was anderes benötigt werden, muss nachprogrammiert werden.
+             */
+            'comment' => 'comment',
+            'endtime' => 'endtime',
+            'repeat_mode' => 'repeat',
+            //'repeat_mode' => 'repeat_mode',
+            //'repeat_submode' => 'repeat_mode',
+            'office' => 'office', 
+            'starttime' => 'starttime',
         );
         $fields_univis_orgunits = array(
             'worksFor' => 'orgunit',            
@@ -135,7 +169,9 @@ class sync_helper {
         foreach( $fields_univis_officehours as $key => $value ) {
             if( $univis_sync && array_key_exists( 'officehours', $person ) && array_key_exists( 'officehour', $person['officehours'][0] ) ) {
                 $person_officehours = $person['officehours'][0]['officehour'][0];
+                //_rrze_debug($person_officehours);
                 $value = self::sync_univis( $id, $person_officehours, $key, $value, $defaults );
+                _rrze_debug($value);
             } else {
                 if( $defaults ) {
                     $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);

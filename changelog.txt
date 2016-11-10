@@ -18,6 +18,9 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 
 Versionsänderungen:
 ===================
+####Version 2.2.0:    
+- Einbindung der Sprechzeiten aus UnivIS     
+
 ####Version 2.1.20:    
 - Einbindung der Übersichtsseite archive-person.php und archive-standort.php (je nach Bedarf in das eigene Theme zu kopieren und daran anzupassen)    
 

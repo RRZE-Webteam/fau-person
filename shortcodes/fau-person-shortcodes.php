@@ -718,6 +718,7 @@ class FAU_Person_Shortcodes {
         // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
         extract($fields);
 
+        _rrze_debug(get_post_meta($id, 'fau_person_hoursAvailable_group', true));
         if ((strlen($url) > 4) && (strpos($url, "http") === false)) {
             $url = 'http://' . $url;
         }
