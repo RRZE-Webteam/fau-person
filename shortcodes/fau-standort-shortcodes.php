@@ -177,7 +177,7 @@ class FAU_Standort_Shortcodes {
         $content .= '<div class="row">';
 
         if($showthumb) {
-            $content .= '<div class="span1 span-small" itemprop="image">';	
+            $content .= '<div class="span1 span-small" itemprop="image" aria-hidden="true">';	
             $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">';
             if (has_post_thumbnail($id)) {
                 $content .= get_the_post_thumbnail($id, 'person-thumb-bigger');
@@ -357,7 +357,7 @@ class FAU_Standort_Shortcodes {
             $content .= '<div class="row">';
 
             if (has_post_thumbnail($id) && $showthumb) {
-                $content .= '<div class="span1" itemprop="image">';
+                $content .= '<div class="span1" itemprop="image" aria-hidden="true">';
                 $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">';
                 $content .= get_the_post_thumbnail($id, 'person-thumb');
                 $content .= '</a>';

@@ -607,7 +607,7 @@ class FAU_Person_Shortcodes {
         $content .= '<div class="row">';
 
         if ($showthumb) {
-            $content .= '<div class="span1 span-small" itemprop="image">';
+            $content .= '<div class="span1 span-small" itemprop="image" aria-hidden="true">';
             $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">';
 
             if (has_post_thumbnail($id)) {
@@ -856,7 +856,7 @@ class FAU_Person_Shortcodes {
             $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'default' );
             
             if (has_post_thumbnail($id) && $showthumb) {
-                $sidebar_thumb = '<div class="span1" itemprop="image">';
+                $sidebar_thumb = '<div class="span1" itemprop="image" aria-hidden="true">';
                 $sidebar_thumb .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">';
                 $sidebar_thumb .= get_the_post_thumbnail($id, 'person-thumb');
                 $sidebar_thumb .= '</a>';

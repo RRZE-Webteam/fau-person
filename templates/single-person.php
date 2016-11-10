@@ -11,7 +11,7 @@ get_header(); ?>
                     $id = $post->ID;
 
 		    echo FAU_Person_Shortcodes::fau_person_page($id);
-			?>
+                    ?>
           
                     </div>
                 </div>
