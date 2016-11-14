@@ -168,10 +168,13 @@ class sync_helper {
         }
         foreach( $fields_univis_officehours as $key => $value ) {
             if( $univis_sync && array_key_exists( 'officehours', $person ) && array_key_exists( 'officehour', $person['officehours'][0] ) ) {
-                $person_officehours = $person['officehours'][0]['officehour'][0];
-                //_rrze_debug($person_officehours);
-                $value = self::sync_univis( $id, $person_officehours, $key, $value, $defaults );
-                _rrze_debug($value);
+                $person_officehours = $person['officehours'][0]['officehour'];
+                foreach($person_officehours as $number => $number_value) {
+                    $person_officehours_number = $person_officehours[$number];
+                    _rrze_debug($person_officehours);
+                    $value = self::sync_univis( $id, $person_officehours_number, $key, $value, $defaults );
+                    _rrze_debug($value);
+                }
             } else {
                 if( $defaults ) {
                     $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);
@@ -179,6 +182,7 @@ class sync_helper {
                     $value = get_post_meta($id, 'fau_person_'.$key, true);  
                 }
             }
+                        _rrze_debug("$value" . $value);
             $fields[$key] = $value;
         }
         foreach( $fields_univis_orgunits as $key => $value ) {
@@ -371,6 +375,83 @@ class sync_helper {
         return $phone_number;
     }
 
+    public static function officehours_repeat( $repeat ) {
+        $repeat = explode( $repeat, ' ' );
+        _rrze_debug( $repeat );
+        $mode = $repeat[0];
+        $submode = $repeat[1];
+        switch($day) {
+            case 0:
+                $day = __('Montag', FAU_PERSON_TEXTDOMAIN);
+                break;
+            case 1:
+                $day = __('Dienstag', FAU_PERSON_TEXTDOMAIN);
+                break;
+            case 2:
+                $day = __('Mittwoch', FAU_PERSON_TEXTDOMAIN);
+                break;
+            case 3:
+                $day = __('Donnerstag', FAU_PERSON_TEXTDOMAIN);
+                break;
+            case 4:
+                $day = __('Freitag', FAU_PERSON_TEXTDOMAIN);
+                break;
+            case 5:
+                $day = __('Samstag', FAU_PERSON_TEXTDOMAIN);
+                break;
+            case 6:
+                $day = __('Sonntag', FAU_PERSON_TEXTDOMAIN);
+                break;
+                                    
+        }
+        $date = array();
+
+				$repeat = explode(" ", $lecture["repeat"]);
+				if($repeat) {
+					$dict = array(
+                                                'd1' => 'Täglich',
+						"w1" => "Jede Woche",
+						"w2" => "Alle zwei Wochen",
+					);
+
+					if(array_key_exists($repeat[0], $dict))
+						array_push($date, $dict[$repeat[0]]);
+
+					if($repeat[0] == "s1") {
+						$formated = date("d.m.Y", strtotime($lecture["startdate"]));
+						array_push($date, $formated);
+					}
+
+					if(count($repeat)>0) {
+						$days_short = array(
+							1 => "Mo",
+							2 => "Di",
+							3 => "Mi",
+							4 => "Do",
+							5 => "Fr",
+							6 => "Sa",
+							7 => "So"
+						);
+
+						$days_long = array(
+							1 => "Montag",
+							2 => "Dienstag",
+							3 => "Mittwoch",
+							4 => "Donnerstag",
+							5 => "Freitag",
+							6 => "Samstag",
+							7 => "Sonntag"
+						);
+
+						array_push($date, $days_short[$repeat[1]]);
+
+					}
+				}
+
+				$lecture["date"] = implode(" ", $date);
+        
+        return $repeat;
+    }
        
 }
 
