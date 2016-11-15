@@ -370,7 +370,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'fields' => array(
                     array(
                         'name' =>  __('Wiederholung', FAU_PERSON_TEXTDOMAIN),
-                        'id' => 'repeat_mode',
+                        'id' => 'repeat',
                         'type' => 'radio_inline',
                         'options' => array(
                             'd1' => __('täglich', FAU_PERSON_TEXTDOMAIN), 
