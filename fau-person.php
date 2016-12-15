@@ -130,8 +130,7 @@ class FAU_Person {
             $themeoptions = get_option('fau_theme_options');
             self::$oldfau_person_plugin = isset($themeoptions['advanced_activatefaupluginpersonen']) && $themeoptions['advanced_activatefaupluginpersonen'] ? true : false;
         }
-		
-	
+    	
     }
     
     public function adding_custom_meta_boxes( $post ) {
@@ -216,7 +215,7 @@ class FAU_Person {
                 'kurzauszug' => true,
                 'bild' => true,
             ),
-            'overview' => true,
+            'has_archive_page' => true,
         );               
         return $options; // Standard-Array für zukünftige Optionen
     }
@@ -484,7 +483,11 @@ class FAU_Person {
                 $input = isset($_POST[self::option_name]['sidebar'][$key]) ? 1 : 0;
                 $options['sidebar'][$key] = $input;    
             }
-            update_option(self::option_name, $options);   
+            $input = isset($_POST[self::option_name]['has_archive_page']) ? true : false;
+            set_transient('fau-person-options', 1, 30);
+            $options['has_archive_page'] = $input;
+            update_option(self::option_name, $options); 
+            
         }
 
         $this->search_univis_id_page = add_submenu_page('edit.php?post_type=person', __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'search-univis-id', array( $this, 'search_univis_id' ));
@@ -589,6 +592,8 @@ class FAU_Person {
         
         add_settings_section('sidebar_section', __('Geben Sie an, welche Daten angezeigt werden sollen:', FAU_PERSON_TEXTDOMAIN), '__return_false', 'sidebar_options');
         add_settings_field('sidebar', __('Im Widget (bei den FAU-Themes auch in der Sidebar, wenn der Kontakt über das Feld "Auswahl Ansprechpartner" in der Metabox "Sidebar" gewählt wird)', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar'), 'sidebar_options', 'sidebar_section');
+        add_settings_section('has_archive_page_section', __('Kontakt-Übersichtsseite:', FAU_PERSON_TEXTDOMAIN), '__return_false', 'has_archive_page_options');
+        add_settings_field('has_archive_page', __('Verwendung der Standard-Übersichtsseite', FAU_PERSON_TEXTDOMAIN), array($this, 'has_archive_page'), 'has_archive_page_options', 'has_archive_page_section');
     }
 
     public function sidebar() {
@@ -608,6 +613,15 @@ class FAU_Person {
         <label for="<?php printf('%s[sidebar][bild]', self::option_name); ?>"><input type='checkbox' id="<?php printf('%s[sidebar][bild]', self::option_name); ?>" name="<?php printf('%s[sidebar][bild]', self::option_name); ?>"  <?php checked($options['sidebar']['bild'], 1); ?>><?php _e('Bild', FAU_PERSON_TEXTDOMAIN); ?></label><br>
 
         <?php         
+    }
+    
+    public function has_archive_page() {
+        $options = $this->get_options();
+        ?>
+        <label for="<?php printf('%s[has_archive_page]', self::option_name); ?>"><input type='checkbox' id="<?php printf('%s[has_archive_page]', self::option_name); ?>" name="<?php printf('%s[has_archive_page]', self::option_name); ?>" <?php checked($options['has_archive_page'], 1); ?>><?php _e('Zeige die Standard-Übersichtsseite aller Kontakte an. Wenn diese Option deaktiviert wird, muss eine eigene Seite mit dem Slug "person" angelegt werden.', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+
+        <?php         
+        
     }
          
     public function help_menu_search_univis_id() {
@@ -647,6 +661,8 @@ class FAU_Person {
                 <?php
                 settings_fields('sidebar_options');
                 do_settings_sections('sidebar_options');
+                settings_fields('has_archive_page_options');
+                do_settings_sections('has_archive_page_options');
                 submit_button(esc_html(__('Änderungen speichern', FAU_PERSON_TEXTDOMAIN)), 'primary', 'fau-person-options');
                 //update_option($options['sidebar']['position'], isset($_POST['_fau_person']['sidebar']['position']) ? 1 : null);
                 ?>
@@ -739,8 +755,13 @@ class FAU_Person {
     }
 
     public static function register_person_post_type() {
-        require_once('posttypes/fau-person-posttype.php');
+        require('posttypes/fau-person-posttype.php');
         register_post_type('person', $person_args);
+        // ist nötig, damit bei den Anzeigeoptionen die Änderung der Übersichtsseite funktioniert
+        if( get_transient('fau-person-options') ) {
+            flush_rewrite_rules();
+            delete_transient('fau-person-options');
+        }
     }
 
     public static function register_standort_post_type() {
