@@ -618,7 +618,7 @@ class FAU_Person {
     public function has_archive_page() {
         $options = $this->get_options();
         ?>
-        <label for="<?php printf('%s[has_archive_page]', self::option_name); ?>"><input type='checkbox' id="<?php printf('%s[has_archive_page]', self::option_name); ?>" name="<?php printf('%s[has_archive_page]', self::option_name); ?>" <?php checked($options['has_archive_page'], 1); ?>><?php _e('Zeige die Standard-Übersichtsseite aller Kontakte an. Wenn diese Option deaktiviert wird, muss eine eigene Seite mit dem Slug "person" angelegt werden.', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+        <label for="<?php printf('%s[has_archive_page]', self::option_name); ?>"><input type='checkbox' id="<?php printf('%s[has_archive_page]', self::option_name); ?>" name="<?php printf('%s[has_archive_page]', self::option_name); ?>" <?php checked($options['has_archive_page'], 1); ?>><?php _e('Zeige die Standard-Übersichtsseite aller Kontakte an. Bevor diese Option deaktiviert wird, muss eine eigene Seite mit der Titelform (slug) "person" direkt unterhalb der Hauptebene angelegt werden.', FAU_PERSON_TEXTDOMAIN); ?></label><br>
 
         <?php         
         
