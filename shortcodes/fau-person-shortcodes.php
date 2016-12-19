@@ -510,16 +510,18 @@ class FAU_Person_Shortcodes {
         }
 
         $category = get_term_by('slug', $category, 'persons_category');
-
-        $posts = get_posts(array('post_type' => 'person', 'post_status' => 'publish', 'numberposts' => 1000, 'orderby' => 'title', 'order' => 'ASC', 'tax_query' => array(
+        
+        if( is_object( $category ) ) {
+            $posts = get_posts(array('post_type' => 'person', 'post_status' => 'publish', 'numberposts' => 1000, 'orderby' => 'title', 'order' => 'ASC', 'tax_query' => array(
                 array(
                     'taxonomy' => 'persons_category',
                     'field' => 'id', // can be slug or id - a CPT-onomy term's ID is the same as its post ID
-                    'terms' => $category->term_id
+                    'terms' => $category->term_id   // Notice: Trying to get property of non-object bei unbekannter Kategorie
                 )
             ), 'suppress_filters' => false));
-
-        if ($posts) {
+        } 
+        
+        if ( isset( $posts ) ) {
             $number = count($posts);
             $i = 1;
             if ($shortlist) {
@@ -563,7 +565,11 @@ class FAU_Person_Shortcodes {
                 $content .= '';              
             }
         } else {
-            $content = '<p>' . sprintf(__('Es konnten keine Kontakte in der Kategorie %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $category->slug) . '</p>';
+            if( is_object( $category ) ) {
+                $content = '<p>' . sprintf(__('Es konnten keine Kontakte in der Kategorie %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $category->slug) . '</p>'; 
+            } else {
+                $content = '<p>' . sprintf(__('Die Kategorie %s konnte leider nicht gefunden werden.', FAU_PERSON_TEXTDOMAIN), $atts['category']) . '</p>';                 
+            }
         }
 
         return $content;
