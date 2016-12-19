@@ -18,6 +18,9 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 
 Versionsänderungen:
 ===================
+####Version 2.2.0:    
+- Standard-Kontakt-Übersichtsseite kann mit einer eigens gestaltbaren Seite überschrieben werden, diese muss den Slug "person" haben        
+
 ####Version 2.1.20:    
 - Einbindung der Übersichtsseite archive-person.php und archive-standort.php (je nach Bedarf in das eigene Theme zu kopieren und daran anzupassen)    
 

@@ -21,6 +21,8 @@ $person_rewrite = array(
     'pages' => true,
     'feeds' => true,
 );
+$options = FAU_Person::get_options();
+
 $person_args = array(
     'label' => __('person', self::textdomain),
     'description' => __('Kontaktinformationen', self::textdomain),
@@ -36,7 +38,7 @@ $person_args = array(
     'menu_position' => 20,
     'menu_icon' => 'dashicons-id-alt',
     'can_export' => true,
-    'has_archive' => true,
+    'has_archive' => $options['has_archive_page'],
     'exclude_from_search' => false,
     'publicly_queryable' => true,
     'query_var' => 'person',
