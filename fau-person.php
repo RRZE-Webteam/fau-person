@@ -1033,6 +1033,48 @@ class FAU_Person {
         }
         	return $helpuse;
     }*/
+    
+    // Sortierung eines Arrays mit Objekten (z.B. bei einer Kategorie) alphabetisch nach Titel oder Nachname, je nach Typ
+    public static function sort_person_posts( $personlist ) {
+        if ( is_array( $personlist ) ) {
+            foreach( $personlist as $key => $value) {
+                $personlist[$key] = (array) $personlist[$key];
+                if( get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realperson' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realmale' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realfemale' ) {
+                    
+                    $fields = sync_helper::get_fields($personlist[$key]['ID'], get_post_meta($personlist[$key]['ID'], 'fau_person_univis_id', true), 0);
+                    if( isset($familyName) ) {
+                        $lastname = $familyName;
+                        if( isset($givenName) ) {
+                            $firstname = $givenName;
+                        } else {
+                            $firstname = '';
+                        }
+                    } else {
+                        $name = $personlist[$key]['post_title'];                   
+                        if( ltrim( strpos( $name, ' ' ) ) ) {
+                            $lastname = ltrim( strrchr( $name, ' ' ) );
+                            $firstname = ltrim( str_replace( $lastname, '', $name ) );
+                        } else {
+                            $lastname = $name;
+                            $firstname = '';
+                    }
+                    }
+                } else {
+                    $lastname = $personlist[$key]['post_title'];
+                    $firstname = '';
+                }
+                $temp[$key]['lastname'] = $lastname;
+                $temp[$key]['firstname'] = $firstname;
+
+            }
+            _rrze_debug($temp);
+            _rrze_debug($personlist);
+            array_multisort($temp, $personlist);
+            _rrze_debug($temp);
+                    _rrze_debug($personlist);
+        return $personlist;  
+        }
+    }
         
         private function array_orderby(){
 		$args = func_get_args();

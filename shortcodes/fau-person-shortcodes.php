@@ -522,6 +522,7 @@ class FAU_Person_Shortcodes {
         } 
         
         if ( isset( $posts ) ) {
+            //FAU_Person::sort_person_posts( $posts );
             $number = count($posts);
             $i = 1;
             if ($shortlist) {
