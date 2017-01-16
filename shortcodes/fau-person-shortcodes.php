@@ -321,6 +321,7 @@ class FAU_Person_Shortcodes {
             "format" => '',
             "show" => '',
             "hide" => '',
+            "sort" => FALSE,
                         ), $atts));
 
         $content = '';
@@ -522,7 +523,9 @@ class FAU_Person_Shortcodes {
         } 
         
         if ( isset( $posts ) ) {
-            //FAU_Person::sort_person_posts( $posts );
+            if ( $sort == 'name' ) {
+                $posts = FAU_Person::sort_person_posts( $posts );                
+            } 
             $number = count($posts);
             $i = 1;
             if ($shortlist) {
@@ -538,7 +541,12 @@ class FAU_Person_Shortcodes {
                 //$liste = '<p>';
             }
             foreach ($posts as $post) {
-                $value = $post->ID;
+                // Bei Sortierung nach Name ist $posts ein Array
+                if ( $sort == 'name' ) {
+                    $value = $post['ID'];
+                } else {
+                    $value = $post->ID;
+                }
                 if ($page) {
                     $content .= self::fau_person_page($value, 1, $showname);
                 } elseif ($shortlist) {

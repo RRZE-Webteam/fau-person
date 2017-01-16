@@ -19,7 +19,6 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 Versionsänderungen:
 ===================
 ####Version 2.2.1:    
-- Bugfix: Unterstützung von Accordions bei Standardformat    
 - Alphabetische Sortierung der Kategorienausgabe    
 
 ####Version 2.2.0:    
