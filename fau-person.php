@@ -253,6 +253,30 @@ class FAU_Person {
         if( $personlist ) {  
             foreach( $personlist as $key => $value) {
                 $personlist[$key] = (array) $personlist[$key];
+                //Zeile verschoben
+                /* $name = $personlist[$key]['post_title'];
+                if( get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realperson' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realmale' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realfemale' ) {
+                    if( ltrim( strpos( $name, ' ' ) ) ) {
+                        $lastname = ltrim( strrchr( $name, ' ' ) );
+                        $firstname = ltrim( str_replace( $lastname, '', $name ) );
+                        $fullname = $lastname . ', ' . $firstname;
+                    } else {
+                        $fullname = $name;
+                    }
+                } else {
+                    $fullname = $name;
+                }
+                $contactselect[ $personlist[$key]['ID'] ] = $fullname;
+                _rrze_debug($contactselect);
+            }
+            
+            $personlist = $this->array_orderby( $personlist, "fullname", SORT_ASC );
+            foreach( $personlist as $key => $value) {
+                $fullname = $personlist[$key]['ID'] . ': ' . $fullname;
+                $contactselect[ $personlist[$key]['ID'] ] = $fullname; */
+                
+                
+                
                 if( get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realperson' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realmale' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realfemale' ) {
                     $name = $personlist[$key]['post_title'];
                     if( ltrim( strpos( $name, ' ' ) ) ) {
@@ -275,8 +299,9 @@ class FAU_Person {
             foreach( $personlist as $key => $value) {
                 $fullname = $personlist[$key]['ID'] . ': ' . $personlist[$key]['lastname'];
                 if( !empty( $personlist[$key]['firstname'] ) )  $fullname .= ', ' . $personlist[$key]['firstname'];          
-                $contactselect[ $personlist[$key]['ID'] ] = $fullname;
-            }
+                $contactselect[ $personlist[$key]['ID'] ] = $fullname; 
+            } 
+            //_rrze_debug ( $contactselect );
             if ( $connection ) {
                 $contactselect = array( '0' => __('Kein Kontakt ausgewählt.', FAU_PERSON_TEXTDOMAIN) ) + $contactselect;
             }
