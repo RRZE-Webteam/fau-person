@@ -321,7 +321,7 @@ class FAU_Person_Shortcodes {
             "format" => '',
             "show" => '',
             "hide" => '',
-            "sort" => FALSE,
+            "sort" => FALSE,    //für die Sortierung in Katgorien nach Nachname sort="nachname" angeben. Standardsortierung nach Titel
                         ), $atts));
 
         $content = '';
@@ -523,8 +523,9 @@ class FAU_Person_Shortcodes {
         } 
         
         if ( isset( $posts ) ) {
-            if ( $sort == 'name' ) {
-                $posts = FAU_Person::sort_person_posts( $posts );                
+            if ( $sort == 'nachname' ) {
+                $posts = FAU_Person::sort_person_posts( $posts );   
+                _rrze_debug($posts);
             } 
             $number = count($posts);
             $i = 1;
@@ -542,7 +543,7 @@ class FAU_Person_Shortcodes {
             }
             foreach ($posts as $post) {
                 // Bei Sortierung nach Name ist $posts ein Array
-                if ( $sort == 'name' ) {
+                if ( $sort == 'nachname' ) {
                     $value = $post['ID'];
                 } else {
                     $value = $post->ID;

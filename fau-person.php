@@ -1094,7 +1094,8 @@ class FAU_Person {
                 }
                 $temp[$key]['name'] = $lastname . $firstname;
             }
-            array_multisort($temp, $personlist);
+            _rrze_debug($temp);
+            array_multisort($temp, SORT_NATURAL, $personlist);
         return $personlist;  
         }
     }
