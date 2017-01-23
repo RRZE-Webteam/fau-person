@@ -1072,30 +1072,31 @@ class FAU_Person {
                     
                     if( !empty( $familyName ) ) {
                         _rrze_debug($familyName);
-                        $lastname = $familyName;
+                        _rrze_debug($givenName);
+                        $name = $familyName;
                         if( !empty( $givenName ) ) {
-                            $firstname = ', ' . $givenName;
-                        } else {
-                            $firstname = '';
+                            $name = $name . ', ' . $givenName;
                         }
                     } else {
                         $name = $personlist[$key]['post_title'];                   
                         if( ltrim( strpos( $name, ' ' ) ) ) {
                             $lastname = ltrim( strrchr( $name, ' ' ) );
-                            $firstname = ', ' . ltrim( str_replace( $lastname, '', $name ) );
-                        } else {
-                            $lastname = $name;
-                            $firstname = '';
-                        }
+                            $name = $lastname . ', ' . ltrim( str_replace( $lastname, '', $name ) );
+                        } 
                     }
-                } else {
-                    $lastname = $personlist[$key]['post_title'];
-                    $firstname = '';
+                } else {                    
+                    if( !empty( $alternateName ) ) {
+                        $name = $alternateName;
+                    } else {
+                        $name = $personlist[$key]['post_title'];
+                    }
                 }
-                $temp[$key]['name'] = $lastname . $firstname;
+                $temp[$key]['name'] = $name;
             }
             _rrze_debug($temp);
-            array_multisort($temp, SORT_NATURAL, $personlist);
+            //$personlist = $this->array_orderby($temp, "name", $personlist);
+            _rrze_debug($personlist);
+        //array_multisort($temp, $personlist);
         return $personlist;  
         }
     }
