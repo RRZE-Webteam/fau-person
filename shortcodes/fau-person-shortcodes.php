@@ -525,7 +525,7 @@ class FAU_Person_Shortcodes {
         if ( isset( $posts ) ) {
             if ( $sort == 'nachname' ) {
                 $posts = FAU_Person::sort_person_posts( $posts );   
-                _rrze_debug($posts);
+                //_rrze_debug($posts);
             } 
             $number = count($posts);
             $i = 1;
@@ -612,7 +612,7 @@ class FAU_Person_Shortcodes {
                 $excerpt = wp_trim_excerpt($post->post_content);
         }
         
-        $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix);
+        $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix, $alternateName);
         $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'default' );
         
         $content = '<div class="person content-person" itemscope itemtype="http://schema.org/Person">';
@@ -733,12 +733,12 @@ class FAU_Person_Shortcodes {
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
         // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
         extract($fields);
-
+        //_rrze_debug($fields);
         if ((strlen($url) > 4) && (strpos($url, "http") === false)) {
             $url = 'http://' . $url;
         }
         if ( !$is_shortcode || $showname ) {
-            $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1);
+            $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1, $alternateName);
             $content .= '<h2>' . $fullname . '</h2>';
         }
 
@@ -818,7 +818,7 @@ class FAU_Person_Shortcodes {
         }
         $content = '';
         
-        $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1);
+        $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1, $alternateName);
         if ( $list==1 )
             $content .= '<div class="list">';
         $content .= '<span class="person-info">';
@@ -868,7 +868,7 @@ class FAU_Person_Shortcodes {
                 $personlink = get_permalink($id);
             }
 
-            $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix);
+            $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix, $alternateName);
             $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'default' );
             
             if (has_post_thumbnail($id) && $showthumb) {
@@ -954,7 +954,7 @@ class FAU_Person_Shortcodes {
                 $showroom = 0;
             }
             
-            $fullname = self::fullname_output($nr, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1);
+            $fullname = self::fullname_output($nr, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1, $alternateName);
             $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'connection' );
             
             $contactlist .= '<li itemscope itemtype="http://schema.org/Person">' . $fullname;
@@ -998,20 +998,24 @@ class FAU_Person_Shortcodes {
         return $content;
     }
     
-    public static function fullname_output( $id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix ) {
+    public static function fullname_output( $id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix, $alternateName ) {
         $fullname = '<span itemprop="name">';
-        if ($showtitle && $honorificPrefix)
-            $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
-        if ($givenName && $familyName) {
-            if ($givenName)
-                $fullname .= '<span itemprop="givenName">' . $givenName . "</span> ";
-            if ($familyName)
-                $fullname .= '<span itemprop="familyName">' . $familyName . "</span>";
-        } elseif (!empty(get_the_title($id))) {
-            $fullname .= get_the_title($id);
+        if ( $alternateName ) {
+            $fullname .= '<span itemprop="alternateName">' . $alternateName . '</span>';
+        } else {
+            if ( $showtitle && $honorificPrefix )
+                $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
+            if ( $givenName && $familyName ) {
+                if ( $givenName )
+                    $fullname .= '<span itemprop="givenName">' . $givenName . "</span> ";
+                if ( $familyName )
+                    $fullname .= '<span itemprop="familyName">' . $familyName . "</span>";
+            } elseif (!empty(get_the_title($id))) {
+                $fullname .= get_the_title($id);
+            }
+            if ( $showsuffix && $honorificSuffix )
+                $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
         }
-        if ($showsuffix && $honorificSuffix)
-            $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
         $fullname .= '</span>';
         return $fullname;
     }
