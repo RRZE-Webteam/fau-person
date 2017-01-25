@@ -241,7 +241,7 @@ class FAU_Person {
         return $options;
     }
     
-   public function get_contactdata( $connection=0 ) {      
+   public function get_contactdata( $connection=0 ) {            
         $args = array(
             'post_type' => 'person',
             'numberposts' => -1,
@@ -252,7 +252,7 @@ class FAU_Person {
 
         if( $personlist ) {  
             foreach( $personlist as $key => $value) {
-                $personlist[$key] = (array) $personlist[$key];
+                $personlist[$key] = (array) $personlist[$key];  
                 //Zeile verschoben
                 /* $name = $personlist[$key]['post_title'];
                 if( get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realperson' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realmale' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realfemale' ) {
@@ -300,14 +300,14 @@ class FAU_Person {
                 $fullname = $personlist[$key]['ID'] . ': ' . $personlist[$key]['lastname'];
                 if( !empty( $personlist[$key]['firstname'] ) )  $fullname .= ', ' . $personlist[$key]['firstname'];          
                 $contactselect[ $personlist[$key]['ID'] ] = $fullname; 
-            } 
+            }  
             //_rrze_debug ( $contactselect );
             if ( $connection ) {
                 $contactselect = array( '0' => __('Kein Kontakt ausgewählt.', FAU_PERSON_TEXTDOMAIN) ) + $contactselect;
             }
         } else {
             $contactselect[0] = __('Noch keine Kontakte eingepflegt.', FAU_PERSON_TEXTDOMAIN);
-        }
+        } 
         return $contactselect;  
     }
     
@@ -1064,40 +1064,38 @@ class FAU_Person {
         if ( is_array( $personlist ) ) {
             foreach( $personlist as $key => $value) {
                 $personlist[$key] = (array) $personlist[$key];
-                
-                if( get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realperson' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realmale' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realfemale' ) {
-                    
-                    $fields = sync_helper::get_fields($personlist[$key]['ID'], get_post_meta($personlist[$key]['ID'], 'fau_person_univis_id', true), 0);
-                    extract($fields);
-                    
-                    if( !empty( $familyName ) ) {
-                        _rrze_debug($familyName);
-                        _rrze_debug($givenName);
-                        $name = $familyName;
-                        if( !empty( $givenName ) ) {
-                            $name = $name . ', ' . $givenName;
+                // Bei Personen Prüfung, ob Nachname im Feld eingetragen ist (ggf. aus UnivIS), wenn nicht letztes Wort von Titel als Nachname angenommen
+                switch ( get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) ) {
+                    case 'realperson':
+                    case 'realmale':
+                    case 'realfemale':
+                        $fields = sync_helper::get_fields($personlist[$key]['ID'], get_post_meta($personlist[$key]['ID'], 'fau_person_univis_id', true), 0);
+                        extract($fields);                   
+                        if( !empty( $familyName ) ) {
+                            $name = $familyName;
+                            if( !empty( $givenName ) ) {
+                                $name = $name . ', ' . $givenName;
+                            }
+                        } else {
+                            $name = $personlist[$key]['post_title'];                   
+                            if( ltrim( strpos( $name, ' ' ) ) ) {
+                                $lastname = ltrim( strrchr( $name, ' ' ) );
+                                $name = $lastname . ', ' . ltrim( str_replace( $lastname, '', $name ) );
+                            } 
                         }
-                    } else {
-                        $name = $personlist[$key]['post_title'];                   
-                        if( ltrim( strpos( $name, ' ' ) ) ) {
-                            $lastname = ltrim( strrchr( $name, ' ' ) );
-                            $name = $lastname . ', ' . ltrim( str_replace( $lastname, '', $name ) );
-                        } 
-                    }
-                } else {                    
-                    if( !empty( $alternateName ) ) {
-                        $name = $alternateName;
-                    } else {
-                        $name = $personlist[$key]['post_title'];
-                    }
+                        break;
+                    default:
+                        if( !empty( get_post_meta( $personlist[$key]['ID'], 'fau_person_alternateName', true ) ) ) {
+                            $name = get_post_meta( $personlist[$key]['ID'], 'fau_person_alternateName', true );
+                        } else {
+                            $name = $personlist[$key]['post_title'];
+                        }
+                        break;
                 }
-                $temp[$key]['name'] = $name;
+                $temp[$key] = strtolower($name);
             }
-            _rrze_debug($temp);
-            //$personlist = $this->array_orderby($temp, "name", $personlist);
-            _rrze_debug($personlist);
-        //array_multisort($temp, $personlist);
-        return $personlist;  
+            array_multisort($temp, $personlist);
+            return $personlist;  
         }
     }
         
