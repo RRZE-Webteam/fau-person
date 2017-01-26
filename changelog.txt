@@ -18,8 +18,9 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 
 Versionsänderungen:
 ===================
-####Version 2.2.1:    
-- Alphabetische Sortierung der Kategorienausgabe    
+####Version 2.3.0:    
+- Alphabetische Sortierung der Kategorienausgabe nach Nachname (bzw. bei Einrichtungen nach Bezeichnungsfeld) über Parameter sort="nachname"         
+- Berücksichtigung der Felder "Nachname" und "Bezeichnung" bei Sortierung der Auswahlliste    
 
 ####Version 2.2.0:    
 - Standard-Kontakt-Übersichtsseite kann mit einer eigens gestaltbaren Seite überschrieben werden, diese muss den Slug "person" haben        
