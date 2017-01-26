@@ -509,11 +509,19 @@ class FAU_Person {
         add_action('load-' . $this->sidebar_options_page, array($this, 'help_menu_sidebar_options'));        
     }
 
+    private static function sonderzeichen ($string) {
+        $search = array("Ä", "Ö", "Ü", "ä", "ö", "ü", "ß", "´");
+        $replace = array("Ae", "Oe", "Ue", "ae", "oe", "ue", "ss", "");
+        return str_replace($search, $replace, $string);
+    }
+        
     public function search_univis_id() {
         $transient = get_transient(self::search_univis_id_transient);
         $firstname = isset($transient['firstname']) ? $transient['firstname'] : '';
         $givenname = isset($transient['givenname']) ? $transient['givenname'] : '';
         if(class_exists( 'Univis_Data' ) ) {
+            $firstname = self::sonderzeichen($firstname);
+            $givenname = self::sonderzeichen($givenname);
             $person = sync_helper::get_univisdata(0, $firstname, $givenname);           
         } else {
             $person = array();
@@ -536,7 +544,7 @@ class FAU_Person {
                 settings_fields('find_univis_id_options');
                 do_settings_sections('find_univis_id_options');
                 if(empty($person) || empty($person[0])) {
-                    echo __('Es konnten keine Daten zur Person gefunden werden. Bitte verändern Sie Ihre Suchwerte und stellen Sie sicher, dass das Plugin Univis-Data aktiviert ist.', FAU_PERSON_TEXTDOMAIN);
+                    echo __('Es konnten keine Daten zur Person gefunden werden. Bitte verändern Sie Ihre Suchwerte.', FAU_PERSON_TEXTDOMAIN);
                 } else {
                     $person = $this->array_orderby($person,"lastname", SORT_ASC, "firstname", SORT_ASC );
                     $no_univis_data = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
@@ -579,7 +587,7 @@ class FAU_Person {
     }
 
     public function admin_init() {       
-        add_settings_section('search_univis_id_section', __('Bitte geben Sie den Vor- und Nachnamen der Person ein, von der Sie die UnivIS-ID benötigen.', FAU_PERSON_TEXTDOMAIN), '__return_false', 'search_univis_id_options');
+        add_settings_section('search_univis_id_section', __('Bitte geben Sie den Vor- und/oder Nachnamen der Person ein, von der Sie die UnivIS-ID benötigen.', FAU_PERSON_TEXTDOMAIN), '__return_false', 'search_univis_id_options');
         add_settings_field('univis_id_firstname', __('Vorname', FAU_PERSON_TEXTDOMAIN), array($this, 'univis_id_firstname'), 'search_univis_id_options', 'search_univis_id_section');
         add_settings_field('univis_id_givenname', __('Nachname', FAU_PERSON_TEXTDOMAIN), array($this, 'univis_id_givenname'), 'search_univis_id_options', 'search_univis_id_section');      
         add_settings_section('find_univis_id_section', __('Folgende Daten wurden in UnivIS gefunden:', FAU_PERSON_TEXTDOMAIN), '__return_false', 'find_univis_id_options');
@@ -588,14 +596,14 @@ class FAU_Person {
     public function univis_id_firstname() {
         $transient = get_transient(self::search_univis_id_transient);
         ?>
-        <input type='text' name="<?php printf('%s[firstname]', self::option_name); ?>" value="<?php echo (isset($transient['firstname'])) ? $transient['firstname'] : NULL; ?>"><p class="description"><?php _e('Bitte keine Umlaute, sondern statt dessen ae, oe, ue, ss verwenden.', FAU_PERSON_TEXTDOMAIN); ?></p>
+        <input type='text' name="<?php printf('%s[firstname]', self::option_name); ?>" value="<?php echo (isset($transient['firstname'])) ? $transient['firstname'] : NULL; ?>"><p class="description"><?php _e('Es können auch nur Teile des Namens eingegeben werden.', FAU_PERSON_TEXTDOMAIN); ?></p>
         <?php
     }
 
     public function univis_id_givenname() {
         $transient = get_transient(self::search_univis_id_transient);   
         ?>
-        <input type='text' name="<?php printf('%s[givenname]', self::option_name); ?>" value="<?php echo (isset($transient['givenname'])) ? $transient['givenname'] : NULL; ?>"><p class="description"><?php _e('Bitte keine Umlaute, sondern statt dessen ae, oe, ue, ss verwenden.', FAU_PERSON_TEXTDOMAIN); ?></p>        
+        <input type='text' name="<?php printf('%s[givenname]', self::option_name); ?>" value="<?php echo (isset($transient['givenname'])) ? $transient['givenname'] : NULL; ?>"><p class="description"><?php _e('Es können auch nur Teile des Namens eingegeben werden.', FAU_PERSON_TEXTDOMAIN); ?></p>        
         <?php
     }       
     
