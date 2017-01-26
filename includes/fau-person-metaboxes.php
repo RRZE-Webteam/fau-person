@@ -215,7 +215,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
             ),
             array(
                 'name' => __('Bezeichnung (oder Pseudonym)', FAU_PERSON_TEXTDOMAIN),
-                'desc' => '',
+                'desc' => __('Wird auch bei der Kategoriensortierung nach Nachname verwendet.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'text',
                 'id' => $prefix . 'alternateName',
                 'show_on_cb' => 'show_on_einrichtung'
