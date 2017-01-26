@@ -241,7 +241,9 @@ class FAU_Person {
         return $options;
     }
     
-   public function get_contactdata( $connection=0 ) {            
+    // Für Anzeige aller Kontakte mit ID (in Metabox auf Seiten und bei Kontakten), Sortierung je nach Typ (Person oder Einrichtung) 
+    // nach Bezeichnung (wenn nicht vorhanden Titel) oder Nachname (wenn nicht vorhanden letztes Wort im Titel)
+    public function get_contactdata( $connection=0 ) {            
         $args = array(
             'post_type' => 'person',
             'numberposts' => -1,
@@ -252,60 +254,45 @@ class FAU_Person {
 
         if( $personlist ) {  
             foreach( $personlist as $key => $value) {
-                $personlist[$key] = (array) $personlist[$key];  
-                //Zeile verschoben
-                /* $name = $personlist[$key]['post_title'];
-                if( get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realperson' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realmale' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realfemale' ) {
-                    if( ltrim( strpos( $name, ' ' ) ) ) {
-                        $lastname = ltrim( strrchr( $name, ' ' ) );
-                        $firstname = ltrim( str_replace( $lastname, '', $name ) );
-                        $fullname = $lastname . ', ' . $firstname;
-                    } else {
-                        $fullname = $name;
-                    }
-                } else {
-                    $fullname = $name;
-                }
-                $contactselect[ $personlist[$key]['ID'] ] = $fullname;
-                _rrze_debug($contactselect);
+                $personlist[$key] = (array) $personlist[$key];      
+                $name = $personlist[$key]['post_title'];
+                switch ( get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) ) {
+                    case 'realperson':
+                    case 'realmale':
+                    case 'realfemale':
+                        if ( get_post_meta( $personlist[$key]['ID'], 'fau_person_familyName', true ) ) {
+                            $lastname = get_post_meta( $personlist[$key]['ID'], 'fau_person_familyName', true );
+                            if ( get_post_meta( $personlist[$key]['ID'], 'fau_person_givenName', true ) ) {
+                                $name = $lastname . ', ' . get_post_meta( $personlist[$key]['ID'], 'fau_person_givenName', true );
+                            } elseif ( ltrim( strpos( $name, $lastname ) ) ) {
+                                $name = $lastname . ', ' . ltrim( str_replace( $lastname, '', $name ) );
+                            } else {
+                                $name = $lastname;
+                            }
+                        } else {
+                            if( ltrim( strpos( $name, ' ' ) ) ) {
+                                $lastname = ltrim( strrchr( $name, ' ' ) );
+                                $firstname = ltrim( str_replace( $lastname, '', $name ) );
+                                $name = $lastname . ', ' . $firstname;
+                            }                           
+                        } 
+                        break;
+                    default:
+                        break;
+                }   
+                $temp[ $personlist[$key]['ID'] ] = $name; 
             }
-            
-            $personlist = $this->array_orderby( $personlist, "fullname", SORT_ASC );
-            foreach( $personlist as $key => $value) {
-                $fullname = $personlist[$key]['ID'] . ': ' . $fullname;
-                $contactselect[ $personlist[$key]['ID'] ] = $fullname; */
-                
-                
-                
-                if( get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realperson' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realmale' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realfemale' ) {
-                    $name = $personlist[$key]['post_title'];
-                    if( ltrim( strpos( $name, ' ' ) ) ) {
-                        $lastname = ltrim( strrchr( $name, ' ' ) );
-                        $firstname = ltrim( str_replace( $lastname, '', $name ) );
-                    } else {
-                        $lastname = $name;
-                        $firstname = '';
-                    }
-                } else {
-                    $lastname = $personlist[$key]['post_title'];
-                    $firstname = '';
-                }
-                $personlist[$key]['lastname'] = $lastname;
-                $personlist[$key]['firstname'] = $firstname;
+            natcasesort($temp);     
+
+            foreach( $temp as $key => $value ) {
+                $contactselect[$key] = $key . ': ' . $value;
             }
- 
-            $personlist = $this->array_orderby( $personlist, "lastname", SORT_ASC );
-        
-            foreach( $personlist as $key => $value) {
-                $fullname = $personlist[$key]['ID'] . ': ' . $personlist[$key]['lastname'];
-                if( !empty( $personlist[$key]['firstname'] ) )  $fullname .= ', ' . $personlist[$key]['firstname'];          
-                $contactselect[ $personlist[$key]['ID'] ] = $fullname; 
-            }  
-            //_rrze_debug ( $contactselect );
+            // Für Auswahlfeld bei verknüpften Kontakten
             if ( $connection ) {
                 $contactselect = array( '0' => __('Kein Kontakt ausgewählt.', FAU_PERSON_TEXTDOMAIN) ) + $contactselect;
             }
         } else {
+            // falls noch keine Kontakte vorhanden sind
             $contactselect[0] = __('Noch keine Kontakte eingepflegt.', FAU_PERSON_TEXTDOMAIN);
         } 
         return $contactselect;  
