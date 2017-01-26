@@ -57,6 +57,7 @@ class sync_helper {
             'connection_givenName' => 'givenName',
             'connection_familyName' => 'familyName',
             'connection_honorificSuffix' => 'honorificSuffix',
+            'connection_alternateName' => 'alternateName',
             'connection_streetAddress' => 'streetAddress',
             'connection_postalCode' => 'postalCode',
             'connection_addressLocality' => 'addressLocality',
