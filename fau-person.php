@@ -870,6 +870,7 @@ class FAU_Person {
     public function change_columns( $cols ) {
 	$cols = array(
 	    'cb' => '<input type="checkbox" />',
+            'id' => 'ID',
 	    'title' => __( 'Neuer Titel', FAU_PERSON_TEXTDOMAIN ),
             'typ' => __( 'Typ', FAU_PERSON_TEXTDOMAIN ),
             'date' => __( 'Datum', FAU_PERSON_TEXTDOMAIN )
