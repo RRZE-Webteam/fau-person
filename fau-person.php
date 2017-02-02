@@ -370,10 +370,17 @@ class FAU_Person {
     }
     
     public function help_menu_new_person() {
-
+        
         $content_overview = array(
-            '<p>' . __('Geben Sie auf dieser Seite alle gewünschten Daten zu einem Kontakt ein. Die Einbindung der Kontaktdaten erfolgt dann in den Beiträgen oder Seiten über einen Shortcode oder ein Widget.', FAU_PERSON_TEXTDOMAIN) . '</p>'
+            '<p>' . __('Geben Sie auf dieser Seite alle gewünschten Daten zu einem Kontakt ein. Die Einbindung der Kontaktdaten erfolgt dann in den Beiträgen oder Seiten über einen Shortcode oder ein Widget.', FAU_PERSON_TEXTDOMAIN) . '</p>',
         );
+        
+        $person_id = cmb_Meta_Box::get_object_id();
+        if ( $person_id > 0 ) {
+            $shortcode =  '<p>' . __('Zur Einbindung dieses Kontaktes verwenden Sie folgenden Shortcode', FAU_PERSON_TEXTDOMAIN) . ':</p>';
+            $shortcode .= '<pre> [kontakt id="' . $person_id . '"] </pre>';
+            $content_overview[] = $shortcode;
+        }
 
         $help_tab_overview = array(
             'id' => 'overview',
