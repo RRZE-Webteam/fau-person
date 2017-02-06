@@ -130,9 +130,17 @@ class FAU_Person {
             $themeoptions = get_option('fau_theme_options');
             self::$oldfau_person_plugin = isset($themeoptions['advanced_activatefaupluginpersonen']) && $themeoptions['advanced_activatefaupluginpersonen'] ? true : false;
         }
-    	
+  
+        add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_styles' ) );
+   	
     }
     
+    public function register_admin_styles() {
+        wp_register_style( 'fau-person-admin', FAU_PERSON_URL . 'css/admin.css', false, self::version, 'all' );
+        wp_enqueue_style( 'fau-person-admin' );
+    }
+
+
     public function adding_custom_meta_boxes( $post ) {
         add_meta_box( 
             'my-meta-box',
@@ -870,10 +878,10 @@ class FAU_Person {
     public function change_columns( $cols ) {
 	$cols = array(
 	    'cb' => '<input type="checkbox" />',
-            'id' => 'ID',
 	    'title' => __( 'Neuer Titel', FAU_PERSON_TEXTDOMAIN ),
             'typ' => __( 'Typ', FAU_PERSON_TEXTDOMAIN ),
-            'date' => __( 'Datum', FAU_PERSON_TEXTDOMAIN )
+            'date' => __( 'Datum', FAU_PERSON_TEXTDOMAIN ),
+            'id' => 'ID',
 
 	);
 
@@ -882,6 +890,9 @@ class FAU_Person {
 
     public function custom_columns( $column, $post_id ) {
 	switch ( $column ) {
+            case "id":
+                echo $post_id;
+                break;
 	    case "typ":
                 $typ = get_post_meta( $post_id, 'fau_person_typ', true);
                 switch ( $typ ) {
