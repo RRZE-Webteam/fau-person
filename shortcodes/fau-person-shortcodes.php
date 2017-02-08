@@ -321,6 +321,7 @@ class FAU_Person_Shortcodes {
             "format" => '',
             "show" => '',
             "hide" => '',
+            "sort" => FALSE,    //für die Sortierung in Katgorien nach Nachname sort="nachname" angeben. Standardsortierung nach Titel
                         ), $atts));
 
         $content = '';
@@ -510,16 +511,22 @@ class FAU_Person_Shortcodes {
         }
 
         $category = get_term_by('slug', $category, 'persons_category');
-
-        $posts = get_posts(array('post_type' => 'person', 'post_status' => 'publish', 'numberposts' => 1000, 'orderby' => 'title', 'order' => 'ASC', 'tax_query' => array(
+        
+        if( is_object( $category ) ) {
+            $posts = get_posts(array('post_type' => 'person', 'post_status' => 'publish', 'numberposts' => 1000, 'orderby' => 'title', 'order' => 'ASC', 'tax_query' => array(
                 array(
                     'taxonomy' => 'persons_category',
                     'field' => 'id', // can be slug or id - a CPT-onomy term's ID is the same as its post ID
-                    'terms' => $category->term_id
+                    'terms' => $category->term_id   // Notice: Trying to get property of non-object bei unbekannter Kategorie
                 )
             ), 'suppress_filters' => false));
-
-        if ($posts) {
+        } 
+        
+        if ( isset( $posts ) ) {
+            if ( $sort == 'nachname' ) {
+                $posts = FAU_Person::sort_person_posts( $posts );   
+                //_rrze_debug($posts);
+            } 
             $number = count($posts);
             $i = 1;
             if ($shortlist) {
@@ -535,7 +542,12 @@ class FAU_Person_Shortcodes {
                 //$liste = '<p>';
             }
             foreach ($posts as $post) {
-                $value = $post->ID;
+                // Bei Sortierung nach Name ist $posts ein Array
+                if ( $sort == 'nachname' ) {
+                    $value = $post['ID'];
+                } else {
+                    $value = $post->ID;
+                }
                 if ($page) {
                     $content .= self::fau_person_page($value, 1, $showname);
                 } elseif ($shortlist) {
@@ -563,7 +575,11 @@ class FAU_Person_Shortcodes {
                 $content .= '';              
             }
         } else {
-            $content = '<p>' . sprintf(__('Es konnten keine Kontakte in der Kategorie %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $category->slug) . '</p>';
+            if( is_object( $category ) ) {
+                $content = '<p>' . sprintf(__('Es konnten keine Kontakte in der Kategorie %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $category->slug) . '</p>'; 
+            } else {
+                $content = '<p>' . sprintf(__('Die Kategorie %s konnte leider nicht gefunden werden.', FAU_PERSON_TEXTDOMAIN), $atts['category']) . '</p>';                 
+            }
         }
 
         return $content;
@@ -596,7 +612,7 @@ class FAU_Person_Shortcodes {
                 $excerpt = wp_trim_excerpt($post->post_content);
         }
         
-        $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix);
+        $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix, $alternateName);
         $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'default' );
         
         $content = '<div class="person content-person" itemscope itemtype="http://schema.org/Person">';
@@ -719,11 +735,12 @@ class FAU_Person_Shortcodes {
         extract($fields);
 
         //_rrze_debug(get_post_meta($id, 'fau_person_hoursAvailable_group', true));
+        //_rrze_debug($fields);
         if ((strlen($url) > 4) && (strpos($url, "http") === false)) {
             $url = 'http://' . $url;
         }
         if ( !$is_shortcode || $showname ) {
-            $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1);
+            $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1, $alternateName);
             $content .= '<h2>' . $fullname . '</h2>';
         }
 
@@ -803,7 +820,7 @@ class FAU_Person_Shortcodes {
         }
         $content = '';
         
-        $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1);
+        $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1, $alternateName);
         if ( $list==1 )
             $content .= '<div class="list">';
         $content .= '<span class="person-info">';
@@ -853,7 +870,7 @@ class FAU_Person_Shortcodes {
                 $personlink = get_permalink($id);
             }
 
-            $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix);
+            $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix, $alternateName);
             $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'default' );
             
             if (has_post_thumbnail($id) && $showthumb) {
@@ -939,7 +956,7 @@ class FAU_Person_Shortcodes {
                 $showroom = 0;
             }
             
-            $fullname = self::fullname_output($nr, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1);
+            $fullname = self::fullname_output($nr, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1, $alternateName);
             $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'connection' );
             
             $contactlist .= '<li itemscope itemtype="http://schema.org/Person">' . $fullname;
@@ -983,20 +1000,24 @@ class FAU_Person_Shortcodes {
         return $content;
     }
     
-    public static function fullname_output( $id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix ) {
+    public static function fullname_output( $id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix, $alternateName ) {
         $fullname = '<span itemprop="name">';
-        if ($showtitle && $honorificPrefix)
-            $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
-        if ($givenName && $familyName) {
-            if ($givenName)
-                $fullname .= '<span itemprop="givenName">' . $givenName . "</span> ";
-            if ($familyName)
-                $fullname .= '<span itemprop="familyName">' . $familyName . "</span>";
-        } elseif (!empty(get_the_title($id))) {
-            $fullname .= get_the_title($id);
+        if ( $alternateName ) {
+            $fullname .= '<span itemprop="alternateName">' . $alternateName . '</span>';
+        } else {
+            if ( $showtitle && $honorificPrefix )
+                $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
+            if ( $givenName && $familyName ) {
+                if ( $givenName )
+                    $fullname .= '<span itemprop="givenName">' . $givenName . "</span> ";
+                if ( $familyName )
+                    $fullname .= '<span itemprop="familyName">' . $familyName . "</span>";
+            } elseif (!empty(get_the_title($id))) {
+                $fullname .= get_the_title($id);
+            }
+            if ( $showsuffix && $honorificSuffix )
+                $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
         }
-        if ($showsuffix && $honorificSuffix)
-            $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
         $fullname .= '</span>';
         return $fullname;
     }

@@ -44,7 +44,7 @@ require_once('shortcodes/fau-standort-shortcodes.php');
 class FAU_Person {
 
     //******** Mit neuer Version auch hier aktualisieren!!! ***********
-    const version = '2.1.20';
+    const version = '2.2.0';
     
     const option_name = '_fau_person';
     const version_option_name = '_fau_person_version';
@@ -130,10 +130,17 @@ class FAU_Person {
             $themeoptions = get_option('fau_theme_options');
             self::$oldfau_person_plugin = isset($themeoptions['advanced_activatefaupluginpersonen']) && $themeoptions['advanced_activatefaupluginpersonen'] ? true : false;
         }
-		
-	
+  
+        add_action( 'admin_enqueue_scripts', array( $this, 'register_admin_styles' ) );
+   	
     }
     
+    public function register_admin_styles() {
+        wp_register_style( 'fau-person-admin', FAU_PERSON_URL . 'css/admin.css', false, self::version, 'all' );
+        wp_enqueue_style( 'fau-person-admin' );
+    }
+
+
     public function adding_custom_meta_boxes( $post ) {
         add_meta_box( 
             'my-meta-box',
@@ -215,7 +222,8 @@ class FAU_Person {
                 'sprechzeiten' => true,
                 'kurzauszug' => true,
                 'bild' => true,
-            ),                
+            ),
+            'has_archive_page' => true,
         );               
         return $options; // Standard-Array für zukünftige Optionen
     }
@@ -241,7 +249,9 @@ class FAU_Person {
         return $options;
     }
     
-   public function get_contactdata( $connection=0 ) {      
+    // Für Anzeige aller Kontakte mit ID (in Metabox auf Seiten und bei Kontakten), Sortierung je nach Typ (Person oder Einrichtung) 
+    // nach Bezeichnung (wenn nicht vorhanden Titel) oder Nachname (wenn nicht vorhanden letztes Wort im Titel)
+    public function get_contactdata( $connection=0 ) {            
         $args = array(
             'post_type' => 'person',
             'numberposts' => -1,
@@ -252,37 +262,47 @@ class FAU_Person {
 
         if( $personlist ) {  
             foreach( $personlist as $key => $value) {
-                $personlist[$key] = (array) $personlist[$key];
-                if( get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realperson' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realmale' ||  get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) == 'realfemale' ) {
-                    $name = $personlist[$key]['post_title'];
-                    if( ltrim( strpos( $name, ' ' ) ) ) {
-                        $lastname = ltrim( strrchr( $name, ' ' ) );
-                        $firstname = ltrim( str_replace( $lastname, '', $name ) );
-                    } else {
-                        $lastname = $name;
-                        $firstname = '';
-                    }
-                } else {
-                    $lastname = $personlist[$key]['post_title'];
-                    $firstname = '';
-                }
-                $personlist[$key]['lastname'] = $lastname;
-                $personlist[$key]['firstname'] = $firstname;
+                $personlist[$key] = (array) $personlist[$key];      
+                $name = $personlist[$key]['post_title'];
+                switch ( get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) ) {
+                    case 'realperson':
+                    case 'realmale':
+                    case 'realfemale':
+                        if ( get_post_meta( $personlist[$key]['ID'], 'fau_person_familyName', true ) ) {
+                            $lastname = get_post_meta( $personlist[$key]['ID'], 'fau_person_familyName', true );
+                            if ( get_post_meta( $personlist[$key]['ID'], 'fau_person_givenName', true ) ) {
+                                $name = $lastname . ', ' . get_post_meta( $personlist[$key]['ID'], 'fau_person_givenName', true );
+                            } elseif ( ltrim( strpos( $name, $lastname ) ) ) {
+                                $name = $lastname . ', ' . ltrim( str_replace( $lastname, '', $name ) );
+                            } else {
+                                $name = $lastname;
+                            }
+                        } else {
+                            if( ltrim( strpos( $name, ' ' ) ) ) {
+                                $lastname = ltrim( strrchr( $name, ' ' ) );
+                                $firstname = ltrim( str_replace( $lastname, '', $name ) );
+                                $name = $lastname . ', ' . $firstname;
+                            }                           
+                        } 
+                        break;
+                    default:
+                        break;
+                }   
+                $temp[ $personlist[$key]['ID'] ] = $name; 
             }
- 
-            $personlist = $this->array_orderby( $personlist, "lastname", SORT_ASC );
-        
-            foreach( $personlist as $key => $value) {
-                $fullname = $personlist[$key]['ID'] . ': ' . $personlist[$key]['lastname'];
-                if( !empty( $personlist[$key]['firstname'] ) )  $fullname .= ', ' . $personlist[$key]['firstname'];          
-                $contactselect[ $personlist[$key]['ID'] ] = $fullname;
+            natcasesort($temp);     
+
+            foreach( $temp as $key => $value ) {
+                $contactselect[$key] = $key . ': ' . $value;
             }
+            // Für Auswahlfeld bei verknüpften Kontakten
             if ( $connection ) {
                 $contactselect = array( '0' => __('Kein Kontakt ausgewählt.', FAU_PERSON_TEXTDOMAIN) ) + $contactselect;
             }
         } else {
+            // falls noch keine Kontakte vorhanden sind
             $contactselect[0] = __('Noch keine Kontakte eingepflegt.', FAU_PERSON_TEXTDOMAIN);
-        }
+        } 
         return $contactselect;  
     }
     
@@ -358,10 +378,17 @@ class FAU_Person {
     }
     
     public function help_menu_new_person() {
-
+        
         $content_overview = array(
-            '<p>' . __('Geben Sie auf dieser Seite alle gewünschten Daten zu einem Kontakt ein. Die Einbindung der Kontaktdaten erfolgt dann in den Beiträgen oder Seiten über einen Shortcode oder ein Widget.', FAU_PERSON_TEXTDOMAIN) . '</p>'
+            '<p>' . __('Geben Sie auf dieser Seite alle gewünschten Daten zu einem Kontakt ein. Die Einbindung der Kontaktdaten erfolgt dann in den Beiträgen oder Seiten über einen Shortcode oder ein Widget.', FAU_PERSON_TEXTDOMAIN) . '</p>',
         );
+        
+        $person_id = cmb_Meta_Box::get_object_id();
+        if ( $person_id > 0 ) {
+            $shortcode =  '<p>' . __('Zur Einbindung dieses Kontaktes verwenden Sie folgenden Shortcode', FAU_PERSON_TEXTDOMAIN) . ':</p>';
+            $shortcode .= '<pre> [kontakt id="' . $person_id . '"] </pre>';
+            $content_overview[] = $shortcode;
+        }
 
         $help_tab_overview = array(
             'id' => 'overview',
@@ -483,7 +510,11 @@ class FAU_Person {
                 $input = isset($_POST[self::option_name]['sidebar'][$key]) ? 1 : 0;
                 $options['sidebar'][$key] = $input;    
             }
-            update_option(self::option_name, $options);   
+            $input = isset($_POST[self::option_name]['has_archive_page']) ? true : false;
+            set_transient('fau-person-options', 1, 30);
+            $options['has_archive_page'] = $input;
+            update_option(self::option_name, $options); 
+            
         }
 
         $this->search_univis_id_page = add_submenu_page('edit.php?post_type=person', __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'search-univis-id', array( $this, 'search_univis_id' ));
@@ -493,11 +524,19 @@ class FAU_Person {
         add_action('load-' . $this->sidebar_options_page, array($this, 'help_menu_sidebar_options'));        
     }
 
+    private static function sonderzeichen ($string) {
+        $search = array("Ä", "Ö", "Ü", "ä", "ö", "ü", "ß", "´");
+        $replace = array("Ae", "Oe", "Ue", "ae", "oe", "ue", "ss", "");
+        return str_replace($search, $replace, $string);
+    }
+        
     public function search_univis_id() {
         $transient = get_transient(self::search_univis_id_transient);
         $firstname = isset($transient['firstname']) ? $transient['firstname'] : '';
         $givenname = isset($transient['givenname']) ? $transient['givenname'] : '';
         if(class_exists( 'Univis_Data' ) ) {
+            $firstname = self::sonderzeichen($firstname);
+            $givenname = self::sonderzeichen($givenname);
             $person = sync_helper::get_univisdata(0, $firstname, $givenname);           
         } else {
             $person = array();
@@ -520,7 +559,7 @@ class FAU_Person {
                 settings_fields('find_univis_id_options');
                 do_settings_sections('find_univis_id_options');
                 if(empty($person) || empty($person[0])) {
-                    echo __('Es konnten keine Daten zur Person gefunden werden. Bitte verändern Sie Ihre Suchwerte und stellen Sie sicher, dass das Plugin Univis-Data aktiviert ist.', FAU_PERSON_TEXTDOMAIN);
+                    echo __('Es konnten keine Daten zur Person gefunden werden. Bitte verändern Sie Ihre Suchwerte.', FAU_PERSON_TEXTDOMAIN);
                 } else {
                     $person = $this->array_orderby($person,"lastname", SORT_ASC, "firstname", SORT_ASC );
                     $no_univis_data = __('keine Daten in UnivIS eingepflegt', FAU_PERSON_TEXTDOMAIN);
@@ -563,7 +602,7 @@ class FAU_Person {
     }
 
     public function admin_init() {       
-        add_settings_section('search_univis_id_section', __('Bitte geben Sie den Vor- und Nachnamen der Person ein, von der Sie die UnivIS-ID benötigen.', FAU_PERSON_TEXTDOMAIN), '__return_false', 'search_univis_id_options');
+        add_settings_section('search_univis_id_section', __('Bitte geben Sie den Vor- und/oder Nachnamen der Person ein, von der Sie die UnivIS-ID benötigen.', FAU_PERSON_TEXTDOMAIN), '__return_false', 'search_univis_id_options');
         add_settings_field('univis_id_firstname', __('Vorname', FAU_PERSON_TEXTDOMAIN), array($this, 'univis_id_firstname'), 'search_univis_id_options', 'search_univis_id_section');
         add_settings_field('univis_id_givenname', __('Nachname', FAU_PERSON_TEXTDOMAIN), array($this, 'univis_id_givenname'), 'search_univis_id_options', 'search_univis_id_section');      
         add_settings_section('find_univis_id_section', __('Folgende Daten wurden in UnivIS gefunden:', FAU_PERSON_TEXTDOMAIN), '__return_false', 'find_univis_id_options');
@@ -572,14 +611,14 @@ class FAU_Person {
     public function univis_id_firstname() {
         $transient = get_transient(self::search_univis_id_transient);
         ?>
-        <input type='text' name="<?php printf('%s[firstname]', self::option_name); ?>" value="<?php echo (isset($transient['firstname'])) ? $transient['firstname'] : NULL; ?>"><p class="description"><?php _e('Bitte keine Umlaute, sondern statt dessen ae, oe, ue, ss verwenden.', FAU_PERSON_TEXTDOMAIN); ?></p>
+        <input type='text' name="<?php printf('%s[firstname]', self::option_name); ?>" value="<?php echo (isset($transient['firstname'])) ? $transient['firstname'] : NULL; ?>"><p class="description"><?php _e('Es können auch nur Teile des Namens eingegeben werden.', FAU_PERSON_TEXTDOMAIN); ?></p>
         <?php
     }
 
     public function univis_id_givenname() {
         $transient = get_transient(self::search_univis_id_transient);   
         ?>
-        <input type='text' name="<?php printf('%s[givenname]', self::option_name); ?>" value="<?php echo (isset($transient['givenname'])) ? $transient['givenname'] : NULL; ?>"><p class="description"><?php _e('Bitte keine Umlaute, sondern statt dessen ae, oe, ue, ss verwenden.', FAU_PERSON_TEXTDOMAIN); ?></p>        
+        <input type='text' name="<?php printf('%s[givenname]', self::option_name); ?>" value="<?php echo (isset($transient['givenname'])) ? $transient['givenname'] : NULL; ?>"><p class="description"><?php _e('Es können auch nur Teile des Namens eingegeben werden.', FAU_PERSON_TEXTDOMAIN); ?></p>        
         <?php
     }       
     
@@ -588,6 +627,8 @@ class FAU_Person {
         
         add_settings_section('sidebar_section', __('Geben Sie an, welche Daten angezeigt werden sollen:', FAU_PERSON_TEXTDOMAIN), '__return_false', 'sidebar_options');
         add_settings_field('sidebar', __('Im Widget (bei den FAU-Themes auch in der Sidebar, wenn der Kontakt über das Feld "Auswahl Ansprechpartner" in der Metabox "Sidebar" gewählt wird)', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar'), 'sidebar_options', 'sidebar_section');
+        add_settings_section('has_archive_page_section', __('Kontakt-Übersichtsseite:', FAU_PERSON_TEXTDOMAIN), '__return_false', 'has_archive_page_options');
+        add_settings_field('has_archive_page', __('Verwendung der Standard-Übersichtsseite', FAU_PERSON_TEXTDOMAIN), array($this, 'has_archive_page'), 'has_archive_page_options', 'has_archive_page_section');
     }
 
     public function sidebar() {
@@ -607,6 +648,15 @@ class FAU_Person {
         <label for="<?php printf('%s[sidebar][bild]', self::option_name); ?>"><input type='checkbox' id="<?php printf('%s[sidebar][bild]', self::option_name); ?>" name="<?php printf('%s[sidebar][bild]', self::option_name); ?>"  <?php checked($options['sidebar']['bild'], 1); ?>><?php _e('Bild', FAU_PERSON_TEXTDOMAIN); ?></label><br>
 
         <?php         
+    }
+    
+    public function has_archive_page() {
+        $options = $this->get_options();
+        ?>
+        <label for="<?php printf('%s[has_archive_page]', self::option_name); ?>"><input type='checkbox' id="<?php printf('%s[has_archive_page]', self::option_name); ?>" name="<?php printf('%s[has_archive_page]', self::option_name); ?>" <?php checked($options['has_archive_page'], 1); ?>><?php _e('Zeige die Standard-Übersichtsseite aller Kontakte an. Bevor diese Option deaktiviert wird, muss eine eigene Seite mit der Titelform (slug) "person" direkt unterhalb der Hauptebene angelegt werden.', FAU_PERSON_TEXTDOMAIN); ?></label><br>
+
+        <?php         
+        
     }
          
     public function help_menu_search_univis_id() {
@@ -646,6 +696,8 @@ class FAU_Person {
                 <?php
                 settings_fields('sidebar_options');
                 do_settings_sections('sidebar_options');
+                settings_fields('has_archive_page_options');
+                do_settings_sections('has_archive_page_options');
                 submit_button(esc_html(__('Änderungen speichern', FAU_PERSON_TEXTDOMAIN)), 'primary', 'fau-person-options');
                 //update_option($options['sidebar']['position'], isset($_POST['_fau_person']['sidebar']['position']) ? 1 : null);
                 ?>
@@ -738,8 +790,13 @@ class FAU_Person {
     }
 
     public static function register_person_post_type() {
-        require_once('posttypes/fau-person-posttype.php');
+        require('posttypes/fau-person-posttype.php');
         register_post_type('person', $person_args);
+        // ist nötig, damit bei den Anzeigeoptionen die Änderung der Übersichtsseite funktioniert
+        if( get_transient('fau-person-options') ) {
+            flush_rewrite_rules();
+            delete_transient('fau-person-options');
+        }
     }
 
     public static function register_standort_post_type() {
@@ -823,7 +880,8 @@ class FAU_Person {
 	    'cb' => '<input type="checkbox" />',
 	    'title' => __( 'Neuer Titel', FAU_PERSON_TEXTDOMAIN ),
             'typ' => __( 'Typ', FAU_PERSON_TEXTDOMAIN ),
-            'date' => __( 'Datum', FAU_PERSON_TEXTDOMAIN )
+            'date' => __( 'Datum', FAU_PERSON_TEXTDOMAIN ),
+            'id' => 'ID',
 
 	);
 
@@ -832,6 +890,9 @@ class FAU_Person {
 
     public function custom_columns( $column, $post_id ) {
 	switch ( $column ) {
+            case "id":
+                echo $post_id;
+                break;
 	    case "typ":
                 $typ = get_post_meta( $post_id, 'fau_person_typ', true);
                 switch ( $typ ) {
@@ -1011,6 +1072,46 @@ class FAU_Person {
         }
         	return $helpuse;
     }*/
+    
+    // Sortierung eines Arrays mit Objekten (z.B. bei einer Kategorie) alphabetisch nach Titel oder Nachname, je nach Typ
+    public static function sort_person_posts( $personlist ) {
+        if ( is_array( $personlist ) ) {
+            foreach( $personlist as $key => $value) {
+                $personlist[$key] = (array) $personlist[$key];
+                // Bei Personen Prüfung, ob Nachname im Feld eingetragen ist (ggf. aus UnivIS), wenn nicht letztes Wort von Titel als Nachname angenommen
+                switch ( get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) ) {
+                    case 'realperson':
+                    case 'realmale':
+                    case 'realfemale':
+                        $fields = sync_helper::get_fields($personlist[$key]['ID'], get_post_meta($personlist[$key]['ID'], 'fau_person_univis_id', true), 0);
+                        extract($fields);                   
+                        if( !empty( $familyName ) ) {
+                            $name = $familyName;
+                            if( !empty( $givenName ) ) {
+                                $name = $name . ', ' . $givenName;
+                            }
+                        } else {
+                            $name = $personlist[$key]['post_title'];                   
+                            if( ltrim( strpos( $name, ' ' ) ) ) {
+                                $lastname = ltrim( strrchr( $name, ' ' ) );
+                                $name = $lastname . ', ' . ltrim( str_replace( $lastname, '', $name ) );
+                            } 
+                        }
+                        break;
+                    default:
+                        if( !empty( get_post_meta( $personlist[$key]['ID'], 'fau_person_alternateName', true ) ) ) {
+                            $name = get_post_meta( $personlist[$key]['ID'], 'fau_person_alternateName', true );
+                        } else {
+                            $name = $personlist[$key]['post_title'];
+                        }
+                        break;
+                }
+                $temp[$key] = strtolower($name);
+            }
+            array_multisort($temp, $personlist);
+            return $personlist;  
+        }
+    }
         
         private function array_orderby(){
 		$args = func_get_args();

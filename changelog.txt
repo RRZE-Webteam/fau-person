@@ -18,8 +18,15 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 
 Versionsänderungen:
 ===================
+####Version 2.3.0:    
+- Alphabetische Sortierung der Kategorienausgabe nach Nachname (bzw. bei Einrichtungen nach Bezeichnungsfeld) über Parameter sort="nachname"         
+- Berücksichtigung der Felder "Nachname" und "Bezeichnung" bei Sortierung der Auswahlliste    
+- Bugfix bei Anzeige des Raumes und des Bildes in der Sidebar über die Metabox "Ansprechpartner"    
+- auf Kontaktseite ID der aktuellen Person in Kontexthilfe eingebunden    
+- zusätzliche Spalte ID in Kontaktübersicht eingefügt    
+
 ####Version 2.2.0:    
-- Einbindung der Sprechzeiten aus UnivIS     
+- Standard-Kontakt-Übersichtsseite kann mit einer eigens gestaltbaren Seite überschrieben werden, diese muss den Slug "person" haben        
 
 ####Version 2.1.20:    
 - Einbindung der Übersichtsseite archive-person.php und archive-standort.php (je nach Bedarf in das eigene Theme zu kopieren und daran anzupassen)    
