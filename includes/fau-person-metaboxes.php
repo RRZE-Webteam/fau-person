@@ -360,9 +360,10 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
             array(
                 'id' => $prefix . 'hoursAvailable_group',
                 'type' => 'group',
+                'desc' => $univis_default['repeat'],
                 //'desc' => __('Bitte geben Sie die Sprechzeiten an.', FAU_PERSON_TEXTDOMAIN),
                 'options' => array(
-                    'group_title' => __('{#}. Sprechzeit', FAU_PERSON_TEXTDOMAIN),
+                    'group_title' => __('Sprechzeit {#}', FAU_PERSON_TEXTDOMAIN),
                     'add_button' => __('Weitere Sprechzeit einfügen', FAU_PERSON_TEXTDOMAIN),
                     'remove_button' => __('Sprechzeit löschen', FAU_PERSON_TEXTDOMAIN),
                     //'sortable' => true,
