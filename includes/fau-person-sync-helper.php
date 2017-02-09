@@ -174,85 +174,49 @@ class sync_helper {
         }
 
         foreach( $fields_univis_officehours as $key => $value ) {
-            if( $univis_sync && array_key_exists( 'officehours', $person ) && array_key_exists( 'officehour', $person['officehours'][0] ) ) {
-                //_rrze_debug($person);
-                $person_officehours = $person['officehours'][0]['officehour'];
-                _rrze_debug($person_officehours);
-                $value = $person_officehours;
-//                foreach ($person_officehours as $num => $num_val) {
-  //                  $value = $person_officehours[$num];
-                    //$abc[$num] = self::sync_univis( $id, $person_officehours[$num], $key, $value, $defaults );
-    //            }
- 
-                    //_rrze_debug($value);
-                    //$abc[$num] = self::sync_univis( $id, $num_val, $key, $value, $defaults );
-  
-                
-                //$abc[$num] = self::officehours_repeat($repeat, $repeat_submode, $starttime, $endtime, $office, $comment);
-                //_rrze_debug($abc);
 
+            if( $univis_sync && array_key_exists( 'officehours', $person ) && array_key_exists( 'officehour', $person['officehours'][0] ) ) {
+                $person_officehours = $person['officehours'][0]['officehour'];
+                $officehours = array();
+                foreach ($person_officehours as $num => $num_val) {
+                    $repeat = isset( $person_officehours[$num]['repeat'] ) ? $person_officehours[$num]['repeat'] : 0;
+                    $repeat_submode = isset( $person_officehours[$num]['repeat_submode'] ) ? $person_officehours[$num]['repeat_submode'] : 0;
+                    $starttime = isset( $person_officehours[$num]['starttime'] ) ? $person_officehours[$num]['starttime'] : 0;
+                    $endtime = isset( $person_officehours[$num]['endtime'] ) ? $person_officehours[$num]['endtime'] : 0;
+                    $office = isset( $person_officehours[$num]['office'] ) ? $person_officehours[$num]['office'] : 0;
+                    $comment = isset( $person_officehours[$num]['comment'] ) ? $person_officehours[$num]['comment'] : 0;
+                    $officehour = self::officehours_repeat($repeat, $repeat_submode, $starttime, $endtime, $office, $comment);
+                    
+                    array_push($officehours, $officehour);
+
+                }
+                if ($defaults) {
+                    $officehours = implode($officehours, '</p></li><li><p class="cmb_metabox_description">');
+                    $officehours = sprintf(__('<p class="cmb_metabox_description">[Aus UnivIS angezeigter Wert: </p><ul><li><p class="cmb_metabox_description">%s</p></li></ul><p class="cmb_metabox_description">]</p>', FAU_PERSON_TEXTDOMAIN), $officehours); 
+                }
             } else {
                 if( $defaults ) {
-                    $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);
+                    $officehours = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);
                 } else {
-                    //_rrze_debug('$key');
                     $person_officehours = get_post_meta($id, 'fau_person_hoursAvailable_group', true);
-
-                    //_rrze_debug($person_officehours);
+                    $officehours = array();
                     if( !empty( $person_officehours ) ) {
                         foreach ( $person_officehours as $num => $num_val ) {
-                            
-                        }
-                        $value = $person_officehours;
-                            //foreach($person_officehours as $num => $num_val) {
-                            //_rrze_debug($num_val);
  
-                            // _rrze_debug($num_val);
-                            
-
-                            //$repeat = $num_val['repeat_mode'] . ' ' . $num_val['repeat_submode'];
-                            //$repeat = implode(  )
-                            //$person_officehours_number = $person_officehours[$number];
-                            //$value = get_post_meta($id, 'fau_person_'.$key, true);
-                            /*$repeat = isset( $person_officehours[$num]['repeat'] ) ? $person_officehours[$num]['repeat'] : 0;
+                            $repeat = isset( $person_officehours[$num]['repeat'] ) ? $person_officehours[$num]['repeat'] : 0;
                             $repeat_submode = isset( $person_officehours[$num]['repeat_submode'] ) ? $person_officehours[$num]['repeat_submode'] : 0;
                             $starttime = isset( $person_officehours[$num]['starttime'] ) ? $person_officehours[$num]['starttime'] : 0;
                             $endtime = isset( $person_officehours[$num]['endtime'] ) ? $person_officehours[$num]['endtime'] : 0;
                             $office = isset( $person_officehours[$num]['office'] ) ? $person_officehours[$num]['office'] : 0;
                             $comment = isset( $person_officehours[$num]['comment'] ) ? $person_officehours[$num]['comment'] : 0;
-                            $value[$num] = self::officehours_repeat($repeat, $repeat_submode, $starttime, $endtime, $office, $comment);*/
-                        } 
-
-                    //$value = get_post_meta($id, 'fau_person_'.$key, true);  
-                    
+                            $officehour = self::officehours_repeat($repeat, $repeat_submode, $starttime, $endtime, $office, $comment);
+                            array_push($officehours, $officehour);
+                        }
+                    } 
                 }
             }
-            
-            
-/*                   if( $defaults ) {
-            if( !empty( $person[$univis_var] ) ) {
-                $val = sprintf(__('<p class="cmb_metabox_description">[Aus UnivIS angezeigter Wert: %s]</p>', FAU_PERSON_TEXTDOMAIN), $person[$univis_var]);
-            } else {
-                $val = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);
-            }
-        } else {
-            if( !empty( $person[$univis_var] ) && get_post_meta($id, 'fau_person_univis_sync', true) ) {
-                $val = $person[$univis_var];             
-            } else {
-                $val = get_post_meta($id, 'fau_person_'.$fau_person_var, true);
-            }
-        }*/
-            
-            
-            
-                       // _rrze_debug("value " . $value);
-                        $fields['officehours'] = $value;
-            //$fields[$key] = $value;
-            _rrze_debug($fields);
-        }
-        
-        
-        
+            $fields[$key] = $officehours;
+        }       
         
         foreach( $fields_univis_orgunits as $key => $value ) {
             $language = get_locale();
@@ -345,8 +309,6 @@ class sync_helper {
 
     //$id = ID des Personeneintrags, $person = Array mit Personendaten, $fau_person_var = Bezeichnung Personenplugin, $univis_var = Bezeichnung UnivIS, $defaults = Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular
     public static function sync_univis( $id, $person, $fau_person_var, $univis_var, $defaults ) {   
-        //_rrze_debug($person);
-        //_rrze_debug($univis_var);
         //wird benötigt, falls jeder einzelne Wert abgefragt werden soll
         //if( !empty( $person[$univis_var] ) && get_post_meta($id, 'fau_person_'.$fau_person_var_sync', true) ) {
         if( $defaults ) {
@@ -446,14 +408,16 @@ class sync_helper {
         return $phone_number;
     }
 
-    public static function officehours_repeat( $officehours ) {
-    //public static function officehours_repeat( $repeat, $repeat_submode, $starttime, $endtime, $office, $comment ) {
-        //_rrze_debug( $repeat );
-        
+    //public static function officehours_repeat( $officehours ) {
+    public static function officehours_repeat( $repeat, $repeat_submode, $starttime, $endtime, $office, $comment ) {
         $date = array();
 
-        $repeat = explode( ' ', $repeat );
-        //_rrze_debug($repeat[0]);
+        if ( !$repeat_submode ) {
+            $repeat = strtok($repeat, ' ');
+            $repeat_submode = strtok(' ');
+            $repeat_submode = explode( ',', $repeat_submode );
+        }
+
         if( $repeat ) {
             $dict = array(
                 'd1' => __('Täglich', FAU_PERSON_TEXTDOMAIN),
@@ -461,12 +425,10 @@ class sync_helper {
                 'w2' => __('Alle zwei Wochen', FAU_PERSON_TEXTDOMAIN),
             );
 
-            if( array_key_exists( $repeat[0], $dict ) )
-                array_push( $date, $dict[$repeat[0]] );
-            //_rrze_debug(count($repeat));
-            if( count( $repeat ) > 1 ) 
-                $repeat_submode = explode( ',', $repeat[1] );
-            if( is_array( $repeat_submode ) ) {
+            if( array_key_exists( $repeat, $dict ) )
+                array_push( $date, $dict[$repeat] );
+
+            if( is_array( $repeat_submode ) && !empty($repeat_submode[0] )) {
                 $days_short = array(
                     1 => __('Mo', FAU_PERSON_TEXTDOMAIN),
                     2 => __('Di', FAU_PERSON_TEXTDOMAIN),
@@ -487,13 +449,31 @@ class sync_helper {
                     7 => __('Sonntag', FAU_PERSON_TEXTDOMAIN)
                 );
                 foreach( $repeat_submode as $value ) {
-                    array_push($date, $days_short[$value]);
+                        $days_short[$value] = $days_short[$value] . ',';
+                        array_push($date, $days_short[$value]);
                 }
             }
         }
+        if ( $starttime !==0 ) {
+            $time = $starttime;
+            if ( $endtime ) {
+                $time .= ' - ' . $endtime;
+            }
+            $time = $time . ',';
+            array_push($date, $time);
+        }
+
+        if ( $office !== 0 ) {
+            $office = __('Raum', FAU_PERSON_TEXTDOMAIN) . ' ' . $office . ',';
+            array_push($date, $office);            
+        }
+        
+        if( $comment !== 0 ) {
+            array_push($date, $comment);
+        }
 
         $officehours = implode( ' ', $date );
-        //_rrze_debug($officehours);
+        
         return $officehours;
     }
        

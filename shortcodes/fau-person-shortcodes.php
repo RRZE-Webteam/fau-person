@@ -735,7 +735,7 @@ class FAU_Person_Shortcodes {
         extract($fields);
 
         //_rrze_debug(get_post_meta($id, 'fau_person_hoursAvailable_group', true));
-        //_rrze_debug($fields);
+        _rrze_debug($fields);
         if ((strlen($url) > 4) && (strpos($url, "http") === false)) {
             $url = 'http://' . $url;
         }
