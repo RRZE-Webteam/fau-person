@@ -174,7 +174,8 @@ class sync_helper {
         }
 
         foreach( $fields_univis_officehours as $key => $value ) {
-
+            _rrze_debug($univis_sync);
+                    _rrze_debug(get_post_meta($id, 'fau_person_hoursAvailable_group', true));
             if( $univis_sync && array_key_exists( 'officehours', $person ) && array_key_exists( 'officehour', $person['officehours'][0] ) ) {
                 $person_officehours = $person['officehours'][0]['officehour'];
                 $officehours = array();
@@ -199,23 +200,34 @@ class sync_helper {
                     $officehours = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);
                 } else {
                     $person_officehours = get_post_meta($id, 'fau_person_hoursAvailable_group', true);
+                    _rrze_debug(get_post_meta($id, 'fau_person_hoursAvailable_group', true));
+                    //_rrze_debug($person_officehours);
                     $officehours = array();
                     if( !empty( $person_officehours ) ) {
                         foreach ( $person_officehours as $num => $num_val ) {
- 
+                            
                             $repeat = isset( $person_officehours[$num]['repeat'] ) ? $person_officehours[$num]['repeat'] : 0;
+                            _rrze_debug($repeat);
                             $repeat_submode = isset( $person_officehours[$num]['repeat_submode'] ) ? $person_officehours[$num]['repeat_submode'] : 0;
+                            _rrze_debug($repeat_submode);
                             $starttime = isset( $person_officehours[$num]['starttime'] ) ? $person_officehours[$num]['starttime'] : 0;
+                                                        _rrze_debug($starttime);
                             $endtime = isset( $person_officehours[$num]['endtime'] ) ? $person_officehours[$num]['endtime'] : 0;
+                                                        _rrze_debug($endtime);
                             $office = isset( $person_officehours[$num]['office'] ) ? $person_officehours[$num]['office'] : 0;
+                                                        _rrze_debug($office);
                             $comment = isset( $person_officehours[$num]['comment'] ) ? $person_officehours[$num]['comment'] : 0;
+                                                        _rrze_debug($comment);
                             $officehour = self::officehours_repeat($repeat, $repeat_submode, $starttime, $endtime, $office, $comment);
+                                                        _rrze_debug($officehour);
                             array_push($officehours, $officehour);
                         }
                     } 
                 }
             }
+            //_rrze_debug(get_post_meta($id, 'fau_person_hoursAvailable_group', true));
             $fields[$key] = $officehours;
+            
         }       
         
         foreach( $fields_univis_orgunits as $key => $value ) {
