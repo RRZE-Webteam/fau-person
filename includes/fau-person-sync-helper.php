@@ -466,12 +466,13 @@ class sync_helper {
                 }
             }
         }
-        if ( $starttime !==0 ) {
-            $time = $starttime;
+        if ( $starttime ) {
+            $time = self::convert_time( $starttime );
             if ( $endtime ) {
-                $time .= ' - ' . $endtime;
+                $time .= ' - ' . self::convert_time( $endtime );
             }
             $time = $time . ',';
+            _rrze_debug ($time);
             array_push($date, $time);
         }
 
@@ -487,6 +488,21 @@ class sync_helper {
         $officehours = implode( ' ', $date );
         
         return $officehours;
+    }
+    
+    public static function convert_time($time) {
+        if ( strpos( $time, 'PM' ) ) {
+            _rrze_debug('123 '.rtrim( $time, ' PM' ));
+            //$cuttime = ;
+            $modtime = explode( ':', rtrim( $time, ' PM' ) );
+            _rrze_debug($modtime);
+            $modtime[0] = $modtime[0] + 12;
+            $time = implode( $modtime, ':' );
+        } elseif ( strpos( $time, 'AM' ) ) {
+            $time = rtrim( $time, ' AM');            
+        } 
+        //elseif ( count($time) > 5 ) Länge beschränken.   
+        return $time;
     }
        
 }
