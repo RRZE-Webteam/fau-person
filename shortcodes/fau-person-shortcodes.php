@@ -614,6 +614,7 @@ class FAU_Person_Shortcodes {
         
         $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix, $alternateName);
         $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'default' );
+        // hier Fehlermeldung nicht vorhanden $hoursAvailable_group
         $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group );
         
         $content = '<div class="person content-person" itemscope itemtype="http://schema.org/Person">';
@@ -736,8 +737,6 @@ class FAU_Person_Shortcodes {
         // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
         extract($fields);
 
-        //_rrze_debug(get_post_meta($id, 'fau_person_hoursAvailable_group', true));
-        _rrze_debug($fields);
         if ((strlen($url) > 4) && (strpos($url, "http") === false)) {
             $url = 'http://' . $url;
         }
