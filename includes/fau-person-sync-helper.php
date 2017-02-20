@@ -106,6 +106,7 @@ class sync_helper {
             'connection_faxNumber' => 'faxNumber',         
             'connection_email' => 'email',
             'connection_hoursAvailable' => 'hoursAvailable',
+            'connection_hoursAvailable_group' => 'hoursAvailable_group',
             'connection_nr' => 'nr',
         );
         foreach( $fields_univis as $key => $value ) {
@@ -174,7 +175,8 @@ class sync_helper {
         }
 
         foreach( $fields_univis_officehours as $key => $value ) {
-            // ist eine UnivIS-ID vorhanden?        
+            // ist eine UnivIS-ID vorhanden?      
+            _rrze_debug($defaults);
             switch ( $univis_sync ) {
                 case true:
                     if ( array_key_exists( 'officehours', $person ) && array_key_exists( 'officehour', $person['officehours'][0] ) ) { // sind in UnivIS überhaupt Sprechzeiten hinterlegt?
@@ -197,7 +199,7 @@ class sync_helper {
                             }
                             break;
                         }  
-                    } else { // in UnivIS stehen keine Sprechzeiten
+                    } elseif ( $defaults ) { // in UnivIS stehen keine Sprechzeiten
                         $officehours = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);                                                   
                         break;
                     }                                                              
