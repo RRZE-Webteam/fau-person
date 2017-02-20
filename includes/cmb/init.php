@@ -1182,7 +1182,7 @@ function cmb_metabox_form( $meta_box, $object_id, $echo = true ) {
 
 	$form_format = apply_filters( 'cmb_frontend_form_format', '<form class="cmb-form" method="post" id="%s" enctype="multipart/form-data" encoding="multipart/form-data"><input type="hidden" name="object_id" value="%s">%s<input type="submit" name="submit-cmb" value="%s" class="button-primary"></form>', $object_id, $meta_box, $form );
 
-	$form = sprintf( $form_format, $meta_box['id'], $object_id, $form, __( 'Speichern', self::$textdomain ) );
+	$form = sprintf( $form_format, $meta_box['id'], $object_id, $form, __( 'Speichern', cmb_Meta_Box::$textdomain ) );
 
 	if ( $echo )
 		echo $form;
