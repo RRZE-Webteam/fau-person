@@ -1029,21 +1029,23 @@ class FAU_Person_Shortcodes {
     }
 
     public static function hoursavailable_output( $hoursAvailable, $hoursAvailable_group ) {
-        $output = '<li class="person-info-office"><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span>';
-        if ( $hoursAvailable ) {
-            $output .= $hoursAvailable;
+        if(!empty($hoursAvailable) || !empty($hoursAvailable_group)) {
+            $output = '<li class="person-info-office"><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span>';
+            if ( $hoursAvailable ) {
+                $output .= $hoursAvailable;
+            }
+            if ( $hoursAvailable_group ) {
+                /* foreach ( $hoursAvailable_group as $key => $value ) {
+                    $output .= '<br>';
+                    $output .= $value;                                
+                } */
+                if ( $hoursAvailable )  $output .= '<br>';
+                $output .= implode('<br>', $hoursAvailable_group);
+            }
+
+            $output .= '</span></li>';
+            return $output;
         }
-        if ( $hoursAvailable_group ) {
-            /* foreach ( $hoursAvailable_group as $key => $value ) {
-                $output .= '<br>';
-                $output .= $value;                                
-            } */
-            if ( $hoursAvailable )  $output .= '<br>';
-            $output .= implode('<br>', $hoursAvailable_group);
-        }
-                   
-        $output .= '</span></li>';
-        return $output;
     }
     
     // über $type wird die Ausgabereihenfolge definiert: "page", "connection" oder alles andere

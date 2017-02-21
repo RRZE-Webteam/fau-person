@@ -176,7 +176,6 @@ class sync_helper {
 
         foreach( $fields_univis_officehours as $key => $value ) {
             // ist eine UnivIS-ID vorhanden?      
-            _rrze_debug($defaults);
             switch ( $univis_sync ) {
                 case true:
                     if ( array_key_exists( 'officehours', $person ) && array_key_exists( 'officehour', $person['officehours'][0] ) ) { // sind in UnivIS überhaupt Sprechzeiten hinterlegt?
