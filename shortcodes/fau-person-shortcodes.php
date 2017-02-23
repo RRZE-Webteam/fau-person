@@ -694,12 +694,12 @@ class FAU_Person_Shortcodes {
 
         //  if( !($compactindex && $showthumb) )      $content .= '</div>';
 
-        if (($showoffice && $hoursAvailable && empty($connection_only)) || ($showlist && isset($excerpt)) || (($showsidebar || $extended) && $description) || ($showlink && $personlink)) {
+        if (($showoffice && $hoursavailable_output && empty($connection_only)) || ($showlist && isset($excerpt)) || (($showsidebar || $extended) && $description) || ($showlink && $personlink)) {
 
 
             if (!$compactindex)
                 $content .= '</div><div class="span3">';
-            if ($showoffice && $hoursAvailable && empty($connection_only)) {
+            if ($showoffice && $hoursavailable_output && empty($connection_only)) {
                 $content .= '<ul class="person-info">';
                 //$content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><div itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</div></li>';
                 $content .= $hoursavailable_output;
@@ -929,7 +929,7 @@ class FAU_Person_Shortcodes {
                 $content .= '<li class="person-info-email"><span class="screen-reader-text">' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="email" href="mailto:' . strtolower($email) . '">' . strtolower($email) . '</a></li>' . "\n";
             if ($url && $showwebsite)
                 $content .= '<li class="person-info-www"><span class="screen-reader-text">' . __('Webseite', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="url" href="' . $url . '">' . $url . '</a></li>' . "\n";
-            if ($hoursAvailable && $showoffice && empty($connection_only))
+            if ($hoursavailable_output && $showoffice && empty($connection_only))
                 $content .= $hoursavailable_output;
                 //$content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><div itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</div></li>';
             $content .= '</ul>' . "\n";
@@ -980,7 +980,7 @@ class FAU_Person_Shortcodes {
                     $cinfo .= '<li class="person-info-email"><span class="screen-reader-text">' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="email" href="mailto:' . strtolower($email) . '">' . strtolower($email) . '</a></li>';
                 if (!empty($contactpoint) && in_array('contactPoint', $connection_options))
                     $cinfo .= $contactpoint;
-                if ($hoursAvailable && in_array('hoursAvailable', $connection_options))
+                if ($hoursavailable_output && in_array('hoursAvailable', $connection_options))
                     //$cinfo .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</span></li>';
                     $cinfo .= $hoursavailable_output;
                 if (!empty($cinfo)) {
