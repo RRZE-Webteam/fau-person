@@ -321,6 +321,7 @@ class FAU_Person_Shortcodes {
             "format" => '',
             "show" => '',
             "hide" => '',
+            "sort" => FALSE,    //für die Sortierung in Katgorien nach Nachname sort="nachname" angeben. Standardsortierung nach Titel
                         ), $atts));
 
         $content = '';
@@ -522,6 +523,10 @@ class FAU_Person_Shortcodes {
         } 
         
         if ( isset( $posts ) ) {
+            if ( $sort == 'nachname' ) {
+                $posts = FAU_Person::sort_person_posts( $posts );   
+                //_rrze_debug($posts);
+            } 
             $number = count($posts);
             $i = 1;
             if ($shortlist) {
@@ -537,7 +542,12 @@ class FAU_Person_Shortcodes {
                 //$liste = '<p>';
             }
             foreach ($posts as $post) {
-                $value = $post->ID;
+                // Bei Sortierung nach Name ist $posts ein Array
+                if ( $sort == 'nachname' ) {
+                    $value = $post['ID'];
+                } else {
+                    $value = $post->ID;
+                }
                 if ($page) {
                     $content .= self::fau_person_page($value, 1, $showname);
                 } elseif ($shortlist) {
@@ -602,8 +612,10 @@ class FAU_Person_Shortcodes {
                 $excerpt = wp_trim_excerpt($post->post_content);
         }
         
-        $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix);
+        $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix, $alternateName);
         $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'default' );
+        // hier Fehlermeldung nicht vorhanden $hoursAvailable_group
+        $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
         
         $content = '<div class="person content-person" itemscope itemtype="http://schema.org/Person">';
         if ($compactindex)
@@ -682,14 +694,15 @@ class FAU_Person_Shortcodes {
 
         //  if( !($compactindex && $showthumb) )      $content .= '</div>';
 
-        if (($showoffice && $hoursAvailable && empty($connection_only)) || ($showlist && isset($excerpt)) || (($showsidebar || $extended) && $description) || ($showlink && $personlink)) {
+        if (($showoffice && $hoursavailable_output && empty($connection_only)) || ($showlist && isset($excerpt)) || (($showsidebar || $extended) && $description) || ($showlink && $personlink)) {
 
 
             if (!$compactindex)
                 $content .= '</div><div class="span3">';
-            if ($showoffice && $hoursAvailable && empty($connection_only)) {
+            if ($showoffice && $hoursavailable_output && empty($connection_only)) {
                 $content .= '<ul class="person-info">';
-                $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><div itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</div></li>';
+                //$content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><div itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</div></li>';
+                $content .= $hoursavailable_output;
                 $content .= '</ul>';
             }
 
@@ -728,11 +741,12 @@ class FAU_Person_Shortcodes {
             $url = 'http://' . $url;
         }
         if ( !$is_shortcode || $showname ) {
-            $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1);
+            $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1, $alternateName);
             $content .= '<h2>' . $fullname . '</h2>';
         }
 
         $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, 1, 1, 'page' );
+        $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
         
         if (has_post_thumbnail($id)) {
             $content .= '<div itemprop="image" class="alignright">'; 
@@ -760,8 +774,9 @@ class FAU_Person_Shortcodes {
         if (!empty($contactpoint) && empty($connection_only)) {            
             $content .= $contactpoint;
         }
-        if ($hoursAvailable && empty($connection_only))
-            $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</span></li>';
+        if ($hoursavailable_output && empty($connection_only))
+            $content .= $hoursavailable_output;
+            //$content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</span></li>';
         if ($pubs)
             $content .= '<li class="person-info-pubs"><span class="screen-reader-text">' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $pubs . '</li>';
         $content .= '</ul>';
@@ -808,7 +823,7 @@ class FAU_Person_Shortcodes {
         }
         $content = '';
         
-        $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1);
+        $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1, $alternateName);
         if ( $list==1 )
             $content .= '<div class="list">';
         $content .= '<span class="person-info">';
@@ -858,8 +873,9 @@ class FAU_Person_Shortcodes {
                 $personlink = get_permalink($id);
             }
 
-            $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix);
+            $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix, $alternateName);
             $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'default' );
+            $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
             
             if (has_post_thumbnail($id) && $showthumb) {
                 $sidebar_thumb = '<div class="span1" itemprop="image" aria-hidden="true">';
@@ -913,8 +929,9 @@ class FAU_Person_Shortcodes {
                 $content .= '<li class="person-info-email"><span class="screen-reader-text">' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="email" href="mailto:' . strtolower($email) . '">' . strtolower($email) . '</a></li>' . "\n";
             if ($url && $showwebsite)
                 $content .= '<li class="person-info-www"><span class="screen-reader-text">' . __('Webseite', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="url" href="' . $url . '">' . $url . '</a></li>' . "\n";
-            if ($hoursAvailable && $showoffice && empty($connection_only))
-                $content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><div itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</div></li>';
+            if ($hoursavailable_output && $showoffice && empty($connection_only))
+                $content .= $hoursavailable_output;
+                //$content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><div itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</div></li>';
             $content .= '</ul>' . "\n";
             if ((!empty($connection_text) || !empty($connection_options) || !empty($connections) ) && $showvia === 1)
                 $content .= self::fau_person_connection($connection_text, $connection_options, $connections);
@@ -944,8 +961,9 @@ class FAU_Person_Shortcodes {
                 $showroom = 0;
             }
             
-            $fullname = self::fullname_output($nr, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1);
+            $fullname = self::fullname_output($nr, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1, $alternateName);
             $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'connection' );
+            $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
             
             $contactlist .= '<li itemscope itemtype="http://schema.org/Person">' . $fullname;
 
@@ -962,9 +980,9 @@ class FAU_Person_Shortcodes {
                     $cinfo .= '<li class="person-info-email"><span class="screen-reader-text">' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . ': </span><a itemprop="email" href="mailto:' . strtolower($email) . '">' . strtolower($email) . '</a></li>';
                 if (!empty($contactpoint) && in_array('contactPoint', $connection_options))
                     $cinfo .= $contactpoint;
-                if ($hoursAvailable && in_array('hoursAvailable', $connection_options))
-                    $cinfo .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</span></li>';
-
+                if ($hoursavailable_output && in_array('hoursAvailable', $connection_options))
+                    //$cinfo .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</span></li>';
+                    $cinfo .= $hoursavailable_output;
                 if (!empty($cinfo)) {
                     $contactlist .= '<ul class="person-info">';
                     $contactlist .= $cinfo;
@@ -988,22 +1006,51 @@ class FAU_Person_Shortcodes {
         return $content;
     }
     
-    public static function fullname_output( $id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix ) {
+    public static function fullname_output( $id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix, $alternateName ) {
         $fullname = '<span itemprop="name">';
-        if ($showtitle && $honorificPrefix)
-            $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
-        if ($givenName && $familyName) {
-            if ($givenName)
-                $fullname .= '<span itemprop="givenName">' . $givenName . "</span> ";
-            if ($familyName)
-                $fullname .= '<span itemprop="familyName">' . $familyName . "</span>";
-        } elseif (!empty(get_the_title($id))) {
-            $fullname .= get_the_title($id);
+        if ( $alternateName ) {
+            $fullname .= '<span itemprop="alternateName">' . $alternateName . '</span>';
+        } else {
+            if ( $showtitle && $honorificPrefix )
+                $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
+            if ( $givenName && $familyName ) {
+                if ( $givenName )
+                    $fullname .= '<span itemprop="givenName">' . $givenName . "</span> ";
+                if ( $familyName )
+                    $fullname .= '<span itemprop="familyName">' . $familyName . "</span>";
+            } elseif (!empty(get_the_title($id))) {
+                $fullname .= get_the_title($id);
+            }
+            if ( $showsuffix && $honorificSuffix )
+                $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
         }
-        if ($showsuffix && $honorificSuffix)
-            $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
         $fullname .= '</span>';
         return $fullname;
+    }
+
+    public static function hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text ) {
+        if(!empty($hoursAvailable) || !empty($hoursAvailable_group)) {
+            $output = '<li class="person-info-office"><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">';
+            if(!empty($hoursAvailable_text)) {
+                $output .= '<strong>' . $hoursAvailable_text . ':</strong><br>';
+            } else {
+                $output .= '<span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span>';    
+            }
+            if ( $hoursAvailable ) {
+                $output .= $hoursAvailable;
+            }
+            if ( $hoursAvailable_group ) {
+                /* foreach ( $hoursAvailable_group as $key => $value ) {
+                    $output .= '<br>';
+                    $output .= $value;                                
+                } */
+                if ( $hoursAvailable )  $output .= '<br>';
+                $output .= implode('<br>', $hoursAvailable_group);
+            }
+
+            $output .= '</span></li>';
+            return $output;
+        }
     }
     
     // über $type wird die Ausgabereihenfolge definiert: "page", "connection" oder alles andere

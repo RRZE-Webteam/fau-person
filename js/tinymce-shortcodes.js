@@ -7,7 +7,7 @@
             text: 'Person einfügen',
             context: 'tools',
             onclick: function() {
-                editor.insertContent('[person id="" format="" show="" hide=""]');
+                editor.insertContent('[kontakt id="" format="" show="" hide=""]');
             }
         });
         
@@ -15,7 +15,7 @@
             text: 'Personengalerie einfügen',
             context: 'tools',
             onclick: function() {
-                editor.insertContent('[persons category="" showlink="0" extended="0"]');
+                editor.insertContent('[kontakt category="" format="" show="" hide=""]');
             }
         });
             });
