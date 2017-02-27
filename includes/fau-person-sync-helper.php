@@ -12,6 +12,7 @@ class sync_helper {
             $univis_sync = 1;
         } 
         $fields = array();
+        // Ab hier Definition aller Feldzuordnungen, $key ist Name der Metaboxen, $value ist Name in UnivIS
         $fields_univis = array(
             'department' => 'orgname',
             'honorificPrefix' => 'title',
@@ -30,7 +31,45 @@ class sync_helper {
             'workLocation' => 'office', 
         );
         $fields_univis_officehours = array(
-            //'workLocation' => 'office', 
+            'hoursAvailable_group' => 'officehours',
+        );
+        // Die Detailfelder zu den Sprechzeiten
+        $subfields_univis_officehours = array(
+            /* von der UnivIS-Doku:
+             * repeat mode is encoded in a string
+             * syntax: <modechar><numbers><space><args>                  
+             * mode  description                  
+             * d     daily                  
+             * w     weekly
+             * m     monthly                  
+             * y     yearly                 
+             * b     block
+             * numbers: number of skips between repeats
+             * example:  "d2":      every second day
+             * weekly and monthly have additional arguments:  
+             * weekly: argument is comma-separated list of weekdays where event is repeated                  
+             * example:  "w3 1,2":  every third week on Monday and Tuesday                  
+             * also possible: „we“ and „wo"
+             * e = even calender week                  
+             * o = odd calender week                  
+             * monthly: argument has syntax "<submodechar><numbers>"                 
+             * submode description                  
+             * d       monthly by date                  
+             * w       monthly by week                  
+             * numbers: monthly by date: number of day (1-31)                  
+             * monthly by week: number of week (1-5,e,o))                  
+             * special case: 5 = last week of month                
+             * examples:  "m1 d23": on the 23rd day of every month
+             * "m2 w5":  in the last week of every second month
+             * Laut UnivIS-Live-Daten werden für die Sprechzeiten aber nur wöchentlich an verschiedenen Tagen, 2-wöchentlich und täglich verwendet. Sollte noch was anderes benötigt werden, muss nachprogrammiert werden.
+             */
+            'comment' => 'comment',
+            'endtime' => 'endtime',
+            'repeat' => 'repeat',
+            //'repeat_mode' => 'repeat_mode',
+            'repeat_submode' => '',
+            'office' => 'office', 
+            'starttime' => 'starttime',
         );
         $fields_univis_orgunits = array(
             'worksFor' => 'orgunit',            
@@ -42,6 +81,7 @@ class sync_helper {
             'addressCountry' => '',
             'pubs' => '',
             'link' => '',
+            'hoursAvailable_text' => '',
             'hoursAvailable' => '',
             'description' => '',
             'mobilePhone' => '',
@@ -67,6 +107,7 @@ class sync_helper {
             'connection_faxNumber' => 'faxNumber',         
             'connection_email' => 'email',
             'connection_hoursAvailable' => 'hoursAvailable',
+            'connection_hoursAvailable_group' => 'hoursAvailable_group',
             'connection_nr' => 'nr',
         );
         foreach( $fields_univis as $key => $value ) {
@@ -133,19 +174,55 @@ class sync_helper {
             //add_action( 'admin_notices', array( 'FAU_Person', 'admin_notice_phone_number' ) );
             $fields[$key] = $value;
         }
+
         foreach( $fields_univis_officehours as $key => $value ) {
-            if( $univis_sync && array_key_exists( 'officehours', $person ) && array_key_exists( 'officehour', $person['officehours'][0] ) ) {
-                $person_officehours = $person['officehours'][0]['officehour'][0];
-                $value = self::sync_univis( $id, $person_officehours, $key, $value, $defaults );
-            } else {
-                if( $defaults ) {
-                    $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);
-                } else {
-                    $value = get_post_meta($id, 'fau_person_'.$key, true);  
-                }
+            // ist eine UnivIS-ID vorhanden?      
+            switch ( $univis_sync ) {
+                case true:
+                    if ( array_key_exists( 'officehours', $person ) && array_key_exists( 'officehour', $person['officehours'][0] ) ) { // sind in UnivIS überhaupt Sprechzeiten hinterlegt?
+                        if( get_post_meta($id, 'fau_person_univis_sync', true) || $defaults ) { // ist der Haken zur Synchronisation da bzw. werden die UnivIS-Werte für das Backend abgefragt
+                            $person_officehours = $person['officehours'][0]['officehour'];   
+                            $officehours = array();
+                            foreach ($person_officehours as $num => $num_val) {
+                                $repeat = isset( $person_officehours[$num]['repeat'] ) ? $person_officehours[$num]['repeat'] : 0;
+                                $repeat_submode = isset( $person_officehours[$num]['repeat_submode'] ) ? $person_officehours[$num]['repeat_submode'] : 0;
+                                $starttime = isset( $person_officehours[$num]['starttime'] ) ? $person_officehours[$num]['starttime'] : 0;
+                                $endtime = isset( $person_officehours[$num]['endtime'] ) ? $person_officehours[$num]['endtime'] : 0;
+                                $office = isset( $person_officehours[$num]['office'] ) ? $person_officehours[$num]['office'] : 0;
+                                $comment = isset( $person_officehours[$num]['comment'] ) ? $person_officehours[$num]['comment'] : 0;
+                                $officehour = self::officehours_repeat($repeat, $repeat_submode, $starttime, $endtime, $office, $comment);                    
+                                array_push($officehours, $officehour);
+                            }
+                            if ( $defaults ) {
+                                $officehours = implode($officehours, '</p></li><li><p class="cmb_metabox_description">');
+                                $officehours = sprintf(__('<p class="cmb_metabox_description">[Aus UnivIS angezeigter Wert: </p><ul><li><p class="cmb_metabox_description">%s</p></li></ul><p class="cmb_metabox_description">]</p>', FAU_PERSON_TEXTDOMAIN), $officehours); 
+                            }
+                            break;
+                        }  
+                    } elseif ( $defaults ) { // in UnivIS stehen keine Sprechzeiten
+                        $officehours = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', FAU_PERSON_TEXTDOMAIN);                                                   
+                        break;
+                    }                                                              
+                default:  // keine UnivIS-ID da bzw. kein Haken bei Datenanzeige aus UnivIS => die Feldinhalte werden ausgegeben
+                    $person_officehours = get_post_meta($id, 'fau_person_hoursAvailable_group', true);
+                    $officehours = array();
+                    if( !empty( $person_officehours ) ) {
+                        foreach ( $person_officehours as $num => $num_val ) {                            
+                            $repeat = isset( $person_officehours[$num]['repeat'] ) ? $person_officehours[$num]['repeat'] : 0;
+                            $repeat_submode = isset( $person_officehours[$num]['repeat_submode'] ) ? $person_officehours[$num]['repeat_submode'] : 0;
+                            $starttime = isset( $person_officehours[$num]['starttime'] ) ? $person_officehours[$num]['starttime'] : 0;
+                            $endtime = isset( $person_officehours[$num]['endtime'] ) ? $person_officehours[$num]['endtime'] : 0;
+                            $office = isset( $person_officehours[$num]['office'] ) ? $person_officehours[$num]['office'] : 0;
+                            $comment = isset( $person_officehours[$num]['comment'] ) ? $person_officehours[$num]['comment'] : 0;
+                            $officehour = self::officehours_repeat($repeat, $repeat_submode, $starttime, $endtime, $office, $comment);
+                            array_push($officehours, $officehour);                                
+                        }
+                    }
             }
-            $fields[$key] = $value;
-        }
+            $fields[$key] = $officehours;
+            
+        }       
+        
         foreach( $fields_univis_orgunits as $key => $value ) {
             $language = get_locale();
             if( strpos( $language, 'en_' ) === 0 && array_key_exists( 'orgunit_ens', $person ) ) {
@@ -234,8 +311,8 @@ class sync_helper {
       
         return (array) $result;
     }
-    
-    //$id = ID des Personeneintrags, $person = Array mit Personendaten, $fau_person_var = Bezeichnung Personenplugin, $univis_vat = Bezeichnung UnivIS, $defaults = Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular
+
+    //$id = ID des Personeneintrags, $person = Array mit Personendaten, $fau_person_var = Bezeichnung Personenplugin, $univis_var = Bezeichnung UnivIS, $defaults = Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular
     public static function sync_univis( $id, $person, $fau_person_var, $univis_var, $defaults ) {   
         //wird benötigt, falls jeder einzelne Wert abgefragt werden soll
         //if( !empty( $person[$univis_var] ) && get_post_meta($id, 'fau_person_'.$fau_person_var_sync', true) ) {
@@ -336,6 +413,85 @@ class sync_helper {
         return $phone_number;
     }
 
+    //public static function officehours_repeat( $officehours ) {
+    public static function officehours_repeat( $repeat, $repeat_submode, $starttime, $endtime, $office, $comment ) {
+        $date = array();
+
+        if ( !$repeat_submode ) {
+            $repeat = strtok($repeat, ' ');
+            $repeat_submode = strtok(' ');
+            $repeat_submode = explode( ',', $repeat_submode );
+        }
+
+        if( $repeat ) {
+            $dict = array(
+                'd1' => __('Täglich', FAU_PERSON_TEXTDOMAIN),
+                'w1' => __('Jede Woche', FAU_PERSON_TEXTDOMAIN),
+                'w2' => __('Alle zwei Wochen', FAU_PERSON_TEXTDOMAIN),
+            );
+
+            if( array_key_exists( $repeat, $dict ) )
+                array_push( $date, $dict[$repeat] );
+
+            if( is_array( $repeat_submode ) && !empty($repeat_submode[0] )) {
+                $days_short = array(
+                    1 => __('Mo', FAU_PERSON_TEXTDOMAIN),
+                    2 => __('Di', FAU_PERSON_TEXTDOMAIN),
+                    3 => __('Mi', FAU_PERSON_TEXTDOMAIN),
+                    4 => __('Do', FAU_PERSON_TEXTDOMAIN),
+                    5 => __('Fr', FAU_PERSON_TEXTDOMAIN),
+                    6 => __('Sa', FAU_PERSON_TEXTDOMAIN),
+                    7 => __('So', FAU_PERSON_TEXTDOMAIN)
+                );
+
+                $days_long = array(
+                    1 => __('Montag', FAU_PERSON_TEXTDOMAIN),
+                    2 => __('Dienstag', FAU_PERSON_TEXTDOMAIN),
+                    3 => __('Mittwoch', FAU_PERSON_TEXTDOMAIN),
+                    4 => __('Donnerstag', FAU_PERSON_TEXTDOMAIN),
+                    5 => __('Freitag', FAU_PERSON_TEXTDOMAIN),
+                    6 => __('Samstag', FAU_PERSON_TEXTDOMAIN),
+                    7 => __('Sonntag', FAU_PERSON_TEXTDOMAIN)
+                );
+                foreach( $repeat_submode as $value ) {
+                        $days_short[$value] = $days_short[$value] . ',';
+                        array_push($date, $days_short[$value]);
+                }
+            }
+        }
+        if ( $starttime ) {
+            $time = self::convert_time( $starttime );
+            if ( $endtime ) {
+                $time .= ' - ' . self::convert_time( $endtime );
+            }
+            $time = $time . ',';
+            array_push($date, $time);
+        }
+
+        if ( $office ) {
+            $office = __('Raum', FAU_PERSON_TEXTDOMAIN) . ' ' . $office . ',';
+            array_push($date, $office);            
+        }
+        
+        if( $comment !== 0 ) {
+            array_push($date, $comment);
+        }
+
+        $officehours = implode( ' ', $date );
+        
+        return $officehours;
+    }
+    
+    public static function convert_time($time) {
+        if ( strpos( $time, 'PM' ) ) {
+            $modtime = explode( ':', rtrim( $time, ' PM' ) );
+            $modtime[0] = $modtime[0] + 12;
+            $time = implode( $modtime, ':' );
+        } elseif ( strpos( $time, 'AM' ) ) {
+            $time = rtrim( $time, ' AM');            
+        } 
+        return $time;
+    }
        
 }
 
