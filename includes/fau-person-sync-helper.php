@@ -81,6 +81,7 @@ class sync_helper {
             'addressCountry' => '',
             'pubs' => '',
             'link' => '',
+            'hoursAvailable_text' => '',
             'hoursAvailable' => '',
             'description' => '',
             'mobilePhone' => '',

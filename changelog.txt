@@ -24,6 +24,7 @@ Versionsänderungen:
 - Bugfix bei Anzeige des Raumes und des Bildes in der Sidebar über die Metabox "Ansprechpartner"    
 - auf Kontaktseite ID der aktuellen Person in Kontexthilfe eingebunden    
 - Einbindung von Sprechzeiten aus UnivIS    
+- Neues Feld zur Eingabe einer Überschrift (Fettdruck) über den Sprechzeiten    
 - Kompatibilität mit PHP7.1    
 
 ####Version 2.2.0:    

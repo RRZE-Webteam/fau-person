@@ -352,8 +352,14 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
                 'id' => $prefix . 'description'
             ),
             array(
-                'name' => __('Sprech- bzw. Öffnungszeiten', FAU_PERSON_TEXTDOMAIN),
-                'desc' => __('Zur Formatierung können HTML-Befehle verwendet werden (z.B. &lt;br&gt; für Zeilenumbruch).', FAU_PERSON_TEXTDOMAIN),
+                'name' => __('Sprechzeiten: Überschrift', FAU_PERSON_TEXTDOMAIN),
+                'desc' => __('Wird in Fettdruck über den Sprechzeiten ausgegeben.', FAU_PERSON_TEXTDOMAIN),
+                'type' => 'text',
+                'id' => $prefix . 'hoursAvailable_text'                
+            ),
+            array(
+                'name' => __('Sprechzeiten: Allgemeines oder Anmerkungen', FAU_PERSON_TEXTDOMAIN),
+                'desc' => __('Zur Formatierung können HTML-Befehle verwendet werden (z.B. &lt;br&gt; für Zeilenumbruch). Wird vor den Sprechzeiten ausgegeben.', FAU_PERSON_TEXTDOMAIN),
                 'type' => 'textarea_small',
                 'id' => $prefix . 'hoursAvailable'
             ),

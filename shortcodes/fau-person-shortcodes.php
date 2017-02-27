@@ -615,7 +615,7 @@ class FAU_Person_Shortcodes {
         $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix, $alternateName);
         $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'default' );
         // hier Fehlermeldung nicht vorhanden $hoursAvailable_group
-        $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group );
+        $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
         
         $content = '<div class="person content-person" itemscope itemtype="http://schema.org/Person">';
         if ($compactindex)
@@ -746,7 +746,7 @@ class FAU_Person_Shortcodes {
         }
 
         $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, 1, 1, 'page' );
-        $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group );
+        $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
         
         if (has_post_thumbnail($id)) {
             $content .= '<div itemprop="image" class="alignright">'; 
@@ -875,7 +875,7 @@ class FAU_Person_Shortcodes {
 
             $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, $showtitle, $showsuffix, $alternateName);
             $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'default' );
-            $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group );
+            $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
             
             if (has_post_thumbnail($id) && $showthumb) {
                 $sidebar_thumb = '<div class="span1" itemprop="image" aria-hidden="true">';
@@ -963,7 +963,7 @@ class FAU_Person_Shortcodes {
             
             $fullname = self::fullname_output($nr, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1, $alternateName);
             $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'connection' );
-            $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group );
+            $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
             
             $contactlist .= '<li itemscope itemtype="http://schema.org/Person">' . $fullname;
 
@@ -1028,9 +1028,14 @@ class FAU_Person_Shortcodes {
         return $fullname;
     }
 
-    public static function hoursavailable_output( $hoursAvailable, $hoursAvailable_group ) {
+    public static function hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text ) {
         if(!empty($hoursAvailable) || !empty($hoursAvailable_group)) {
-            $output = '<li class="person-info-office"><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span>';
+            $output = '<li class="person-info-office"><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">';
+            if(!empty($hoursAvailable_text)) {
+                $output .= '<strong>' . $hoursAvailable_text . ':</strong><br>';
+            } else {
+                $output .= '<span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span>';    
+            }
             if ( $hoursAvailable ) {
                 $output .= $hoursAvailable;
             }
