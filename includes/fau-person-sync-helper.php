@@ -485,9 +485,12 @@ class sync_helper {
     public static function convert_time($time) {
         if ( strpos( $time, 'PM' ) ) {
             $modtime = explode( ':', rtrim( $time, ' PM' ) );
-            $modtime[0] = $modtime[0] + 12;
+            if ( $modtime[0] != 12 ) {
+                $modtime[0] = $modtime[0] + 12;
+            }                
             $time = implode( $modtime, ':' );
         } elseif ( strpos( $time, 'AM' ) ) {
+            $time = str_replace( '12:', '00:', $time);
             $time = rtrim( $time, ' AM');            
         } 
         return $time;
