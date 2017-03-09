@@ -557,10 +557,10 @@ class FAU_Person {
             
         }
 
-        $this->search_univis_id_page = add_submenu_page('edit.php?post_type=person', __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'search-univis-id', array( $this, 'search_univis_id' ));
+        $this->search_univis_id_page = add_submenu_page('edit.php?post_type=person', __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), 'edit_persons', 'search-univis-id', array( $this, 'search_univis_id' ));
         add_action('load-' . $this->search_univis_id_page, array($this, 'help_menu_search_univis_id'));
         
-        $this->sidebar_options_page = add_submenu_page('edit.php?post_type=person', __('Anzeigeoptionen', FAU_PERSON_TEXTDOMAIN), __('Anzeigeoptionen', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'sidebar-options', array( $this, 'sidebar_options' ));
+        $this->sidebar_options_page = add_submenu_page('edit.php?post_type=person', __('Anzeigeoptionen', FAU_PERSON_TEXTDOMAIN), __('Anzeigeoptionen', FAU_PERSON_TEXTDOMAIN), 'edit_persons', 'sidebar-options', array( $this, 'sidebar_options' ));
         add_action('load-' . $this->sidebar_options_page, array($this, 'help_menu_sidebar_options'));        
     }
 
