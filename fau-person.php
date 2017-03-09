@@ -4,7 +4,7 @@
  Plugin Name: FAU Person
  Plugin URI: https://github.com/RRZE-Webteam/fau-person
  * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 2.3.2
+ * Version: 2.3.3
  * Author: RRZE-Webteam
  * Author URI: http://blogs.fau.de/webworking/
  * License: GPLv2 or later
@@ -44,7 +44,7 @@ require_once('shortcodes/fau-standort-shortcodes.php');
 class FAU_Person {
 
     //******** Mit neuer Version auch hier aktualisieren!!! ***********
-    const version = '2.3.2';
+    const version = '2.3.3';
     
     const option_name = '_fau_person';
     const version_option_name = '_fau_person_version';
@@ -163,34 +163,22 @@ class FAU_Person {
 
         self::$options = self::get_options();  
         
-       // CPT-Capabilities für die Administrator, Editor und Autor zuweisen
+        // CPT-Capabilities für die Administrator-Rolle zuweisen
         // 
         $caps_person = self::get_caps('person');
         self::add_caps('administrator', $caps_person);
-        self::add_caps('editor', $caps_person);
-        $caps_person_author = self::get_caps_author('person');
-        self::add_caps('author', $caps_person_author);
-        
         $caps_standort = self::get_caps('standort');
         self::add_caps('administrator', $caps_standort);
-        self::add_caps('editor', $caps_standort);
-        $caps_standort_author = self::get_caps_author('standort');
-        self::add_caps('author', $caps_standort_author);      
+        //self::add_caps('editor', $caps);       
     }
     
     public static function deactivation() {       
-        // CPT-Capabilities aus der Administrator-, Editor- und Autor-Rolle entfernen
+        // CPT-Capabilities aus der Administrator-Rolle entfernen
         $caps_person = self::get_caps('person');
         self::remove_caps('administrator', $caps_person);
-        self::remove_caps('editor', $caps_person);
-        $caps_person_author = self::get_caps_author('person');
-        self::remove_caps('author', $caps_person_author);
-
         $caps_standort = self::get_caps('standort');
         self::remove_caps('administrator', $caps_standort);
-        self::remove_caps('editor', $caps_standort);
-        $caps_standort_author = self::get_caps_author('standort');
-        self::remove_caps('author', $caps_standort_author);
+            //self::remove_caps('editor', $caps);
         flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind   
     }
 
@@ -216,21 +204,6 @@ class FAU_Person {
         
         if (version_compare($version, self::version, '<')) {
             // Hier muss der Code rein, wenn sich bei den bestehenden Optionen was ändert (z.B. Anpassungen in der Struktur)
-
-            // Ab hier zur Rechtevergabe für die Autoren, Editoren und Administratoren. Wurde angepasst in Version 2.3.1, 
-            // kann evtl. in späteren Versionen wieder raus an dieser Stelle, weil dann mit der Aktivierung des Plugins 
-            // alles korrekt ist.
-            $caps_person = self::get_caps('person');
-            self::add_caps('administrator', $caps_person);
-            self::add_caps('editor', $caps_person);
-            $caps_person_author = self::get_caps_author('person');
-            self::add_caps('author', $caps_person_author);
-
-            $caps_standort = self::get_caps('standort');
-            self::add_caps('administrator', $caps_standort);
-            self::add_caps('editor', $caps_standort);
-            $caps_standort_author = self::get_caps_author('standort');
-            self::add_caps('author', $caps_standort_author);            
         }
         
         update_option(self::version_option_name, self::version);
@@ -375,18 +348,6 @@ class FAU_Person {
         return $caps;
     }
  
-    private static function get_caps_author($cap_type) {
-        $caps = array(
-            "edit_" . $cap_type,
-            "read_" . $cap_type,
-            "delete_" . $cap_type,
-            "edit_" . $cap_type . "s",
-            "delete_" . $cap_type . "s",             
-        );
-
-        return $caps;
-    }
-    
     private static function add_caps($role, $caps) {
         $role = get_role($role);
         foreach($caps as $cap) {
