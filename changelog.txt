@@ -18,6 +18,9 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 
 Versionsänderungen:
 ===================
+####Version 2.3.2:    
+- Korrektur Rollenrechte (Editor und Author)            
+
 ####Version 2.3.1:    
 - Bugfix Sprechzeiten 12:00 AM und 12:00 PM        
 
