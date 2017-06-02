@@ -963,7 +963,12 @@ class FAU_Person_Shortcodes {
             
             $fullname = self::fullname_output($nr, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1, $alternateName);
             $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'connection' );
-            $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
+            if( isset($hoursAvailable_text) ) {
+                $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
+            } else {
+                $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, '' );
+            }
+            
             
             $contactlist .= '<li itemscope itemtype="http://schema.org/Person">' . $fullname;
 
