@@ -730,3 +730,36 @@ class UnivIS_Data {
     }
     
 }
+
+/* RRZE-Schnittstelle für Ansprechpartner */
+
+class rrze_gmail_data {
+    public static function get_idm_data($apikey) {
+        // Hole Daten von Univis
+        $url = 'https://www.idm.fau.de/gmail/addressExporter/exportAll/index.html?apikey=' . $apikey;
+
+        if(!fopen($url, "r")) {
+                // IdM-Server ist nicht erreichbar
+                return -1;
+        }
+
+        // XML Daten Parsen
+        $daten = json_decode(file_get_contents($url));
+        if(empty($daten)) {
+            echo "Leider konnten keine Daten gefunden werden.";
+            return -1;
+        } else {
+            $ansprechpartner = array();
+            foreach ($daten as $key => $value) {
+                //_rrze_debug($key);
+                //_rrze_debug($value);
+                if ($value->ansprechpartner == true) {
+                    _rrze_debug($value->contactInfo);
+                    //_rrze_debug($value['ansprechpartner']);
+                }
+            }
+            _rrze_debug($ansprechpartner);
+        }
+    }
+    
+}

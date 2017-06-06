@@ -594,6 +594,7 @@ class FAU_Person {
                         //$output = __('UnivIS-ID', FAU_PERSON_TEXTDOMAIN) . ' '. $id . ': '. $firstname . ' ' . $lastname . ', ' . __('E-Mail', FAU_PERSON_TEXTDOMAIN) . ': ' . $email. ', ' . __('Organisation', FAU_PERSON_TEXTDOMAIN) . ': ' . $orgname;
                         echo 'UnivIS-ID '. $id . ': '. $firstname . ' ' . $lastname . ', E-Mail: ' . $email. ', Organisation: ' . $orgname;
                         echo "<br>";
+                        rrze_gmail_data::get_idm_data('ad6c4afc-7c9e-4dd4-90d2-dc870810bee7');
                     }
                 }
             ?>
