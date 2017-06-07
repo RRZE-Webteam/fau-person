@@ -477,6 +477,8 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
         )
     );
 
+    $meta_boxes['rrze_gmail_sync'] = apply_filters('rrze_gmail_metabox', array());
+    
     // Meta-Box Synchronisierung mit externen Daten - fau_person_sync ab hier
     $meta_boxes['fau_person_options'] = array(
         'id' => 'fau_person_options',
