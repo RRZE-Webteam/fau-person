@@ -631,6 +631,8 @@ class FAU_Person {
         add_settings_field('sidebar', __('Im Widget (bei den FAU-Themes auch in der Sidebar, wenn der Kontakt über das Feld "Auswahl Ansprechpartner" in der Metabox "Sidebar" gewählt wird)', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar'), 'sidebar_options', 'sidebar_section');
         add_settings_section('has_archive_page_section', __('Kontakt-Übersichtsseite:', FAU_PERSON_TEXTDOMAIN), '__return_false', 'has_archive_page_options');
         add_settings_field('has_archive_page', __('Verwendung der Standard-Übersichtsseite', FAU_PERSON_TEXTDOMAIN), array($this, 'has_archive_page'), 'has_archive_page_options', 'has_archive_page_section');
+        
+        //do_action('fau_person_gmail_apikey');
     }
 
     public function sidebar() {
@@ -700,6 +702,7 @@ class FAU_Person {
                 do_settings_sections('sidebar_options');
                 settings_fields('has_archive_page_options');
                 do_settings_sections('has_archive_page_options');
+                do_action('fau_person_gmail_apikey');
                 submit_button(esc_html(__('Änderungen speichern', FAU_PERSON_TEXTDOMAIN)), 'primary', 'fau-person-options');
                 //update_option($options['sidebar']['position'], isset($_POST['_fau_person']['sidebar']['position']) ? 1 : null);
                 ?>
