@@ -477,7 +477,7 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
         )
     );
 
-    $meta_boxes['rrze_gmail_sync'] = apply_filters('rrze_gmail_metabox', array());
+    $meta_boxes['fau_person_gmail_sync'] = apply_filters('fau_person_gmail_metabox', array());
     
     // Meta-Box Synchronisierung mit externen Daten - fau_person_sync ab hier
     $meta_boxes['fau_person_options'] = array(
@@ -536,6 +536,8 @@ add_filter('cmb_meta_boxes', function(array $metaboxes) {
             ),
         )        
     );
+    
+    $meta_boxes['fau_person_gmail_contacts'] = apply_filters('fau_person_gmail_contacts', array());
     
     // Meta-Box um eine Kontaktperson oder -Einrichtung zuzuordnen
     $meta_boxes['fau_person_connection'] = array(

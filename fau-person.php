@@ -226,10 +226,12 @@ class FAU_Person {
             ),
             'has_archive_page' => true,
         );               
+        // für ergänzende Optionen aus anderen Plugins
+        $options = apply_filters('fau_person_default_options', $options);
         return $options; // Standard-Array für zukünftige Optionen
     }
 
-    private static function get_options() {
+    public static function get_options() {
         $defaults = self::default_options();
         $options = (array) get_option(self::option_name);
         if(!isset($options['sidebar'])) {
@@ -239,7 +241,7 @@ class FAU_Person {
 
         //Umstellung auf mehrdimensionales Array wegen Sidebar
         foreach ($options as $key => $value) {
-            if(is_array($options[$key])) {
+            if(isset($options[$key]) && is_array($options[$key])) {
                 $options[$key] = wp_parse_args($options[$key], $defaults[$key]);
                 $options[$key] = array_intersect_key($options[$key], $defaults[$key]);   
                
@@ -514,8 +516,8 @@ class FAU_Person {
             $input = isset($_POST[self::option_name]['has_archive_page']) ? true : false;
             set_transient('fau-person-options', 1, 30);
             $options['has_archive_page'] = $input;
-            update_option(self::option_name, $options); 
-            
+            $options = apply_filters('gmail_apikey_options', $options);
+            update_option(self::option_name, $options);        
         }
 
         $this->search_univis_id_page = add_submenu_page('edit.php?post_type=person', __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), 'edit_persons', 'search-univis-id', array( $this, 'search_univis_id' ));
