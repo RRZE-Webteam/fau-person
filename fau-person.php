@@ -123,7 +123,10 @@ class FAU_Person {
         //Excerpt-Meta-Box umbenennen
         add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));        
 	
-	add_filter( 'parse_query', array( $this, 'taxonomy_filter_post_type_request' ) );	
+	add_filter( 'parse_query', array( $this, 'taxonomy_filter_post_type_request' ) );
+        
+        // Unterstützung vom Shortcode im Widget
+        add_filter('widget_text','do_shortcode');
 	
 		
 	// FAU-Theme + Alte FAU Plugin Personenfelder aktiv
