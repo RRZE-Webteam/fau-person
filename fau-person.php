@@ -127,6 +127,16 @@ class FAU_Person {
         
         // Unterstützung vom Shortcode im Widget
         add_filter('widget_text','do_shortcode');
+        
+        /* Thumb for person-type; small for sidebar - Name: person-thumb */
+	add_image_size( 'person-thumb', self::$options['default_person_thumb_width' ], self::$options['default_person_thumb_height'], self::$options['default_person_thumb_crop'	]); // 60, 80, true
+	
+        /* Thumb for person-type; small for content - Name: person-thumb-bigger */
+	add_image_size( 'person-thumb-bigger', self::$options['default_person_thumb_bigger_width'], self::$options[ 'default_person_thumb_bigger_height'], self::$options['default_person_thumb_bigger_crop']); // 90,120,true
+
+	 /* Thumb for person-type; big for content - Name: person-thumb-page */
+	add_image_size( 'person-thumb-page', self::$options['default_person_thumb_page_width'], self::$options[ 'default_person_thumb_page_height'], self::$options['default_person_thumb_page_crop']); // 200,300,true
+
 	
 		
 	// FAU-Theme + Alte FAU Plugin Personenfelder aktiv
@@ -229,6 +239,19 @@ class FAU_Person {
                 'bild' => true,
             ),
             'has_archive_page' => true,
+            /* Thumb for person-type; small for sidebar - Name: person-thumb */
+            'default_person_thumb_width'	=> 60,
+            'default_person_thumb_height'	=> 80,
+            'default_person_thumb_crop'		=> true, 
+            /* Thumb for person-type; small for content - Name: person-thumb-bigger */
+            'default_person_thumb_bigger_width' => 90,
+            'default_person_thumb_bigger_height'=> 120,
+            'default_person_thumb_bigger_crop'	=> true,     
+            /* Thumb for person-type; small for content - Name: person-thumb-page */
+            'default_person_thumb_page_width'    => 200,
+            'default_person_thumb_page_height'   => 300,
+            'default_person_thumb_page_crop'	 => true,         
+    
         );               
         // für ergänzende Optionen aus anderen Plugins
         $options = apply_filters('fau_person_default_options', $options);
