@@ -785,11 +785,14 @@ class FAU_Person_Shortcodes {
             $content .= self::fau_person_connection($connection_text, $connection_options, $connections);
 
 
-
-        $post = get_post($id);
-        if ($post->post_content) {
+        if ( is_singular( 'person' ) && in_the_loop() ) {
+            $post = get_the_content();
+        } else {
+            $post = get_post($id)->post_content;
+        }
+        if ($post) {
             $content .= '<div class="desc" itemprop="description">' . PHP_EOL;
-            $content .= apply_filters( 'the_content', $post->post_content );
+            $content .= apply_filters( 'the_content', $post );
             $content .= '</div>';
         }
         $content .= '</div>';
