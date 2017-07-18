@@ -1,6 +1,4 @@
 <?php
- 
-
 get_header(); ?>
     <?php while ( have_posts() ) : the_post(); ?>
         <div id="content">
@@ -8,11 +6,8 @@ get_header(); ?>
                 <div class="row">
                     <div class="span8">
                     <?php 
-                    $id = $post->ID;
-
-		    echo FAU_Person_Shortcodes::fau_person_page($id);
-                    ?>
-          
+                        echo FAU_Person_Shortcodes::fau_person_page(get_the_ID());
+                    ?>         
                     </div>
                 </div>
             </div>
