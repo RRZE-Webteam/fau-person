@@ -18,9 +18,11 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 
 Versionsänderungen:
 ===================
-####Version 2.3.2:    
+####Version 2.4.0:    
 - Korrektur Rollenrechte (Editor und Author)       
 - Einbettung Größe der Personenbilder    
+- Caption für Personenbilder     
+- Shortcode in Widget ermöglicht        
 - Schnittstelle zu rrze-gmail-Plugin         
 
 ####Version 2.3.1:    
