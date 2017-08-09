@@ -3,11 +3,12 @@
 /**
  Plugin Name: FAU Person
  Plugin URI: https://github.com/RRZE-Webteam/fau-person
- * Description: Visitenkarten-Plugin für FAU Webauftritte
- * Version: 2.3.1
- * Author: RRZE-Webteam
- * Author URI: http://blogs.fau.de/webworking/
- * License: GPLv2 or later
+ GitHub Plugin URI: https://github.com/RRZE-Webteam/fau-person
+ Description: Visitenkarten-Plugin für FAU Webauftritte
+ Version: 2.4.0
+ Author: RRZE-Webteam
+ Author URI: http://blogs.fau.de/webworking/
+ License: GPLv2 or later
  */
 
 /*
@@ -44,7 +45,7 @@ require_once('shortcodes/fau-standort-shortcodes.php');
 class FAU_Person {
 
     //******** Mit neuer Version auch hier aktualisieren!!! ***********
-    const version = '2.3.1';
+    const version = '2.4.0';
     
     const option_name = '_fau_person';
     const version_option_name = '_fau_person_version';
@@ -122,7 +123,20 @@ class FAU_Person {
         //Excerpt-Meta-Box umbenennen
         add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));        
 	
-	add_filter( 'parse_query', array( $this, 'taxonomy_filter_post_type_request' ) );	
+	add_filter( 'parse_query', array( $this, 'taxonomy_filter_post_type_request' ) );
+        
+        // Unterstützung vom Shortcode im Widget
+        add_filter('widget_text','do_shortcode');
+        
+        /* Thumb for person-type; small for sidebar - Name: person-thumb */
+	add_image_size( 'person-thumb', self::$options['default_person_thumb_width' ], self::$options['default_person_thumb_height'], self::$options['default_person_thumb_crop'	]); // 60, 80, true
+	
+        /* Thumb for person-type; small for content - Name: person-thumb-bigger */
+	add_image_size( 'person-thumb-bigger', self::$options['default_person_thumb_bigger_width'], self::$options[ 'default_person_thumb_bigger_height'], self::$options['default_person_thumb_bigger_crop']); // 90,120,true
+
+	 /* Thumb for person-type; big for content - Name: person-thumb-page */
+	add_image_size( 'person-thumb-page', self::$options['default_person_thumb_page_width'], self::$options[ 'default_person_thumb_page_height'], self::$options['default_person_thumb_page_crop']); // 200,300,true
+
 	
 		
 	// FAU-Theme + Alte FAU Plugin Personenfelder aktiv
@@ -174,12 +188,12 @@ class FAU_Person {
     
     public static function deactivation() {       
         // CPT-Capabilities aus der Administrator-Rolle entfernen
-            $caps_person = self::get_caps('person');
-            self::remove_caps('administrator', $caps_person);
-            $caps_standort = self::get_caps('standort');
-            self::remove_caps('administrator', $caps_standort);
+        $caps_person = self::get_caps('person');
+        self::remove_caps('administrator', $caps_person);
+        $caps_standort = self::get_caps('standort');
+        self::remove_caps('administrator', $caps_standort);
             //self::remove_caps('editor', $caps);
-            flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind   
+        flush_rewrite_rules(); // Flush Rewrite-Regeln, so dass CPT und CT auf dem Front-End sofort vorhanden sind   
     }
 
     private static function version_compare() {
@@ -225,11 +239,26 @@ class FAU_Person {
                 'bild' => true,
             ),
             'has_archive_page' => true,
+            /* Thumb for person-type; small for sidebar - Name: person-thumb */
+            'default_person_thumb_width'	=> 60,
+            'default_person_thumb_height'	=> 80,
+            'default_person_thumb_crop'		=> true, 
+            /* Thumb for person-type; small for content - Name: person-thumb-bigger */
+            'default_person_thumb_bigger_width' => 90,
+            'default_person_thumb_bigger_height'=> 120,
+            'default_person_thumb_bigger_crop'	=> true,     
+            /* Thumb for person-type; small for content - Name: person-thumb-page */
+            'default_person_thumb_page_width'    => 200,
+            'default_person_thumb_page_height'   => 300,
+            'default_person_thumb_page_crop'	 => true,         
+    
         );               
+        // für ergänzende Optionen aus anderen Plugins
+        $options = apply_filters('fau_person_default_options', $options);
         return $options; // Standard-Array für zukünftige Optionen
     }
 
-    private static function get_options() {
+    public static function get_options() {
         $defaults = self::default_options();
         $options = (array) get_option(self::option_name);
         if(!isset($options['sidebar'])) {
@@ -239,7 +268,7 @@ class FAU_Person {
 
         //Umstellung auf mehrdimensionales Array wegen Sidebar
         foreach ($options as $key => $value) {
-            if(is_array($options[$key])) {
+            if(isset($options[$key]) && is_array($options[$key])) {
                 $options[$key] = wp_parse_args($options[$key], $defaults[$key]);
                 $options[$key] = array_intersect_key($options[$key], $defaults[$key]);   
                
@@ -347,7 +376,7 @@ class FAU_Person {
 
         return $caps;
     }
-    
+ 
     private static function add_caps($role, $caps) {
         $role = get_role($role);
         foreach($caps as $cap) {
@@ -514,14 +543,14 @@ class FAU_Person {
             $input = isset($_POST[self::option_name]['has_archive_page']) ? true : false;
             set_transient('fau-person-options', 1, 30);
             $options['has_archive_page'] = $input;
-            update_option(self::option_name, $options); 
-            
+            $options = apply_filters('gmail_apikey_options', $options);
+            update_option(self::option_name, $options);        
         }
 
-        $this->search_univis_id_page = add_submenu_page('edit.php?post_type=person', __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'search-univis-id', array( $this, 'search_univis_id' ));
+        $this->search_univis_id_page = add_submenu_page('edit.php?post_type=person', __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), __('Suche nach UnivIS-ID', FAU_PERSON_TEXTDOMAIN), 'edit_persons', 'search-univis-id', array( $this, 'search_univis_id' ));
         add_action('load-' . $this->search_univis_id_page, array($this, 'help_menu_search_univis_id'));
         
-        $this->sidebar_options_page = add_submenu_page('edit.php?post_type=person', __('Anzeigeoptionen', FAU_PERSON_TEXTDOMAIN), __('Anzeigeoptionen', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'sidebar-options', array( $this, 'sidebar_options' ));
+        $this->sidebar_options_page = add_submenu_page('edit.php?post_type=person', __('Anzeigeoptionen', FAU_PERSON_TEXTDOMAIN), __('Anzeigeoptionen', FAU_PERSON_TEXTDOMAIN), 'edit_persons', 'sidebar-options', array( $this, 'sidebar_options' ));
         add_action('load-' . $this->sidebar_options_page, array($this, 'help_menu_sidebar_options'));        
     }
 
@@ -630,6 +659,8 @@ class FAU_Person {
         add_settings_field('sidebar', __('Im Widget (bei den FAU-Themes auch in der Sidebar, wenn der Kontakt über das Feld "Auswahl Ansprechpartner" in der Metabox "Sidebar" gewählt wird)', FAU_PERSON_TEXTDOMAIN), array($this, 'sidebar'), 'sidebar_options', 'sidebar_section');
         add_settings_section('has_archive_page_section', __('Kontakt-Übersichtsseite:', FAU_PERSON_TEXTDOMAIN), '__return_false', 'has_archive_page_options');
         add_settings_field('has_archive_page', __('Verwendung der Standard-Übersichtsseite', FAU_PERSON_TEXTDOMAIN), array($this, 'has_archive_page'), 'has_archive_page_options', 'has_archive_page_section');
+        
+        //do_action('fau_person_gmail_apikey');
     }
 
     public function sidebar() {
@@ -699,6 +730,7 @@ class FAU_Person {
                 do_settings_sections('sidebar_options');
                 settings_fields('has_archive_page_options');
                 do_settings_sections('has_archive_page_options');
+                do_action('fau_person_gmail_apikey');
                 submit_button(esc_html(__('Änderungen speichern', FAU_PERSON_TEXTDOMAIN)), 'primary', 'fau-person-options');
                 //update_option($options['sidebar']['position'], isset($_POST['_fau_person']['sidebar']['position']) ? 1 : null);
                 ?>
@@ -739,11 +771,11 @@ class FAU_Person {
     public function person_menu_subpages() {
         //remove_submenu_page('edit.php?post_type=person', 'load-post-new.php');
         // Personen mit oder ohne bestimmte Funktionen. Andere Ansprechpartner (aus der Rubrik Kontakt) und Standorte können diesen zugeordnet werden
-        add_submenu_page('edit.php?post_type=person', __('Person hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neue Person', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_person', array( $this, 'add_person_types' ));
+        add_submenu_page('edit.php?post_type=person', __('Person hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neue Person', FAU_PERSON_TEXTDOMAIN), 'edit_persons', 'new_person', array( $this, 'add_person_types' ));
         // Kontakte, z.B. Vorzimmer, Sekretariat, Abteilungen. Hier sind Ansprechpartner aus den Personen zuordenbar, wird direkt über CPT angezeigt
-        add_submenu_page('edit.php?post_type=person', __('Einrichtung hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neue Einrichtung', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_einrichtung', array( $this, 'add_person_types' ));
+        add_submenu_page('edit.php?post_type=person', __('Einrichtung hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neue Einrichtung', FAU_PERSON_TEXTDOMAIN), 'edit_persons', 'new_einrichtung', array( $this, 'add_person_types' ));
         // Zentrale Adressen, können in Personen und Kontakte übernommen werden
-        add_submenu_page('edit.php?post_type=person', __('Standort hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neuer Standort', FAU_PERSON_TEXTDOMAIN), 'edit_posts', 'new_standort', array( $this, 'add_person_types' ));
+        add_submenu_page('edit.php?post_type=person', __('Standort hinzufügen', FAU_PERSON_TEXTDOMAIN), __('Neuer Standort', FAU_PERSON_TEXTDOMAIN), 'edit_persons', 'new_standort', array( $this, 'add_person_types' ));
         add_action('load-person_page_new_person', array( $this, 'person_menu' ));
         add_action('load-person_page_new_einrichtung', array( $this, 'einrichtung_menu' ));
         add_action('load-person_page_new_standort', array( $this, 'standort_menu' ));

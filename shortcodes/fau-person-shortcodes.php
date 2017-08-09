@@ -751,6 +751,9 @@ class FAU_Person_Shortcodes {
         if (has_post_thumbnail($id)) {
             $content .= '<div itemprop="image" class="alignright">'; 
             $content .= get_the_post_thumbnail($id, 'person-thumb-page');
+            if ( $caption = get_post( get_post_thumbnail_id() )->post_excerpt ) : 
+                    $content .= '<p class="wp-caption-text">' . $caption . '</div>';
+            endif;
             $content .= '</div>';
         }
         $content .= '<ul class="person-info">';
@@ -785,11 +788,14 @@ class FAU_Person_Shortcodes {
             $content .= self::fau_person_connection($connection_text, $connection_options, $connections);
 
 
-
-        $post = get_post($id);
-        if ($post->post_content) {
+        if ( is_singular( 'person' ) && in_the_loop() ) {
+            $post = get_the_content();
+        } else {
+            $post = get_post($id)->post_content;
+        }
+        if ($post) {
             $content .= '<div class="desc" itemprop="description">' . PHP_EOL;
-            $content .= apply_filters( 'the_content', $post->post_content );
+            $content .= apply_filters( 'the_content', $post );
             $content .= '</div>';
         }
         $content .= '</div>';
@@ -963,7 +969,12 @@ class FAU_Person_Shortcodes {
             
             $fullname = self::fullname_output($nr, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1, $alternateName);
             $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'connection' );
-            $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
+            if( isset($hoursAvailable_text) ) {
+                $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
+            } else {
+                $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, '' );
+            }
+            
             
             $contactlist .= '<li itemscope itemtype="http://schema.org/Person">' . $fullname;
 
