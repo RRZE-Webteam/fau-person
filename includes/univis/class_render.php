@@ -652,13 +652,17 @@ class Render {
 	}
 
 	private function _rename_key($search_key, &$arr, $dict) {
-		foreach ($arr as &$veranstaltung) {
-			foreach ($veranstaltung as $key => &$value) {
-				if($key == $search_key) {
-					$value = $this->_str_replace_dict($dict, $value);
-				}
-			}
-		}
+            if (is_array($arr)) {
+                foreach ($arr as &$veranstaltung) {
+                    if (is_array($veranstaltung)) {
+                        foreach ($veranstaltung as $key => &$value) {
+                            if ($key == $search_key) {
+                                $value = $this->_str_replace_dict($dict, $value);
+                            }
+                        }
+                    }
+                }
+            }
 	}
 
 	private function _group_by($key_name, $arr) {
