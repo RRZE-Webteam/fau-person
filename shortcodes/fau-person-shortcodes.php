@@ -939,10 +939,10 @@ class FAU_Person_Shortcodes {
                 $content .= $hoursavailable_output;
                 //$content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><div itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</div></li>';
             $content .= '</ul>' . "\n";
-            if ((!empty($connection_text) || !empty($connection_options) || !empty($connections) ) && $showvia === 1)
-                $content .= self::fau_person_connection($connection_text, $connection_options, $connections);
             if ($description && $showdescription)
                 $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $description . '</div>' . "\n";
+            if ((!empty($connection_text) || !empty($connection_options) || !empty($connections) ) && $showvia === 1)
+                $content .= self::fau_person_connection($connection_text, $connection_options, $connections);
             $content .= '</div>' . "\n";
             $content .= '</div>' . "\n";
             $content .= '</div>' . "\n";
@@ -1024,14 +1024,13 @@ class FAU_Person_Shortcodes {
         } else {
             if ( $showtitle && $honorificPrefix )
                 $fullname .= '<span itemprop="honorificPrefix">' . $honorificPrefix . '</span> ';
+            $fullname .= '<span class="fullname">';
             if ( $givenName && $familyName ) {
-                if ( $givenName )
-                    $fullname .= '<span itemprop="givenName">' . $givenName . "</span> ";
-                if ( $familyName )
-                    $fullname .= '<span itemprop="familyName">' . $familyName . "</span>";
+                    $fullname .= '<span itemprop="givenName">' . $givenName . "</span> ".'<span itemprop="familyName">' . $familyName . "</span>";
             } elseif (!empty(get_the_title($id))) {
                 $fullname .= get_the_title($id);
             }
+            $fullname .= '</span>';
             if ( $showsuffix && $honorificSuffix )
                 $fullname .= ', <span itemprop="honorificSuffix">' . $honorificSuffix . '</span>';
         }

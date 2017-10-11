@@ -18,6 +18,11 @@ showfax *, showwebsite *, showaddress *, showroom *, showdescription *, showlist
 
 Versionsänderungen:
 ===================
+####Version 2.5.0:    
+- <span class="fullname"> um den kompletten Namen ergänzt          
+- Kurzbeschreibung bei Sidebar-Format über verknüpfte Kontakte gesetzt    
+
+
 ####Version 2.4.0:    
 - Korrektur Rollenrechte (Editor und Author)       
 - Einbettung Größe der Personenbilder    
