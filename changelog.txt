@@ -20,7 +20,8 @@ Versionsänderungen:
 ===================
 ####Version 2.5.0:    
 - <span class="fullname"> um den kompletten Namen ergänzt          
-- Kurzbeschreibung bei Sidebar-Format über verknüpfte Kontakte gesetzt    
+- Kurzbeschreibung bei Sidebar-Format über verknüpfte Kontakte gesetzt     
+- Klassen ergänzt bei span1 (person-thumb), span3 mit Bild (person-default-thumb), span3 mit Mehrlink (person-default-more), span4 (person-default), span6 (person-compact-thumb), span7 (person-compact)    
 
 
 ####Version 2.4.0:    

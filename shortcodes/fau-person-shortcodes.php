@@ -625,7 +625,7 @@ class FAU_Person_Shortcodes {
         $content .= '<div class="row">';
 
         if ($showthumb) {
-            $content .= '<div class="span1 span-small" itemprop="image" aria-hidden="true">';
+            $content .= '<div class="span1 span-small person-thumb" itemprop="image" aria-hidden="true">';
             $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">';
 
             if (has_post_thumbnail($id)) {
@@ -650,15 +650,15 @@ class FAU_Person_Shortcodes {
 
         if ($compactindex) {
             if ($showthumb) {
-                $content .= '<div class="span6">';
+                $content .= '<div class="span6 person-compact-thumb">';
             } else {
-                $content .= '<div class="span7">';
+                $content .= '<div class="span7 person-compact">';
             }
         } else {
             if ($showthumb) {
-                $content .= '<div class="span3">';
+                $content .= '<div class="span3 person-default-thumb">';
             } else {
-                $content .= '<div class="span4">';
+                $content .= '<div class="span4 person-default">';
             }
         }
         $content .= '<h3>';
@@ -698,7 +698,7 @@ class FAU_Person_Shortcodes {
 
 
             if (!$compactindex)
-                $content .= '</div><div class="span3">';
+                $content .= '</div><div class="span3 person-default-more">';
             if ($showoffice && $hoursavailable_output && empty($connection_only)) {
                 $content .= '<ul class="person-info">';
                 //$content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', FAU_PERSON_TEXTDOMAIN) . ': </span><div itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</div></li>';
@@ -884,7 +884,7 @@ class FAU_Person_Shortcodes {
             $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
             
             if (has_post_thumbnail($id) && $showthumb) {
-                $sidebar_thumb = '<div class="span1" itemprop="image" aria-hidden="true">';
+                $sidebar_thumb = '<div class="span1 person-thumb" itemprop="image" aria-hidden="true">';
                 $sidebar_thumb .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">';
                 $sidebar_thumb .= get_the_post_thumbnail($id, 'person-thumb');
                 $sidebar_thumb .= '</a>';
@@ -903,7 +903,7 @@ class FAU_Person_Shortcodes {
                 $content .= $sidebar_thumb;
             }            
 
-            $content .= '<div class="span3">' . "\n";
+            $content .= '<div class="span3 person-sidebar">' . "\n";
             $content .= '<h3>';
             $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
             $content .= '</h3>' . "\n";
@@ -911,7 +911,7 @@ class FAU_Person_Shortcodes {
             if ( isset( $sidebar_thumb ) && isset ( $small_sidebar ) ) {
                 $content .= '</div>';
                 $content .= $sidebar_thumb;
-                $content .= '<div class="span3">';
+                $content .= '<div class="span3 person-sidebar">';
             }
             
             
