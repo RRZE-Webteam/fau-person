@@ -188,9 +188,10 @@ class Render {
 		}
 
                     foreach ($jobnamen as $gruppen_name) {
+                        if(isset($gruppen_dict[$gruppen_name])) {
                             $gruppen_personen = $gruppen_dict[$gruppen_name];
                                                                                     
-                            if(isset($gruppen_personen[0]['lastname'])){
+                        if(isset($gruppen_personen[0]['lastname'])){
                                 $gruppen_personen = $this->array_orderby($gruppen_personen, "lastname", SORT_ASC, "firstname", SORT_ASC);
                             }
                             $gruppen_obj = array(
@@ -201,6 +202,7 @@ class Render {
          
                             array_push($gruppen, $gruppen_obj);
                     }                  
+        }
                 
                 //Sortierung der Ergebnisse nach dem Funktionsfeld
                 //$gruppen = $this->record_sort($gruppen, "name");
@@ -492,12 +494,14 @@ class Render {
 		$this->_rename_key("type", $veranstaltung, Dicts::$lecturetypen);
 
 		// Dozs
-		for ($i = 0; $i<count($veranstaltung["dozs"]); $i++) {
+                if ( isset($veranstaltung["dozs"])) {
+                    for ($i = 0; $i<count($veranstaltung["dozs"]); $i++) {
 			for ($k = 0; $k < count($veranstaltung["dozs"][$i]["doz"]); $k++) {
 
 				$veranstaltung["dozs"][$i]["doz"][$k]["firstname_small"] = strtolower($this->umlaute_ersetzen($veranstaltung["dozs"][$i]["doz"][$k]["firstname"]));
 				$veranstaltung["dozs"][$i]["doz"][$k]["lastname_small"] = strtolower($this->umlaute_ersetzen($veranstaltung["dozs"][$i]["doz"][$k]["lastname"]));
 			}
+                    }
 		}
 
 
@@ -555,17 +559,19 @@ class Render {
 			array_push($angaben, $veranstaltung["comment"]);
 		}
 
-		$veranstaltung["angaben"] = implode(", ", $angaben);
+                if (isset($veranstaltung["angaben"]))
+                    $veranstaltung["angaben"] = implode(", ", $angaben);
 
 		//Begin Zeit und Ort
-		for ($_terms=0; $_terms < count($veranstaltung["terms"]); $_terms++) {
+                if (isset($veranstaltung¢["terms"])) {
+                    for ($_terms=0; $_terms < count($veranstaltung["terms"]); $_terms++) {
 			for ($_term=0; $_term < count($veranstaltung["terms"][$_terms]["term"]); $_term++) {
 				$lecture = &$veranstaltung["terms"][$_terms]["term"][$_term];
 
 				$date = array();
-
-				$repeat = explode(" ", $lecture["repeat"]);
-				if($repeat) {
+                                if (isset($lecture["repeat"]))
+                                    $repeat = explode(" ", $lecture["repeat"]);
+                                if (isset($repeat)) {
 					$dict = array(
 						"w1" => "",
 						"w2" => "Alle zwei Wochen",
@@ -577,7 +583,7 @@ class Render {
 					if(array_key_exists($repeat[0], $dict))
 						array_push($date, $dict[$repeat[0]]);
 
-					if($repeat[0] == "s1") {
+                        if ($repeat[0] == "s1" && isset($lecture["startdate"])) {
 						$formated = date("d.m.Y", strtotime($lecture["startdate"]));
 						array_push($date, $formated);
 					}
@@ -625,19 +631,25 @@ class Render {
 					$lecture["exclude"] = implode(", ", $dates);
 				}
 			}
+                    }
 		}//end Zeit und Ort
 
 
 		//Summary
+        if (isset($veranstaltung["summary"]))
 		$veranstaltung["summary"] = str_replace("\n", "<br/>", $veranstaltung["summary"]);
 
 		//Organizational
+        if (isset($veranstaltung["organizational"]))
 		$veranstaltung["organizational"] = str_replace("\n", "<br/>", $veranstaltung["organizational"]);
 
 		//ECTS Summary
+        if (isset($veranstaltung["ects_summary"]))
 		$veranstaltung["ects_summary"] = str_replace("\n", "<br/>", $veranstaltung["ects_summary"]);
 
+        if (isset($veranstaltung["ects_infos"]))
 		$veranstaltung["ects_infos"] = ($veranstaltung["ects_name"] || $veranstaltung["ects_summary"] || $veranstaltung["ects_literature"]);
+        if (isset($veranstaltung["zusatzinfos"]))
 		$veranstaltung["zusatzinfos"] = ($veranstaltung["keywords"] || $veranstaltung["turnout"] || $veranstaltung["url_description"]);
 
 
@@ -652,13 +664,17 @@ class Render {
 	}
 
 	private function _rename_key($search_key, &$arr, $dict) {
-		foreach ($arr as &$veranstaltung) {
-			foreach ($veranstaltung as $key => &$value) {
-				if($key == $search_key) {
-					$value = $this->_str_replace_dict($dict, $value);
-				}
-			}
-		}
+            if (is_array($arr)) {
+                foreach ($arr as &$veranstaltung) {
+                    if (is_array($veranstaltung)) {
+                        foreach ($veranstaltung as $key => &$value) {
+                            if ($key == $search_key) {
+                                $value = $this->_str_replace_dict($dict, $value);
+                            }
+                        }
+                    }
+                }
+            }
 	}
 
 	private function _group_by($key_name, $arr) {
@@ -666,14 +682,16 @@ class Render {
 		$gruppen = array();
 
 		$gruppen_dict = array();
-		foreach ($arr as $child) {
+                if (is_array($arr)) {
+                    foreach ($arr as $child) {
 
 			$gruppenName = $child[$key_name];
 
-			if($gruppen_dict[$gruppenName]==NULL)
+                        if (!isset($gruppen_dict[$gruppenName]))
 				$gruppen_dict[$gruppenName] = array();
 			array_push($gruppen_dict[$gruppenName], $child);
 		}
+        }
 
 		foreach ($gruppen_dict as $gruppen_name => $gruppen_data) {
 			$gruppen_obj = array(
@@ -705,10 +723,14 @@ class Render {
 	private function record_sort($records, $field, $reverse=false) {
 	    $hash = array();
 
-	    foreach($records as $record)
-	    {
+        foreach ($records as $record) {
+            if(!isset($hash[$record[$field]])) {
 	        $hash[$record[$field]] = $record;
+            } else {
+                $i = $record[$field] . '1';
+                $hash[$i] = $record; 
 	    }
+        }
 
 	    ($reverse)? krsort($hash) : ksort($hash);
 

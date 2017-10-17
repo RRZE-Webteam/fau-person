@@ -80,9 +80,9 @@ class UNIVIS {
 					$this->daten = $this->_ladeLehrveranstaltungenEinzeln();
 					break;
 
-				case "lehrveranstaltungen-kalender":
-					$this->daten = $this->_ladeLehrveranstaltungenKalender();
-					break;
+//				case "lehrveranstaltungen-kalender":
+//					$this->daten = $this->_ladeLehrveranstaltungenKalender();
+//					break;
 
 				default:
 					echo "Fehler: Unbekannter Befehl\n";
@@ -392,20 +392,27 @@ class UNIVIS {
 	  $a = array();
 
 	  for( $sxi->rewind(); $sxi->valid(); $sxi->next() ) {
+              
 	    if(!array_key_exists($sxi->key(), $a)){
 	      $a[$sxi->key()] = array();
 	    }
-	    if($sxi->hasChildren()){
+	    
+            if($sxi->hasChildren()) {
+                    if (empty($a[$sxi->key()])) {
+                        $a[$sxi->key()] = array();
+                    }
 	      $a[$sxi->key()][] = $this->sxiToArray($sxi->current());
-	    }
-	    else{
+            } else {
 	      $a[$sxi->key()] = strval($sxi->current());
 
-	      //Fuege die UnivisRef Informationen ein.
-	      if($sxi->UnivISRef) {
-	      	$attributes = (array) $sxi->UnivISRef->attributes();
+            // Fuege die UnivisRef Informationen ein
+                if ($sxi->UnivISRef) {
+                        if (empty($a[$sxi->key()])) {
+                            $a[$sxi->key()] = array();
+                        }
+                        $attributes = (array) $sxi->UnivISRef->attributes();
 			$a[$sxi->key()][] = $attributes["@attributes"];
-	      }
+                }
 	    }
 
 		if($sxi->attributes()) {
@@ -430,10 +437,10 @@ class UNIVIS {
 		$search_key = "UnivISRef";
 
 		foreach ($arr as &$child) {
-			if(array_key_exists($search_key, $child)) {
+			if(is_array($child) && array_key_exists($search_key, $child)) {    
+                            if( array_key_exists( $child[$search_key][0]["key"], $refs ) )
 				$child = $refs[$child[$search_key][0]["key"]];
 			}
-
 			if(is_array($child)) {
 				$this->univis_refs_ersetzen($refs, $child);
 			}
@@ -446,6 +453,9 @@ class UNIVIS {
 
 		$dict = array("Room", "Person", "Title", "Lecture");
 		foreach ($dict as $type) {
+                    if( !isset( $arr[$type] ) ) {
+                        $arr[$type] = array();
+                    }
 			$univis_refs = array_merge($univis_refs, $arr[$type]);
 		}
 
