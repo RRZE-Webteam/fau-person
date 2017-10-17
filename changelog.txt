@@ -23,9 +23,10 @@ Versionsänderungen:
 - Kurzbeschreibung bei Sidebar-Format über verknüpfte Kontakte gesetzt     
 - Klassen ergänzt bei span1 (person-thumb), span3 mit Bild (person-default-thumb), span3 mit Mehrlink (person-default-more), span4 (person-default), span6 (person-compact-thumb), span7 (person-compact)    
 - bei Kategorienausgabe bei format="page" wird per default der Namen als Überschrift ausgegeben    
-- neuer Shortcode-Parameter: hide="rahmen" vergibt die zusätzliche Klasse noborder bei der Standardausgabe und bei format="kompakt"    
-
-
+- neuer Shortcode-Parameter bei der Standardausgabe und bei format="kompakt": hide="rahmen" vergibt die zusätzliche Klasse noborder    
+- neuer Shortcode-Parameter bei der Standardausgabe, bei format="kompakt" und bei format="sidebar": hstart="x" (x ist eine Zahl zwischen 1 und 5) kann genutzt werden, um bei Bedarf die Überschriftengröße des Kontakttitels anzupassen (standardmäßig ist x=3, die erste Überschrift wird also mit h3 definiiert)      
+- bei verknüpften Kontakten Anpassung der Überschriftengröße an eins kleiner als der Kontakttitel    
+- PHP-Bugfixes
 
 ####Version 2.4.0:    
 - Korrektur Rollenrechte (Editor und Author)       

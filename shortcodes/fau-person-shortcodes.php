@@ -37,7 +37,8 @@ class FAU_Person_Shortcodes {
             "show" => '',
             "hide" => '',
             "showmobile" => FALSE,
-            "border" => TRUE,
+            "border" => TRUE,   //bei false wird der Rahmen um die Kontaktdarstellung ausgeblendet über die Klasse noborder
+            "hstart" => '3',    //Überschriftendefinition
                         ), $atts));
 
         if ($category) {
@@ -238,6 +239,13 @@ class FAU_Person_Shortcodes {
                 $noborder = "";
             }
 
+            $hstart = absint($hstart);
+            if (!$hstart) {
+                $hstart = 3;
+            } elseif ($hstart > 5) {
+                $hstart = 5;
+            }
+                      
             if (empty($id)) {
                 if (empty($slug)) {
                     return '<p>' . sprintf(__('Bitte geben Sie den Titel oder die ID des Kontakteintrags an.', FAU_PERSON_TEXTDOMAIN), $slug) . '</p>';
@@ -280,11 +288,11 @@ class FAU_Person_Shortcodes {
                             $liste .= self::fau_person_shortlist($value, $showlist, 1, $showmail, $showtelefon);
                             $liste .= "</li>\n";
                         } elseif ($sidebar) {
-                            $liste .= self::fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia);
+                            $liste .= self::fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia, $hstart);
                         } elseif ($compactindex) {
-                            $liste .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex, $noborder);
+                            $liste .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex, $noborder, $hstart);
                         } else {
-                            $liste .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, 0, $noborder);
+                            $liste .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, 0, $noborder, $hstart);
                         }
                     } else {
                         $liste .= sprintf(__('Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $value);
@@ -334,6 +342,7 @@ class FAU_Person_Shortcodes {
             "hide" => '',
             "sort" => FALSE,    //für die Sortierung in Katgorien nach Nachname sort="nachname" angeben. Standardsortierung nach Titel
             "border" => TRUE,   //bei false wird der Rahmen um die Kontaktdarstellung ausgeblendet über die Klasse noborder
+            "hstart" => '3',    //Überschriftendefinition
                         ), $atts));
 
         $content = '';
@@ -526,7 +535,7 @@ class FAU_Person_Shortcodes {
             $showwebsite = 0;
             $showthumb = 1;
         }
-        //_rrze_debug($border);
+                
         if ( $border == 0 ) {
             $noborder = " noborder";
         } else {
@@ -582,11 +591,11 @@ class FAU_Person_Shortcodes {
                     $content .= self::fau_person_shortlist($value, $showlist, 1, $showmail, $showtelefon);
                     $content .= "</li>\n";
                 } elseif ($sidebar) {
-                    $content .= self::fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia);
+                    $content .= self::fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia, $hstart);
                 } elseif ($compactindex) {
-                    $content .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex, $noborder);
+                    $content .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex, $noborder, $hstart);
                 } else {
-                    $content .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, 0, $noborder);
+                    $content .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, 0, $noborder, $hstart);
                 }
                 $i++;
             }
@@ -608,7 +617,7 @@ class FAU_Person_Shortcodes {
         return $content;
     }
 
-    public static function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex = 0, $noborder) {
+    public static function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex = 0, $noborder, $hstart) {
 
         // Hole die Feldinhalte (in der Klasse sync_helper wird gesteuert, was aus UnivIS angezeigt werden soll und was nicht)
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
@@ -684,9 +693,10 @@ class FAU_Person_Shortcodes {
                 $content .= '<div class="span4 person-default">';
             }
         }
-        $content .= '<h3>';
+        
+        $content .= '<h' . $hstart . '>';
         $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
-        $content .= '</h3>';
+        $content .= '</h' . $hstart . '>';
         $content .= '<ul class="person-info">';
         if ($showposition && $jobTitle)
             $content .= '<li class="person-info-position"><span class="screen-reader-text">' . __('Tätigkeit', FAU_PERSON_TEXTDOMAIN) . ': </span><strong><span itemprop="jobTitle">' . $jobTitle . '</span></strong></li>';
@@ -713,7 +723,7 @@ class FAU_Person_Shortcodes {
 
 
         if ((!empty($connection_text) || !empty($connection_options) || !empty($connections)) && $showvia === 1)
-            $content .= self::fau_person_connection($connection_text, $connection_options, $connections);
+            $content .= self::fau_person_connection($connection_text, $connection_options, $connections, $hstart);
 
         //  if( !($compactindex && $showthumb) )      $content .= '</div>';
 
@@ -808,7 +818,7 @@ class FAU_Person_Shortcodes {
         $content .= '</ul>';
 
         if (!empty($connection_text) || !empty($connection_options) || !empty($connections))
-            $content .= self::fau_person_connection($connection_text, $connection_options, $connections);
+            $content .= self::fau_person_connection($connection_text, $connection_options, $connections, 2);
 
 
         if ( is_singular( 'person' ) && in_the_loop() ) {
@@ -869,10 +879,10 @@ class FAU_Person_Shortcodes {
         return $content;
     }
 
-    // von Widget, also Sidebar über Fakultätsthemes - Ansprechpartner: fau_person_sidebar($id, $title, list 0, inst 1, abtielung 1, posi 1, titel 1, suffix 1, addresse 1, raum 1, tele 1, fax 1, handy 0,                                                                  mail 1, url 1, mehrlink 0, kurzauszug 1, office 0, pubs 0, bild 1, via 0)
+    // von Widget, also Sidebar über Fakultätsthemes - Ansprechpartner: fau_person_sidebar($id, $title, list 0, inst 1, abtielung 1, posi 1, titel 1, suffix 1, addresse 1, raum 1, tele 1, fax 1, handy 0,                                                                  mail 1, url 1, mehrlink 0, kurzauszug 1, office 0, pubs 0, bild 1, via 0, hstart 3)
     // muss noch eingebaut werden: Wenn shortcode mit sidebar zeige bild ja und wo?     if (theme(FAU-*)  && template =~    else { Bild anzeigen }   if (theme(FAU-*)  && template =~( page.php || page-subnav.php ) && (not option(zeige bild in sidebar)   ) { Zeige kein Bild }   else {       if  template =~( page.php || page-subnav.php )   { binde Bild NACH dem Namen ein} else {    Bild vor dem Namen anzeigen }   }
     
-    public static function fau_person_sidebar($id, $title, $showlist = 0, $showinstitution = 0, $showabteilung = 0, $showposition = 0, $showtitle = 0, $showsuffix = 0, $showaddress = 0, $showroom = 0, $showtelefon = 0, $showfax = 0, $showmobile = 0, $showmail = 0, $showwebsite = 0, $showlink = 0, $showdescription = 0, $showoffice = 0, $showpubs = 0, $showthumb = 0, $showvia = 0) {
+    public static function fau_person_sidebar($id, $title, $showlist = 0, $showinstitution = 0, $showabteilung = 0, $showposition = 0, $showtitle = 0, $showsuffix = 0, $showaddress = 0, $showroom = 0, $showtelefon = 0, $showfax = 0, $showmobile = 0, $showmail = 0, $showwebsite = 0, $showlink = 0, $showdescription = 0, $showoffice = 0, $showpubs = 0, $showthumb = 0, $showvia = 0, $hstart = 3) {
         //Überprüfung zur Bildplatzierung in der Sidebar, ob ein FAU-Theme gewählt wurde und welches Template gewählt ist
         $active_theme = wp_get_theme();
         $active_theme = $active_theme->get( 'Name' );
@@ -918,7 +928,7 @@ class FAU_Person_Shortcodes {
             $content .= '<div class="side">';
                     
             if (!empty($title))
-                $content .= '<h2 class="small">' . $title . '</h2>' . "\n";
+                $content .= '<h' . ($hstart-1) . ' class="small">' . $title . '</h' . ($hstart-1) . '>' . "\n";
 
             $content .= '<div class="row">' . "\n";
             
@@ -927,9 +937,9 @@ class FAU_Person_Shortcodes {
             }            
 
             $content .= '<div class="span3 person-sidebar">' . "\n";
-            $content .= '<h3>';
+            $content .= '<h' . $hstart . '>';
             $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">' . $fullname . '</a>';
-            $content .= '</h3>' . "\n";
+            $content .= '</h' . $hstart . '>' . "\n";
             
             if ( isset( $sidebar_thumb ) && isset ( $small_sidebar ) ) {
                 $content .= '</div>';
@@ -965,7 +975,7 @@ class FAU_Person_Shortcodes {
             if ($description && $showdescription)
                 $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $description . '</div>' . "\n";
             if ((!empty($connection_text) || !empty($connection_options) || !empty($connections) ) && $showvia === 1)
-                $content .= self::fau_person_connection($connection_text, $connection_options, $connections);
+                $content .= self::fau_person_connection($connection_text, $connection_options, $connections, $hstart);
             $content .= '</div>' . "\n";
             $content .= '</div>' . "\n";
             $content .= '</div>' . "\n";
@@ -974,7 +984,7 @@ class FAU_Person_Shortcodes {
         return $content;
     }
 
-    public static function fau_person_connection($connection_text, $connection_options, $connections) {
+    public static function fau_person_connection($connection_text, $connection_options, $connections, $hstart) {
 
         $content = '';
         $contactlist = '';
@@ -1029,7 +1039,7 @@ class FAU_Person_Shortcodes {
         if (!empty($contactlist)) {
             $content = '<div class="connection">';
             if ($connection_text) {
-                $content .= '<h3>' . $connection_text . '</h3>';
+                $content .= '<h' . ($hstart+1) . '>' . $connection_text . '</h' . ($hstart+1) . '>';
             }
             $content .= '<ul class="connection-list">';
             $content .= $contactlist;
