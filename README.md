@@ -14,7 +14,9 @@ PHP-Modules:
 
 * php-xml
 
+## Changelog
 
+[changelog.txt](./changelog.txt)
 
 ## Funktionsweise und Verwendung:
 
