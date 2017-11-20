@@ -37,6 +37,7 @@ class FAU_Person_Shortcodes {
             "show" => '',
             "hide" => '',
             "showmobile" => FALSE,
+            "background" => '',  // alternativ kann eine Farbe als Hintergrund eingestellt werden: background-grau, -fau, -phil, -med, -nat, -tf, -rw
             "border" => TRUE,   //bei false wird der Rahmen um die Kontaktdarstellung ausgeblendet über die Klasse noborder
             "hstart" => '3',    //Überschriftendefinition
                         ), $atts));
@@ -231,6 +232,13 @@ class FAU_Person_Shortcodes {
                     $showname = 0;           // bei format="page" Anzeige des Namens über den Daten
                 if (in_array('rahmen', $hide))  // ergänzende Klasse noborder bei false
                     $border = 0;
+            }
+            
+            $bg_array = array('grau', 'fau', 'phil', 'med', 'nat', 'tf', 'rw');
+            if (in_array($background, $bg_array)) {
+                $bg_color = ' background-' . $background;
+            } else {
+                $bg_color = '';
             }
 
             if ($border == 0) {
