@@ -242,9 +242,9 @@ class FAU_Person_Shortcodes {
             }
 
             if ($border == 0) {
-                $noborder = " noborder";
+                $noborder = ' noborder';
             } else {
-                $noborder = "";
+                $noborder = '';
             }
 
             $hstart = absint($hstart);
@@ -298,9 +298,9 @@ class FAU_Person_Shortcodes {
                         } elseif ($sidebar) {
                             $liste .= self::fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia, $hstart);
                         } elseif ($compactindex) {
-                            $liste .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex, $noborder, $hstart);
+                            $liste .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex, $noborder, $hstart, $bg_color);
                         } else {
-                            $liste .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, 0, $noborder, $hstart);
+                            $liste .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, 0, $noborder, $hstart, $bg_color);
                         }
                     } else {
                         $liste .= sprintf(__('Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden.', FAU_PERSON_TEXTDOMAIN), $value);
@@ -349,6 +349,7 @@ class FAU_Person_Shortcodes {
             "show" => '',
             "hide" => '',
             "sort" => FALSE,    //für die Sortierung in Katgorien nach Nachname sort="nachname" angeben. Standardsortierung nach Titel
+            "background" => '',  // alternativ kann eine Farbe als Hintergrund eingestellt werden: background-grau, -fau, -phil, -med, -nat, -tf, -rw
             "border" => TRUE,   //bei false wird der Rahmen um die Kontaktdarstellung ausgeblendet über die Klasse noborder
             "hstart" => '3',    //Überschriftendefinition
                         ), $atts));
@@ -543,11 +544,18 @@ class FAU_Person_Shortcodes {
             $showwebsite = 0;
             $showthumb = 1;
         }
-                
-        if ( $border == 0 ) {
-            $noborder = " noborder";
+
+        $bg_array = array('grau', 'fau', 'phil', 'med', 'nat', 'tf', 'rw');
+        if (in_array($background, $bg_array)) {
+            $bg_color = ' background-' . $background;
         } else {
-            $noborder = "";
+            $bg_color = '';
+        }
+            
+        if ( $border == 0 ) {
+            $noborder = ' noborder';
+        } else {
+            $noborder = '';
         }
 
         $category = get_term_by('slug', $category, 'persons_category');
@@ -601,9 +609,9 @@ class FAU_Person_Shortcodes {
                 } elseif ($sidebar) {
                     $content .= self::fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia, $hstart);
                 } elseif ($compactindex) {
-                    $content .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex, $noborder, $hstart);
+                    $content .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex, $noborder, $hstart, $bg_color);
                 } else {
-                    $content .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, 0, $noborder, $hstart);
+                    $content .= self::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, 0, $noborder, $hstart, $bg_color);
                 }
                 $i++;
             }
@@ -625,7 +633,7 @@ class FAU_Person_Shortcodes {
         return $content;
     }
 
-    public static function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex = 0, $noborder, $hstart) {
+    public static function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex = 0, $noborder, $hstart, $bg_color) {
 
         // Hole die Feldinhalte (in der Klasse sync_helper wird gesteuert, was aus UnivIS angezeigt werden soll und was nicht)
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
@@ -657,7 +665,7 @@ class FAU_Person_Shortcodes {
         // hier Fehlermeldung nicht vorhanden $hoursAvailable_group
         $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
         
-        $content = '<div class="person content-person' . $noborder . '" itemscope itemtype="http://schema.org/Person">';
+        $content = '<div class="person content-person' . $noborder . $bg_color . '" itemscope itemtype="http://schema.org/Person">';
         if ($compactindex)
             $content .= '<div class="compactindex">';
 
