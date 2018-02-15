@@ -933,9 +933,28 @@ class FAU_Person_Shortcodes {
             $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
             
             if (has_post_thumbnail($id) && $showthumb) {
+		
+		$alttext = get_the_title($id);
+		$alttext = esc_html($alttext);
+		$altattr = 'alt="'.__('Weitere Informationen zu','fau').' '.$alttext.' '.__('aufrufen','fau').'"';
+
+
+		$post_thumbnail_id = get_post_thumbnail_id( $id ); 
+		$sliderimage = wp_get_attachment_image_src( $post_thumbnail_id, 'person-thumb' );
+		$slidersrcset =  wp_get_attachment_image_srcset($post_thumbnail_id, 'person-thumb');
+
+		$imagehtml = '<img src="'.$sliderimage[0].'" '.$altattr.' width="'.$sliderimage[1].'" height="'.$sliderimage[2].'"';
+		if ($slidersrcset) {
+		    $imagehtml .= 'srcset="'.$slidersrcset.'"';
+		}
+		$imagehtml .= '>';
+		
+		
+		
+		
                 $sidebar_thumb = '<div class="span1 person-thumb" itemprop="image" aria-hidden="true">';
-                $sidebar_thumb .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">';
-                $sidebar_thumb .= get_the_post_thumbnail($id, 'person-thumb');
+                $sidebar_thumb .= '<a href="' . $personlink . '">';
+                $sidebar_thumb .= $imagehtml;
                 $sidebar_thumb .= '</a>';
                 $sidebar_thumb .= '</div>' . "\n";
             }
