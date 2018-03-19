@@ -526,9 +526,9 @@ class UnivIS_Data {
             return false;
         }
 
-        if (($data = self::get_data_cache($id)) !== false) {
-            return $data;
-        }
+        //if (($data = self::get_data_cache($id)) !== false) {
+        //    return $data;
+        //}
 
         if (($data = self::get_remote_data_by('id', $id)) === false) {
             return false;
