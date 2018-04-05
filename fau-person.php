@@ -5,7 +5,7 @@
  Plugin URI: https://github.com/RRZE-Webteam/fau-person
  GitHub Plugin URI: https://github.com/RRZE-Webteam/fau-person
  Description: Visitenkarten-Plugin für FAU Webauftritte
- Version: 2.6.1
+ Version: 2.6.2
  Author: RRZE-Webteam
  Author URI: http://blogs.fau.de/webworking/
  License: GPLv2 or later
@@ -45,14 +45,14 @@ require_once('shortcodes/fau-standort-shortcodes.php');
 class FAU_Person {
 
     //******** Mit neuer Version auch hier aktualisieren!!! ***********
-    const version = '2.6.1';
+    const version = '2.6.2';
     
     const option_name = '_fau_person';
     const version_option_name = '_fau_person_version';
 
     const textdomain = 'fau-person';
-    const php_version = '5.4'; // Minimal erforderliche PHP-Version
-    const wp_version = '4.5'; // Minimal erforderliche WordPress-Version
+    const php_version = '5.5'; // Minimal erforderliche PHP-Version
+    const wp_version = '4.9'; // Minimal erforderliche WordPress-Version
     const search_univis_id_transient = 'sui_1k4fu7056Kl12a5';
     public static $fauthemes = array('FAU-Einrichtungen', 'FAU-Philfak', 'FAU-Natfak', 'FAU-RWFak', 'FAU-Medfak', 'FAU-Techfak');
        
