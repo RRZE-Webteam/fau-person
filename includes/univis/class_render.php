@@ -51,8 +51,8 @@ class Render {
 				case "lehrveranstaltungen-einzeln":
 					return $this->_bearbeiteLehrveranstaltungenEinzeln($daten);
 
-				case "lehrveranstaltungen-kalender":
-					return $this->_bearbeiteLehrveranstaltungenKalender($daten);
+				//case "lehrveranstaltungen-kalender":
+				//	return $this->_bearbeiteLehrveranstaltungenKalender($daten);
 
 				default:
 					echo "Fehler: Unbekannter Befehl\n";
@@ -418,7 +418,7 @@ class Render {
 		return array( "veranstaltungen" => $veranstaltungen, "optionen" => $this->optionen);
 	}
 
-	private function _bearbeiteLehrveranstaltungenKalender($veranstaltungen) {
+/*	private function _bearbeiteLehrveranstaltungenKalender($veranstaltungen) {
 		if(!$veranstaltungen) return NULL;
 
 		$this->_rename_key("type", $veranstaltungen, Dicts::$lecturetypen);
@@ -487,7 +487,7 @@ class Render {
 
 		return array( "ics" => $v->returnCalendar(), "optionen" => $this->optionen);
 	}
-
+*/
 	private function _bearbeiteLehrveranstaltungenEinzeln($veranstaltung) {
 
 
