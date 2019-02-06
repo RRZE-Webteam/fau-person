@@ -1034,7 +1034,7 @@ class FAU_Person_Shortcodes {
                 $showaddress = 0;
                 $showroom = 0;
             }
-            
+
             $fullname = self::fullname_output($nr, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1, $alternateName);
             $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'connection' );
             if( isset($hoursAvailable_text) ) {
@@ -1043,8 +1043,15 @@ class FAU_Person_Shortcodes {
                 $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, '' );
             }
             
-            
-            $contactlist .= '<li itemscope itemtype="http://schema.org/Person">' . $fullname;
+            if ($link) {
+                $personlink = $link;
+            } else {
+                $personlink = get_permalink($nr);
+            }
+            $contactlist .= '<li itemscope itemtype="http://schema.org/Person">';
+            $contactlist .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($nr)) . '" href="' . $personlink . '">';
+            $contactlist .= $fullname;
+            $contactlist .= '</a>';
 
             if ($connection_options) {
                 $cinfo = '';
