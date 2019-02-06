@@ -800,7 +800,7 @@ class FAU_Person_Shortcodes {
         if (has_post_thumbnail($id)) {
             $content .= '<div itemprop="image" class="alignright">'; 
             $content .= get_the_post_thumbnail($id, 'person-thumb-page');
-            if ( $caption = get_post( get_post_thumbnail_id() )->post_excerpt ) : 
+            if ( $caption = get_post( get_post_thumbnail_id($id) )->post_excerpt ) : 
                     $content .= '<p class="wp-caption-text">' . $caption . '</div>';
             endif;
             $content .= '</div>';
