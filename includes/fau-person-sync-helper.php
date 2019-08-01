@@ -89,7 +89,7 @@ class sync_helper {
         $fields_exception = array(
             'postalCode' => '',
         );            
-        $fields_connection = array(
+        $fields_connection = array(             // hier alle Felder ergänzen, die für die Anzeige der verknüpften Kontakte benötigt werden
             'connection_text' => '',
             'connection_only' => '',
             'connection_options' => array(),
@@ -109,6 +109,7 @@ class sync_helper {
             'connection_hoursAvailable' => 'hoursAvailable',
             'connection_hoursAvailable_group' => 'hoursAvailable_group',
             'connection_nr' => 'nr',
+            'connection_link' => 'link',
         );
         foreach( $fields_univis as $key => $value ) {
             if( $univis_sync && array_key_exists( $value, $person ) ) {

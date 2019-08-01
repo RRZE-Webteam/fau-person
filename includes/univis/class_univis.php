@@ -337,9 +337,9 @@ class UNIVIS {
 
 	}
 
-	private function _ladeLehrveranstaltungenKalender($dozentid = NULL) {
-		return $this->_ladeLehrveranstaltungenAlle($dozentid);
-	}
+//	private function _ladeLehrveranstaltungenKalender($dozentid = NULL) {
+//		return $this->_ladeLehrveranstaltungenAlle($dozentid);
+//	}
 
 	private function _ladeLehrveranstaltungenEinzeln() {
 		// Hole Daten von Univis
