@@ -673,7 +673,7 @@ class FAU_Person_Shortcodes {
         $content .= '<div class="row">';
 
         if ($showthumb) {
-            $content .= '<div class="span1 span-small person-thumb" itemprop="image" aria-hidden="true">';
+            $content .= '<div class="span1 span-small person-thumb" itemprop="image" aria-hidden="true" role="presentation">';
             $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', FAU_PERSON_TEXTDOMAIN), get_the_title($id)) . '" href="' . $personlink . '">';
 
             if (has_post_thumbnail($id)) {
@@ -688,7 +688,6 @@ class FAU_Person_Shortcodes {
                 } else {
                     $bild = plugin_dir_url(__FILE__) . '../images/platzhalter-unisex.png';
                 }
-                // _rrze_debug ($bild);
                 if ($bild)
                     $content .= '<img src="' . $bild . '" width="90" height="120" alt="">';
             }
@@ -779,15 +778,14 @@ class FAU_Person_Shortcodes {
 
     public static function fau_person_page($id, $is_shortcode=0, $showname=0) {
 
-        $content = '<div class="person" itemscope itemtype="http://schema.org/Person">';
-        $content .= '<div class="page">';
+        $content = '<div class="person page" itemscope itemtype="http://schema.org/Person">';
         // Hole die Feldinhalte (in der Klasse sync_helper wird gesteuert, was aus UnivIS angezeigt werden soll und was nicht)
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
         // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
         extract($fields);
 
         if ((strlen($url) > 4) && (strpos($url, "http") === false)) {
-            $url = 'http://' . $url;
+            $url = 'https://' . $url;
         }
         if ( !$is_shortcode || $showname ) {
             $fullname = self::fullname_output($id, $honorificPrefix, $givenName, $familyName, $honorificSuffix, 1, 1, $alternateName);
@@ -798,11 +796,8 @@ class FAU_Person_Shortcodes {
         $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
         
         if (has_post_thumbnail($id)) {
-            $content .= '<div itemprop="image" class="alignright">'; 
+            $content .= '<div itemprop="image" class="person-image alignright">'; 
             $content .= get_the_post_thumbnail($id, 'person-thumb-page');
-            if ( $caption = get_post( get_post_thumbnail_id($id) )->post_excerpt ) : 
-                    $content .= '<p class="wp-caption-text">' . $caption . '</div>';
-            endif;
             $content .= '</div>';
         }
         $content .= '<ul class="person-info">';
@@ -848,10 +843,6 @@ class FAU_Person_Shortcodes {
             $content .= '</div>';
         }
         $content .= '</div>';
-        $content .= '</div>';
-
-        //	    if (($options['plugin_fau_person_headline'] != 'jobTitle') && ($position)) 
-        //		$content .= '<li class="person-info-position"><span class="screen-reader-text">'.__('Tätigkeit','fau').': </span><strong><span itemprop="jobTitle">'.$jobTitle.'</span></strong></li>';
 
         return $content;
     }
