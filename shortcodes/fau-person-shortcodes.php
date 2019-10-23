@@ -795,12 +795,13 @@ class FAU_Person_Shortcodes {
         $contactpoint = self::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, 1, 1, 'page' );
         $hoursavailable_output = self::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
         
-        if (has_post_thumbnail($id)) {
+	$content .= '<div class="person-meta">';
+	if (has_post_thumbnail($id)) {
             $content .= '<div itemprop="image" class="person-image alignright">'; 
             $content .= get_the_post_thumbnail($id, 'person-thumb-page');
             $content .= '</div>';
-        }
-        $content .= '<ul class="person-info">';
+         }
+         $content .= '<ul class="person-info">';
         if ($jobTitle)
             $content .= '<li class="person-info-position"><span class="screen-reader-text">' . __('Tätigkeit', FAU_PERSON_TEXTDOMAIN) . ': </span><strong><span itemprop="jobTitle">' . $jobTitle . '</span></strong></li>';
         if ($worksFor)
@@ -827,6 +828,7 @@ class FAU_Person_Shortcodes {
         if ($pubs)
             $content .= '<li class="person-info-pubs"><span class="screen-reader-text">' . __('Publikationen', FAU_PERSON_TEXTDOMAIN) . ': </span>' . $pubs . '</li>';
         $content .= '</ul>';
+	$content .= '</div>';
 
         if (!empty($connection_text) || !empty($connection_options) || !empty($connections))
             $content .= self::fau_person_connection($connection_text, $connection_options, $connections, 2);
