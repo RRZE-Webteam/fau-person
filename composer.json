@@ -1,0 +1,12 @@
+{
+	"name": "FAU_Person",
+	"description": "Kontakt-Plugin für FAU Webauftritte.",
+	"type": "WordPress Plugin",
+	"license": "GNU General Public License v3",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"FAU_Person\\": "includes/"
+		}
+	}
+}
