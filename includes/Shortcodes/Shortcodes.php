@@ -22,17 +22,11 @@ class Shortcodes {
     }
 
     public function onLoaded() {
+	$kontakt_shortcode = new Kontakt($this->pluginFile,  $this->settings);
+	$kontakt_shortcode->onLoaded();
 
-        $kontakt_shortcode = new Kontakt($this->pluginFile,  $this->settings);
-        $kontakt_shortcode->onLoaded();
-
-     //   $standort_shortcode = new Standort($this->pluginFile,  $this->settings);
-     //   $standort_shortcode->onLoaded();
-	
-//	add_action( 'init', array($this, 'add_shortcodes' ) );
-
+	$standort_shortcode = new Standort($this->pluginFile,  $this->settings);
+	$standort_shortcode->onLoaded();
     }
-
-
 }
 

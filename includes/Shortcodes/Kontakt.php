@@ -12,9 +12,8 @@ defined('ABSPATH') || exit;
 /**
  * Define Shortcodes 
  */
-class Kontakt  {
-
-    public $pluginFile = 'sss';
+class Kontakt extends Shortcodes {
+    public $pluginFile = '';
     private $settings = '';
     private $shortcodesettings = '';
     
@@ -24,18 +23,11 @@ class Kontakt  {
 	$this->shortcodesettings = getShortcodeSettings();
     }
 
-      /**
-     * Er wird ausgeführt, sobald die Klasse instanziiert wird.
-     * @return void
-     */
     public function onLoaded() {	
 	add_shortcode('kontakt', [$this, 'shortcode_kontakt'], 10, 2);
-	// add_shortcode('kontakt', [$this, 'shortcode_kontakt'], 10, 2);
 	add_shortcode('person', [$this, 'shortcode_kontakt'], 10, 2);
 	add_shortcode('kontaktliste', [$this, 'shortcode_kontaktListe'], 10, 2);
 	add_shortcode('persons', [$this, 'shortcode_kontaktListe'], 10, 2);
-	
-	
     }
    
 
@@ -318,14 +310,14 @@ class Kontakt  {
                       
             if (empty($id)) {
                 if (empty($slug)) {
-                    return '<p>' . sprintf(__('Bitte geben Sie den Titel oder die ID des Kontakteintrags an.', 'fau-person'), $slug) . '</p>';
+                    return '<div class="alert alert-danger">' . sprintf(__('Bitte geben Sie den Titel oder die ID des Kontakteintrags an.', 'fau-person'), $slug) . '</div>';
                 } else {
                     $posts = get_posts(array('name' => $slug, 'post_type' => 'person', 'post_status' => 'publish'));
                     if ($posts) {
                         $post = $posts[0];
                         $id = $post->ID;
                     } else {
-                        return '<p>' . sprintf(__('Es konnte kein Kontakteintrag mit dem angegebenen Titel %s gefunden werden. Versuchen Sie statt dessen die Angabe der ID des Kontakteintrags.', 'fau-person'), $slug) . '</p>';
+                        return '<div class="alert alert-danger">' . sprintf(__('Es konnte kein Kontakteintrag mit dem angegebenen Titel %s gefunden werden. Versuchen Sie statt dessen die Angabe der ID des Kontakteintrags.', 'fau-person'), $slug) . '</div>';
                     }
                 }
             }

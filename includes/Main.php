@@ -11,7 +11,7 @@ use FAU_Person\Plugins\Plugins;
 use FAU_Person\Images;
 use FAU_Person\Templates;
 use FAU_Person\Shortcodes\Shortcodes;
-use FAU_Person\FAUPersonWidget;
+use FAU_Person\Widgets;
 use FAU_Person\Metaboxes\Metaboxes;
 use FAU_Person\Helper;
 use function FAU_Person\Config\getConstants;
@@ -83,7 +83,7 @@ class Main {
 		return;	
 		
 	// Add Widget
-        $widget = new FAUPersonWidget($this->pluginFile, $settings); 
+        $widget = new Widgets($this->pluginFile, $settings); 
         $widget->onLoaded();
 			
     }

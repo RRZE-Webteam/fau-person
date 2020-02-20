@@ -9,7 +9,7 @@ use WP_Widget;
 /**
  * Define Image Sizes
  */
-class FAUPersonWidget extends WP_Widget {
+class Widgets extends WP_Widget {
 
     protected $pluginFile;
     private $settings;
