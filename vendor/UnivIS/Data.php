@@ -14,11 +14,12 @@ add_action('save_post', function() {
 class UnivIS_Data {
 
     const transient_prefix = 'univis_data_';    
-    protected static $univis_api_url = 'http://univis.uni-erlangen.de/prg';
     protected static $transient_expiration = DAY_IN_SECONDS;    
     protected static $timeout = HOUR_IN_SECONDS; 
     protected static $results_limit = 100;
     
+
+       
     public static function get_person($id) {
 
         if (!Sanitizer::is_valid_id($id)) {
@@ -130,16 +131,18 @@ class UnivIS_Data {
     }
             
     private static function get_remote_data_by($field, $value) {
-        
+        $config = Config::get_Config();
+	$apiurl = $config['api_url'];
+	
         switch ($field) {
             case 'id':
-                $url = sprintf('%1$s?search=persons&id=%2$d&show=xml', self::$univis_api_url, $value);
+                $url = sprintf('%1$s?search=persons&id=%2$d&show=xml', $apiurl, $value);
                 break;
             case 'firstname':
-                $url = sprintf('%1$s?search=persons&firstname=%2$s&show=xml', self::$univis_api_url, urlencode($value));
+                $url = sprintf('%1$s?search=persons&firstname=%2$s&show=xml', $apiurl, urlencode($value));
                 break;
             case 'lastname':
-                $url = sprintf('%1$s?search=persons&name=%2$s&show=xml', self::$univis_api_url, urlencode($value));
+                $url = sprintf('%1$s?search=persons&name=%2$s&show=xml', $apiurl, urlencode($value));
                 break;
             default:
                 return false;
@@ -163,8 +166,9 @@ class UnivIS_Data {
     }
     
     private static function get_remote_data_by_fullname($firstname, $lastname) {
-        
-        $url = sprintf('%1$s?search=persons&firstname=%2$s&name=%3$s&show=xml', self::$univis_api_url, urlencode($firstname), urlencode($lastname));
+	$config = Config::get_Config();
+	$apiurl = $config['api_url'];
+	$url = sprintf('%1$s?search=persons&firstname=%2$s&name=%3$s&show=xml', $apiurl, urlencode($firstname), urlencode($lastname));
         
         if (!fopen($url, "r")) {
             return false;

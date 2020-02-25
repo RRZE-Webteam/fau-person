@@ -4,7 +4,7 @@
  Plugin URI: https://github.com/RRZE-Webteam/fau-person
  GitHub Plugin URI: https://github.com/RRZE-Webteam/fau-person
  Description: Visitenkarten-Plugin für FAU Webauftritte
- Version: 2.6.5-0
+ Version: 3.0.1
  Author: RRZE-Webteam
  Author URI: http://blogs.fau.de/webworking/
  License: GPLv3 or later
@@ -30,11 +30,7 @@ use FAU_Person\Main;
 
 // Laden der Konfigurationsdatei
 require_once __DIR__ . '/vendor/UnivIS/UnivIS.php';
-
-
 require_once __DIR__ . '/config/config.php';
-require_once __DIR__ . '/vendor/UnivIS/SyncHelper.php';
-require_once __DIR__ . '/vendor/UnivIS/Data.php';
 require_once __DIR__ . '/compatibility.php';
 
 

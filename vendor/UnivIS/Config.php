@@ -12,7 +12,7 @@ class Config {
 	    $options = array(
 		'transient_prefix'		=> 'univis_data_',
 		'api_url'			=> 'http://univis.uni-erlangen.de/prg',
-		'api_transient_expiration'	=> DAY_IN_SECONDS,
+		'api_transient_expiration'		=> DAY_IN_SECONDS,
 		'api_timeout'			=> HOUR_IN_SECONDS,
 		'api_results_limit'		=> 100,
 	    );               
