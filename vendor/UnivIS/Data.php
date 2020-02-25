@@ -2,6 +2,7 @@
 /*
  * UnivIS-Data API- und Cache-Funktionen
  */
+use Config;
 
 add_action('univis_data_async_task', array('UnivIS_Data', 'async_task'));
 
@@ -235,6 +236,9 @@ class UnivIS_Data {
 	if( !is_null( $post ) && $post->post_type === 'person' && get_post_meta($id, 'fau_person_univis_id', true)) {
 	    $univis_id = get_post_meta($id, 'fau_person_univis_id', true);
 	    $univis_default = sync_helper::get_fields($id, $univis_id, 1);
+	    return $univis_default;
+	} else {
+	$univis_default = Config::get_keys_fields('persons');
 	    return $univis_default;
 	}
     }

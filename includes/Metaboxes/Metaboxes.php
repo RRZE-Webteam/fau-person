@@ -7,7 +7,8 @@ defined('ABSPATH') || exit;
 use FAU_Person\Main;
 use FAU_Person\Metaboxes\Kontakt;
 use FAU_Person\Metaboxes\Standort;
-use FAU_Person\Metaboxes\PagesPosts;
+use FAU_Person\Metaboxes\Pages;
+use FAU_Person\Metaboxes\Posts;
 
 
 class Metaboxes  {
@@ -24,7 +25,7 @@ class Metaboxes  {
 	
 
 	require_once(plugin_dir_path($this->pluginFile) . 'vendor/cmb2/init.php');
-		// Textdomain wird festgestellt.
+	
          
          //Excerpt-Meta-Box umbenennen
          add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));        
@@ -36,8 +37,10 @@ class Metaboxes  {
 	$kontaktmetabox->onLoaded();
 	$standortmetabox = new Standort($this->pluginFile,  $this->settings);
 	$standortmetabox->onLoaded();
-	$pagesposts = new PagesPosts($this->pluginFile,  $this->settings);
-	$pagesposts->onLoaded();
+	$pagesmb = new Pages($this->pluginFile,  $this->settings);
+	$pagesmb->onLoaded();
+	$postsmb = new Posts($this->pluginFile,  $this->settings);
+	$postsmb->onLoaded();
     }
     
      //Excerpt Metabox entfernen um Titel zu ändern und Länge zu modifizieren

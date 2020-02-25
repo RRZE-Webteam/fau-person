@@ -3,8 +3,6 @@
 namespace FAU_Person\Metaboxes;
 use FAU_Person\Data;
 use UnivIS_Data;
-use sync_helper;
-
 
 defined('ABSPATH') || exit;
 
@@ -22,33 +20,34 @@ class Kontakt extends Metaboxes {
     }
 
     public function onLoaded()    {
-	add_filter('cmb2_meta_boxes', array( $this, 'cmb2_kontakt_metaboxes') );
-	
+	require_once(plugin_dir_path($this->pluginFile) . 'vendor/UnivIS/UnivIS.php');
+	add_filter('cmb2_meta_boxes', array( $this, 'cmb2_kontakt_metaboxes') );	
     }
-   
-    
 
     public function cmb2_kontakt_metaboxes( $meta_boxes ) {
 	$prefix = $this->prefix;
 
+
 	$contactselect_connection = Data::get_contactdata(1);
  	$standortselect =  Data::get_standortdata();
 	$default_fau_person_typ = Data::get_default_fau_person_typ();
-
-
-	$person_id = null;
-	if ('person' === get_post_type( $_GET['post'])) { 
-	    if ( isset( $_GET[ 'post' ] ) ) {
-		    $person_id = $_GET[ 'post' ];
-	    } else if ( isset( $_POST[ 'post_ID' ] ) ) {
-		    $person_id = $_POST[ 'post_ID' ];
-	    }
+	
+	$person_id = 0;
+	
+	if ( isset( $_GET['post'] ) ) {
+	    $person_id = intval( $_GET['post'] );
+	} elseif ( isset( $_POST['post_ID'] ) ) {
+	    $person_id = intval( $_POST['post_ID'] );
 	}
+	
+	
+
+	
 	if(UnivIS_Data::get_person($person_id) ) {
 	    $univis_sync = '';
 //	    $univis_sync = '<p class="cmb2_metabox_description">' . __('Es können aktuell keine Daten aus UnivIS angezeigt werden. Bitte überprüfen Sie, ob Sie das Plugin univis-data installiert und aktiviert haben.', 'fau-person') . '</p>';
 	} else {
-	    $univis_sync = '<p class="cmb2_metabox_description">' . __('Dezeit sind keine Daten aus UnivIS syncronisiert.', 'fau-person') . '</p>';
+	    $univis_sync = '<p class="cmb2_metabox_description">' . __('Derzeit sind keine Daten aus UnivIS syncronisiert.', 'fau-person') . '</p>';
 	}
 	$standort_default = Data::get_standort_defaults($person_id);  
 	$univis_default = UnivIS_Data::univis_defaults($person_id);  

@@ -117,7 +117,7 @@ class Data {
             } else {
                 if( $defaults ) {
                     $value = __('<p class="cmb2_metabox_description">[Im Standort ist hierfür kein Wert hinterlegt.]</p>', 'fau-person');     
-                } else {
+                } elseif ($id) {
                     $value = get_post_meta($id, 'fau_person_'.$key, true);                          
                 }
             }
@@ -157,7 +157,9 @@ class Data {
                 $standort_id = get_post_meta($id, 'fau_person_standort_id', true);
                 $standort_default = Data::get_fields_standort($id, $standort_id, 1);
                 return $standort_default;        
-            }
+            } else {
+		return Data::get_fields_standort(0,0,0);
+	    }
     }
     
     // Sortierung eines Arrays mit Objekten (z.B. bei einer Kategorie) alphabetisch nach Titel oder Nachname, je nach Typ

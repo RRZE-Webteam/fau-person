@@ -29,6 +29,9 @@ defined('ABSPATH') || exit;
 use FAU_Person\Main;
 
 // Laden der Konfigurationsdatei
+require_once __DIR__ . '/vendor/UnivIS/UnivIS.php';
+
+
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/vendor/UnivIS/SyncHelper.php';
 require_once __DIR__ . '/vendor/UnivIS/Data.php';
@@ -149,6 +152,8 @@ function loaded() {
     }
 
     // Hauptklasse (Main) wird instanziiert.
+
+	
     $main = new Main(__FILE__);
     $main->onLoaded();
 }

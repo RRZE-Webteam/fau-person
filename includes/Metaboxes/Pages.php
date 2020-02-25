@@ -2,8 +2,6 @@
 
 namespace FAU_Person\Metaboxes;
 use FAU_Person\Data;
-use UnivIS_Data;
-use sync_helper;
 
 
 defined('ABSPATH') || exit;
@@ -11,7 +9,7 @@ defined('ABSPATH') || exit;
 /**
  * Define Metaboxes for Kontakt-Edit
  */
-class PagesPosts extends Metaboxes {
+class Pages extends Metaboxes {
 
     protected $pluginFile;
     private $settings = '';
@@ -22,21 +20,21 @@ class PagesPosts extends Metaboxes {
     }
 
     public function onLoaded()    {
-	add_filter('cmb2_meta_boxes', array( $this, 'cmb2_pages_posts_metaboxes') );
+	add_filter('cmb2_meta_boxes', array( $this, 'cmb2_pages_metaboxes') );
 	
     }
    
     
 
-    public function cmb2_pages_posts_metaboxes( $meta_boxes ) {
+    public function cmb2_pages_metaboxes( $meta_boxes ) {
 	$prefix = $this->prefix;
 	$contactselect = Data::get_contactdata();
 
 	// Meta-Box zur Anzeige der verfügbaren Kontakte auf post und page, um die Personen-ID schneller herauszufinden
-	$meta_boxes['fau_person_post_metabox'] = array(
-	    'id'		    => 'fau_person_post_metabox',
+	$meta_boxes['fau_person_page_metabox'] = array(
+	    'id'		    => 'fau_person_page_metabox',
 	    'title'	    => __( 'Kontaktinformationen', 'fau-person' ),
-	    'object_types'    => array('post', 'page'), // post type
+	    'object_types'    => array('page'), // post type
 	    'context'	    => 'side',
 	    'priority'	    => 'default',
 	    'show_names'	    => true, // Show field names on the left

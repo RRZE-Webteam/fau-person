@@ -935,15 +935,16 @@ class Kontakt extends Shortcodes {
     
     public static function fau_person_sidebar($id, $title, $showlist = 0, $showinstitution = 0, $showabteilung = 0, $showposition = 0, $showtitle = 0, $showsuffix = 0, $showaddress = 0, $showroom = 0, $showtelefon = 0, $showfax = 0, $showmobile = 0, $showmail = 0, $showwebsite = 0, $showlink = 0, $showdescription = 0, $showoffice = 0, $showpubs = 0, $showthumb = 0, $showvia = 0, $hstart = 3) {
         //Überprüfung zur Bildplatzierung in der Sidebar, ob ein FAU-Theme gewählt wurde und welches Template gewählt ist
-        $active_theme = wp_get_theme();
-        $active_theme = $active_theme->get( 'Name' );
-        if (in_array($active_theme, FAU_Person::$fauthemes)) {
-            $fautheme = 1;
+
+	$fautheme = \FAU_Person\Helper::isFAUTheme();
+	$small_sidebar = false;
+	if ($fautheme) {
             if( !is_page_template( array('page-templates/page-portal.php', 'page-templates/page-start.php', 'page-templates/page-start-sub.php'))  ) {
                 $small_sidebar = 1;
             }
-        }
-        echo "MOEB";
+	}
+       
+
         if (!empty($id)) {
             $post = get_post($id);
 

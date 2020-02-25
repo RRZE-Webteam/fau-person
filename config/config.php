@@ -58,11 +58,11 @@ function getConstants() {
  */
 function getMenuSettings() {
     return [
-        'page_title'    => __('FAU Person', 'fau-person'),
-        'menu_title'    => __('FAU Person', 'fau-person'),
+        'page_title'    => __('Kontakt', 'fau-person'),
+        'menu_title'    => __('Kontakt', 'fau-person'),
         'capability'    => 'manage_options',
         'menu_slug'     => 'fau-person',
-        'title'         => __('FAU Person Settings', 'fau-person'),
+        'title'         => __('Kontakt Einstellungen', 'fau-person'),
     ];
 }
 
@@ -159,13 +159,10 @@ function getHelpTabSidebar() {
  */
 function getSections() {
     return [
-        // [
-        //    'id'    => 'basic',
-        //    'title' => __('Basic Settings', 'fau-person')
-       //  ],
+
 	[
             'id'    => 'sidebar',
-            'title' => __('Anzeigeoptionen', 'fau-person')
+            'title' => __('Anzeigeoptionen (Widget Kontakt-Visitenkarte)', 'fau-person')
         ],
 	[
             'id'    => 'indexpage',
@@ -257,7 +254,7 @@ function getFields() {
 		'label' => __('Bild', 'fau-person'),
 		'type'  => 'checkbox',
 		'checked'   => true,
-		'default' => true,
+		'default' => false,
             ],
 	],
 	'indexpage' => [

@@ -1,6 +1,7 @@
 <?php
 
 namespace FAU_Person;
+use function FAU_Person\Config\getConstants;
 
 defined('ABSPATH') || exit;
 
@@ -64,6 +65,16 @@ class Helper {
         <?php
     }
 
-  
+    public static function isFAUTheme() {
+	$constants = getConstants();
+	$themelist = $constants['fauthemes'];
+	$fautheme = false;
+	$active_theme = wp_get_theme();
+	$active_theme = $active_theme->get( 'Name' );
+	if (in_array($active_theme, $themelist)) {
+	    $fautheme = true;
+	}
+	return $fautheme;   
+    }
     
 }

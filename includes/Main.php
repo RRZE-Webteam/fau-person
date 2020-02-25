@@ -5,15 +5,13 @@ namespace FAU_Person;
 defined('ABSPATH') || exit;
 
 use FAU_Person\Settings;
-use FAU_Person\Data;
 use FAU_Person\Taxonomy\Taxonomy;
 use FAU_Person\Plugins\Plugins;
 use FAU_Person\Images;
 use FAU_Person\Templates;
 use FAU_Person\Shortcodes\Shortcodes;
-use FAU_Person\Widgets;
+use FAU_Person\Widgets\Widgets;
 use FAU_Person\Metaboxes\Metaboxes;
-use FAU_Person\Helper;
 use function FAU_Person\Config\getConstants;
 	
 	
@@ -46,6 +44,7 @@ class Main {
         $settings = new Settings($this->pluginFile);
         $settings->onLoaded();
 	// $this->options = $settings->options;
+
 	
 	add_action('wp_enqueue_scripts', [$this, 'enqueueScripts']);
 	
@@ -80,12 +79,12 @@ class Main {
 		// Add Shortcodes
         $shortcodes = new Shortcodes($this->pluginFile, $settings); 
         $shortcodes->onLoaded();
-		return;	
+
 		
 	// Add Widget
         $widget = new Widgets($this->pluginFile, $settings); 
         $widget->onLoaded();
-			
+			return;			
     }
     
     /**

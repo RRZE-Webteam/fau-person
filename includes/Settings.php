@@ -174,6 +174,7 @@ class Settings {
 
         return $default;
     }
+    
 
     /**
      * Sanitize-Callback für die Optionen.
