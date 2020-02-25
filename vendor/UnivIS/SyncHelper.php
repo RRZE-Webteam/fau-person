@@ -1,8 +1,8 @@
 <?php
 
 use FAU_Person\Data;
-use function UnivIS\Sanitizer\correct_phone_number;
-use function UnivIS\Sanitizer\convert_time;
+
+
 
 class sync_helper {
     //gibt die Werte der Person an, Inhalte abhängig von UnivIS, 
@@ -143,13 +143,13 @@ class sync_helper {
                     $phone_number = self::sync_univis( $id, $person_location, $key, $value, $defaults );
                     switch ( get_post_meta($id, 'fau_person_telephone_select', true) ) {
                         case 'erl':
-                            $value = correct_phone_number($phone_number, 'erl');
+                            $value = Sanitizer::correct_phone_number($phone_number, 'erl');
                             break;
                         case 'nbg':
-                            $value = correct_phone_number($phone_number, 'nbg');                        
+                            $value = Sanitizer::correct_phone_number($phone_number, 'nbg');                        
                             break;
                         default:
-                            $value = correct_phone_number($phone_number, 'standard');                        
+                            $value = Sanitizer::correct_phone_number($phone_number, 'standard');                        
                             break;
                     }                    
                 } else {
@@ -163,13 +163,13 @@ class sync_helper {
                         $phone_number = get_post_meta($id, 'fau_person_'.$key, true);
                         switch ( get_post_meta($id, 'fau_person_telephone_select', true) ) {
                         case 'erl':
-                            $value = correct_phone_number($phone_number, 'erl');
+                            $value = Sanitizer::correct_phone_number($phone_number, 'erl');
                             break;
                         case 'nbg':
-                            $value = correct_phone_number($phone_number, 'nbg');                        
+                            $value = Sanitizer::correct_phone_number($phone_number, 'nbg');                        
                             break;
                         default:
-                            $value = correct_phone_number($phone_number, 'standard');  
+                            $value = Sanitizer::correct_phone_number($phone_number, 'standard');  
                             break;
                         }
                     } else {                    
@@ -388,9 +388,9 @@ class sync_helper {
             }
         }
         if ( $starttime ) {
-            $time = convert_time( $starttime );
+            $time = Sanitizer::convert_time( $starttime );
             if ( $endtime ) {
-                $time .= ' - ' . convert_time( $endtime );
+                $time .= ' - ' . Sanitizer::convert_time( $endtime );
             }
             $time = $time . ',';
             array_push($date, $time);

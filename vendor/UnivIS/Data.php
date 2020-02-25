@@ -3,6 +3,7 @@
  * UnivIS-Data API- und Cache-Funktionen
  */
 use Config;
+use Sanitizer;
 
 add_action('univis_data_async_task', array('UnivIS_Data', 'async_task'));
 
@@ -12,19 +13,15 @@ add_action('save_post', function() {
 
 class UnivIS_Data {
 
-    const transient_prefix = 'univis_data_';
-    
+    const transient_prefix = 'univis_data_';    
     protected static $univis_api_url = 'http://univis.uni-erlangen.de/prg';
-    
-    protected static $transient_expiration = DAY_IN_SECONDS;
-    
-    protected static $timeout = HOUR_IN_SECONDS;
-    
+    protected static $transient_expiration = DAY_IN_SECONDS;    
+    protected static $timeout = HOUR_IN_SECONDS; 
     protected static $results_limit = 100;
     
     public static function get_person($id) {
 
-        if (!self::is_valid_id($id)) {
+        if (!Sanitizer::is_valid_id($id)) {
             return false;
         }
 
@@ -42,7 +39,7 @@ class UnivIS_Data {
     }
     
     private static function get_data_cache($id) {
-        if (!self::is_valid_id($id)) {
+        if (!Sanitizer::is_valid_id($id)) {
             return false;
         }
         
@@ -55,7 +52,7 @@ class UnivIS_Data {
         }
         
         $id = $data['id'];
-        if (!self::is_valid_id($id)) {
+        if (!Sanitizer::is_valid_id($id)) {
             return false;
         }
         
@@ -92,7 +89,7 @@ class UnivIS_Data {
     }
     
     public static function delete_data_cache($id) {
-        if (!self::is_valid_id($id)) {
+        if (!Sanitizer::is_valid_id($id)) {
             return false;
         }
 
@@ -100,7 +97,7 @@ class UnivIS_Data {
     }
     
     public static function search_by($field = '', $value = '') {
-        if ('id' == $field && !self::is_valid_id($value)) {
+        if ('id' == $field && !Sanitizer::is_valid_id($value)) {
             return false;
         } else {
             $value = trim($value);
@@ -223,13 +220,7 @@ class UnivIS_Data {
         return $a;
     }
     
-    private static function is_valid_id($id) {
-        $return = ((string)$id === (string)(int)$id);
-        if ($return && intval($id) < 1) {
-            $return = false;
-        }
-        return $return;
-    }
+   
       //Legt die in UnivIS hinterlegten Werte in einem Array ab, Feldbezeichnungen
     public static function univis_defaults($id ) {
          $post = get_post($id);

@@ -3,14 +3,14 @@
 /* 
  * Convert and sanitize data from UnivIS
  */
-namespace UnivIS\Sanitizer;
+
 
 defined('ABSPATH') || exit;
-    
+class Sanitizer {    
     /*
      * Normalize Phone Numbers 
      */
-    function correct_phone_number( $phone_number, $location ) {
+    public static function correct_phone_number( $phone_number, $location ) {
         if( ( strpos( $phone_number, '+49 9131 85-' ) !== 0 ) && ( strpos( $phone_number, '+49 911 5302-' ) !== 0 ) ) {
             if( !preg_match( '/\+49 [1-9][0-9]{1,4} [1-9][0-9]+/', $phone_number ) ) {
                 $phone_data = preg_replace( '/\D/', '', $phone_number );
@@ -95,7 +95,7 @@ defined('ABSPATH') || exit;
     /*
      * Correct Time Format of UnivIS
      */
-    function convert_time($time) {
+    public static function convert_time($time) {
         if ( strpos( $time, 'PM' ) ) {
             $modtime = explode( ':', rtrim( $time, ' PM' ) );
             if ( $modtime[0] != 12 ) {
@@ -108,3 +108,13 @@ defined('ABSPATH') || exit;
         } 
         return $time;
     }
+    
+   public static  function is_valid_id($id) {
+        $return = ((string)$id === (string)(int)$id);
+        if ($return && intval($id) < 1) {
+            $return = false;
+        }
+        return $return;
+    }
+    
+}
