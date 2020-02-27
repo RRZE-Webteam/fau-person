@@ -7,7 +7,10 @@
 namespace {
     class FAU_Person_Shortcodes {
 	public function fau_person_page($id) {
-	    return FAU_Person\Shortcodes\Kontakt::fau_person_page($id);
+	    return FAU_Person\Data::fau_person_page($id);
+	}
+	public function fau_person($id) {
+	    return FAU_Person\Shortcodes\Kontakt::shortcode_kontakt($id);
 	}
     }
 }
