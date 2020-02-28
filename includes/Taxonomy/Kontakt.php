@@ -42,6 +42,7 @@ class Kontakt extends Taxonomy {
 	    'not_found'		=> __('Keine Kontakte gefunden', 'fau-person'),
 	    'not_found_in_trash'    => __('Keine Kontakte in Papierkorb gefunden', 'fau-person'),
         ];
+	
 	$has_archive_page = $this->settings->getOption('constants', 'has_archive_page');
 	$person_args = array(
 	    'label'		=> __('Kontakt', 'fau-person'),

@@ -35,7 +35,7 @@ function getConstants() {
 		'default_person_thumb_page_height'  => 300,
 		'default_person_thumb_page_crop'    => true,
 	    ],
-	    
+	    'has_archive_page'	=> true,
 	    'fauthemes' => [
 		'FAU-Einrichtungen', 
 		'FAU-Philfak',
@@ -165,8 +165,8 @@ function getSections() {
             'title' => __('Anzeigeoptionen (Widget Kontakt-Visitenkarte)', 'fau-person')
         ],
 	[
-            'id'    => 'indexpage',
-            'title' => __('Indexseiten', 'fau-person')
+            'id'    => 'constants',
+            'title' => __('Erweiterte Einstellungen', 'fau-person')
         ],
       
     ];
@@ -265,9 +265,9 @@ function getFields() {
 		'default' => false,
             ],
 	],
-	'indexpage' => [
+	'constants' => [
 	    [
-		'name'  => 'checkbox',
+		'name'  => 'has_archive_page',
 		'label' => __('Kontakt-Übersichtsseite', 'fau-person'),
 		'desc'  => __('Zeige die Standard-Übersichtsseite aller Kontakte an. Bevor diese Option deaktiviert wird, muss eine eigene Seite mit der Titelform (slug) "person" direkt unterhalb der Hauptebene angelegt werden.', 'fau-person'),
 		'type'  => 'checkbox',
@@ -697,6 +697,18 @@ function getShortcodeSettings(){
 			'field_type' => 'text', // Art des Feldes im Gutenberg Editor
 			'label' => __( 'Slug (URI) des Kontakteintrags', 'fau-person' ),
 			'type' => 'text' // Variablentyp der Eingabe
+		],
+		'titletag' => [
+			'default' => 'h2',
+			'field_type' => 'text', // Art des Feldes im Gutenberg Editor
+			'label' => __( 'HTML-Element zur Darstellung des Standortnamens', 'fau-person' ),
+			'type' => 'text' // Variablentyp der Eingabe
+		],
+		'adresse' => [
+			'default' => true,
+			'field_type' => 'checkbox',
+			'label' => __( 'Telefonnummer anzeigen', 'fau-person' ),
+			'type' => 'boolean' 
 		],
 		'format' => [
 			'default' => '',

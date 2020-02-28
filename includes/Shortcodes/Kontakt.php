@@ -62,7 +62,7 @@ class Kontakt extends Shortcodes {
         );
     }    
     */
-    public function shortcode_kontakt($atts, $content = null) {
+    public static function shortcode_kontakt($atts, $content = null) {
 	$defaults = getShortcodeDefaults('kontakt');
 	extract(shortcode_atts($defaults, $atts));
 	
@@ -348,7 +348,7 @@ class Kontakt extends Shortcodes {
         
     }
 
-    public function shortcode_kontaktListe($atts, $content = null) {
+    public static function shortcode_kontaktListe($atts, $content = null) {
 	$defaults = getShortcodeDefaults('kontaktliste');
 	extract(shortcode_atts($defaults, $atts));
 	

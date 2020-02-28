@@ -1,6 +1,8 @@
 <?php
 
-namespace FAU_Person;
+
+namespace FAU_Person\Templates;
+use FAU_Person\Helper;
 
 defined('ABSPATH') || exit;
 
@@ -18,9 +20,7 @@ class Templates {
     }
 
 
-    public function onLoaded()    {
-        define('FAU_PERSON_ROOT', dirname(__FILE__));
-	
+    public function onLoaded()    {	
 	add_filter( 'single_template', array( $this, 'include_single_template' ) );     
 	add_filter( 'archive_template', array( $this, 'include_archive_template' ) );         
     }
@@ -35,7 +35,11 @@ class Templates {
                 if ($theme_file = locate_template(array('single-person.php'))) {
                     $template_path = $theme_file;
                 } else {
-                    $template_path = FAU_PERSON_ROOT . '/templates/single-person.php';                    
+		    if (Helper::isFAUTheme()) {
+			$template_path = dirname($this->pluginFile) . '/includes/Templates/single-person-fau-theme.php';      
+		    } else {
+			$template_path = dirname($this->pluginFile) . '/includes/Templates/single-person.php';         
+		    }
                 }
             //}
         }
@@ -46,7 +50,11 @@ class Templates {
                 if ($theme_file = locate_template(array('single-standort.php'))) {
                     $template_path = $theme_file;
                 } else {
-                    $template_path = FAU_PERSON_ROOT . '/templates/single-standort.php';                    
+		    if (Helper::isFAUTheme()) {
+			 $template_path = dirname($this->pluginFile) . '/includes/Templates/single-standort-fau-theme.php';      
+		    } else {
+			 $template_path = dirname($this->pluginFile) . '/includes/Templates/single-standort.php';      
+		    }            
                 }
             //}
         }
@@ -62,7 +70,14 @@ class Templates {
                 if ($theme_file = locate_template(array('archive-person.php'))) {
                     $template_path = $theme_file;
                 } else {
-                    $template_path = FAU_PERSON_ROOT . '/templates/archive-person.php';                    
+		    
+		    if (Helper::isFAUTheme()) {
+			 $template_path = dirname($this->pluginFile) . '/includes/Templates/archive-person-fau-theme.php';      
+		    } else {
+			 $template_path = dirname($this->pluginFile) . '/includes/Templates/archive-person.php';      
+		    }  
+		    
+                   
                 }
             //}
         }
@@ -73,7 +88,11 @@ class Templates {
                 if ($theme_file = locate_template(array('archive-standort.php'))) {
                     $template_path = $theme_file;
                 } else {
-                    $template_path = FAU_PERSON_ROOT . '/templates/archive-standort.php';                    
+                   if (Helper::isFAUTheme()) {
+			 $template_path = dirname($this->pluginFile) . '/includes/Templates/archive-standort-fau-theme.php';      
+		    } else {
+			 $template_path = dirname($this->pluginFile) . '/includes/Templates/archive-standort.php';      
+		    }
                 }
             //}
         }

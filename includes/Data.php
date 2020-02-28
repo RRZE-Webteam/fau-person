@@ -828,5 +828,138 @@ class Data {
         return $content;
     }
     
+    
+    public static function create_fau_standort($id, $showfields, $titletag = 'h2') {
+	if (!isset($id)) {
+	    return;
+	}
+	$id = sanitize_key($id);
+	if (!is_array($showfields)) {
+	    return;
+	}
+	$fields = sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true), 0 );
+	$permalink = get_permalink( $id );
+	
+	if (isset($showfields['kurzbeschreibung']) && ($showfields['kurzbeschreibung'])) {
+	    $excerpt = get_post_field( 'post_excerpt', $id );         
+	    $fields['description'] = $excerpt;
+	}
+	if (isset($showfields['adresse']) && ($showfields['adresse'])) {
+	    $schemaadr = true;
+	} else {
+	    $schemaadr = false;
+	}
+	$schema = Schema::create_Place($fields,'location','','div',true, $schemaadr);
+	
+	$title = '';
+	if (isset($showfields['title']) && ($showfields['title'])) {	
+	    if( !empty( get_the_title($id) ) ) {                                                
+		$title .= get_the_title($id);
+	    }       
+	}
+                    
+	$content = '<div class="fau-person standort" itemscope itemtype="http://schema.org/Organization">';		
+	if( !empty( $title ) ) {                                                
+              $content .= '<'.$titletag.' itemprop="name">';
+	     if (isset($showfields['permalink']) && ($showfields['permalink']) && ($permalink)) { 
+		 $content .= '<a href="'.$permalink.'">';
+	     }
+	     $content .= $title;
+	      if (isset($showfields['permalink']) && ($showfields['permalink']) && ($permalink)) { 
+		   $content .= '</a>'; 
+	      }
+	     $content .= '</'.$titletag.'>';
+         }
+
+	if( !empty( $schema ) ) {            
+	   $content .=  $schema;
+	}          
+	 
+	 
+	if (isset($showfields['bild']) && ($showfields['bild']) && has_post_thumbnail($id)) {
+	    $content .= '<div class="standort-image" itemprop="image" aria-hidden="true">';	
+	    $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', 'fau-person'), get_the_title($id)) . '" href="' . $permalink . '">';
+	    $content .= get_the_post_thumbnail($id);   
+	    $content .= '</a>';
+	    $content .= '</div>';
+	}
+
+	if (isset($showfields['content']) && ($showfields['content'])) {
+	    $post = get_post( $id );
+	    if ( $post->post_content )      {
+		$content .= '<div class="content">'.$post->post_content.'</div>';
+	    }
+	}
+	$content .= '</div>';
+	return $content;
+    }
+    
+     public static function create_fau_standort_plain($id, $showfields, $titletag = '') {
+	if (!isset($id)) {
+	    return;
+	}
+	$id = sanitize_key($id);
+	if (!is_array($showfields)) {
+	    return;
+	}
+	$fields = sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true), 0 );
+	$permalink = get_permalink( $id );
+	
+	if (isset($showfields['kurzbeschreibung']) && ($showfields['kurzbeschreibung'])) {
+	    $excerpt = get_post_field( 'post_excerpt', $id );         
+	    $fields['description'] = $excerpt;
+	}
+	if (isset($showfields['adresse']) && ($showfields['adresse'])) {
+	    $schemaadr = true;
+	} else {
+	    $schemaadr = false;
+	}
+	$schema = Schema::create_Place($fields,'','','span',false, $schemaadr);
+	
+	$title = '';
+	if (isset($showfields['title']) && ($showfields['title'])) {	
+	    if( !empty( get_the_title($id) ) ) {                                                
+		$title .= get_the_title($id);
+	    }       
+	}
+                    
+	$content = '';		
+	if( !empty( $title ) ) {      
+	    if (!empty($titletag)) {
+		$content .= '<'.$titletag.'>';
+	    }
+	     if (isset($showfields['permalink']) && ($showfields['permalink']) && ($permalink)) { 
+		 $content .= '<a href="'.$permalink.'">';
+	     }
+	     $content .= $title;
+	      if (isset($showfields['permalink']) && ($showfields['permalink']) && ($permalink)) { 
+		   $content .= '</a>'; 
+	      }
+	      if (!empty($titletag)) {
+		$content .= '</'.$titletag.'>';
+	      }
+         }
+
+	if( !empty( $schema ) ) {            
+	   $content .=  $schema;
+	}          
+	 
+	 
+	if (isset($showfields['bild']) && ($showfields['bild']) && has_post_thumbnail($id)) {
+	    $content .= '<div class="standort-image" aria-hidden="true">';	
+	    $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', 'fau-person'), get_the_title($id)) . '" href="' . $permalink . '">';
+	    $content .= get_the_post_thumbnail($id);   
+	    $content .= '</a>';
+	    $content .= '</div>';
+	}
+
+	if (isset($showfields['content']) && ($showfields['content'])) {
+	    $post = get_post( $id );
+	    if ( $post->post_content )      {
+		$content .= '<div class="content">'.$post->post_content.'</div>';
+	    }
+	}
+	return $content;
+    }   
 
 }

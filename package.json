@@ -1,6 +1,6 @@
 {
   "name": "fau-person",
-  "version": "3.0.2-4",
+  "version": "3.0.4",
   "description": "Kontakt-Plugin für FAU Webauftritte.",
   "main": "fau-person.php",
   "scripts": {
@@ -8,10 +8,24 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/RRZE-Webteam/fau-person.git"
+    "url": "https://github.com/RRZE-Webteam/fau-person",
+    "issues": "https://github.com/RRZE-Webteam/fau-person/issues",
+    "clone": "git+https://github.com/RRZE-Webteam/fau-person.git"
   },
-  "author": "RRZE Webteam",
-  "license": "GNU General Public License v3",
+  "browserslist": [
+    "last 3 years",
+    "ie 11"
+  ],
+  "supports": {
+    "email": "webmaster@fau.de",
+    "docs": "https://www.wordpress.rrze.fau.de/plugins/fau-und-rrze-plugins/fau-person/"
+  },  
+  
+  "author": {
+    "name": "RRZE-Webteam <webmaster@fau.de>",
+    "url": "https://www.wordpress.rrze.fau.de/person/webmaster"
+  },  
+    "license": "GNU General Public License v3",
   "devDependencies": {
     "@babel/core": "^7.6.2",
     "@babel/preset-env": "^7.6.2",

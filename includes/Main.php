@@ -7,7 +7,7 @@ defined('ABSPATH') || exit;
 use FAU_Person\Settings;
 use FAU_Person\Taxonomy\Taxonomy;
 use FAU_Person\Plugins\Plugins;
-use FAU_Person\Templates;
+use FAU_Person\Templates\Templates;
 use FAU_Person\Shortcodes\Shortcodes;
 use FAU_Person\Widgets\Widgets;
 use FAU_Person\Metaboxes\Metaboxes;

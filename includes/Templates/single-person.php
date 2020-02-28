@@ -4,9 +4,9 @@ get_header(); ?>
         <div id="content">
             <div class="container">
                 <div class="row">
-                    <div class="span8">
+                    <div class="col-xs-12">
                     <?php 
-                        echo FAU_Person_Shortcodes::fau_person_page(get_the_ID());
+                      echo FAU_Person\Data::fau_person_page($id);
                     ?>         
                     </div>
                 </div>
