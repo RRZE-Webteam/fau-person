@@ -1,4 +1,5 @@
 <?php
+namespace RRZE\Lib\UnivIS;
 
 /* 
  * Convert and sanitize data from UnivIS

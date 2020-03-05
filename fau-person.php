@@ -4,7 +4,7 @@
  Plugin URI: https://github.com/RRZE-Webteam/fau-person
  GitHub Plugin URI: https://github.com/RRZE-Webteam/fau-person
  Description: Visitenkarten-Plugin für FAU Webauftritte
- Version: 3.0.4
+ Version: 3.0.5-4
  Author: RRZE-Webteam
  Author URI: http://blogs.fau.de/webworking/
  License: GPLv3 or later
@@ -13,16 +13,6 @@
 	
 
 namespace FAU_Person;
-
-/*
-Die Codezeile defined('ABSPATH') || exit;
-verhindert den direkten Zugriff auf die PHP-Dateien über URL und stellt sicher,
-dass die Plugin-Dateien nur innerhalb der WordPress-Umgebung ausgeführt werden.
-Denn wenn bspw. eine Datei I/O-Operationen enthält,
-kann sie schließlich kompromittiert werden (durch einen Angreifer),
-was zu unerwartetem Verhalten führen kann.
-*/
-
 
 defined('ABSPATH') || exit;
 

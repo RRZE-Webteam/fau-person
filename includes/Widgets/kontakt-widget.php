@@ -70,7 +70,7 @@ if (!class_exists('FAUPersonWidget')) {
 
 	public function widget($args, $instance) {
     
-	    $settings = new Settings($this->pluginFile);
+	    $settings = new Settings(PLUGIN_FILE);
 	    $settings->onLoaded();
 	    $options = $settings->options;
 	    

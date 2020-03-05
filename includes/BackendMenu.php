@@ -2,7 +2,7 @@
 
 namespace FAU_Person;
 use FAU_Person\Data;
-use UnivIS_Data;
+use RRZE\Lib\UnivIS\UnivIS_Data;
 use sync_helper;
 defined('ABSPATH') || exit;
 
@@ -58,13 +58,14 @@ class BackendMenu {
         $transient = get_transient($this->settings->search_univis_id_transient);
         $firstname = isset($transient['firstname']) ? $transient['firstname'] : '';
         $givenname = isset($transient['givenname']) ? $transient['givenname'] : '';
-        if(class_exists( 'Univis_Data' ) ) {
+    //    if(class_exists( 'Univis_Data' ) ) {
             $firstname = Helper::sonderzeichen($firstname);
             $givenname = Helper::sonderzeichen($givenname);
             $person = sync_helper::get_univisdata(0, $firstname, $givenname);       
-        } else {
-            $person = array();
-        }
+      //  } else {
+	 
+        //    $person = array();
+        // }
         ?>
         <div class="wrap">
             <?php screen_icon(); ?>

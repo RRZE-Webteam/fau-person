@@ -9,7 +9,7 @@ class Schema {
     /*
      * Create Schema Markup for Place
      */
-    public static function create_Place($data, $itemprop = 'location', $class = '', $surroundingtag = 'div', $widthbreak = true, $widthaddress = true ) {
+    public static function create_Place($data, $itemprop = 'location', $class = '', $surroundingtag = 'div', $widthbreak = true, $widthaddress = true, $phoneuri = true ) {
 
 	if (!is_array($data)) {
 	    return;
@@ -32,14 +32,26 @@ class Schema {
 	    }
 	}
 	if ((isset($data['telephone'])) && (!empty(trim($data['telephone'])))) {	    
-	    $res .= '<span itemprop="telephone">'.$data['telephone'].'</span>';
+
+	    $number = self::get_sanitized_phone($data['telephone']);
+	    if ($phoneuri) {
+		$res .= '<a itemprop="telephone" href="tel:'.self::get_telephone_uri($number).'">' . $number . '</a>';
+	    } else {
+		$res .= '<span itemprop="telephone">' . $data['telephone'] . '</span>';
+	    }
+
 	     $filled = true;
 	     if ($widthbreak) {
 		$res .= '<br>';
 	    }
 	}
 	if ((isset($data['faxNumber'])) && (!empty(trim($data['faxNumber'])))) {	    
-	    $res .= '<span itemprop="faxNumber">'.$data['faxNumber'].'</span>';
+	    $number = self::get_sanitized_phone($data['faxNumber']);
+	    if ($phoneuri) {
+		$res .= '<a itemprop="telephone" href="tel:'.self::get_telephone_uri($number).'">' . $number . '</a>';
+	    } else {
+		$res .= '<span itemprop="telephone">' . $data['telephone'] . '</span>';
+	    }
 	     $filled = true;
 	   if ($widthbreak) {
 		$res .= '<br>';
@@ -135,5 +147,324 @@ class Schema {
 	}
 	return;
 	
+    }
+    
+    
+     
+    public static function create_Name( $data, $itemprop = 'name', $class = '', $surroundingtag = 'span', $suffixbracket = false ) {
+	if (!is_array($data)) {
+	    return;
+	}
+	$res = '<'.$surroundingtag;
+	if (!empty($itemprop)) {
+	    $res .= ' itemprop="'.$itemprop.'"';
+	}
+	if (!empty($class)) {
+	    $res .= ' class="'.$class.'"';
+	}
+	if ($surroundingtag === 'a') {
+	    if ((isset($data['url'])) && (!empty($data['url']))) {
+		$res .= 'href="'.$data['url'].'"';
+	    }
+	}
+	$res .= '>';
+	
+	$honorificPrefix = $honorificSuffix = $givenName = $familyName = $fullname = '';
+	
+	if ((isset($data['honorificPrefix'])) && (!empty($data['honorificPrefix']))) {
+	    $honorificPrefix = '<span itemprop="honorificPrefix">' . $data['honorificPrefix'] . '</span>';
+	}
+	if ((isset($data['honorificSuffix'])) && (!empty($data['honorificSuffix']))) {
+	    $honorificSuffix = '<span itemprop="honorificSuffix">' . $data['honorificSuffix'] . '</span>';
+	}
+	
+
+	if ((isset($data['givenName'])) && (!empty($data['givenName']))) {
+	    $givenName  = '<span itemprop="givenName">' . $data['givenName'] . '</span>';
+	}
+	if ((isset($data['familyName'])) && (!empty($data['familyName']))) {
+	    $familyName  = '<span itemprop="familyName">' . $data['familyName'] . '</span>';
+	}
+	
+	if ((!empty($givenName)) && (!empty($familyName))) {
+	    $fullname = $givenName.' '.$familyName;
+	} elseif ((isset($data['name'])) && (!empty($data['name']))) {
+	    $fullname = $data['name'];   
+	} elseif ((isset($data['alternateName'])) && (!empty($data['alternateName']))) {
+	    $fullname = '<span itemprop="alternateName">' . $data['alternateName'] . '</span>';
+	}
+	
+	if (!empty($fullname))  {
+	    
+	    if (!empty($honorificPrefix)) {
+		$res .= $honorificPrefix. ' ';
+	    }
+	    $res .= $fullname;
+	    if (!empty($honorificSuffix)) {
+		if ($suffixbracket) {
+		    $res .= ' ('.$honorificSuffix.')';
+		} else {
+		    $res .= ', '.$honorificSuffix;
+		}
+	    }
+	    $res .= '</'.$surroundingtag.'>';
+
+	    return $res;
+	}
+
+	return;
+    }
+    
+    public static function create_contactpointlist($data, $blockstart = 'ul', $itemprop = '', $class = 'person-info', $liststart = 'li', $phoneuri = true) {
+	if (!is_array($data)) {
+	    return;
+	}
+	$filled = false;
+	$res = '<'.$blockstart;
+	if (!empty($itemprop)) {
+	    $res .= ' itemprop="'.$itemprop.'"';
+	}
+	if (!empty($class)) {
+	    $res .= ' class="'.$class.'"';
+	}
+	$res .= '>';
+	
+	if ((isset($data['telephone'])) && (!empty($data['telephone']))) {
+	    $res .= '<'.$liststart.' class="person-info-phone telephone">';
+	    $res .= '<span class="screen-reader-text">' . __('Telefon', 'fau-person') . ': </span>';
+	    $number = self::get_sanitized_phone($data['telephone']);
+	    if ($phoneuri) {
+		$res .= '<a itemprop="telephone" href="tel:'.self::get_telephone_uri($number).'">' . $number . '</a>';
+	    } else {
+		$res .= '<span itemprop="telephone">' . $data['telephone'] . '</span>';
+	    }
+	    $res .= '</'.$liststart.'>';
+	    $filled = true;
+	}
+	
+	if ((isset($data['mobilePhone'])) && (!empty($data['mobilePhone']))) {
+	    $res .= '<'.$liststart.' class="person-info-mobile mobilePhone">';
+	    $res .= '<span class="screen-reader-text">' . __('Mobil', 'fau-person') . ': </span>';
+	    $number = self::get_sanitized_phone($data['mobilePhone']);
+	    if ($phoneuri) {
+		$res .= '<a itemprop="telephone" href="tel:'.self::get_telephone_uri($number).'">' . $number . '</a>';
+	    } else {
+		$res .= '<span itemprop="telephone">' . $number . '</span>';
+	    }
+	    $res .= '</'.$liststart.'>';
+	     $filled = true;
+	}
+	
+	if ((isset($data['faxNumber'])) && (!empty($data['faxNumber']))) {
+	    $res .= '<'.$liststart.' class="person-info-fax faxNumber">';
+	    $res .= '<span class="screen-reader-text">' . __('Faxnummer', 'fau-person') . ': </span>';
+	    $number = self::get_sanitized_phone($data['faxNumber']);
+	    if ($phoneuri) {
+		$res .= '<a itemprop="faxNumber" href="tel:'.self::get_telephone_uri($number).'">' . $number . '</a>';
+	    } else {
+		$res .= '<span itemprop="faxNumber">' . $number . '</span>';
+	    }
+	    $res .= '</'.$liststart.'>';
+	     $filled = true;
+	}
+	
+	if ((isset($data['email'])) && (!empty($data['email']))) {
+	    $res .= '<'.$liststart.' class="person-info-email email">';
+	    $res .= '<span class="screen-reader-text">' . __('E-Mail', 'fau-person') . ': </span>';
+	    $res .= '<a itemprop="email" href="mailto:'.self::get_email_uri($data['email']).'">' . self::get_email_uri($data['email']) . '</a>';
+	    $res .= '</'.$liststart.'>';
+	     $filled = true;
+	}
+	
+	if ((isset($data['url'])) && (!empty($data['url']))) {
+	    $res .= '<'.$liststart.' class="person-info-www url">';
+	    $res .= '<span class="screen-reader-text">' . __('Webseite', 'fau-person') . ': </span>';
+	    $res .= '<a itemprop="url" href="'.self::get_sanitized_url($data['url']).'">' . self::get_sanitized_url($data['url']) . '</a>';
+	    $res .= '</'.$liststart.'>';
+	     $filled = true;
+	}
+	
+	$res .= '</'.$blockstart.'>';
+	if ( $filled ) {
+	    return $res;
+	}
+	return;
+    }
+    
+    
+    public static function create_ContactPoint( $data, $blockstart = 'div', $itemprop = 'contactPoint', $class = '') {	
+	if (!is_array($data)) {
+	    return;
+	}
+	$filled = false;
+	$res = '<'.$blockstart;
+	if (!empty($itemprop)) {
+	    $res .= ' itemprop="'.$itemprop.'"';
+	}
+	if (!empty($class)) {
+	    $res .= ' class="'.$class.'"';
+	}
+	$res .= ' itemtype="http://schema.org/ContactPoint">';	
+	
+	$hoursAvailable = self::create_OpeningHours($data);
+	if (!empty($hoursAvailable)) {
+	    $res .= $hoursAvailable;
+	    $filled = true;
+	}
+	
+	$res .= '</'.$blockstart.'>';
+	if ( $filled ) {
+	    return $res;
+	}
+	return;	
+    }
+    
+    public static function create_OpeningHours( $data, $blockstart = 'p', $itemprop = 'hoursAvaible', $class = '') {
+	if (!is_array($data)) {
+	    return;
+	}
+	$filled = false;
+	$res = '<'.$blockstart;
+	if (!empty($itemprop)) {
+	    $res .= ' itemprop="'.$itemprop.'"';
+	}
+	if (!empty($class)) {
+	    $res .= ' class="'.$class.'"';
+	}
+	$res .= ' itemtype="http://schema.org/OpeningHoursSpecification">';	
+	$hoursAvailable = $data['hoursAvailable'];
+	$hoursAvailable_group = $data['hoursAvailable_group'];
+	$hoursAvailable_text = $data['hoursAvailable_text'];
+	
+        if(!empty($hoursAvailable) || !empty($hoursAvailable_group)) {
+            
+            if(!empty($hoursAvailable_text)) {
+                $res  .= '<strong itemprop="name">' . $hoursAvailable_text . ':</strong><br>';
+            } else {
+                $res  .= '<strong itemprop="name">' . __('Sprechzeiten', 'fau-person') . '</strong><br>';   
+            }
+            if ( $hoursAvailable ) {
+                $res  .= '<span itemprop="description">' . $hoursAvailable. '</span>';  
+            }
+            if ( $hoursAvailable_group ) {
+                if ( $hoursAvailable )  $res .= '<br>';
+		if ((is_array($hoursAvailable_group)) && (count($hoursAvailable_group)>1)){
+		     $res  .= '<ul class="hoursAvailable_group" itemprop="disambiguatingDescription">';
+		     foreach ($hoursAvailable_group as $val) {
+			 $res .= '<li>'.$val.'</li>';
+		     }
+		    $res  .= '</ul>';
+		} else {
+		
+		    $res  .= '<span itemprop="disambiguatingDescription">';
+		    $res  .= implode('<br>', $hoursAvailable_group);
+		    $res  .= '</span>';
+		}
+            }
+	    $filled = true;
+        }
+	
+	$res .= '</'.$blockstart.'>';
+	if ( $filled ) {
+	    return $res;
+	}
+	return;	
+	
+	
+    }
+  
+    public static function create_Organization($data, $blockstart = 'p', $itemprop = 'affiliation', $class = '', $withaddress = true, $withcontactpoints = true, $withOpeningHours = false) {
+	if (!is_array($data)) {
+	    return;
+	}
+	$filled = false;
+	$res = '<'.$blockstart;
+	if (!empty($itemprop)) {
+	    $res .= ' itemprop="'.$itemprop.'"';
+	}
+	if (!empty($class)) {
+	    $res .= ' class="'.$class.'"';
+	}
+	$res .= ' itemtype="http://schema.org/Organization">';	
+	if (isset($data['name']) && (!empty($data['name']))) { 
+            $content .= '<span itemprop="name">' . $data['name'] . '</span><br>';	
+	    $filled = true;
+	}
+	if (isset($data['department']) && (!empty($data['department']))) { 
+            $content .= '<span itemprop="department">' . $data['department'] . '</span><br>';	
+	    $filled = true;
+	}
+	if (isset($data['subOrganization']) && (!empty($data['subOrganization']))) { 
+            $content .= '<span itemprop="subOrganization">' . $data['subOrganization'] . '</span><br>';	
+	    $filled = true;
+	}
+	if (isset($data['parentOrganization']) && (!empty($data['parentOrganization']))) { 
+            $content .= '<span itemprop="parentOrganization">' . $data['parentOrganization'] . '</span><br>';	
+	    $filled = true;
+	}
+
+	if ($withaddress) {
+	    $adresse = self::create_PostalAdress($data, 'address','', 'address', true);
+	    if (!empty($adresse)) {
+		$res .= $adresse;
+		$filled = true;
+	    }
+	}
+	if ($withcontactpoints) {
+	    $contactpointlist = self::create_contactpointlist($data, 'ul', '', '', 'li');
+	     if (!empty($contactpointlist)) {
+		$res .= $contactpointlist;
+		$filled = true;
+	    }
+	}
+	if ($withOpeningHours) {
+	    $openinghours = self::create_OpeningHours($data);
+	     if (!empty($openinghours)) {
+		$res .= $openinghours;
+		$filled = true;
+	    }
+	}
+	$res .= '</'.$blockstart.'>';
+	if ( $filled ) {
+	    return $res;
+	}
+	return;	
+    }
+    
+    private static function get_telephone_uri($number) {
+	if (!isset($number)) {
+	    return;
+	}
+	
+	$res = preg_replace("/[\s]+/", "-", trim($number));
+	$res = preg_replace("/[^0-9\-\+\.]+/", "", $res);
+	return $res;
+    }
+    
+    private static function get_email_uri($email) {
+	if ((!isset($email)) || (empty($email))) {
+	    return;
+	}
+	$email = filter_var($email, FILTER_SANITIZE_EMAIL);
+	$res = strtolower($email);
+
+	return $res;
+    }
+         private static function get_sanitized_phone($number) {
+	if ((!isset($number)) || (empty($number))) {
+	    return;
+	}
+	$res = preg_replace("/[^\(\)0-9\-\+\s]+/", "", $number);
+
+	return $res;
+    }
+     private static function get_sanitized_url($url) {
+	if ((!isset($url)) || (empty($url))) {
+	    return;
+	}
+	$url = filter_var($url, FILTER_SANITIZE_URL);
+	$res = strtolower($url);
+
+	return $res;
     }
 }

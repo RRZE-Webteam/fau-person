@@ -1,4 +1,6 @@
 <?php
+
+namespace RRZE\Lib;
 /**
  * The initation loader for UnivIS, and the main plugin file.
  *
@@ -32,10 +34,7 @@ require_once  'Sanitizer.php';
 require_once 'SyncHelper.php';
 require_once 'Data.php';
 
-if ( ! class_exists( 'UnivIS', false ) ) {
-	/**
-	 * Handles checking for and loading the newest version of CMB2
-	 */
+
 	class UnivIS {
 
 		/**
@@ -98,7 +97,7 @@ if ( ! class_exists( 'UnivIS', false ) ) {
 			//require_once UnivIS_DIR . 'includes/Config.php';
 
 			// Now kick off the class autoloader.
-			spl_autoload_register( 'univis_autoload_classes' );
+			spl_autoload_register( 'RRZE\Lib\univis_autoload_classes' );
 
 		
 
@@ -113,7 +112,7 @@ if ( ! class_exists( 'UnivIS', false ) ) {
 	UnivIS::initiate();
 	
 	function univis_autoload_classes( $class_name ) {
-	    $prefix = 'UnivIS';
+	    $prefix = 'RREZE\Lib\UnivIS';
 	    $base_dir = UnivIS_DIR; //  . '/includes/';
 	    $len = strlen($prefix);
 
@@ -129,5 +128,3 @@ if ( ! class_exists( 'UnivIS', false ) ) {
 	    }
 
 	}
-
-}// End if().

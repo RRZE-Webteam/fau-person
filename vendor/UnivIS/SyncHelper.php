@@ -1,7 +1,7 @@
 <?php
 
+namespace RRZE\Lib\UnivIS;
 use FAU_Person\Data;
-
 
 
 class sync_helper {
@@ -12,7 +12,7 @@ class sync_helper {
     public static function get_fields( $id, $univis_id, $defaults, $ignore_connection=0 ) {
         $univis_sync = 0;
         $person = array();
-        if( $univis_id && class_exists( 'Univis_Data' ) ) {
+        if( $univis_id  ) {
             $person = self::get_univisdata( $univis_id );
             $univis_sync = 1;
         } 
@@ -309,7 +309,7 @@ class sync_helper {
         } elseif( $firstname && $lastname ) {
         	$result = UnivIS_Data::search_by_fullname($firstname, $lastname);
         } elseif( $firstname ) {
-        	$result = UnivIS_Data::search_by('firstname', $firstname);
+	$result = RRZE\Lib\UnivIS\UnivIS_Data::search_by('firstname', $firstname);
         } elseif( $lastname ) {
         	$result = UnivIS_Data::search_by('lastname', $lastname);
         } else {

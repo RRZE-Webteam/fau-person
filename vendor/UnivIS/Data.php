@@ -1,9 +1,12 @@
 <?php
+
+namespace RRZE\Lib\UnivIS;
+
 /*
  * UnivIS-Data API- und Cache-Funktionen
  */
-use Config;
-use Sanitizer;
+use RRZE\Lib\UnivIS\Config;
+use RRZE\Lib\UnivIS\Sanitizer;
 
 add_action('univis_data_async_task', array('UnivIS_Data', 'async_task'));
 
@@ -169,7 +172,8 @@ class UnivIS_Data {
 	$config = Config::get_Config();
 	$apiurl = $config['api_url'];
 	$url = sprintf('%1$s?search=persons&firstname=%2$s&name=%3$s&show=xml', $apiurl, urlencode($firstname), urlencode($lastname));
-        
+        echo "URL: ".$url;
+	
         if (!fopen($url, "r")) {
             return false;
         }
@@ -188,7 +192,7 @@ class UnivIS_Data {
     }
     
     private static function xml2array($url) {
-        $sxi = new SimpleXMLIterator($url, null, true);
+        $sxi = new \SimpleXMLIterator($url, null, true);
         return self::sxi2array($sxi);
     }
 

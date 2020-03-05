@@ -2,7 +2,7 @@
 
 namespace FAU_Person\Metaboxes;
 use FAU_Person\Data;
-use UnivIS_Data;
+use RRZE\Lib\UnivIS\UnivIS_Data;
 
 defined('ABSPATH') || exit;
 
@@ -212,6 +212,7 @@ class Kontakt extends Metaboxes {
 		    'name' => __('Mobiltelefon', 'fau-person'),
 		    'desc' => __('Bitte geben Sie die Nummer in der internationalen Form +49 176 1111111 an.', 'fau-person'),
 		    'type' => 'text',
+		    'sanitization_cb' => 'validate_number',
 		    'id' => $prefix . 'mobilePhone'
 		),
 	    )
