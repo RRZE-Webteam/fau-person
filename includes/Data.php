@@ -464,7 +464,6 @@ class Data {
         if ($showinstitution && $worksFor)
             $content .= '<li class="person-info-institution"><span class="screen-reader-text">' . __('Organisation', 'fau-person') . ': </span><span itemprop="worksFor">' . $worksFor . '</span></li>';
         if ($showabteilung && $department)
-            //itemprop="department" entfernt da nicht zu Person zugehörig
             $content .= '<li class="person-info-abteilung"><span class="screen-reader-text">' . __('Abteilung', 'fau-person') . ': </span>' . $department . '</li>';   
         if (($extended || $showaddress || $showroom) && !empty($contactpoint) && empty($connection_only))
             $content .= $contactpoint;
@@ -527,16 +526,13 @@ class Data {
         // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
         extract($fields);
 
-        if ((strlen($url) > 4) && (strpos($url, "http") === false)) {
-            $url = 'https://' . $url;
-        }
+        
         if ( !$is_shortcode || $showname ) {
 	    $content .= Schema::create_Name($fields,'name','','h2');
         }
 	
 	Main::enqueueForeignThemes();
 	
-
         
 	$content .= '<div class="person-meta">';
 	if (has_post_thumbnail($id)) {
@@ -548,12 +544,14 @@ class Data {
          if (isset($fields['jobTitle']) && (!empty($fields['jobTitle']))) {
              $content .= '<span class="person-info-position" itemprop="jobTitle">' . $fields['jobTitle'] . '</span><br>';
 	}
+	$orgadata = array();
 	if (isset($fields['department']) && (!empty($fields['department']))) { 
-            $content .= '<span class="person-info-abteilung" itemprop="worksFor">' . $fields['department'] . '</span><br>';	
+	    $orgadata['name'] = $fields['worksFor'];
 	}
 	if (isset($fields['worksFor']) && (!empty($fields['worksFor']))) { 
-            $content .= '<span class="person-info-institution" itemprop="worksFor">' . $fields['worksFor'] . '</span><br>';
+	    $orgadata['department'] = $fields['department'];
 	}
+	$content .= Schema::create_Organization($orgadata,'p','worksFor','',false,false,false);
 	
 	
 	if (isset($fields['connection_only']) && $fields['connection_only']==false) {
@@ -564,10 +562,11 @@ class Data {
 	    $content .= Schema::create_contactpointlist($fields, 'ul', '', 'contactlist', 'li',true);
 	      
 	}
-	$hoursavailable_output =  Schema::create_ContactPoint($fields);
 	
-        if ($hoursavailable_output && $fields['connection_only']==false)
-            $content .= $hoursavailable_output;
+	if ($fields['connection_only']==false) {
+	    $content .=   Schema::create_ContactPoint($fields);
+	}
+           
 	
 	
         if ($pubs)
@@ -600,7 +599,6 @@ class Data {
     
     public static function fau_person_shortlist($id, $showlist, $list=0, $showmail=0, $showtelefon=0) {
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
-        extract($fields);
 
         if (get_post_field('post_excerpt', $id)) {
             $excerpt = get_post_field('post_excerpt', $id);
@@ -610,8 +608,8 @@ class Data {
                 $excerpt = wp_trim_excerpt($post->post_content);
         }
 
-        if ($link) {
-            $personlink = $link;
+        if ($fields['link']) {
+            $personlink = $fields['link'];
         } else {
             $personlink = get_permalink($id);
         }
@@ -620,10 +618,10 @@ class Data {
 	
 	$data = $fields;
 	$surroundingtag = 'span';
-	if ($showtitle==false) {
+	if ($fields['showtitle']==false) {
 	    $data['honorificPrefix'] = '';
 	}
-	if ($showsuffix==false) {
+	if ($fields['showsuffix']==false) {
 	    $data['honorificSuffix'] = '';
 	}
 	if ($personlink) {
@@ -636,20 +634,26 @@ class Data {
 	$fullname = Schema::create_Name($data,'name','',$surroundingtag);
 	
 	
-        if ( $list==1 )
+        if ( $list==1 ) {
             $content .= '<div class="list">';
+	}
+	
         $content .= '<span class="person-info">';
         $content .= $fullname;
 	
-        if ( $telephone && $showtelefon && empty( $connection_only ) && $list==1 )
-                $content .= ', <span class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', 'fau-person') . ': </span><span itemprop="telephone">' . $telephone . '</span></span>';
-        if ( $email && $showmail && empty( $connection_only ) && $list==1  )
-                $content .= ', <span class="person-info-email"><span class="screen-reader-text">' . __('E-Mail', 'fau-person') . ': </span><a itemprop="email" href="mailto:' . strtolower($email) . '">' . strtolower($email) . '</a></span>';    
+	if (isset($fields['connection_only']) && $fields['connection_only']==false && $list==1) {
+	    $content .= Schema::create_contactpointlist($fields, 'span', '', 'person-info', 'span',true);
+	}
+	
         if ( $showlist && isset( $excerpt ) )
             $content .= "<br>" . $excerpt;
+	
         $content .= '</span>';
-        if ( $list==1 )
+	
+
+        if ( $list==1 ) {
             $content .= '</div>';        
+	}
         return $content;
     }
 
@@ -657,17 +661,6 @@ class Data {
     // muss noch eingebaut werden: Wenn shortcode mit sidebar zeige bild ja und wo?     if (theme(FAU-*)  && template =~    else { Bild anzeigen }   if (theme(FAU-*)  && template =~( page.php || page-subnav.php ) && (not option(zeige bild in sidebar)   ) { Zeige kein Bild }   else {       if  template =~( page.php || page-subnav.php )   { binde Bild NACH dem Namen ein} else {    Bild vor dem Namen anzeigen }   }
     
     public static function fau_person_sidebar($id, $title, $showlist = 0, $showinstitution = 0, $showabteilung = 0, $showposition = 0, $showtitle = 0, $showsuffix = 0, $showaddress = 0, $showroom = 0, $showtelefon = 0, $showfax = 0, $showmobile = 0, $showmail = 0, $showwebsite = 0, $showlink = 0, $showdescription = 0, $showoffice = 0, $showpubs = 0, $showthumb = 0, $showvia = false, $hstart = 3) {
-        //Überprüfung zur Bildplatzierung in der Sidebar, ob ein FAU-Theme gewählt wurde und welches Template gewählt ist
-
-	$fautheme = Helper::isFAUTheme();
-	$small_sidebar = false;
-	if ($fautheme) {
-            if( !is_page_template( array('page-templates/page-portal.php', 'page-templates/page-start.php', 'page-templates/page-start-sub.php'))  ) {
-                $small_sidebar = true;
-            }
-	}
-       
-
         if (!empty($id)) {
             $post = get_post($id);
 
@@ -676,21 +669,17 @@ class Data {
             // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
             extract($fields);
 
-            if ($link) {
-                $personlink = $link;
-            } else {
+	    
+             if ($fields['link']) {
+                $personlink = $fields['link'];
+             } else {
                 $personlink = get_permalink($id);
-            }
-
+             }
 	    $data = $fields;
 	    $surroundingtag = 'span';
-	    if ($showtitle==false) {
-		$data['honorificPrefix'] = '';
-	    }
-	    if ($showsuffix==false) {
-		$data['honorificSuffix'] = '';
-	    }
-	    if ($personlink) {
+	    
+
+	    if ($showlink && $personlink) {
 		$data['url'] = $personlink;
 		$surroundingtag = 'a';
 	    }
@@ -700,10 +689,16 @@ class Data {
 	    $fullname = Schema::create_Name($data,'name','',$surroundingtag);
 
 
-            $contactpoint = Data::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'default' );
-            $hoursavailable_output = Data::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
+             $content = '<div class="fau-person person sidebar" itemscope itemtype="http://schema.org/Person">' . "\n";
+            $content .= '<div class="side">';         
+	
+	    
+	    if ($showtitle && (!empty($title))) {
+                $content .= '<h' . ($hstart-1) . ' class="small">' . $title . '</h' . ($hstart-1) . '>' . "\n";
+	    }
+	    $content .= '<div class="row">' . "\n";
             
-            if (has_post_thumbnail($id) && $showthumb) {
+	    if (has_post_thumbnail($id) && $showthumb) {
 		
 		$alttext = get_the_title($id);
 		$alttext = esc_html($alttext);
@@ -719,151 +714,150 @@ class Data {
 		    $imagehtml .= 'srcset="'.$slidersrcset.'"';
 		}
 		$imagehtml .= '>';
-		
-		
-		
-		
-                $sidebar_thumb = '<div class="span1 person-thumb" itemprop="image" aria-hidden="true">';
+
+                $sidebar_thumb = '<div class="person-thumb" itemprop="image" aria-hidden="true">';
                 $sidebar_thumb .= '<a href="' . $personlink . '">';
                 $sidebar_thumb .= $imagehtml;
                 $sidebar_thumb .= '</a>';
                 $sidebar_thumb .= '</div>' . "\n";
-            }
-            
-            $content = '<div class="person" itemscope itemtype="http://schema.org/Person">' . "\n";
-            $content .= '<div class="side">';
-                    
-            if (!empty($title))
-                $content .= '<h' . ($hstart-1) . ' class="small">' . $title . '</h' . ($hstart-1) . '>' . "\n";
 
-            $content .= '<div class="row">' . "\n";
-            
-            if ( isset( $sidebar_thumb ) && !isset ( $small_sidebar ) ) {
                 $content .= $sidebar_thumb;
-            }            
+             }            
 
-            $content .= '<div class="span3 person-sidebar">' . "\n";
+            $content .= '<div class="person-sidebar">' . "\n";
             $content .= '<h' . $hstart . '>';
             $content .= $fullname;
             $content .= '</h' . $hstart . '>' . "\n";
             
-            if ( isset( $sidebar_thumb ) && isset ( $small_sidebar ) ) {
-                $content .= '</div>';
-                $content .= $sidebar_thumb;
-                $content .= '<div class="span3 person-sidebar">';
-            }
-            
-            
-            $content .= '<ul class="person-info">' . "\n";
-            if ($jobTitle && $showposition)
-                $content .= '<li class="person-info-position"><span class="screen-reader-text">' . __('Tätigkeit', 'fau-person') . ': </span><strong><span itemprop="jobTitle">' . $jobTitle . '</span></strong></li>' . "\n";
-            if ($worksFor && $showinstitution)
-                $content .= '<li class="person-info-institution"><span class="screen-reader-text">' . __('Organisation', 'fau-person') . ': </span><span itemprop="worksFor">' . $worksFor . '</span></li>' . "\n";
-            //itemprop="department" entfernt da nicht zu Person zugehörig
-            if ($department && $showabteilung)
-                $content .= '<li class="person-info-abteilung"><span class="screen-reader-text">' . __('Abteilung', 'fau-person') . ': </span>' . $department . '</li>' . "\n";
-            if (!empty($contactpoint) && empty($connection_only))
-                $content .= $contactpoint;
-            if ($telephone && $showtelefon && empty($connection_only))
-                $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', 'fau-person') . ': </span><span itemprop="telephone">' . $telephone . '</span></li>' . "\n";
-            if ($mobilePhone && $showmobile && empty($connection_only))
-                $content .= '<li class="person-info-mobile"><span class="screen-reader-text">' . __('Mobil', 'fau-person') . ': </span><span itemprop="telephone">' . $mobilePhone . '</span></li>' . "\n";
-            if ($faxNumber && $showfax && empty($connection_only))
-                $content .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', 'fau-person') . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>' . "\n";
-            if ($email && $showmail && empty($connection_only))
-                $content .= '<li class="person-info-email"><span class="screen-reader-text">' . __('E-Mail', 'fau-person') . ': </span><a itemprop="email" href="mailto:' . strtolower($email) . '">' . strtolower($email) . '</a></li>' . "\n";
-            if ($url && $showwebsite)
-                $content .= '<li class="person-info-www"><span class="screen-reader-text">' . __('Webseite', 'fau-person') . ': </span><a itemprop="url" href="' . $url . '">' . $url . '</a></li>' . "\n";
-            if ($hoursavailable_output && $showoffice && empty($connection_only))
-                $content .= $hoursavailable_output;
-                //$content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', 'fau-person') . ': </span><div itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</div></li>';
-            $content .= '</ul>' . "\n";
-            if ($description && $showdescription)
+             $content .= '<div class="person-info">';
+	     if ($showposition && isset($fields['jobTitle']) && (!empty($fields['jobTitle']))) {
+		 $content .= '<span class="person-info-position" itemprop="jobTitle">' . $fields['jobTitle'] . '</span><br>';
+	    }
+	    $orgadata = array();
+	    if ($showinstitution && isset($fields['department']) && (!empty($fields['department']))) { 
+		$orgadata['name'] = $fields['worksFor'];
+	    }
+	    if ($showabteilung && isset($fields['worksFor']) && (!empty($fields['worksFor']))) { 
+		$orgadata['department'] = $fields['department'];
+	    }
+	    $content .= Schema::create_Organization($orgadata,'p','worksFor','',false,false,false);
+
+
+
+	    if ($showroom==false) {
+		$fields['workLocation'] = '';
+	    } 
+	    if ($showtelefon==false) {
+		$fields['telephone'] = '';
+	    } 
+	    if ($showfax==false) {
+		$fields['faxNumber'] = '';
+	    } 
+	    if ($showmobile==false) {
+		$fields['mobilePhone'] = '';
+	    } 
+	    if ($showmail==false) {
+		$fields['email'] = '';
+	    } 
+	    if ($showwebsite==false) {
+		$fields['url'] = '';
+	    } 
+	    if ($showdescription==false) {
+		$fields['description'] = '';
+	    } 
+
+	    if (isset($fields['connection_only']) && $fields['connection_only']==false) {
+		$adresse = Schema::create_PostalAdress($fields, 'address','', 'address', true);
+		if ($showaddress && isset($adresse)) {
+		    $content .= $adresse;
+		} 
+		$content .= Schema::create_contactpointlist($fields, 'ul', '', 'contactlist', 'li',true); 
+	    }
+
+	    if ($showoffice && $fields['connection_only']==false) {
+		$sprechzeitentitletag = 'h'.($hstart+1);
+		$content .=   Schema::create_ContactPoint($fields,'div','contactPoint','',$sprechzeitentitletag);
+	    }
+
+	    $content .= '</div>';
+	
+
+            if ($description && $showdescription) {
                 $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', 'fau-person') . ': </span>' . $description . '</div>' . "\n";
-	    
-            if ($showvia || $connection_only)
+	    }
+            if ($showvia || $connection_only) {
                 $content .= self::fau_person_connection($connection_text, $connection_options, $connections, $hstart);
+	    }
 	    
-	    
-            $content .= '</div>' . "\n";
-            $content .= '</div>' . "\n";
-            $content .= '</div>' . "\n";
-            $content .= '</div>';
+            $content .= '</div><!-- /sidebar -->';
+            $content .= '</div><!-- /row -->';
+            $content .= '</div><!-- /side -->';
+            $content .= '</div><!-- /fau-person -->';
         }
         return $content;
     }
 
     public static function fau_person_connection($connection_text, $connection_options, $connections, $hstart) {
-
         $content = '';
         $contactlist = '';
+	
+
         foreach ($connections as $key => $value) {
             extract($connections[$key]);
-            $contactpoint = '';
-
-            if ( $connection_options && in_array( 'contactPoint', $connection_options ) ) {
-                $showaddress = 1;
-                $showroom = 1;
-            } else {
-                $showaddress = 0;
-                $showroom = 0;
-            }
-
+	   
 	    $data = $connections[$key];
+	    if (!isset($connection_options) && is_array($connection_options)) {
+		
+		if (!isset($connection_options['contactPoint'])) {
+		    $data['streetAddress'] = '';
+		    $data['addressLocality'] = '';
+		    $data['postalCode'] = '';
+		    $data['addressRegion']= '';
+		    $data['addressCountry'] = '';
+		    $data['workLocation'] = '';
+		}
+		if (!isset($connection_options['hoursAvailable'])) {
+		    $data['hoursAvailable']= '';
+		    $data['hoursAvailable_group']= '';
+		    $data['hoursAvailable_text'] = '';
+		}
+		if (!isset($connection_options['telephone'])) {
+		     $data['telephone'] = '';
+		}
+		if (!isset($connection_options['faxNumber'])) {
+		    $data['faxNumber'] = '';
+		} 
+		if (!isset($connection_options['email'])) {
+		    $data['email'] = '';
+		}
+	    }
+             $contactpoint = '';
 	    $surroundingtag = 'span';
-	    if ($showtitle==false) {
-		$data['honorificPrefix'] = '';
-	    }
-	    if ($showsuffix==false) {
-		$data['honorificSuffix'] = '';
-	    }
+	    
+	    $contactlist .= '<li itemscope itemtype="http://schema.org/Person">';
+	    
+            if ($data['link']) {
+                $personlink = $data['link'];
+            } else {
+                $personlink = get_permalink($data['nr']);
+            }
+	    $oldurl  = $data['url'];
 	    if ($personlink) {
+
 		$data['url'] = $personlink;
 		$surroundingtag = 'a';
 	    }
-	    if (!empty(get_the_title($id))) {
-		 $data['name'] = get_the_title($id);
+	    if (!empty(get_the_title($data['nr']))) {
+		 $data['name'] = get_the_title($data['nr']);
 	     }
 	    $fullname = Schema::create_Name($data,'name','',$surroundingtag);
-	    
-            $contactpoint = Data::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'connection' );
-            if( isset($hoursAvailable_text) ) {
-                $hoursavailable_output = Data::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
-            } else {
-                $hoursavailable_output = Data::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, '' );
-            }
-            
-            if ($link) {
-                $personlink = $link;
-            } else {
-                $personlink = get_permalink($nr);
-            }
-            $contactlist .= '<li itemscope itemtype="http://schema.org/Person">';
-            $contactlist .= $fullname;
+	    $data['url'] = $oldurl;
+	    $contactlist .= $fullname;
+	     
+	    $contactlist .= Schema::create_PostalAdress($data, 'address','', 'address', true);
+	    $contactlist .= Schema::create_contactpointlist($data, 'ul', '', 'contactlist', 'li',true);
+	    $contactlist .= Schema::create_ContactPoint($data);
 
-
-            if ($connection_options) {
-                $cinfo = '';
-
-                if ($telephone && in_array('telephone', $connection_options))
-                    $cinfo .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', 'fau-person') . ': </span><span itemprop="telephone">' . $telephone . '</span></li>';
-                if (isset($mobilePhone) && in_array('telephone', $connection_options))
-                    $cinfo .= '<li class="person-info-mobile"><span class="screen-reader-text">' . __('Mobiltelefon', 'fau-person') . ': </span><span itemprop="telephone">' . $mobilePhone . '</span></li>';
-                if ($faxNumber && in_array('faxNumber', $connection_options))
-                    $cinfo .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', 'fau-person') . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>';
-                if ($email && in_array('email', $connection_options))
-                    $cinfo .= '<li class="person-info-email"><span class="screen-reader-text">' . __('E-Mail', 'fau-person') . ': </span><a itemprop="email" href="mailto:' . strtolower($email) . '">' . strtolower($email) . '</a></li>';
-                if (!empty($contactpoint) && in_array('contactPoint', $connection_options))
-                    $cinfo .= $contactpoint;
-                if ($hoursavailable_output && in_array('hoursAvailable', $connection_options))
-                    //$cinfo .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', 'fau-person') . ': </span><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</span></li>';
-                    $cinfo .= $hoursavailable_output;
-                if (!empty($cinfo)) {
-                    $contactlist .= '<ul class="person-info">';
-                    $contactlist .= $cinfo;
-                    $contactlist .= '</ul>';
-                }
-            }
             $contactlist .= '</li>';
         }
 

@@ -84,7 +84,7 @@ if (!class_exists('FAUPersonWidget')) {
 	    } 
 	    
 	    extract($args, EXTR_SKIP);
-
+	    
 	    echo $before_widget;
 	    $id = empty($instance['id']) ? ' ' : $instance['id'];
 	    $title = empty($instance['title']) ? '' : $instance['title'];
@@ -93,12 +93,13 @@ if (!class_exists('FAUPersonWidget')) {
 	    } else {
 		$bild = $shortcodeopt['bild'];
 	    }
+	    
 	    if(array_key_exists('show_ansprechpartner', $instance)) {
 		$show_ansprechpartner = empty($instance['show_ansprechpartner']) ? false : true;
 	    } else {
 		$show_ansprechpartner = $shortcodeopt['show_ansprechpartner'];
 	    }
-	    echo FAU_Person\Data::fau_person_sidebar($id, $title, 0, $shortcodeopt['organisation'], $shortcodeopt['abteilung'], $shortcodeopt['position'], 1, 1, $shortcodeopt['adresse'], $shortcodeopt['adresse'], $shortcodeopt['telefon'], $shortcodeopt['fax'], 0, $shortcodeopt['mail'], $shortcodeopt['webseite'], 0, $shortcodeopt['kurzauszug'], $shortcodeopt['sprechzeiten'], 0, $bild, $show_ansprechpartner, 3);
+	    echo FAU_Person\Data::fau_person_sidebar($id, $title, 0, $shortcodeopt['organisation'], $shortcodeopt['abteilung'], $shortcodeopt['position'], 1, 1, $shortcodeopt['adresse'], $shortcodeopt['workLocation'], $shortcodeopt['telefon'], $shortcodeopt['fax'], 0, $shortcodeopt['mail'], $shortcodeopt['webseite'], 1, $shortcodeopt['kurzauszug'], $shortcodeopt['sprechzeiten'], 0, $bild, $show_ansprechpartner, 3);
 	    echo $after_widget;
 	}
 

@@ -292,7 +292,7 @@ class Schema {
     }
     
     
-    public static function create_ContactPoint( $data, $blockstart = 'div', $itemprop = 'contactPoint', $class = '') {	
+    public static function create_ContactPoint( $data, $blockstart = 'div', $itemprop = 'contactPoint', $class = '', $titletagopeninghours = 'strong') {	
 	if (!is_array($data)) {
 	    return;
 	}
@@ -306,7 +306,7 @@ class Schema {
 	}
 	$res .= ' itemtype="http://schema.org/ContactPoint">';	
 	
-	$hoursAvailable = self::create_OpeningHours($data);
+	$hoursAvailable = self::create_OpeningHours($data, 'div', 'hoursAvaible', '', $titletagopeninghours);
 	if (!empty($hoursAvailable)) {
 	    $res .= $hoursAvailable;
 	    $filled = true;
@@ -319,7 +319,7 @@ class Schema {
 	return;	
     }
     
-    public static function create_OpeningHours( $data, $blockstart = 'p', $itemprop = 'hoursAvaible', $class = '') {
+    public static function create_OpeningHours( $data, $blockstart = 'p', $itemprop = 'hoursAvaible', $class = '', $titletagopeninghours  = 'strong') {
 	if (!is_array($data)) {
 	    return;
 	}
@@ -339,15 +339,20 @@ class Schema {
         if(!empty($hoursAvailable) || !empty($hoursAvailable_group)) {
             
             if(!empty($hoursAvailable_text)) {
-                $res  .= '<strong itemprop="name">' . $hoursAvailable_text . ':</strong><br>';
+                $res  .= '<'.$titletagopeninghours.' itemprop="name">' . $hoursAvailable_text . ':</'.$titletagopeninghours.'>';
             } else {
-                $res  .= '<strong itemprop="name">' . __('Sprechzeiten', 'fau-person') . '</strong><br>';   
+                $res  .= '<'.$titletagopeninghours.' itemprop="name">' . __('Sprechzeiten', 'fau-person') . '</'.$titletagopeninghours.'>';   
             }
+	    $desctag = 'span';
+	    if ((substr($titletagopeninghours,0,1)!=='h') && (substr($titletagopeninghours,0,3)!== 'div')) {
+		  $res  .= '<br>';
+	    } else {
+		 $desctag = 'p';
+	    }
             if ( $hoursAvailable ) {
-                $res  .= '<span itemprop="description">' . $hoursAvailable. '</span>';  
+                $res  .= '<'.$desctag.' itemprop="description">' . $hoursAvailable. '</'.$desctag.'>';  
             }
             if ( $hoursAvailable_group ) {
-                if ( $hoursAvailable )  $res .= '<br>';
 		if ((is_array($hoursAvailable_group)) && (count($hoursAvailable_group)>1)){
 		     $res  .= '<ul class="hoursAvailable_group" itemprop="disambiguatingDescription">';
 		     foreach ($hoursAvailable_group as $val) {
@@ -387,21 +392,22 @@ class Schema {
 	}
 	$res .= ' itemtype="http://schema.org/Organization">';	
 	if (isset($data['name']) && (!empty($data['name']))) { 
-            $content .= '<span itemprop="name">' . $data['name'] . '</span><br>';	
-	    $filled = true;
-	}
-	if (isset($data['department']) && (!empty($data['department']))) { 
-            $content .= '<span itemprop="department">' . $data['department'] . '</span><br>';	
-	    $filled = true;
-	}
-	if (isset($data['subOrganization']) && (!empty($data['subOrganization']))) { 
-            $content .= '<span itemprop="subOrganization">' . $data['subOrganization'] . '</span><br>';	
+            $res .= '<span itemprop="name">' . $data['name'] . '</span><br>';	
 	    $filled = true;
 	}
 	if (isset($data['parentOrganization']) && (!empty($data['parentOrganization']))) { 
-            $content .= '<span itemprop="parentOrganization">' . $data['parentOrganization'] . '</span><br>';	
+            $res .= '<span itemprop="parentOrganization">' . $data['parentOrganization'] . '</span><br>';	
 	    $filled = true;
 	}
+	if (isset($data['department']) && (!empty($data['department']))) { 
+	    $res .= '<span itemprop="department">' . $data['department'] . '</span><br>';	
+	    $filled = true;
+	}
+	if (isset($data['subOrganization']) && (!empty($data['subOrganization']))) { 
+            $res .= '<span itemprop="subOrganization">' . $data['subOrganization'] . '</span><br>';	
+	    $filled = true;
+	}
+	
 
 	if ($withaddress) {
 	    $adresse = self::create_PostalAdress($data, 'address','', 'address', true);
