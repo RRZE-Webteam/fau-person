@@ -203,178 +203,66 @@ class Data {
         }
     }
     
-    
 
-    
-    public static function hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text ) {
-        if(!empty($hoursAvailable) || !empty($hoursAvailable_group)) {
-            $output = '<li class="person-info-office"><span itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">';
-            if(!empty($hoursAvailable_text)) {
-                $output .= '<strong>' . $hoursAvailable_text . ':</strong><br>';
-            } else {
-                $output .= '<span class="screen-reader-text">' . __('Sprechzeiten', 'fau-person') . ': </span>';    
-            }
-            if ( $hoursAvailable ) {
-                $output .= $hoursAvailable;
-            }
-            if ( $hoursAvailable_group ) {
-                if ( $hoursAvailable )  $output .= '<br>';
-                $output .= implode('<br>', $hoursAvailable_group);
-            }
+    public function create_kontakt_image($id = 0, $size = 'person-thumb-page', $class = '', $defaultimage = false, $showlink = false, $linkttitle) {
+	if ($id==0) {
+	    return;
+	}
+	$res = '';
+	$imagedata = array();
+	$alttext = get_the_title($id);
+	$alttext = esc_html($alttext);
+	$targetlink = '';
 
-            $output .= '</span></li>';
-            return $output;
-        }
+	$imagedata['alt'] = $alttext;
+	if ($showlink) {
+	    $targetlink = get_permalink($id);
+	}
+	
+	
+	if (has_post_thumbnail($id)) {	
+	    $image_id = get_post_thumbnail_id( $id ); 		
+	    $imga = wp_get_attachment_image_src($image_id, $size);
+	    if (is_array($imga)) {
+		$imgsrcset =  wp_get_attachment_image_srcset($image_id, $size);
+		$imgsrcsizes = wp_get_attachment_image_sizes($image_id, $size);
+		$imagedata['src'] = $imga[0];
+		$imagedata['width'] = $imga[1];
+		$imagedata['height'] = $imga[2];
+		$imagedata['srcset'] = $imgsrcset;
+		$imagedata['sizes'] = $imgsrcsizes;
+	    }
+         }  elseif ($defaultimage) {
+	    $type = get_post_meta($id, 'fau_person_typ', true);
+	    if (defined(PLUGIN_FILE)) {
+		     $pluginfile = PLUGIN_FILE;
+	    } else {
+	        $pluginfile = __DIR__;
+	    }
+	    if ($type == 'realmale') {
+		$bild = plugin_dir_url($pluginfile) . 'images/platzhalter-mann.png';
+	    } elseif ($type == 'realfemale') {
+		$bild = plugin_dir_url($pluginfile ) . 'images/platzhalter-frau.png';
+	    } elseif ($type == 'einrichtung') {
+		$bild = plugin_dir_url($pluginfile ) . 'images/platzhalter-organisation.png';
+	    } else {
+		$bild = plugin_dir_url($pluginfile ) . 'images/platzhalter-unisex.png';
+	    }
+             if ($bild) {
+		$imagedata['src'] = $bild;
+		$imagedata['width'] = 90;
+		$imagedata['height'] = 120;
+	    }
+                    
+	 }         
+	$res = Schema::create_Image($imagedata, 'figure', 'image', $class, true, $targetlink, $linkttitle);
+         return $res;
     }
     
     
     
-    // über $type wird die Ausgabereihenfolge definiert: "page", "connection" oder alles andere
-    public static function contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, $type ) {
-        if( $showaddress ) {
-            if( $streetAddress )       
-                $street = '<span class="person-info-street" itemprop="streetAddress">' . $streetAddress . '</span>';
-            if ( $addressLocality ) {
-                $city = '';
-                if( $postalCode )
-                    $city .= '<span itemprop="postalCode">' . $postalCode . '</span> ';
-                $city .= '<span itemprop="addressLocality">' . $addressLocality . '</span>';
-            }
-            if( $addressCountry )
-                $country = '<span class="person-info-country" itemprop="addressCountry">' . $addressCountry . '</span>';
-        }
-        if( $workLocation && $showroom ) 
-            $room = __('Raum', 'fau-person') . ' ' . $workLocation;
-        
-        if ( !empty($street) || !empty($city) || !empty($country) || !empty($room) ) {
-            $contactpoint = '<li class="person-info-address"><span class="screen-reader-text">' . __('Adresse', 'fau-person') . ': <br></span>';
-            switch( $type ) {
-                case 'page':
-                    if( isset($street) || isset($city) || isset($country) )
-                        $contactpoint .= '<div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
-                    if ( isset($street) ) {
-                        $contactpoint .= $street;
-                        if ( isset($city) || isset($country) ) {       
-                            $contactpoint .= '<br>';
-                        } else {
-                            $contactpoint .= '</div>';
-                        }
-                    } 
-                    if ( isset($city) ) {
-                        $contactpoint .= $city;
-                        if ( isset($country) ) {
-                            $contactpoint .= '<br>';
-                        } else {
-                            $contactpoint .= '</div>';
-                        }
-                    } 
-                    if ( isset($country) ) {
-                            $contactpoint .= $country . '</div>';                        
-                    }
-                    if ( isset($room) ) {
-                        $contactpoint .= '<div class="person-info-room" itemprop="workLocation" itemscope itemtype="http://schema.org/Person">' . $room . '</div>';
-                    }
-                    break;
-                case 'connection':
-                    if( isset($street) || isset($city) || isset($country) )
-                        $contactpoint .= '<span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';  
-                    if ( isset($street) ) {
-                        $contactpoint .= $street;
-                        if ( isset($city) || isset($country) ) {       
-                            $contactpoint .= ', ';
-                        } elseif ( isset($room) ) {
-                            $contactpoint .= '</span>, ';
-                        } else {
-                            $contactpoint .= '</span>';
-                        }
-                    } 
-                    if ( isset($city) ) {
-                        $contactpoint .= $city;
-                        if ( isset($country) ) {
-                            $contactpoint .= ', ';
-                        } elseif ( isset($room) ) {
-                            $contactpoint .= '</span>, ';
-                        } else {
-                            $contactpoint .= '</span>';
-                        }
-                    }  
-                    if ( isset($country) ) {
-                         $contactpoint .= $country . '</span>';
-                         if ( isset($room) ) {
-                             $contactpoint .= ', ';
-                         }
-                    }
-                    if ( isset($room) ) {
-                        $contactpoint .= '<span class="person-info-room" itemprop="workLocation" itemscope itemtype="http://schema.org/Person">' . $room . '</span>';
-                    }
-                    break;                    
-                default:   
-                    if ( isset($street) ) {
-                        $contactpoint .= '<div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">' . $street;
-                        if ( isset($room) ) {
-                            $contactpoint .= '</div>';
-                        } elseif ( isset($city) || isset($country) ) {
-                            $contactpoint .= '<br>';
-                        } else {
-                            $contactpoint .= '</div>';
-                        }
-                    }
-                    if ( isset($room) ) {
-                        $contactpoint .= '<div class="person-info-room" itemprop="workLocation" itemscope itemtype="http://schema.org/Person">' . $room . '</div>';
-                        if ( isset($city) || isset($country) ) 
-                            $contactpoint .= '<div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';                            
-                    }
-                    if ( !isset($street) && !isset($room) ) {
-                        if ( isset($city) || isset($country) ) {
-                            $contactpoint .= '<div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">';
-                        }                       
-                    }
-                    if ( isset($city) ) {
-                       $contactpoint .= $city;
-                        if ( isset($country) ) {
-                            $contactpoint .= '<br>';
-                        } else {
-                            $contactpoint .= '</div>';
-                        }                        
-                    }
-                    if ( isset($country) ) {
-                        $contactpoint .= $country . '</div>';
-                    }
-            }                    
-            $contactpoint .= '</li>' . "\n";
-            return $contactpoint;
-        }
-        
-    }
-    public function get_kontakt_thumb($id = 0, $type = '') {
-	$out = '';
-	
-	
-	if (($id > 0) && (has_post_thumbnail($id))) {
-                $out = get_the_post_thumbnail($id, 'person-thumb-bigger');
-         } else {
-	     if (!isset($type)) {
-		$type = get_post_meta($id, 'fau_person_typ', true);
-	     }
-                if ($type == 'realmale') {
-                    $bild = plugin_dir_url(__DIR__) . 'images/platzhalter-mann.png';
-                } elseif ($type == 'realfemale') {
-                    $bild = plugin_dir_url(__DIR__ ) . 'images/platzhalter-frau.png';
-                } elseif ($type == 'einrichtung') {
-                    $bild = plugin_dir_url(__DIR__ ) . 'images/platzhalter-organisation.png';
-                } else {
-                    $bild = plugin_dir_url(__DIR__ ) . 'images/platzhalter-unisex.png';
-                }
-                if ($bild)
-                    $out = '<img src="' . $bild . '" width="90" height="120" alt="">';
-         }
-	
-	return $out;
-    }
     
-    public static function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex = 0, $noborder, $hstart, $bg_color) {
-
-        // Hole die Feldinhalte (in der Klasse sync_helper wird gesteuert, was aus UnivIS angezeigt werden soll und was nicht)
+    public static function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex = 0, $noborder, $hstart, $bg_color) {
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
         // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
         extract($fields);
@@ -383,7 +271,8 @@ class Data {
         if ($showvia === 0 && !empty($connection_only))
             $connection_only = '';
         
-        
+        Main::enqueueForeignThemes();
+
 
         if ($link) {
             $personlink = $link;
@@ -416,83 +305,66 @@ class Data {
              $data['name'] = get_the_title($id);
          }
 	$fullname = Schema::create_Name($data,'name','',$surroundingtag);
+        $hoursavailable_output  = Schema::create_ContactPoint($data);
 	
-
-        $contactpoint = Data::contactpoint_output( $streetAddress, $postalCode, $addressLocality, $addressCountry, $workLocation, $showaddress, $showroom, 'default' );
-        // hier Fehlermeldung nicht vorhanden $hoursAvailable_group
-        $hoursavailable_output = Data::hoursavailable_output( $hoursAvailable, $hoursAvailable_group, $hoursAvailable_text );
-        
-        $content = '<div class="person content-person' . $noborder . $bg_color . '" itemscope itemtype="http://schema.org/Person">';
-        if ($compactindex)
+	
+        $content = '<div class="fau-person person content-person' . $noborder . $bg_color . '" itemscope itemtype="http://schema.org/Person">';
+        if ($compactindex) {
             $content .= '<div class="compactindex">';
-
-        // if( !$compactindex || $showthumb )        
+	}
         $content .= '<div class="row">';
 
         if ($showthumb) {
-            $content .= '<div class="span1 span-small person-thumb" itemprop="image" aria-hidden="true" role="presentation">';
-            $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', 'fau-person'), get_the_title($id)) . '" href="' . $personlink . '">';
+	    $content .= Data::create_kontakt_image($id, 'person-thumb-bigger', "person-thumb", true, true,'');	    
+	    $content .= '<div class="person-default-thumb">';
+	} else {
+	    $content .= '<div class="person-default">';
+	}
 
-	   
-	   $content .= Data::get_kontakt_thumb($id, $type, $pluginFile );
-	    
-           
-            $content .= '</a>';
-            $content .= '</div>';
-        }
-
-        if ($compactindex) {
-            if ($showthumb) {
-                $content .= '<div class="span6 person-compact-thumb">';
-            } else {
-                $content .= '<div class="span7 person-compact">';
-            }
-        } else {
-            if ($showthumb) {
-                $content .= '<div class="span3 person-default-thumb">';
-            } else {
-                $content .= '<div class="span4 person-default">';
-            }
-        }
-        
         $content .= '<h' . $hstart . '>';
         $content .= $fullname;
         $content .= '</h' . $hstart . '>';
-        $content .= '<ul class="person-info">';
-        if ($showposition && $jobTitle)
-            $content .= '<li class="person-info-position"><span class="screen-reader-text">' . __('Tätigkeit', 'fau-person') . ': </span><strong><span itemprop="jobTitle">' . $jobTitle . '</span></strong></li>';
-        if ($showinstitution && $worksFor)
-            $content .= '<li class="person-info-institution"><span class="screen-reader-text">' . __('Organisation', 'fau-person') . ': </span><span itemprop="worksFor">' . $worksFor . '</span></li>';
-        if ($showabteilung && $department)
-            $content .= '<li class="person-info-abteilung"><span class="screen-reader-text">' . __('Abteilung', 'fau-person') . ': </span>' . $department . '</li>';   
-        if (($extended || $showaddress || $showroom) && !empty($contactpoint) && empty($connection_only))
-            $content .= $contactpoint;
-        if ($showtelefon && $telephone && empty($connection_only))
-            $content .= '<li class="person-info-phone"><span class="screen-reader-text">' . __('Telefonnummer', 'fau-person') . ': </span><span itemprop="telephone">' . $telephone . '</span></li>';
-        if ($showmobile && $mobilePhone && empty($connection_only))
-            $content .= '<li class="person-info-mobile"><span class="screen-reader-text">' . __('Mobil', 'fau-person') . ': </span><span itemprop="telephone">' . $mobilePhone . '</span></li>';
-        if ($showfax && $faxNumber && empty($connection_only))
-            $content .= '<li class="person-info-fax"><span class="screen-reader-text">' . __('Faxnummer', 'fau-person') . ': </span><span itemprop="faxNumber">' . $faxNumber . '</span></li>';
-        if ($showmail && $email && empty($connection_only))
-            $content .= '<li class="person-info-email"><span class="screen-reader-text">' . __('E-Mail', 'fau-person') . ': </span><a itemprop="email" href="mailto:' . strtolower($email) . '">' . strtolower($email) . '</a></li>';
-        if ($showwebsite && $url)
-            $content .= '<li class="person-info-www"><span class="screen-reader-text">' . __('Webseite', 'fau-person') . ': </span><a itemprop="url" href="' . $url . '">' . $url . '</a></li>';
-        if ($showpubs && $pubs)
-            $content .= '<li class="person-info-pubs"><span class="screen-reader-text">' . __('Publikationen', 'fau-person') . ': </span>' . $pubs . '</li>';
-        $content .= '</ul>';
+        $content .= '<div class="person-info">';
+	
+	
+	if (isset($fields['jobTitle']) && (!empty($fields['jobTitle']))) {
+             $content .= '<span class="person-info-position" itemprop="jobTitle">' . $fields['jobTitle'] . '</span><br>';
+	}
+	$orgadata = array();
+	if (isset($fields['department']) && (!empty($fields['department']))) { 
+	    $orgadata['name'] = $fields['worksFor'];
+	}
+	if (isset($fields['worksFor']) && (!empty($fields['worksFor']))) { 
+	    $orgadata['department'] = $fields['department'];
+	}
+	$content .= Schema::create_Organization($orgadata,'p','worksFor','',false,false,false);
+	
+	
+	if (isset($fields['connection_only']) && $fields['connection_only']==false) {
+	    $adresse = Schema::create_PostalAdress($fields, 'address','', 'address', true);
+	    if (isset($adresse)) {
+		$content .= $adresse;
+	    } 
+	    $content .= Schema::create_contactpointlist($fields, 'ul', '', 'contactlist', 'li',true);
+	      
+	}
+	
+
+
+        $content .= '</div>';
 
 
         if ((!empty($connection_text) || !empty($connection_options) || !empty($connections)) && $showvia === 1)
             $content .= self::fau_person_connection($connection_text, $connection_options, $connections, $hstart);
 
-        if (($showoffice && $hoursavailable_output && empty($connection_only)) || ($showlist && isset($excerpt)) || (($showsidebar || $extended) && $description) || ($showlink && $personlink)) {
+        if (($showoffice && $hoursavailable_output && empty($connection_only)) 
+	    || ($showlist && isset($excerpt)) || (($showsidebar || $extended) && $description) || ($showlink && $personlink)) {
 
 
             if (!$compactindex)
-                $content .= '</div><div class="span3 person-default-more">';
+                $content .= '</div><div class="person-default-more">';
             if ($showoffice && $hoursavailable_output && empty($connection_only)) {
                 $content .= '<ul class="person-info">';
-                //$content .= '<li class="person-info-office"><span class="screen-reader-text">' . __('Sprechzeiten', 'fau-person') . ': </span><div itemprop="hoursAvailable" itemtype="http://schema.org/ContactPoint">' . $hoursAvailable . '</div></li>';
                 $content .= $hoursavailable_output;
                 $content .= '</ul>';
             }
@@ -507,10 +379,7 @@ class Data {
             }
         }
 
-
-        // if( $compactindex && $showthumb )      
-        $content .= '</div>'; // end div row
-        // if( !$compactindex || $showthumb )      
+        $content .= '</div>';
         $content .= '</div> <!-- /row-->';
 
         if ($compactindex)
@@ -519,27 +388,23 @@ class Data {
         return $content;
     }
 
-    public static function fau_person_page($id, $is_shortcode=0, $showname=0) {
+    public static function fau_person_page($id, $is_shortcode = false, $showname = false) {
         $content = '<div class="fau-person person page" itemscope itemtype="http://schema.org/Person">';
-        // Hole die Feldinhalte (in der Klasse sync_helper wird gesteuert, was aus UnivIS angezeigt werden soll und was nicht)
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
         // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
         extract($fields);
 
-        
+        Main::enqueueForeignThemes();
+
         if ( !$is_shortcode || $showname ) {
 	    $content .= Schema::create_Name($fields,'name','','h2');
         }
 	
-	Main::enqueueForeignThemes();
-	
         
 	$content .= '<div class="person-meta">';
-	if (has_post_thumbnail($id)) {
-            $content .= '<div itemprop="image" class="person-image alignright">'; 
-            $content .= get_the_post_thumbnail($id, 'person-thumb-page');
-            $content .= '</div>';
-         }
+	
+	$content .= Data::create_kontakt_image($id, 'person-thumb-page', "person-image alignright", false, false,'');	    
+
          $content .= '<div class="person-info">';
          if (isset($fields['jobTitle']) && (!empty($fields['jobTitle']))) {
              $content .= '<span class="person-info-position" itemprop="jobTitle">' . $fields['jobTitle'] . '</span><br>';
@@ -562,24 +427,20 @@ class Data {
 	    $content .= Schema::create_contactpointlist($fields, 'ul', '', 'contactlist', 'li',true);
 	      
 	}
-	
 	if ($fields['connection_only']==false) {
 	    $content .=   Schema::create_ContactPoint($fields);
 	}
            
 	
 	
-        if ($pubs)
-            $content .= '<div class="person-info-pubs"><span class="screen-reader-text">' . __('Publikationen', 'fau-person') . ': </span>' . $pubs . '</div>';
-
 	
-	 $content .= '</div>';
+	$content .= '</div>';
 	
 	$content .= '</div>';
 
-        if (!empty($connection_text) || !empty($connection_options) || !empty($connections))
+        if (!empty($connection_text) || !empty($connection_options) || !empty($connections)) {
             $content .= self::fau_person_connection($connection_text, $connection_options, $connections, 2);
-
+	}
 
         if ( is_singular( 'person' ) && in_the_loop() ) {
             $post = get_the_content();
@@ -597,7 +458,7 @@ class Data {
     }
 
     
-    public static function fau_person_shortlist($id, $showlist, $list=0, $showmail=0, $showtelefon=0) {
+    public static function fau_person_shortlist($id, $showlist, $list = false, $showmail = false, $showtelefon = false) {
         $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
 
         if (get_post_field('post_excerpt', $id)) {
@@ -615,7 +476,8 @@ class Data {
         }
         $content = '';
         
-	
+	Main::enqueueForeignThemes();
+
 	$data = $fields;
 	$surroundingtag = 'span';
 	if ($fields['showtitle']==false) {
@@ -631,45 +493,40 @@ class Data {
 	if (!empty(get_the_title($id))) {
              $data['name'] = get_the_title($id);
          }
-	$fullname = Schema::create_Name($data,'name','',$surroundingtag);
-	
-	
-        if ( $list==1 ) {
+        if ( $list ) {
             $content .= '<div class="list">';
 	}
 	
         $content .= '<span class="person-info">';
-        $content .= $fullname;
+        $content .=  Schema::create_Name($data,'name','',$surroundingtag);
 	
-	if (isset($fields['connection_only']) && $fields['connection_only']==false && $list==1) {
+	if (isset($fields['connection_only']) && $fields['connection_only']==false && $list) {
 	    $content .= Schema::create_contactpointlist($fields, 'span', '', 'person-info', 'span',true);
 	}
 	
-        if ( $showlist && isset( $excerpt ) )
+        if ( $showlist && isset( $excerpt ) ) {
             $content .= "<br>" . $excerpt;
-	
+	}
         $content .= '</span>';
-	
 
-        if ( $list==1 ) {
+        if ( $list ) {
             $content .= '</div>';        
 	}
         return $content;
     }
 
-    // von Widget, also Sidebar über Fakultätsthemes - Ansprechpartner: fau_person_sidebar($id, $title, list 0, inst 1, abtielung 1, posi 1, titel 1, suffix 1, addresse 1, raum 1, tele 1, fax 1, handy 0,                                                                  mail 1, url 1, mehrlink 0, kurzauszug 1, office 0, pubs 0, bild 1, via 0, hstart 3)
-    // muss noch eingebaut werden: Wenn shortcode mit sidebar zeige bild ja und wo?     if (theme(FAU-*)  && template =~    else { Bild anzeigen }   if (theme(FAU-*)  && template =~( page.php || page-subnav.php ) && (not option(zeige bild in sidebar)   ) { Zeige kein Bild }   else {       if  template =~( page.php || page-subnav.php )   { binde Bild NACH dem Namen ein} else {    Bild vor dem Namen anzeigen }   }
+   
     
-    public static function fau_person_sidebar($id, $title, $showlist = 0, $showinstitution = 0, $showabteilung = 0, $showposition = 0, $showtitle = 0, $showsuffix = 0, $showaddress = 0, $showroom = 0, $showtelefon = 0, $showfax = 0, $showmobile = 0, $showmail = 0, $showwebsite = 0, $showlink = 0, $showdescription = 0, $showoffice = 0, $showpubs = 0, $showthumb = 0, $showvia = false, $hstart = 3) {
+    public static function fau_person_sidebar($id, $title, $showlist = 0, $showinstitution = 0, $showabteilung = 0, $showposition = 0, $showtitle = 0, $showsuffix = 0, $showaddress = 0, $showroom = 0, $showtelefon = 0, $showfax = 0, $showmobile = 0, $showmail = 0, $showwebsite = 0, $showlink = 0, $showdescription = 0, $showoffice = 0, $showthumb = 0, $showvia = false, $hstart = 3) {
         if (!empty($id)) {
             $post = get_post($id);
 
-            // Hole die Feldinhalte (in der Klasse sync_helper wird gesteuert, was aus UnivIS angezeigt werden soll und was nicht)            
             $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
             // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
             extract($fields);
 
-	    
+	    Main::enqueueForeignThemes();
+
              if ($fields['link']) {
                 $personlink = $fields['link'];
              } else {
@@ -690,38 +547,38 @@ class Data {
 
 
              $content = '<div class="fau-person person sidebar" itemscope itemtype="http://schema.org/Person">' . "\n";
-            $content .= '<div class="side">';         
+             $content .= '<div class="side">';         
 	
 	    
 	    if ($showtitle && (!empty($title))) {
                 $content .= '<h' . ($hstart-1) . ' class="small">' . $title . '</h' . ($hstart-1) . '>' . "\n";
 	    }
 	    $content .= '<div class="row">' . "\n";
-            
+
 	    if (has_post_thumbnail($id) && $showthumb) {
 		
 		$alttext = get_the_title($id);
 		$alttext = esc_html($alttext);
-		$altattr = 'alt="'.__('Weitere Informationen zu','fau').' '.$alttext.' '.__('aufrufen','fau').'"';
-
-
-		$post_thumbnail_id = get_post_thumbnail_id( $id ); 
-		$sliderimage = wp_get_attachment_image_src( $post_thumbnail_id, 'person-thumb' );
-		$slidersrcset =  wp_get_attachment_image_srcset($post_thumbnail_id, 'person-thumb');
-
-		$imagehtml = '<img src="'.$sliderimage[0].'" '.$altattr.' width="'.$sliderimage[1].'" height="'.$sliderimage[2].'"';
-		if ($slidersrcset) {
-		    $imagehtml .= 'srcset="'.$slidersrcset.'"';
+		$targettitle = $targetlink = '';
+		
+		$imagedata['alt'] = $alttext;
+		if ($showlink) {
+		    $targetlink = $personlink;
 		}
-		$imagehtml .= '>';
-
-                $sidebar_thumb = '<div class="person-thumb" itemprop="image" aria-hidden="true">';
-                $sidebar_thumb .= '<a href="' . $personlink . '">';
-                $sidebar_thumb .= $imagehtml;
-                $sidebar_thumb .= '</a>';
-                $sidebar_thumb .= '</div>' . "\n";
-
-                $content .= $sidebar_thumb;
+		$image_id = get_post_thumbnail_id( $id ); 
+		$size = 'person-thumb-bigger';  // 'person-thumb-page', person-thumb-bigger
+		
+		$imga = wp_get_attachment_image_src($image_id, $size);
+		if (is_array($imga)) {
+		    $imgsrcset =  wp_get_attachment_image_srcset($image_id, $size);
+		    $imgsrcsizes = wp_get_attachment_image_sizes($image_id, $size);
+		    $imagedata['src'] = $imga[0];
+		    $imagedata['width'] = $imga[1];
+		    $imagedata['height'] = $imga[2];
+		    $imagedata['srcset'] = $imgsrcset;
+		    $imagedata['sizes'] = $imgsrcsizes;
+		}
+                $content .= Schema::create_Image($imagedata, 'figure', 'image', 'person-thumb', true, $targetlink, $targettitle);
              }            
 
             $content .= '<div class="person-sidebar">' . "\n";
@@ -923,12 +780,8 @@ class Data {
 	}          
 	 
 	 
-	if (isset($showfields['bild']) && ($showfields['bild']) && has_post_thumbnail($id)) {
-	    $content .= '<div class="standort-image" itemprop="image" aria-hidden="true">';	
-	    $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', 'fau-person'), get_the_title($id)) . '" href="' . $permalink . '">';
-	    $content .= get_the_post_thumbnail($id);   
-	    $content .= '</a>';
-	    $content .= '</div>';
+	if (isset($showfields['bild']) && ($showfields['bild']) && has_post_thumbnail($id)) {    
+	    $content .= Data::create_kontakt_image($id, 'full', "standort-image", false, false,'');	    
 	}
 
 	if (isset($showfields['content']) && ($showfields['content'])) {
@@ -993,11 +846,7 @@ class Data {
 	 
 	 
 	if (isset($showfields['bild']) && ($showfields['bild']) && has_post_thumbnail($id)) {
-	    $content .= '<div class="standort-image" aria-hidden="true">';	
-	    $content .= '<a title="' . sprintf(__('Weitere Informationen zu %s aufrufen', 'fau-person'), get_the_title($id)) . '" href="' . $permalink . '">';
-	    $content .= get_the_post_thumbnail($id);   
-	    $content .= '</a>';
-	    $content .= '</div>';
+	    $content .= Data::create_kontakt_image($id, 'full', "standort-image", false, false,'');	  
 	}
 
 	if (isset($showfields['content']) && ($showfields['content'])) {

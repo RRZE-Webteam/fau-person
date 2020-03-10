@@ -1,7 +1,6 @@
 <?php
  
 get_header(); 
-
 $screenreadertitle = __('Kontaktliste','fau-person');
 ?>
     <div id="content">

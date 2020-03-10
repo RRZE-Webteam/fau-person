@@ -1,8 +1,9 @@
 {
   "name": "fau-person",
-  "version": "3.0.5",
+  "version": "3.0.8",
   "description": "Kontakt-Plugin für FAU Webauftritte.",
   "main": "fau-person.php",
+  "textdomain": "fau-person",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,13 +20,12 @@
   "supports": {
     "email": "webmaster@fau.de",
     "docs": "https://www.wordpress.rrze.fau.de/plugins/fau-und-rrze-plugins/fau-person/"
-  },  
-  
+  },
   "author": {
     "name": "RRZE-Webteam <webmaster@fau.de>",
     "url": "https://www.wordpress.rrze.fau.de/person/webmaster"
-  },  
-    "license": "GNU General Public License v3",
+  },
+  "license": "GNU General Public License v3",
   "devDependencies": {
     "@babel/core": "^7.6.2",
     "@babel/preset-env": "^7.6.2",
@@ -39,6 +39,7 @@
     "gulp-sass": "^4.0.2",
     "gulp-touch-cmd": "0.0.1",
     "gulp-uglify": "^3.0.2",
+    "gulp-wp-pot": "^2.3.6",
     "semver": "^6.3.0"
   }
 }

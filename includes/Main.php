@@ -29,7 +29,7 @@ class Main {
     */
     public function __construct($pluginFile) {
         $this->pluginFile = $pluginFile;
-	
+	define( 'PLUGIN_FILE', $pluginFile);
 	
     }
 

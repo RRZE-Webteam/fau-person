@@ -27,7 +27,7 @@ function getConstants() {
 
 		/* Thumb for person-type; small for content - Name: person-thumb-bigger */
 		'default_person_thumb_bigger_width' => 90,
-		'default_person_thumb_bigger_height'	=> 120,
+		'default_person_thumb_bigger_height'=> 120,
 		'default_person_thumb_bigger_crop'  => true,
 		
 		/* Thumb for person-type; small for content - Name: person-thumb-page */
@@ -380,12 +380,6 @@ function getShortcodeSettings(){
 			'label' => __( 'Personenbild als Thumb anzeigen', 'fau-person' ),
 			'type' => 'boolean' 
 		],
-		'showpubs' => [
-			'default' => false,
-			'field_type' => 'checkbox', 
-			'label' => __( 'Showpubs anzeigen', 'fau-person' ),
-			'type' => 'boolean' 
-		],
 		'showoffice' => [
 			'default' => false,
 			'field_type' => 'checkbox',
@@ -563,12 +557,7 @@ function getShortcodeSettings(){
 			'label' => __( 'Personenbild als Thumb anzeigen', 'fau-person' ),
 			'type' => 'boolean' 
 		],
-		'showpubs' => [
-			'default' => false,
-			'field_type' => 'checkbox', 
-			'label' => __( 'Showpubs anzeigen', 'fau-person' ),
-			'type' => 'boolean' 
-		],
+
 		'showoffice' => [
 			'default' => false,
 			'field_type' => 'checkbox',

@@ -2,10 +2,98 @@
 CSS Settings 
 */
 
+// Framework
+@import "awesome/fontawesome-min";
+
+
+
 .fau-person {
-    .person-info {
-	ul.contactlist {
-	    margin-left: 0;
+   // .person-info {
+    	ul.contactlist {
+	    margin: 0 15px 10px 0;
+	    
+	   
+	}
+	
+    // }
+    
+    
+    [itemprop="telephone"]:before { 
+	@extend .fa;
+	width: 20px; 
+	@extend .fa-phone; 
+    }
+    [itemprop="telephone"].mobile:before { 
+	@extend .fa;
+	width: 20px; 
+	@extend .fa-mobile; 
+    }
+    [itemprop="faxNumber"]:before { 
+	@extend .fa;
+	width: 20px; 
+	@extend .fa-fax; 
+    }
+    [itemprop="email"]:before { 
+	@extend .fa;
+	width: 20px; 
+	@extend .fa-envelope-o; 
+    }
+    [itemprop="url"]:before { 
+	@extend .fa;
+	width: 20px; 
+	@extend .fa-home; 
+    }
+
+
+    .fullname {
+       white-space: nowrap;
+    }
+    [itemprop="hoursAvaible"] {
+	margin-bottom: 10px;
+    }
+    .person-info ul.hoursAvailable_group,
+    [itemprop="hoursAvaible"] ul,
+    ul.hoursAvailable_group {
+	    li {
+ 		list-style: disc;
+		margin-left: 15px;
+	    }
+	    
+	    .widget & li {
+		display: list-item;
+	    }
+	    .widget & li::before {
+		display: none;
+	    }
+	    
+    }
+    ul.contactlist {
+	li {
+	    list-style-type: none;
+	}
+	.widget & li::before {
+		display: none;
+	}
+	
+    }
+    .connection-list {
+	margin-left: 0;
+	li {
+	    list-style-type: none;
 	}
     }
+    
+}
+
+
+.person-info {
+    // Remove old definitions from theme
+	.person-info-phone:before,
+	.person-info-mobile:before,
+	.person-info-fax:before,
+	.person-info-email:before,
+	.person-info-www:before { 
+	    display: none;
+	}
+
 }

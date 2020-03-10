@@ -2,7 +2,6 @@
 get_header(); 
 //	enqueueForeignThemes();
 	
-
 ?>
     <?php while ( have_posts() ) : the_post(); ?>
         <div id="content">

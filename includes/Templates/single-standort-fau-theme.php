@@ -7,6 +7,7 @@ $adisplay = array_map('trim', explode(',', $display));
 	$showfields[$val] = 1;
     }
     get_header(); 
+   
 ?>
 
 <?php while ( have_posts() ) : the_post();  

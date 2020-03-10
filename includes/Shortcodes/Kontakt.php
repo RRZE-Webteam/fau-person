@@ -3,6 +3,7 @@
 namespace FAU_Person\Shortcodes;
 use function FAU_Person\Config\getShortcodeSettings;
 use function FAU_Person\Config\getShortcodeDefaults;
+use FAU_Person\Main;
 use FAU_Person\Data;
 use UnivIS_Data;
 use sync_helper;
@@ -107,7 +108,6 @@ class Kontakt extends Shortcodes {
                     $showwebsite = 1;
                     $showdescription = 1;
                     $showoffice = 1;
-                    $showpubs = 0;
                     $showthumb = 1;
                 }
                 if ($format == 'full' || $format == 'page') {
@@ -137,7 +137,6 @@ class Kontakt extends Shortcodes {
                     $showlink = 0;
                     $showdescription = 0;
                     $showoffice = 0;
-                    $showpubs = 0;
                     $showthumb = 0;
                     $showvia = 0;
                 }
@@ -157,7 +156,6 @@ class Kontakt extends Shortcodes {
                     $showwebsite = 0;
                     $showdescription = 0;
                     $showoffice = 0;
-                    $showpubs = 0;
                     $showthumb = 1;
                 }
             }
@@ -203,8 +201,7 @@ class Kontakt extends Shortcodes {
                     $showdescription = 1;   // $description (erscheint bei Sidebar)
                 if (in_array('sprechzeiten', $show))
                     $showoffice = 1;        // $hoursAvailable
-                if (in_array('publikationen', $show))
-                    $showpubs = 1;          //
+
                 if (in_array('bild', $show))
                     $showthumb = 1;         //
                 if (in_array('ansprechpartner', $show))
@@ -248,8 +245,7 @@ class Kontakt extends Shortcodes {
                     $showdescription = 0;
                 if (in_array('sprechzeiten', $hide))
                     $showoffice = 0;
-                if (in_array('publikationen', $hide))
-                    $showpubs = 0;
+
                 if (in_array('bild', $hide))
                     $showthumb = 0;
                 if (in_array('ansprechpartner', $hide))
@@ -295,10 +291,10 @@ class Kontakt extends Shortcodes {
             }
 
             if (!empty($id)) {
-		\FAU_Person\Main::enqueueForeignThemes();
+		Main::enqueueForeignThemes();
 		
                 if ($shortlist) {
-                    $liste = '<span class="person liste-person" itemscope itemtype="http://schema.org/Person">';
+                    $liste = '<span class="liste-person" itemscope itemtype="http://schema.org/Person">';
                 } elseif ($list) {
                     $liste = '<ul class="person liste-person" itemscope itemtype="http://schema.org/Person">';
                     $liste .= "\n";
@@ -323,11 +319,9 @@ class Kontakt extends Shortcodes {
                             $liste .= Data::fau_person_shortlist($value, $showlist, 1, $showmail, $showtelefon);
                             $liste .= "</li>\n";
                         } elseif ($sidebar) {
-                            $liste .= Data::fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia, $hstart);
-                        } elseif ($compactindex) {
-                            $liste .= Data::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex, $noborder, $hstart, $bg_color);
+                            $liste .= Data::fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showthumb, $showvia, $hstart);
                         } else {
-                            $liste .= Data::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, 0, $noborder, $hstart, $bg_color);
+                            $liste .= Data::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex, $noborder, $hstart, $bg_color);
                         }
                     } else {
                         $liste .= sprintf(__('Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden.', 'fau-person'), $value);
@@ -357,7 +351,7 @@ class Kontakt extends Shortcodes {
 
         $shortlist = '';
         $sidebar = '';
-        $compactindex = '';
+        $compactindex = 0;
         $page = '';
         $list = '';
         $showvia = '';
@@ -392,7 +386,6 @@ class Kontakt extends Shortcodes {
                 $showwebsite = 1;
                 $showdescription = 1;
                 $showoffice = 1;
-                $showpubs = 0;
                 $showthumb = 1;
             }
             if ($format == 'full' || $format == 'page')
@@ -421,7 +414,6 @@ class Kontakt extends Shortcodes {
                 $showlink = 0;
                 $showdescription = 0;
                 $showoffice = 0;
-                $showpubs = 0;
                 $showthumb = 0;
                 $showvia = 0;
             }
@@ -441,7 +433,6 @@ class Kontakt extends Shortcodes {
                 $showwebsite = 0;
                 $showdescription = 0;
                 $showoffice = 0;
-                $showpubs = 0;
                 $showthumb = 1;
             }
         }
@@ -480,8 +471,7 @@ class Kontakt extends Shortcodes {
                 $showdescription = 1;   // $description (erscheint bei Sidebar)
             if (in_array('sprechzeiten', $show))
                 $showoffice = 1;        // $hoursAvailable
-            if (in_array('publikationen', $show))
-                $showpubs = 1;          //
+
             if (in_array('bild', $show))
                 $showthumb = 1;         //
             if (in_array('ansprechpartner', $show))
@@ -525,8 +515,7 @@ class Kontakt extends Shortcodes {
                 $showdescription = 0;
             if (in_array('sprechzeiten', $hide))
                 $showoffice = 0;
-            if (in_array('publikationen', $hide))
-                $showpubs = 0;
+
             if (in_array('bild', $hide))
                 $showthumb = 0;
             if (in_array('ansprechpartner', $hide))
@@ -570,8 +559,8 @@ class Kontakt extends Shortcodes {
         } 
         
         if ( isset( $posts ) ) {
-	   \FAU_Person\Main::enqueueForeignThemes();
-	    
+	  Main::enqueueForeignThemes();
+	
             if (( $sort == 'nachname' ) || ( $sort == 'name' )) {
                 $posts = Data::sort_person_posts( $posts );   
                 //_rrze_debug($posts);
@@ -608,11 +597,9 @@ class Kontakt extends Shortcodes {
                     $content .= Data::fau_person_shortlist($value, $showlist, 1, $showmail, $showtelefon);
                     $content .= "</li>\n";
                 } elseif ($sidebar) {
-                    $content .= Data::fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showpubs, $showthumb, $showvia, $hstart);
-                } elseif ($compactindex) {
-                    $content .= Data::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex, $noborder, $hstart, $bg_color);
-                } else {
-                    $content .= Data::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showpubs, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, 0, $noborder, $hstart, $bg_color);
+                    $content .= Data::fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showthumb, $showvia, $hstart);
+		} else {
+                    $content .= Data::fau_person_markup($value, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex, $noborder, $hstart, $bg_color);
                 }
                 $i++;
             }

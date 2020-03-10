@@ -14,7 +14,7 @@ class Kontakt extends \WP_Widget {
     public function __construct($pluginFile, $settings) {
 	$this->pluginFile = $pluginFile;
         $this->settings = $settings;
-	define( 'PLUGIN_FILE', $pluginFile);
+	
 
     }
 

@@ -2,7 +2,7 @@
 
 namespace RRZE\Lib\UnivIS;
 use FAU_Person\Data;
-
+use RRZE\Lib\UnivIS\UnivIS_Data;
 
 class sync_helper {
     //gibt die Werte der Person an, Inhalte abhängig von UnivIS, 
@@ -84,7 +84,6 @@ class sync_helper {
             'typ' => '',
             'alternateName' => '',
             'addressCountry' => '',
-            'pubs' => '',
             'link' => '',
             'hoursAvailable_text' => '',
             'hoursAvailable' => '',

@@ -11,6 +11,7 @@ const
     bump = require('gulp-bump'),
     semver = require('semver'),
     info = require('./package.json'),
+    wpPot = require('gulp-wp-pot'),
     touch = require('gulp-touch-cmd')
 ;
 
@@ -63,6 +64,20 @@ function prereleasePackageVersion() {
 	.pipe(touch());;
 };
 
+function updatepot()  {
+  return src("**/*.php")
+  .pipe(
+      wpPot({
+        domain: info.textdomain,
+        package: info.name,
+	team: info.author.name
+ 
+      })
+    )
+  .pipe(dest(`languages/${info.textdomain}.pot`))
+  .pipe(touch());
+};
+
 
 function startWatch() {
     watch('./src/sass/*.scss', css);
@@ -73,5 +88,6 @@ exports.css = css;
 exports.js = js;
 exports.dev = series(js, cssdev, prereleasePackageVersion);
 exports.build = series(js, css, patchPackageVersion);
+exports.pot = updatepot;
 
 exports.default = startWatch;

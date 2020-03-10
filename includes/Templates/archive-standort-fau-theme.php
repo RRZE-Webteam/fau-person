@@ -1,7 +1,6 @@
 <?php
  
 get_header(); 
-
 get_template_part('template-parts/hero', 'index');
 $screenreadertitle = __('Standorte','fau-person');
 ?>

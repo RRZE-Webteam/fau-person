@@ -25,7 +25,7 @@ class Schema {
 	$res .= ' itemtype="http://schema.org/Place">';	
 	
 	if ((isset($data['name'])) && (!empty(trim($data['name'])))) {	    
-	    $res .= '<span itemprop="name">'.$data['name'].'</span>';
+	    $res .= '<span itemprop="name">'.esc_html($data['name']).'</span>';
 	    $filled = true;
 	    if ($widthbreak) {
 		$res .= '<br>';
@@ -37,7 +37,7 @@ class Schema {
 	    if ($phoneuri) {
 		$res .= '<a itemprop="telephone" href="tel:'.self::get_telephone_uri($number).'">' . $number . '</a>';
 	    } else {
-		$res .= '<span itemprop="telephone">' . $data['telephone'] . '</span>';
+		$res .= '<span itemprop="telephone">' . $number . '</span>';
 	    }
 
 	     $filled = true;
@@ -50,7 +50,7 @@ class Schema {
 	    if ($phoneuri) {
 		$res .= '<a itemprop="telephone" href="tel:'.self::get_telephone_uri($number).'">' . $number . '</a>';
 	    } else {
-		$res .= '<span itemprop="telephone">' . $data['telephone'] . '</span>';
+		$res .= '<span itemprop="telephone">' . $number . '</span>';
 	    }
 	     $filled = true;
 	   if ($widthbreak) {
@@ -58,7 +58,7 @@ class Schema {
 	    }
 	}
 	if ((isset($data['url'])) && (!empty(trim($data['url'])))) {	    
-	    $res .= '<a itemprop="url" href="'.$data['url'].'">'.$data['url'].'</a>';
+	    $res .= '<a itemprop="url" href="'.esc_url($data['url']).'">'.$data['url'].'</a>';
 	     $filled = true;
 	     if ($widthbreak) {
 		$res .= '<br>';
@@ -95,13 +95,21 @@ class Schema {
 	    $res .= ' itemprop="'.$itemprop.'" itemscope';
 	}
 	if (!empty($class)) {
-	    $res .= ' class="'.$class.'"';
+	    $res .= ' class="'.esc_attr($class).'"';
 	}
 	$res .= ' itemtype="http://schema.org/PostalAddress">';
 	
+	if ((isset($data['workLocation'])) && (!empty(trim($data['workLocation'])))) {
+	    $res .= '<span class="screen-reader-text">' . __('Raum', 'fau-person') . ': </span>';
+	    $res .= '<span class="room">'.esc_html($data['workLocation']).'</span>';
+	    $filled = true;
+	    if ($widthbreak) {
+		$res .= '<br>';
+	    }
+	}
 	
 	if ((isset($data['streetAddress'])) && (!empty(trim($data['streetAddress'])))) {
-	    $res .= '<span itemprop="streetAddress">'.$data['streetAddress'].'</span>';
+	    $res .= '<span itemprop="streetAddress">'.esc_html($data['streetAddress']).'</span>';
 	    $filled = true;
 	    if ($widthbreak) {
 		$res .= '<br>';
@@ -112,14 +120,14 @@ class Schema {
 	}
 	  
 	if ((isset($data['postalCode'])) && (!empty(trim($data['postalCode'])))) {
-	     $res .= '<span itemprop="postalCode">'.$data['postalCode'].'</span>';
+	     $res .= '<span itemprop="postalCode">'.esc_html($data['postalCode']).'</span>';
 	     $filled = true;
 	     if ($widthbreak) {
 		$res .= ' ';
 	    }
 	}
 	if ((isset($data['addressLocality'])) && (!empty(trim($data['addressLocality'])))) {
-	    $res .= '<span itemprop="addressLocality">'.$data['addressLocality'].'</span>';
+	    $res .= '<span itemprop="addressLocality">'.esc_html($data['addressLocality']).'</span>';
 	     $filled = true;
 	}
 	if ((isset($data['addressLocality'])) && (isset($data['postalCode'])) && (!empty(trim($data['addressLocality'])))  && (!empty(trim($data['postalCode']))) ) {
@@ -130,14 +138,14 @@ class Schema {
 	}
 	
 	if ((isset($data['addressRegion'])) && (!empty(trim($data['addressRegion'])))) {
-	    $res .= '<span itemprop="addressRegion">'.$data['addressRegion'].'</span>';
+	    $res .= '<span itemprop="addressRegion">'.esc_html($data['addressRegion']).'</span>';
 	    $filled = true;
 	    if (($widthbreak) && (isset($data['addressCountry'])) && (!empty(trim($data['addressCountry'])))) {
 		$res .= '<br>';
 	    }
 	}
 	if ((isset($data['addressCountry'])) && (!empty(trim($data['addressCountry'])))) {
-	    $res .= '<span itemprop="addressCountry">'.$data['addressCountry'].'</span>';
+	    $res .= '<span itemprop="addressCountry">'.esc_html($data['addressCountry']).'</span>';
 	    $filled = true;
 	}
 	$res .= '</'.$surroundingtag.'>';
@@ -156,38 +164,43 @@ class Schema {
 	    return;
 	}
 	$res = '<'.$surroundingtag;
-	if (!empty($itemprop)) {
+	
+	if (!empty($class)) {
+	    $res .= ' class="'.esc_attr($class).'"';
+	}
+	if ($surroundingtag == 'a') {
+	    if ((isset($data['url'])) && (!empty($data['url']))) {
+		$res .= ' href="'.esc_url($data['url']).'"';
+	    }
+	} elseif (!empty($itemprop)) {
 	    $res .= ' itemprop="'.$itemprop.'"';
 	}
-	if (!empty($class)) {
-	    $res .= ' class="'.$class.'"';
-	}
-	if ($surroundingtag === 'a') {
-	    if ((isset($data['url'])) && (!empty($data['url']))) {
-		$res .= 'href="'.$data['url'].'"';
-	    }
-	}
 	$res .= '>';
+	if (($surroundingtag == 'a') && (!empty($itemprop))) {
+	    $res .= '<span itemprop="'.$itemprop.'">';
+	}
+	    
+	    
 	
 	$honorificPrefix = $honorificSuffix = $givenName = $familyName = $fullname = '';
 	
 	if ((isset($data['honorificPrefix'])) && (!empty($data['honorificPrefix']))) {
-	    $honorificPrefix = '<span itemprop="honorificPrefix">' . $data['honorificPrefix'] . '</span>';
+	    $honorificPrefix = '<span itemprop="honorificPrefix">' . esc_html($data['honorificPrefix']) . '</span>';
 	}
 	if ((isset($data['honorificSuffix'])) && (!empty($data['honorificSuffix']))) {
-	    $honorificSuffix = '<span itemprop="honorificSuffix">' . $data['honorificSuffix'] . '</span>';
+	    $honorificSuffix = '<span itemprop="honorificSuffix">' . esc_html($data['honorificSuffix']) . '</span>';
 	}
 	
 
 	if ((isset($data['givenName'])) && (!empty($data['givenName']))) {
-	    $givenName  = '<span itemprop="givenName">' . $data['givenName'] . '</span>';
+	    $givenName  = '<span itemprop="givenName">' . esc_html($data['givenName']) . '</span>';
 	}
 	if ((isset($data['familyName'])) && (!empty($data['familyName']))) {
-	    $familyName  = '<span itemprop="familyName">' . $data['familyName'] . '</span>';
+	    $familyName  = '<span itemprop="familyName">' . esc_html($data['familyName']) . '</span>';
 	}
 	
 	if ((!empty($givenName)) && (!empty($familyName))) {
-	    $fullname = $givenName.' '.$familyName;
+	    $fullname = '<span class="fullname">'. $givenName.' '.$familyName.'</span>';
 	} elseif ((isset($data['name'])) && (!empty($data['name']))) {
 	    $fullname = $data['name'];   
 	} elseif ((isset($data['alternateName'])) && (!empty($data['alternateName']))) {
@@ -207,6 +220,11 @@ class Schema {
 		    $res .= ', '.$honorificSuffix;
 		}
 	    }
+	    
+	    if (($surroundingtag == 'a') && (!empty($itemprop))) {
+		$res .= '</span>';
+	    }
+
 	    $res .= '</'.$surroundingtag.'>';
 
 	    return $res;
@@ -225,7 +243,7 @@ class Schema {
 	    $res .= ' itemprop="'.$itemprop.'"';
 	}
 	if (!empty($class)) {
-	    $res .= ' class="'.$class.'"';
+	    $res .= ' class="'.esc_attr($class).'"';
 	}
 	$res .= '>';
 	
@@ -247,9 +265,9 @@ class Schema {
 	    $res .= '<span class="screen-reader-text">' . __('Mobil', 'fau-person') . ': </span>';
 	    $number = self::get_sanitized_phone($data['mobilePhone']);
 	    if ($phoneuri) {
-		$res .= '<a itemprop="telephone" href="tel:'.self::get_telephone_uri($number).'">' . $number . '</a>';
+		$res .= '<a class="mobile" itemprop="telephone" href="tel:'.self::get_telephone_uri($number).'">' . $number . '</a>';
 	    } else {
-		$res .= '<span itemprop="telephone">' . $number . '</span>';
+		$res .= '<span class="mobile" itemprop="telephone">' . $number . '</span>';
 	    }
 	    $res .= '</'.$liststart.'>';
 	     $filled = true;
@@ -302,7 +320,7 @@ class Schema {
 	    $res .= ' itemprop="'.$itemprop.'"';
 	}
 	if (!empty($class)) {
-	    $res .= ' class="'.$class.'"';
+	    $res .= ' class="'.esc_attr($class).'"';
 	}
 	$res .= ' itemtype="http://schema.org/ContactPoint">';	
 	
@@ -324,6 +342,24 @@ class Schema {
 	    return;
 	}
 	$filled = false;
+	
+	$desctag = 'span';
+	$descbreak = '<br>';
+	$titletagbreak = '';
+	
+	if ((substr($titletagopeninghours,0,1)=='h') && (substr($titletagopeninghours,0,3)== 'div')) {
+	    $desctag = 'p';
+	    $descbreak = '';
+	    if ($blockstart == 'p') {
+		$blockstart = 'div';
+	    }
+	} elseif ($blockstart == 'div') {
+	    $titletagopeninghours = 'strong';
+	    $titletagbreak = '<br>';
+	    $desctag = 'p';
+	    $descbreak = '';
+	}
+	
 	$res = '<'.$blockstart;
 	if (!empty($itemprop)) {
 	    $res .= ' itemprop="'.$itemprop.'"';
@@ -336,21 +372,19 @@ class Schema {
 	$hoursAvailable_group = $data['hoursAvailable_group'];
 	$hoursAvailable_text = $data['hoursAvailable_text'];
 	
+
         if(!empty($hoursAvailable) || !empty($hoursAvailable_group)) {
             
             if(!empty($hoursAvailable_text)) {
-                $res  .= '<'.$titletagopeninghours.' itemprop="name">' . $hoursAvailable_text . ':</'.$titletagopeninghours.'>';
+                $res  .= '<'.$titletagopeninghours.' itemprop="name">' . esc_html($hoursAvailable_text) . ':</'.$titletagopeninghours.'>';
             } else {
                 $res  .= '<'.$titletagopeninghours.' itemprop="name">' . __('Sprechzeiten', 'fau-person') . '</'.$titletagopeninghours.'>';   
             }
-	    $desctag = 'span';
-	    if ((substr($titletagopeninghours,0,1)!=='h') && (substr($titletagopeninghours,0,3)!== 'div')) {
-		  $res  .= '<br>';
-	    } else {
-		 $desctag = 'p';
-	    }
+	    $res .= $titletagbreak;
+	    
             if ( $hoursAvailable ) {
-                $res  .= '<'.$desctag.' itemprop="description">' . $hoursAvailable. '</'.$desctag.'>';  
+                $res  .= '<'.$desctag.' itemprop="description">' . esc_html($hoursAvailable). '</'.$desctag.'>'; 
+		$res  .= $descbreak;
             }
             if ( $hoursAvailable_group ) {
 		if ((is_array($hoursAvailable_group)) && (count($hoursAvailable_group)>1)){
@@ -388,23 +422,23 @@ class Schema {
 	    $res .= ' itemprop="'.$itemprop.'"';
 	}
 	if (!empty($class)) {
-	    $res .= ' class="'.$class.'"';
+	    $res .= ' class="'.esc_attr($class).'"';
 	}
 	$res .= ' itemtype="http://schema.org/Organization">';	
 	if (isset($data['name']) && (!empty($data['name']))) { 
-            $res .= '<span itemprop="name">' . $data['name'] . '</span><br>';	
+            $res .= '<span itemprop="name">' . esc_html($data['name']) . '</span><br>';	
 	    $filled = true;
 	}
 	if (isset($data['parentOrganization']) && (!empty($data['parentOrganization']))) { 
-            $res .= '<span itemprop="parentOrganization">' . $data['parentOrganization'] . '</span><br>';	
+            $res .= '<span itemprop="parentOrganization">' . esc_html($data['parentOrganization']) . '</span><br>';	
 	    $filled = true;
 	}
 	if (isset($data['department']) && (!empty($data['department']))) { 
-	    $res .= '<span itemprop="department">' . $data['department'] . '</span><br>';	
+	    $res .= '<span itemprop="department">' . esc_html($data['department']) . '</span><br>';	
 	    $filled = true;
 	}
 	if (isset($data['subOrganization']) && (!empty($data['subOrganization']))) { 
-            $res .= '<span itemprop="subOrganization">' . $data['subOrganization'] . '</span><br>';	
+            $res .= '<span itemprop="subOrganization">' . esc_html($data['subOrganization']) . '</span><br>';	
 	    $filled = true;
 	}
 	
@@ -436,6 +470,95 @@ class Schema {
 	}
 	return;	
     }
+    
+    
+    public static function create_Image($data, $blockstart = 'figure', $itemprop = 'image', $class = '', $ariahidden = true, $targetlink = '', $targettitle = '' ) {
+	if (!is_array($data)) {
+	    return;
+	}
+	$filled = false;
+	$res = '<'.$blockstart;
+	if (!empty($itemprop)) {
+	    $res .= ' itemprop="'.esc_attr($itemprop).'"';
+	}
+	if ((isset($data['caption'])) && (!empty($data['caption']))) {
+	    if (!empty($class)) {
+		$class .= ' ';
+	    }
+	    $class .= 'with-caption';
+	}
+	$meta = '';
+	if (!empty($class)) {
+	    $res .= ' class="'.esc_attr($class).'"';
+	}
+	if ($ariahidden) {
+	    $res .= ' aria-hidden="true" role="presentation"';
+	}
+
+	$res .= ' itemtype="http://schema.org/ImageObject">';	
+	
+	if ((isset($targetlink)) && (!empty($targetlink))) {
+	    $res .= '<a href="'.esc_url($targetlink).'"';
+	    if ((isset($targettitle)) && (!empty($targettitle))) {
+		$res .= ' title="'.esc_attr($targettitle).'"';	
+	    }
+	    if ($ariahidden) {
+		$res .= ' tabindex="-1"';
+	    }
+	    $res .= '>';
+	    $meta .= '<meta itemprop="identifier" content="'.esc_url($targetlink).'">';
+
+	}
+	if (isset($data['src'])) {
+
+	     $res .= '<img src="'.esc_url($data['src']).'" itemprop="contentUrl"';
+	     $filled = true;
+
+	     if ((isset($data['alt'])) && (!empty($data['alt']))) {
+		 $res .= ' alt="'.esc_attr($data['alt']).'"';
+	     }
+	     if ((isset($data['title'])) && (!empty($data['title']))) {
+		 $res .= ' alt="'.esc_attr($data['title']).'"';
+	     }
+	     if ((isset($data['width'])) && (!empty($data['width']))) {
+		 $res .= ' width="'.esc_attr($data['width']).'"';
+		 $meta .= '<meta itemprop="width" content="'.esc_attr($data['width']).'">';
+	     }
+	     if ((isset($data['height'])) && (!empty($data['height']))) {
+		 $res .= ' height="'.sanitize_key($data['height']).'"';
+		 $meta .= '<meta itemprop="height" content="'.esc_attr($data['height']).'">';
+	     }
+	     if ((isset($data['srcset'])) && (!empty($data['srcset']))) {
+		$res .= ' srcset="'.esc_attr($data['srcset']).'"';
+	     }
+	     if ((isset($data['sizes'])) && (!empty($data['sizes']))) {
+		$res .= ' sizes="'.esc_attr($data['sizes']).'"';
+	     } 
+	     $res .= '>';
+		 
+
+	}
+	if ((isset($targetlink)) && (!empty($targetlink))) {
+	    $res .= '</a>';
+	}
+	if (!empty($meta)) {
+	    $res .= $meta;
+	}
+	
+	if ((isset($data['caption'])) && (!empty($data['caption']))) {
+	    $res .= '<figcaption itemprop="caption">';
+	    $res .= esc_html( $data['caption'] ); 
+	    $res .= '</figcaption>'; 
+	}
+	
+	
+	$res .= '</'.$blockstart.'>';
+	if ( $filled ) {
+	    return $res;
+	}
+	return;	
+    }
+    
     
     private static function get_telephone_uri($number) {
 	if (!isset($number)) {
