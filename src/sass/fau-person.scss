@@ -81,8 +81,13 @@ CSS Settings
 	li {
 	    list-style-type: none;
 	}
+    }   
+}
+
+.liste-person {
+    li {
+	list-style: circle;
     }
-    
 }
 
 
@@ -96,4 +101,64 @@ CSS Settings
 	    display: none;
 	}
 
+}
+
+.fau-person {
+	
+	.row {
+	    display: flex;
+	    flex-wrap: wrap; 
+	    align-content: flex-start;
+	    margin-left: 0;
+	    margin-right: 0;
+	    
+	
+	    .person-default-thumb,
+	    .person-default {
+		margin-left: 5px;
+		margin-right: 5px;
+		padding: 0 5px;	
+	    }
+	    .person-thumb {
+		flex: 0 0 90px;
+		float: none;
+		order: 1;
+		margin: 0;
+		padding: 5px;
+	    }
+	    .person-default,
+	    .person-sidebar,
+	    .person-default-thumb {
+		flex: 1 0 200px;
+		float: none;
+		order: 2;
+		max-width: inherit;
+		width: inherit;
+	    } 
+
+
+	    .person-compact-thumb {
+		margin-left: 5px;
+		margin-right: 5px;
+		flex: 1 0 200px;
+		@media (min-width: 768px) {
+		    flex-basis: 350px; 
+		    padding: 5px;	
+		}
+		order: 1;
+		width: inherit;
+			
+	    }
+	    .person-default-more {
+		 float: none;
+		 flex: 1 1 200px;
+		 order: 3;
+		 padding: 5px;
+	    }
+	    
+
+	}
+	.compactindex  .row .person-thumb {
+		order: 2;
+	 }
 }

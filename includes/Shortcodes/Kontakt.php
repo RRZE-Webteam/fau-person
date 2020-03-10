@@ -63,9 +63,124 @@ class Kontakt extends Shortcodes {
         );
     }    
     */
+    
+    
+    /*
+     * Vorbereitung für spätere Umbauten der ganzen Aufrufsyntax - Umstellung auf Array als Parameter
+     */
+    public static function shortcode_kontakt2($atts, $content = null) {
+	$defaults = getShortcodeDefaults('kontakt');
+         extract(shortcode_atts($defaults, $atts));
+          
+
+	switch($format) {
+	    case 'name':
+		$display = 'titel, name, suffix';
+		break;
+	    case 'shortlist':
+		$display = 'titel, name, mail, telefon, suffix, permalink';
+		break;
+	    case 'plain':
+		$display = 'name';
+		break;
+	     case 'compactindex':
+	     case 'kompakt':
+		$display = 'titel, name, suffix, position, telefon, email, email, adresse, bild';		 
+		break;
+	    case 'full':
+	    case 'page':
+		$display = 'titel, name, suffix, worksFor, position, telefon, mobil, email, fax, url, content, adresse, bild, permalink';  
+		break;
+	    case 'listentry':
+	    case 'liste':
+		$display = 'titel, name, suffix, telefon, email, fax, url, kurzbeschreibung, permalink';  
+		break;
+	     case 'sidebar':
+		$display = 'titel, name, suffix, raum, worksFor, position, telefon, email, fax, url, adresse, bild, permalink, sprechzeiten';  
+		
+		break;
+	    default:
+		$display = 'title, telefon, email, fax, url, adresse, bild, permalink';  
+	}	
+	$adisplay = array_map('trim', explode(',', $display));
+	$showfields = array();
+	foreach ($adisplay as $val) {
+	    $showfields[$val] = 1;
+	}
+	
+        //Wenn neue Felder dazukommen, hier die Anzeigeoptionen auch mit einstellen
+        if (!empty($show)) {
+            $show = array_map('trim', explode(',', $show));
+	    if( in_array( 'kurzbeschreibung', $show ) ) $showfields['kurzbeschreibung'] = true;  
+	    if( in_array( 'kurzauszug', $show ) ) $showfields['description'] = true;  
+	    if( in_array( 'worksFor', $show ) )	    $showfields['worksFor'] = true;  
+	    if( in_array( 'organisation', $show ) )	    $showfields['worksFor'] = true;  
+	    if( in_array( 'abteilung', $show ) )	    $showfields['department'] = true;  
+	    if( in_array( 'department', $show ) )	    $showfields['department'] = true;  
+	    if( in_array( 'position', $show ) )	    $showfields['jobTitle'] = true;  	     
+	    if( in_array( 'adresse', $show ) )          $showfields['adresse'] = true;  
+	    if( in_array( 'bild', $show ) )             $showfields['bild'] = true;  
+	    if( in_array( 'mail', $show ) )	    $showfields['email'] = true;  
+	    if( in_array( 'email', $show ) )	    $showfields['email'] = true;  
+	    if( in_array( 'telefon', $show ) )	    $showfields['telephone'] = true;  
+	    if( in_array( 'telephone', $show ) )	    $showfields['telephone'] = true;  
+	    if( in_array( 'fax', $show ) )	    $showfields['faxNumber'] = true;  
+	    if( in_array( 'faxNumber', $show ) )	    $showfields['faxNumber'] = true;  	    
+	    if( in_array( 'mobil', $show ) )	    $showfields['mobilePhone'] = true;  
+	    if( in_array( 'webseite', $show ) )		    $showfields['url'] = true;  
+	    if( in_array( 'url', $show ) )		    $showfields['url'] = true;  
+	    if( in_array( 'content', $show ) )          $showfields['content'] = true;  
+	    if( in_array( 'mehrlink', $show ) )        $showfields['link'] = true;  
+	    if( in_array( 'permalink', $show ) )        $showfields['link'] = true;  	    
+	    if( in_array( 'suffix', $show ) )        $showfields['honorificSuffix'] = true;  
+	    if( in_array( 'name', $show ) )        $showfields['name'] = true;  
+	    if( in_array( 'titel', $show ) )            $showfields['titel'] = true;  
+	    if( in_array( 'raum', $show ) )        $showfields['workLocation'] = true;  
+	    if( in_array( 'sprechzeiten', $show ) )        $showfields['hoursAvailable'] = true;  
+	    if( in_array( 'ansprechpartner', $show ) )        $showfields['showvia'] = true;  
+	    if( in_array( 'rahmen', $show ) )        $showfields['border'] = true;  
+      
+	    
+	}    
+        if ( !empty( $hide ) ) {
+             $hide = array_map('trim', explode(',', $hide));
+	    if( in_array( 'kurzbeschreibung', $hide ) ) $showfields['kurzbeschreibung'] = false;  
+	    if( in_array( 'kurzauszug', $hide ) ) $showfields['description'] = false;  
+	    if( in_array( 'worksFor', $hide ) )	    $showfields['worksFor'] = false;  
+	    if( in_array( 'organisation', $hide ) )	    $showfields['worksFor'] = false;  
+	    if( in_array( 'abteilung', $hide ) )	    $showfields['department'] = false;  
+	    if( in_array( 'department', $hide ) )	    $showfields['department'] = false;  
+	    if( in_array( 'position', $hide ) )	    $showfields['jobTitle'] = false;  	     
+	    if( in_array( 'adresse', $hide ) )          $showfields['adresse'] = false;  
+	    if( in_array( 'bild', $hide ) )             $showfields['bild'] = false;  
+	    if( in_array( 'mail', $hide ) )	    $showfields['email'] = false;  
+	    if( in_array( 'email', $hide ) )	    $showfields['email'] = false;  
+	    if( in_array( 'telefon', $hide ) )	    $showfields['telephone'] = false;  
+	    if( in_array( 'telephone', $hide ) )	    $showfields['telephone'] = false;  
+	    if( in_array( 'fax', $hide ) )	    $showfields['faxNumber'] = false;  
+	    if( in_array( 'faxNumber', $hide ) )	    $showfields['faxNumber'] = false;  	    
+	    if( in_array( 'mobil', $hide ) )	    $showfields['mobilePhone'] = false;  
+	    if( in_array( 'webseite', $hide ) )		    $showfields['url'] = false;  
+	    if( in_array( 'url', $hide ) )		    $showfields['url'] = false;  
+	    if( in_array( 'content', $hide ) )          $showfields['content'] = false;  
+	    if( in_array( 'mehrlink', $hide ) )        $showfields['link'] = false;  
+	    if( in_array( 'permalink', $hide ) )        $showfields['link'] = false;  	    
+	    if( in_array( 'suffix', $hide ) )        $showfields['honorificSuffix'] = false;  
+	    if( in_array( 'name', $hide ) )        $showfields['name'] = false;  
+	    if( in_array( 'titel', $hide ) )            $showfields['titel'] = false;  
+	    if( in_array( 'raum', $hide ) )        $showfields['workLocation'] = false;  
+	    if( in_array( 'sprechzeiten', $hide ) )        $showfields['hoursAvailable'] = false;  
+	    if( in_array( 'ansprechpartner', $hide ) )        $showfields['showvia'] = false;  
+	    if( in_array( 'rahmen', $hide ) )        $showfields['border'] = false;  	
+        }
+
+	return 	print_r($showfields, true);
+    }
+    
     public static function shortcode_kontakt($atts, $content = null) {
 	$defaults = getShortcodeDefaults('kontakt');
 	extract(shortcode_atts($defaults, $atts));
+	
 	
         if ($category) {
 	    $out = self::shortcode_kontaktListe($atts, $content);
@@ -568,11 +683,9 @@ class Kontakt extends Shortcodes {
             $number = count($posts);
             $i = 1;
             if ($shortlist) {
-                $content = '<span class="person liste-person" itemscope itemtype="http://schema.org/Person">';
-                //} elseif ( $page ) {
-                //    $liste = '';
+                $content = '<span class="fau-person person liste-person">';
             } elseif ($list) {
-                $content = '<ul class="person liste-person" itemscope itemtype="http://schema.org/Person">';
+                $content = '<ul class="fau-person person liste-person">';
                 $content .= "\n";
             } else {
                 $content = '';
@@ -589,12 +702,12 @@ class Kontakt extends Shortcodes {
                 if ($page) {
                     $content .= Data::fau_person_page($value, 1, $showname);
                 } elseif ($shortlist) {
-                    $content .= Data::fau_person_shortlist($value, $showlist, 0, $showmail, $showtelefon);
+                    $content .= Data::fau_person_shortlist($value, $showdescription, 0, $showmail, $showtelefon);
                     if ($i < $number)
                         $content .= ", ";
                 } elseif ($list) {
                     $content .= '<li class="person-info">' . "\n";
-                    $content .= Data::fau_person_shortlist($value, $showlist, 1, $showmail, $showtelefon);
+                    $content .= Data::fau_person_shortlist($value, $showdescription, 1, $showmail, $showtelefon);
                     $content .= "</li>\n";
                 } elseif ($sidebar) {
                     $content .= Data::fau_person_sidebar($value, 0, $showlist, $showinstitution, $showabteilung, $showposition, $showtitle, $showsuffix, $showaddress, $showroom, $showtelefon, $showfax, $showmobile, $showmail, $showwebsite, $showlink, $showdescription, $showoffice, $showthumb, $showvia, $hstart);

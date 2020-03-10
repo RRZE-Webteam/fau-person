@@ -12,7 +12,8 @@ $screenreadertitle = __('Kontaktliste','fau-person');
                     <?php while ( have_posts() ) {
 			the_post();
 			$id = $post->ID;
-			if ($id) {			    
+			if ($id) {			
+
 			     echo FAU_Person\Shortcodes\Kontakt::shortcode_kontakt(array("id"=> $post->ID, 'format' => 'kompakt', 'showlink' => 0, 'showlist' => 1 ));
 			} else { ?>
 			    <p class="hinweis">

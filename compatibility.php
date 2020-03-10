@@ -9,8 +9,8 @@ namespace {
 	public function fau_person_page($id) {
 	    return FAU_Person\Data::fau_person_page($id);
 	}
-	public function fau_person($id) {
-	    return FAU_Person\Shortcodes\Kontakt::shortcode_kontakt($id);
+	public function fau_person($args) {
+	    return FAU_Person\Shortcodes\Kontakt::shortcode_kontakt($args);
 	}
     }
-}
+}					

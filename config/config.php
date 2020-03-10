@@ -162,8 +162,9 @@ function getSections() {
 
 	[
             'id'    => 'sidebar',
-            'title' => __('Anzeigeoptionen (Widget Kontakt-Visitenkarte)', 'fau-person')
+            'title' => __('Sidebar Kontakte', 'fau-person')
         ],
+
 	[
             'id'    => 'constants',
             'title' => __('Erweiterte Einstellungen', 'fau-person')
@@ -210,6 +211,13 @@ function getFields() {
 	    [
 		'name'  => 'telefon',
 		'label' => __('Telefonnummer', 'fau-person'),
+		'type'  => 'checkbox',
+		'checked'   => true,
+		'default' => true,
+            ],
+	     [
+		'name'  => 'mobil',
+		'label' => __('Handynummer anzeigen', 'fau-person'),
 		'type'  => 'checkbox',
 		'checked'   => true,
 		'default' => true,
@@ -265,7 +273,30 @@ function getFields() {
 		'default' => false,
             ],
 	],
+	
 	'constants' => [
+	     [
+		'name'  => 'view_telefonlink',
+		'label' => __('Telefonnummer als Link', 'fau-person'),
+		'desc'  => __('Setzt die Telefonnummer als Link, so dass mobile Endgeräte und darauf vorbereitet Software bei einem Klick die Telefonwahlfunktion aufrufen.', 'fau-person'),
+		'type'  => 'checkbox',
+		'default' => true,
+            ],
+	     [
+		'name'  => 'view_telefon_intformat',
+		'label' => __('Internationales Nummernformat', 'fau-person'),
+		'desc'  => __('Die Telefonnnummer wird in dem internationalen Format angezeigt.', 'fau-person'),
+		'type'  => 'checkbox',
+		'default' => true,
+            ],
+	    [
+		'name'  => 'view_kontakt_linktext',
+		'default' => __('Mehr', 'fau-person') . ' ›',
+		'placeholder' => __('Mehr', 'fau-person') . ' ›',
+		'label' => __('Linktext für Kontaktseite', 'fau-person'),
+		'field_type' => 'text',
+		'type' => 'text' 
+	    ],
 	    [
 		'name'  => 'has_archive_page',
 		'label' => __('Kontakt-Übersichtsseite', 'fau-person'),
@@ -632,7 +663,6 @@ function getShortcodeSettings(){
 				'listentry' => __( 'Listeneintrag', 'fau-person' ),
 				'plain' => __( 'Unformatiert', 'fau-person' ),
 				'kompakt' => __( 'Kompakt', 'fau-person' ),
-				'compactindex' => __( 'Kompakter Index', 'fau-person' ),
 
 			],
 		],

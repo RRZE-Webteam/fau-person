@@ -3,7 +3,7 @@
 namespace FAU_Person;
 use FAU_Person\Data;
 use RRZE\Lib\UnivIS\UnivIS_Data;
-use sync_helper;
+use RRZE\Lib\UnivIS\sync_helper;
 defined('ABSPATH') || exit;
 
 /**
@@ -58,14 +58,11 @@ class BackendMenu {
         $transient = get_transient($this->settings->search_univis_id_transient);
         $firstname = isset($transient['firstname']) ? $transient['firstname'] : '';
         $givenname = isset($transient['givenname']) ? $transient['givenname'] : '';
-    //    if(class_exists( 'Univis_Data' ) ) {
+ 
             $firstname = Helper::sonderzeichen($firstname);
             $givenname = Helper::sonderzeichen($givenname);
             $person = sync_helper::get_univisdata(0, $firstname, $givenname);       
-      //  } else {
-	 
-        //    $person = array();
-        // }
+
         ?>
         <div class="wrap">
             <?php screen_icon(); ?>
@@ -84,13 +81,16 @@ class BackendMenu {
                 settings_fields('find_univis_id_options');
                 do_settings_sections('find_univis_id_options');
                 if(empty($person) || empty($person[0])) {
-                    echo __('<div class="alert alert-warning">Es konnten keine Daten zur Person gefunden werden. Bitte verändern Sie Ihre Suchwerte.</div>', 'fau-person');
+                    echo __('<div class="alert alert-warning">Es konnten keine Daten zur Person gefunden werden. Bitte verändern Sie Ihre Suchwerte.</div>', 'fau-person');  
                 } else {
                     $person = Helper::array_orderby($person,"lastname", SORT_ASC, "firstname", SORT_ASC );
                     $no_univis_data = __('keine Daten in UnivIS eingepflegt', 'fau-person');
 		    
-		   echo "<ul>"; 
 		    
+		    echo '<div id="results">';
+		    echo '<table class="wp-list-table widefat striped">';
+		    echo '<thead><tr><td>UnivIS Id</td><td>Name</td><td>E-Mail</td><td>Organisation</td></tr></thead>';
+		    echo '<tbody>';
                     foreach($person as $key=>$value) {
                         if(array_key_exists('locations', $person[$key]) && array_key_exists('location', $person[$key]['locations'][0]) && array_key_exists('email', $person[$key]['locations'][0]['location'][0])) {
                             $email = $person[$key]['locations'][0]['location'][0]['email'];
@@ -117,9 +117,18 @@ class BackendMenu {
                         } else {
                             $orgname = $no_univis_data;
                         }
-                        echo '<li>UnivIS-ID: <code>'. $id . '</code>,  '. $firstname . ' ' . $lastname . ', E-Mail: <em>' . $email. '</em>, Organisation: <em>' . $orgname. '</em></li>';
+			echo '<tr>';
+			echo '<th>'.$id.'</th>';
+			echo '<td>'. $firstname . ' ' . $lastname .'</td>';
+			echo '<td>'.$email.'</td>';
+			echo '<td>'.$orgname.'</td>';
+			echo '</tr>';
+			
                     }
-		     echo "</ul>";
+		    
+		     echo '</tbody>';
+		     echo "</table>";
+		      echo "</div>";
                 }
             ?>
         </div>

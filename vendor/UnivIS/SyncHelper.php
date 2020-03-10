@@ -308,7 +308,7 @@ class sync_helper {
         } elseif( $firstname && $lastname ) {
         	$result = UnivIS_Data::search_by_fullname($firstname, $lastname);
         } elseif( $firstname ) {
-	$result = RRZE\Lib\UnivIS\UnivIS_Data::search_by('firstname', $firstname);
+	$result = UnivIS_Data::search_by('firstname', $firstname);
         } elseif( $lastname ) {
         	$result = UnivIS_Data::search_by('lastname', $lastname);
         } else {

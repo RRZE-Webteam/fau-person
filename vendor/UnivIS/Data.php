@@ -109,7 +109,9 @@ class UnivIS_Data {
 
         if (!$value) {
             return false;
-        }
+        } elseif (strlen($value)<2) {
+	    return false;
+	}
 
         if (!$data = self::get_remote_data_by($field, $value)) {
             return false;
@@ -124,8 +126,10 @@ class UnivIS_Data {
         
         if (!$lastname || !$firstname) {
             return false;
-        }
-
+        } elseif ((strlen($lastname)<2) && (strlen($firstname)<2)) {
+	    return false; 
+	}
+	    
         if (!$data = self::get_remote_data_by_fullname($firstname, $lastname)) {
             return false;
         }
@@ -172,7 +176,6 @@ class UnivIS_Data {
 	$config = Config::get_Config();
 	$apiurl = $config['api_url'];
 	$url = sprintf('%1$s?search=persons&firstname=%2$s&name=%3$s&show=xml', $apiurl, urlencode($firstname), urlencode($lastname));
-        echo "URL: ".$url;
 	
         if (!fopen($url, "r")) {
             return false;

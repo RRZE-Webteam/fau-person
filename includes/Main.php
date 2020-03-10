@@ -88,7 +88,7 @@ class Main {
 
       
     public function enqueueForeignThemes() {
-	$constants = getConstants();
+	/* $constants = getConstants();
 	$themelist = $constants['fauthemes'];
 	$foreign = 1;
 	$active_theme = wp_get_theme();
@@ -96,10 +96,9 @@ class Main {
 	if (in_array($active_theme, $themelist)) {
 	    $foreign = 0;
 	}
-	$foreign = 1;
-	if ($foreign) {	
+	if ($foreign) {	*/
 	    wp_enqueue_style('fau-person');
-	}    
+	/* } */   
     }
     
     public function define_image_sizes() {

@@ -233,7 +233,7 @@ class Schema {
 	return;
     }
     
-    public static function create_contactpointlist($data, $blockstart = 'ul', $itemprop = '', $class = 'person-info', $liststart = 'li', $phoneuri = true) {
+    public static function create_contactpointlist($data, $blockstart = 'ul', $itemprop = '', $class = 'person-info', $liststart = 'li', $args = array()) {
 	if (!is_array($data)) {
 	    return;
 	}
@@ -247,14 +247,31 @@ class Schema {
 	}
 	$res .= '>';
 	
+	$phoneuri = true;
+	$intformat = true;
+	if (isset($args) && is_array($args)) {	    
+	    if (isset($args['view_telefonlink'])) {
+		 $phoneuri = $args['view_telefonlink'];
+	    }
+	    if (isset($args['view_telefon_intformat'])) {
+		 $intformat = $args['view_telefon_intformat'];
+	    }  
+	}
+	
+	
 	if ((isset($data['telephone'])) && (!empty($data['telephone']))) {
 	    $res .= '<'.$liststart.' class="person-info-phone telephone">';
 	    $res .= '<span class="screen-reader-text">' . __('Telefon', 'fau-person') . ': </span>';
 	    $number = self::get_sanitized_phone($data['telephone']);
+	    $displaynumber = $number; 
+	    if ($intformat==false) {
+		$displaynumber = self::get_national_telefon_format($number);
+	    }
+	    
 	    if ($phoneuri) {
-		$res .= '<a itemprop="telephone" href="tel:'.self::get_telephone_uri($number).'">' . $number . '</a>';
+		$res .= '<a itemprop="telephone" href="tel:'.self::get_telephone_uri($number).'">' . $displaynumber . '</a>';
 	    } else {
-		$res .= '<span itemprop="telephone">' . $data['telephone'] . '</span>';
+		$res .= '<span itemprop="telephone">' . $displaynumber . '</span>';
 	    }
 	    $res .= '</'.$liststart.'>';
 	    $filled = true;
@@ -264,10 +281,14 @@ class Schema {
 	    $res .= '<'.$liststart.' class="person-info-mobile mobilePhone">';
 	    $res .= '<span class="screen-reader-text">' . __('Mobil', 'fau-person') . ': </span>';
 	    $number = self::get_sanitized_phone($data['mobilePhone']);
+	    $displaynumber = $number; 
+	    if ($intformat==false) {
+		$displaynumber = self::get_national_telefon_format($number);
+	    }
 	    if ($phoneuri) {
-		$res .= '<a class="mobile" itemprop="telephone" href="tel:'.self::get_telephone_uri($number).'">' . $number . '</a>';
+		$res .= '<a class="mobile" itemprop="telephone" href="tel:'.self::get_telephone_uri($number).'">' . $displaynumber . '</a>';
 	    } else {
-		$res .= '<span class="mobile" itemprop="telephone">' . $number . '</span>';
+		$res .= '<span class="mobile" itemprop="telephone">' . $displaynumber . '</span>';
 	    }
 	    $res .= '</'.$liststart.'>';
 	     $filled = true;
@@ -277,10 +298,14 @@ class Schema {
 	    $res .= '<'.$liststart.' class="person-info-fax faxNumber">';
 	    $res .= '<span class="screen-reader-text">' . __('Faxnummer', 'fau-person') . ': </span>';
 	    $number = self::get_sanitized_phone($data['faxNumber']);
+	    $displaynumber = $number; 
+	    if ($intformat==false) {
+		$displaynumber = self::get_national_telefon_format($number);
+	    }
 	    if ($phoneuri) {
-		$res .= '<a itemprop="faxNumber" href="tel:'.self::get_telephone_uri($number).'">' . $number . '</a>';
+		$res .= '<a itemprop="faxNumber" href="tel:'.self::get_telephone_uri($number).'">' . $displaynumber . '</a>';
 	    } else {
-		$res .= '<span itemprop="faxNumber">' . $number . '</span>';
+		$res .= '<span itemprop="faxNumber">' . $displaynumber . '</span>';
 	    }
 	    $res .= '</'.$liststart.'>';
 	     $filled = true;
@@ -567,6 +592,15 @@ class Schema {
 	
 	$res = preg_replace("/[\s]+/", "-", trim($number));
 	$res = preg_replace("/[^0-9\-\+\.]+/", "", $res);
+	return $res;
+    }
+    
+    private static function get_national_telefon_format($number) {
+	if (!isset($number)) {
+	    return;
+	}
+	
+	$res = preg_replace("/^\+\d\d\s+/", "0", trim($number));
 	return $res;
     }
     
