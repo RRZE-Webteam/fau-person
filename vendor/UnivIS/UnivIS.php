@@ -29,9 +29,8 @@ namespace RRZE\Lib;
  */
 
 defined('ABSPATH') || exit;
-require_once  'Config.php';
-require_once  'Sanitizer.php';
-require_once 'SyncHelper.php';
+require_once 'Config.php';
+require_once 'Sanitizer.php';
 require_once 'Data.php';
 
 

@@ -45,7 +45,7 @@ function getConstants() {
 		'FAU-Techfak',
 		'FAU-Jobs'
 		],
-    
+
         );               
         // für ergänzende Optionen aus anderen Plugins
         $options = apply_filters('fau_person_constants', $options);

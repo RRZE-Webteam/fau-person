@@ -2,7 +2,7 @@
 
 namespace FAU_Person\Metaboxes;
 use FAU_Person\Data;
-use RRZE\Lib\UnivIS\UnivIS_Data;
+use RRZE\Lib\UnivIS\Data as UnivIS_Data;
 
 defined('ABSPATH') || exit;
 
@@ -50,7 +50,7 @@ class Kontakt extends Metaboxes {
 	    $univis_sync = '<p class="cmb2_metabox_description">' . __('Derzeit sind keine Daten aus UnivIS syncronisiert.', 'fau-person') . '</p>';
 	}
 	$standort_default = Data::get_standort_defaults($person_id);  
-	$univis_default = UnivIS_Data::univis_defaults($person_id);  
+	$univis_default = Data::univis_defaults($person_id);  
 
 	// Meta-Box Zuordnung - fau_person_orga
 	$meta_boxes['fau_person_orga'] = array(

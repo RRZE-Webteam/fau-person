@@ -14,7 +14,7 @@ add_action('save_post', function() {
     wp_schedule_single_event(time(), 'univis_data_async_task');
 } );
 
-class UnivIS_Data {
+class Data {
 
     const transient_prefix = 'univis_data_';    
     protected static $transient_expiration = DAY_IN_SECONDS;    
@@ -231,17 +231,118 @@ class UnivIS_Data {
         return $a;
     }
     
-   
-      //Legt die in UnivIS hinterlegten Werte in einem Array ab, Feldbezeichnungen
-    public static function univis_defaults($id ) {
-         $post = get_post($id);
-	if( !is_null( $post ) && $post->post_type === 'person' && get_post_meta($id, 'fau_person_univis_id', true)) {
-	    $univis_id = get_post_meta($id, 'fau_person_univis_id', true);
-	    $univis_default = sync_helper::get_fields($id, $univis_id, 1);
-	    return $univis_default;
-	} else {
-	$univis_default = Config::get_keys_fields('persons');
-	    return $univis_default;
+      
+
+    public static function get_univisdata($id = 0, $firstname = '', $lastname = '' ) {    
+        if( !$id && !$firstname && !$lastname ) {
+		return array();
 	}
+        
+        if($id) {
+        	$result = self::get_person($id);
+        } elseif( $firstname && $lastname ) {
+        	$result = self::search_by_fullname($firstname, $lastname);
+        } elseif( $firstname ) {
+	$result = self::search_by('firstname', $firstname);
+        } elseif( $lastname ) {
+        	$result = self::search_by('lastname', $lastname);
+        } else {
+         	$result = array();
+        } 
+      
+        return (array) $result;
     }
+
+    //$id = ID des Personeneintrags, $person = Array mit Personendaten, $fau_person_var = Bezeichnung Personenplugin, $univis_var = Bezeichnung UnivIS, $defaults = Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular
+    public static function sync_univis( $id, $person, $fau_person_var, $univis_var, $defaults ) {   
+        //wird benötigt, falls jeder einzelne Wert abgefragt werden soll
+        //if( !empty( $person[$univis_var] ) && get_post_meta($id, 'fau_person_'.$fau_person_var_sync', true) ) {
+        if( $defaults ) {
+            if( !empty( $person[$univis_var] ) ) {
+                $val = sprintf(__('<p class="cmb_metabox_description">[Aus UnivIS angezeigter Wert: %s]</p>', 'fau-person'), $person[$univis_var]);
+            } else {
+                $val = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', 'fau-person');
+            }
+        } else {
+            if( !empty( $person[$univis_var] ) && get_post_meta($id, 'fau_person_univis_sync', true) ) {
+                $val = $person[$univis_var];             
+            } else {
+                $val = get_post_meta($id, 'fau_person_'.$fau_person_var, true);
+            }
+        }
+        return $val;        
+    }
+    
+    
+
+    //public static function officehours_repeat( $officehours ) {
+    public static function officehours_repeat( $repeat, $repeat_submode, $starttime, $endtime, $office, $comment ) {
+        $date = array();
+
+        if ( !$repeat_submode ) {
+            $repeat = strtok($repeat, ' ');
+            $repeat_submode = strtok(' ');
+            $repeat_submode = explode( ',', $repeat_submode );
+        }
+
+        if( $repeat ) {
+            $dict = array(
+                'd1' => __('Täglich', 'fau-person'),
+                'w1' => __('Jede Woche', 'fau-person'),
+                'w2' => __('Alle zwei Wochen', 'fau-person'),
+            );
+
+            if( array_key_exists( $repeat, $dict ) )
+                array_push( $date, $dict[$repeat] );
+
+            if( is_array( $repeat_submode ) && !empty($repeat_submode[0] )) {
+                $days_short = array(
+                    1 => __('Mo', 'fau-person'),
+                    2 => __('Di', 'fau-person'),
+                    3 => __('Mi', 'fau-person'),
+                    4 => __('Do', 'fau-person'),
+                    5 => __('Fr', 'fau-person'),
+                    6 => __('Sa', 'fau-person'),
+                    7 => __('So', 'fau-person')
+                );
+
+                $days_long = array(
+                    1 => __('Montag', 'fau-person'),
+                    2 => __('Dienstag', 'fau-person'),
+                    3 => __('Mittwoch', 'fau-person'),
+                    4 => __('Donnerstag', 'fau-person'),
+                    5 => __('Freitag', 'fau-person'),
+                    6 => __('Samstag', 'fau-person'),
+                    7 => __('Sonntag', 'fau-person')
+                );
+                foreach( $repeat_submode as $value ) {
+                        $days_short[$value] = $days_short[$value] . ',';
+                        array_push($date, $days_short[$value]);
+                }
+            }
+        }
+        if ( $starttime ) {
+            $time = Sanitizer::convert_time( $starttime );
+            if ( $endtime ) {
+                $time .= ' - ' . Sanitizer::convert_time( $endtime );
+            }
+            $time = $time . ',';
+            array_push($date, $time);
+        }
+
+        if ( $office ) {
+            $office = __('Raum', 'fau-person') . ' ' . $office . ',';
+            array_push($date, $office);            
+        }
+        
+        if( $comment !== 0 ) {
+            array_push($date, $comment);
+        }
+
+        $officehours = implode( ' ', $date );
+        
+        return $officehours;
+    }
+    
+
 }

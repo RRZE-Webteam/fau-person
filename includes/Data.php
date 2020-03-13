@@ -1,8 +1,9 @@
 <?php
 
 namespace FAU_Person;
-use \RRZE\Lib\UnivIS;
-use \RRZE\Lib\UnivIS\sync_helper;
+use RRZE\Lib\UnivIS\Data as UnivIS_Data;
+use RRZE\Lib\UnivIS\Config;
+use RRZE\Lib\UnivIS\Sanitizer;
 
 defined('ABSPATH') || exit;
 
@@ -207,10 +208,10 @@ class Data {
             $post = get_post($id);
             if( !is_null( $post ) && $post->post_type === 'person' && get_post_meta($id, 'fau_person_standort_id', true)) {
                 $standort_id = get_post_meta($id, 'fau_person_standort_id', true);
-                $standort_default = Data::get_fields_standort($id, $standort_id, 1);
+                $standort_default = self::get_fields_standort($id, $standort_id, 1);
                 return $standort_default;        
             } else {
-		return Data::get_fields_standort(0,0,0);
+		return self::get_fields_standort(0,0,0);
 	    }
     }
     
@@ -224,7 +225,7 @@ class Data {
                     case 'realperson':
                     case 'realmale':
                     case 'realfemale':
-                        $fields = sync_helper::get_fields($personlist[$key]['ID'], get_post_meta($personlist[$key]['ID'], 'fau_person_univis_id', true), 0);
+                        $fields = self::get_fields($personlist[$key]['ID'], get_post_meta($personlist[$key]['ID'], 'fau_person_univis_id', true), 0);
                         extract($fields);                   
                         if( !empty( $familyName ) ) {
                             $name = $familyName;
@@ -314,7 +315,7 @@ class Data {
     
     
     public static function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex = 0, $noborder, $hstart, $bg_color) {
-        $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+        $fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
         // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
         extract($fields);
         if ($showvia !== 0 && !empty($connections))
@@ -449,7 +450,7 @@ class Data {
 
     public static function fau_person_page($id, $is_shortcode = false, $showname = false) {
         $content = '<div class="fau-person person page" itemscope itemtype="http://schema.org/Person">';
-        $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+        $fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
         // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
         extract($fields);
 
@@ -517,7 +518,7 @@ class Data {
 
     
     public static function fau_person_shortlist($id, $showdesc = false, $list = false, $showmail = false, $showtelefon = false) {
-        $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+        $fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
 
 	$viewopts = self::get_viewsettings();
 	 
@@ -564,22 +565,20 @@ class Data {
 	if (isset($fields['connection_only']) && $fields['connection_only']==false && $list) {
 	    $content .= Schema::create_contactpointlist($fielddata, 'span', '', 'person-info', 'span',$viewopts);
 	}
-	
-	
+		
 	if ($showdesc) {
-		if (get_post_field('post_excerpt', $id)) {
-		    $excerpt = get_post_field('post_excerpt', $id);
-		} else {
-		    $post = get_post($id);
-		    if ($post->post_content) {
-			$excerpt = wp_trim_excerpt($post->post_content);
-		    }
+	    if (get_post_field('post_excerpt', $id)) {
+		$excerpt = get_post_field('post_excerpt', $id);
+	    } else {
+		$post = get_post($id);
+		if ($post->post_content) {
+		    $excerpt = wp_trim_excerpt($post->post_content);
 		}
-		if (!empty($excerpt)) {
-		    $content .= "<br>" . $excerpt;
-		}
+	    }
+	    if (!empty($excerpt)) {
+		$content .= "<br>" . $excerpt;
+	    }
 	}
-
 
         $content .= '</span>';
 
@@ -595,7 +594,7 @@ class Data {
         if (!empty($id)) {
             $post = get_post($id);
 
-            $fields = sync_helper::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+            $fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
             // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
             extract($fields);
 	    $viewopts = self::get_viewsettings();
@@ -819,7 +818,7 @@ class Data {
 	if (!is_array($showfields)) {
 	    return;
 	}
-	$fields = sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true), 0 );
+	$fields = self::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true), 0 );
 	$permalink = get_permalink( $id );
 	
 	if (isset($showfields['kurzbeschreibung']) && ($showfields['kurzbeschreibung'])) {
@@ -880,7 +879,7 @@ class Data {
 	if (!is_array($showfields)) {
 	    return;
 	}
-	$fields = sync_helper::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true), 0 );
+	$fields = self::get_fields( $id, get_post_meta($id, 'fau_person_univis_id', true), 0 );
 	$permalink = get_permalink( $id );
 	
 	if (isset($showfields['kurzbeschreibung']) && ($showfields['kurzbeschreibung'])) {
@@ -935,5 +934,313 @@ class Data {
 	}
 	return $content;
     }   
+
+    
+     
+      //Legt die in UnivIS hinterlegten Werte in einem Array ab, Feldbezeichnungen
+    public static function univis_defaults($id ) {
+         $post = get_post($id);
+	if( !is_null( $post ) && $post->post_type === 'person' && get_post_meta($id, 'fau_person_univis_id', true)) {
+	    $univis_id = get_post_meta($id, 'fau_person_univis_id', true);
+	    $univis_default = self::get_fields($id, $univis_id, 1);
+	    return $univis_default;
+	} else {
+	$univis_default = Config::get_keys_fields('persons');
+	    return $univis_default;
+	}
+    }
+    
+    
+     //gibt die Werte der Person an, Inhalte abhängig von UnivIS, 
+    //Übergabewerte: ID der Person, UnivIS-ID der Person, 
+    //Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular, 
+    //$ignore_connection=1 wenn die verknüpften Kontakte einer Person ignoriert werden sollen (z.B. wenn die Person selbst schon eine verknüpfte Kontaktperson ist)
+    public static function get_fields( $id, $univis_id, $defaults, $ignore_connection=0 ) {
+        $univis_sync = 0;
+        $person = array();
+        if( $univis_id  ) {
+            $person = UnivIS_Data::get_univisdata( $univis_id );
+            $univis_sync = 1;
+        } 
+        $fields = array();
+        // Ab hier Definition aller Feldzuordnungen, $key ist Name der Metaboxen, $value ist Name in UnivIS
+        $fields_univis = array(
+            'department' => 'orgname',
+            'honorificPrefix' => 'title',
+            'honorificSuffix' => 'atitle',
+            'givenName' => 'firstname',
+            'familyName' => 'lastname',
+            'jobTitle' => 'work',            
+        );
+        $fields_univis_location = array(
+            'telephone' => 'tel',
+            'faxNumber' => 'fax',
+            'email' => 'email',
+            'url' => 'url',
+            'streetAddress' => 'street',
+            'addressLocality' => 'ort', 
+            'workLocation' => 'office', 
+        );
+        $fields_univis_officehours = array(
+            'hoursAvailable_group' => 'officehours',
+        );
+        // Die Detailfelder zu den Sprechzeiten
+        $subfields_univis_officehours = array(
+            /* von der UnivIS-Doku:
+             * repeat mode is encoded in a string
+             * syntax: <modechar><numbers><space><args>                  
+             * mode  description                  
+             * d     daily                  
+             * w     weekly
+             * m     monthly                  
+             * y     yearly                 
+             * b     block
+             * numbers: number of skips between repeats
+             * example:  "d2":      every second day
+             * weekly and monthly have additional arguments:  
+             * weekly: argument is comma-separated list of weekdays where event is repeated                  
+             * example:  "w3 1,2":  every third week on Monday and Tuesday                  
+             * also possible: „we“ and „wo"
+             * e = even calender week                  
+             * o = odd calender week                  
+             * monthly: argument has syntax "<submodechar><numbers>"                 
+             * submode description                  
+             * d       monthly by date                  
+             * w       monthly by week                  
+             * numbers: monthly by date: number of day (1-31)                  
+             * monthly by week: number of week (1-5,e,o))                  
+             * special case: 5 = last week of month                
+             * examples:  "m1 d23": on the 23rd day of every month
+             * "m2 w5":  in the last week of every second month
+             * Laut UnivIS-Live-Daten werden für die Sprechzeiten aber nur wöchentlich an verschiedenen Tagen, 2-wöchentlich und täglich verwendet. Sollte noch was anderes benötigt werden, muss nachprogrammiert werden.
+             */
+            'comment' => 'comment',
+            'endtime' => 'endtime',
+            'repeat' => 'repeat',
+            //'repeat_mode' => 'repeat_mode',
+            'repeat_submode' => '',
+            'office' => 'office', 
+            'starttime' => 'starttime',
+        );
+        $fields_univis_orgunits = array(
+            'worksFor' => 'orgunit',            
+        );
+        $fields_fauperson = array(
+            'contactPoint' => '',
+            'typ' => '',
+            'alternateName' => '',
+            'addressCountry' => '',
+            'link' => '',
+            'hoursAvailable_text' => '',
+            'hoursAvailable' => '',
+            'description' => '',
+            'mobilePhone' => '',
+        );
+        $fields_exception = array(
+            'postalCode' => '',
+        );            
+        $fields_connection = array(             // hier alle Felder ergänzen, die für die Anzeige der verknüpften Kontakte benötigt werden
+            'connection_text' => '',
+            'connection_only' => '',
+            'connection_options' => array(),
+            'connection_honorificPrefix' => 'honorificPrefix',
+            'connection_givenName' => 'givenName',
+            'connection_familyName' => 'familyName',
+            'connection_honorificSuffix' => 'honorificSuffix',
+            'connection_alternateName' => 'alternateName',
+            'connection_streetAddress' => 'streetAddress',
+            'connection_postalCode' => 'postalCode',
+            'connection_addressLocality' => 'addressLocality',
+            'connection_addressCountry' => 'addressCountry',  
+            'connection_workLocation' => 'workLocation',
+            'connection_telephone' => 'telephone',
+            'connection_faxNumber' => 'faxNumber',         
+            'connection_email' => 'email',
+            'connection_hoursAvailable' => 'hoursAvailable',
+            'connection_hoursAvailable_group' => 'hoursAvailable_group',
+            'connection_nr' => 'nr',
+            'connection_link' => 'link',
+        );
+        foreach( $fields_univis as $key => $value ) {
+            if( $univis_sync && array_key_exists( $value, $person ) ) {
+                if( $value == 'orgname' ) {
+                    $language = get_locale();
+                    if( strpos( $language, 'en_' ) === 0 && array_key_exists( 'orgname_en', $person ) ) {
+                        $value = 'orgname_en';
+                    } else {
+                        $value = 'orgname';                   
+                    }
+                }
+                $value = UnivIS_Data::sync_univis( $id, $person, $key, $value, $defaults ); 
+            } else {
+                if( $defaults ) {
+                    $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', 'fau-person');     
+                } else {
+                    $value = get_post_meta($id, 'fau_person_'.$key, true);                          
+                }
+            }
+            $fields[$key] = $value;
+        }
+        foreach( $fields_univis_location as $key => $value ) {
+            if( $univis_sync && array_key_exists( 'locations', $person ) && array_key_exists( 'location', $person['locations'][0] ) ) {
+                $person_location = $person['locations'][0]['location'][0];
+                if(($key == 'telephone' || $key == 'faxNumber') && !$defaults) {
+                    $phone_number = UnivIS_Data::sync_univis( $id, $person_location, $key, $value, $defaults );
+                    switch ( get_post_meta($id, 'fau_person_telephone_select', true) ) {
+                        case 'erl':
+                            $value = Sanitizer::correct_phone_number($phone_number, 'erl');
+                            break;
+                        case 'nbg':
+                            $value = Sanitizer::correct_phone_number($phone_number, 'nbg');                        
+                            break;
+                        default:
+                            $value = Sanitizer::correct_phone_number($phone_number, 'standard');                        
+                            break;
+                    }                    
+                } else {
+                    $value = UnivIS_Data::sync_univis( $id, $person_location, $key, $value, $defaults );
+                }
+            } else {
+                if( $defaults ) {
+                    $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', 'fau-person');
+                } else {
+                    if($key == 'telephone' || $key == 'faxNumber') {
+                        $phone_number = get_post_meta($id, 'fau_person_'.$key, true);
+                        switch ( get_post_meta($id, 'fau_person_telephone_select', true) ) {
+                        case 'erl':
+                            $value = Sanitizer::correct_phone_number($phone_number, 'erl');
+                            break;
+                        case 'nbg':
+                            $value = Sanitizer::correct_phone_number($phone_number, 'nbg');                        
+                            break;
+                        default:
+                            $value = Sanitizer::correct_phone_number($phone_number, 'standard');  
+                            break;
+                        }
+                    } else {                    
+                        $value = get_post_meta($id, 'fau_person_'.$key, true);
+                    }
+                }
+            }
+            //add_action( 'admin_notices', array( 'FAU_Person', 'admin_notice_phone_number' ) );
+            $fields[$key] = $value;
+        }
+
+        foreach( $fields_univis_officehours as $key => $value ) {
+            // ist eine UnivIS-ID vorhanden?      
+            switch ( $univis_sync ) {
+                case true:
+                    if ( array_key_exists( 'officehours', $person ) && array_key_exists( 'officehour', $person['officehours'][0] ) ) { // sind in UnivIS überhaupt Sprechzeiten hinterlegt?
+                        if( get_post_meta($id, 'fau_person_univis_sync', true) || $defaults ) { // ist der Haken zur Synchronisation da bzw. werden die UnivIS-Werte für das Backend abgefragt
+                            $person_officehours = $person['officehours'][0]['officehour'];   
+                            $officehours = array();
+                            foreach ($person_officehours as $num => $num_val) {
+                                $repeat = isset( $person_officehours[$num]['repeat'] ) ? $person_officehours[$num]['repeat'] : 0;
+                                $repeat_submode = isset( $person_officehours[$num]['repeat_submode'] ) ? $person_officehours[$num]['repeat_submode'] : 0;
+                                $starttime = isset( $person_officehours[$num]['starttime'] ) ? $person_officehours[$num]['starttime'] : 0;
+                                $endtime = isset( $person_officehours[$num]['endtime'] ) ? $person_officehours[$num]['endtime'] : 0;
+                                $office = isset( $person_officehours[$num]['office'] ) ? $person_officehours[$num]['office'] : 0;
+                                $comment = isset( $person_officehours[$num]['comment'] ) ? $person_officehours[$num]['comment'] : 0;
+                                $officehour = UnivIS_Data::officehours_repeat($repeat, $repeat_submode, $starttime, $endtime, $office, $comment);                    
+                                array_push($officehours, $officehour);
+                            }
+                            if ( $defaults ) {
+                                $officehours = implode($officehours, '</p></li><li><p class="cmb_metabox_description">');
+                                $officehours = sprintf(__('<p class="cmb_metabox_description">[Aus UnivIS angezeigter Wert: </p><ul><li><p class="cmb_metabox_description">%s</p></li></ul><p class="cmb_metabox_description">]</p>', 'fau-person'), $officehours); 
+                            }
+                            break;
+                        }  
+                    } elseif ( $defaults ) { // in UnivIS stehen keine Sprechzeiten
+                        $officehours = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', 'fau-person');                                                   
+                        break;
+                    }                                                              
+                default:  // keine UnivIS-ID da bzw. kein Haken bei Datenanzeige aus UnivIS => die Feldinhalte werden ausgegeben
+                    $person_officehours = get_post_meta($id, 'fau_person_hoursAvailable_group', true);
+                    $officehours = array();
+                    if( !empty( $person_officehours ) ) {
+                        foreach ( $person_officehours as $num => $num_val ) {                            
+                            $repeat = isset( $person_officehours[$num]['repeat'] ) ? $person_officehours[$num]['repeat'] : 0;
+                            $repeat_submode = isset( $person_officehours[$num]['repeat_submode'] ) ? $person_officehours[$num]['repeat_submode'] : 0;
+                            $starttime = isset( $person_officehours[$num]['starttime'] ) ? $person_officehours[$num]['starttime'] : 0;
+                            $endtime = isset( $person_officehours[$num]['endtime'] ) ? $person_officehours[$num]['endtime'] : 0;
+                            $office = isset( $person_officehours[$num]['office'] ) ? $person_officehours[$num]['office'] : 0;
+                            $comment = isset( $person_officehours[$num]['comment'] ) ? $person_officehours[$num]['comment'] : 0;
+                            $officehour = UnivIS_Data::officehours_repeat($repeat, $repeat_submode, $starttime, $endtime, $office, $comment);
+                            array_push($officehours, $officehour);                                
+                        }
+                    }
+            }
+            $fields[$key] = $officehours;
+            
+        }       
+        
+        foreach( $fields_univis_orgunits as $key => $value ) {
+            $language = get_locale();
+            if( strpos( $language, 'en_' ) === 0 && array_key_exists( 'orgunit_ens', $person ) ) {
+                $orgunit = 'orgunit_en';
+                $orgunits = 'orgunit_ens';
+            } else {
+                $orgunit = 'orgunit';
+                $orgunits = 'orgunits';
+            }
+            if( array_key_exists( $orgunits, $person ) ) {
+                $person_orgunits = $person[$orgunits][0][$orgunit];
+                $i = count($person_orgunits);
+                if($i>1) {
+                    $i = count($person_orgunits)-2;
+                } 
+                $value = UnivIS_Data::sync_univis( $id, $person_orgunits, $key, $i, $defaults );  
+            } else {
+                if( $defaults ) {
+                    $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', 'fau-person');
+                } else {
+                    $value = get_post_meta($id, 'fau_person_'.$key, true); 
+                }
+            }
+            $fields[$key] = $value;
+        }        
+        foreach( $fields_fauperson as $key => $value ) {
+            $value = get_post_meta($id, 'fau_person_'.$key, true);
+            $fields[$key] = $value;            
+        }
+        foreach( $fields_exception as $key => $value ) {
+            if( $key == 'postalCode' ) {
+                if( get_post_meta($id, 'fau_person_univis_sync', true) && array_key_exists( 'locations', $person ) && array_key_exists( 'location', $person['locations'][0] ) && array_key_exists('ort', $person['locations'][0]['location'][0]) ) {
+                    $value = '';
+                } else {
+                    $value = get_post_meta($id, 'fau_person_'.$key, true); 
+                }
+            }
+            $fields[$key] = $value;  
+        }
+        if( !$ignore_connection ) 
+            $connections = get_post_meta($id, 'fau_person_connection_id', true);
+        if( !empty( $connections ) ) {    
+            $connection = array();
+            foreach( $connections as $ckey => $cvalue ) {
+                $connection_fields[$ckey] = self::get_fields($cvalue, get_post_meta($cvalue, 'fau_person_univis_id', true), 0, 1);
+                $connection_fields[$ckey]['nr'] = $cvalue;
+            }
+            foreach ($connection_fields as $key => $value) {    
+                foreach( $fields_connection as $fckey => $fcvalue ) {
+                    if( $fckey == 'connection_text' || $fckey == 'connection_only' || $fckey == 'connection_options' ) {
+                        $value = get_post_meta($id, 'fau_person_'.$fckey, true);
+                        $fields[$fckey] = $value;                   
+                    } else {
+                        $value = $connection_fields[$key][$fcvalue];
+                        $connection[$key][$fcvalue] = $value; 
+                    }
+                }                    
+            }
+            $fields['connections'] = $connection;
+        }
+
+        if( !$defaults && !get_post_meta($id, 'fau_person_univis_sync', true) ) {
+            $fields_standort = self::get_fields_standort( $id, get_post_meta($id, 'fau_person_standort_id', true), 0 );
+            $fields = array_merge( $fields, $fields_standort );
+        }
+        return $fields;
+    }
+    
 
 }

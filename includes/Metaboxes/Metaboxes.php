@@ -80,7 +80,7 @@ class Metaboxes  {
 
     function validate_number( $str ) {
 	$location = get_post_meta( cmb_Meta_Box::get_object_id(), 'fau_person_telephone_select', true );
-	$str = sync_helper::correct_phone_number( $str, $location );
+	$str = UnivIS_Data::correct_phone_number( $str, $location );
 	add_action( 'admin_notices', array( 'FAU_Person', 'admin_notice_phone_number' ) );
 	return $str;
     }

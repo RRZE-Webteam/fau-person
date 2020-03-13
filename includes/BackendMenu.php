@@ -2,8 +2,7 @@
 
 namespace FAU_Person;
 use FAU_Person\Data;
-use RRZE\Lib\UnivIS\UnivIS_Data;
-use RRZE\Lib\UnivIS\sync_helper;
+use RRZE\Lib\UnivIS\Data as UnivIS_Data;
 defined('ABSPATH') || exit;
 
 /**
@@ -61,7 +60,7 @@ class BackendMenu {
  
             $firstname = Helper::sonderzeichen($firstname);
             $givenname = Helper::sonderzeichen($givenname);
-            $person = sync_helper::get_univisdata(0, $firstname, $givenname);       
+            $person = UnivIS_Data::get_univisdata(0, $firstname, $givenname);       
 
         ?>
         <div class="wrap">
