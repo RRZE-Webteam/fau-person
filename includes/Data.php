@@ -11,7 +11,7 @@ defined('ABSPATH') || exit;
 class Data {
     
     
-    private function get_viewsettings() {
+    private static function get_viewsettings() {
 	$settings = new Settings(PLUGIN_FILE);
 	$settings->onLoaded();
 	$options = $settings->options;
@@ -216,7 +216,7 @@ class Data {
     }
     
     // Sortierung eines Arrays mit Objekten (z.B. bei einer Kategorie) alphabetisch nach Titel oder Nachname, je nach Typ
-    public function sort_person_posts( $personlist ) {
+    public function sort_person_posts( $personlist, $sorttype = 'name', $order = 'asc' ) {
         if ( is_array( $personlist ) ) {
             foreach( $personlist as $key => $value) {
                 $personlist[$key] = (array) $personlist[$key];
@@ -226,12 +226,14 @@ class Data {
                     case 'realmale':
                     case 'realfemale':
                         $fields = self::get_fields($personlist[$key]['ID'], get_post_meta($personlist[$key]['ID'], 'fau_person_univis_id', true), 0);
-                        extract($fields);                   
-                        if( !empty( $familyName ) ) {
-                            $name = $familyName;
-                            if( !empty( $givenName ) ) {
-                                $name = $name . ', ' . $givenName;
+                
+                        if( !empty( $fields['familyName'] ) ) {
+                            $name = $fields['familyName'];
+			    
+                            if ((!empty( $fields['givenName']))  && ($sorttype == 'name')) {
+                                $name = $fields['familyName'] . ', ' . $fields['givenName'];
                             }
+			    
                         } else {
                             $name = $personlist[$key]['post_title'];                   
                             if( ltrim( strpos( $name, ' ' ) ) ) {
@@ -250,7 +252,13 @@ class Data {
                 }
                 $temp[$key] = strtolower($name);
             }
-            array_multisort($temp, $personlist);
+	    if ($order=='desc') {
+		echo "ORDER DESC";
+		  array_multisort($temp, SORT_DESC, SORT_STRING, $personlist);
+	    } else {
+		  array_multisort($temp, SORT_ASC, SORT_STRING, $personlist);
+	    }
+          
             return $personlist;  
         }
     }
@@ -311,7 +319,158 @@ class Data {
          return $res;
     }
     
-    
+    public static function create_kontakt_markup($id = 0, $showargs = array(), $blocktag = 'div', $class = '', $schema = true) {
+	if ($id == 0) {
+	    return;
+	}
+	$fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);  	    
+	// $showdata = $fields;
+	
+	if ((isset($showargs)) && (is_array($showargs))) {
+	    foreach ($showargs as $key => $value) {
+		if ($showargs[$key] == true) {
+		    if (isset($fields[$key])) {
+			$showdata[$key] = $fields[$key];
+		    }
+		} 
+	    }
+	} else {
+	    $showdata = $fields;
+	} 
+	
+	Main::enqueueForeignThemes();
+	$viewopts = self::get_viewsettings();
+	
+	$data = $showdata;
+	$surroundingtag = 'span';
+	if ($showdata['permalink']) {
+	    $data['url'] = get_permalink($id);
+	    $surroundingtag = 'a';
+	}
+	if (!empty(get_the_title($id))) {
+             $data['name'] = get_the_title($id);
+         }
+	if (get_post_field('post_excerpt', $id)) {
+            $excerpt = get_post_field('post_excerpt', $id);
+        } else {
+            $post = get_post($id);
+            if ($post->post_content)
+                $excerpt = wp_trim_excerpt($post->post_content);
+        }
+        
+	$fullname = Schema::create_Name($data,'name','',$surroundingtag,false,$viewopts);
+	
+	$hoursavailable_output  = Schema::create_ContactPoint($showdata);
+	
+
+	if (isset($showargs['noborder']) && (!empty($showargs['noborder']))) {
+	   $class .=  esc_attr($showargs['noborder']);
+	}
+	if (isset($showargs['bg_color']) && (!empty($showargs['bg_color']))) {
+	    $class .=  esc_attr($showargs['bg_color']);
+	}
+	
+	$content = '<'.$blocktag.' class="fau-person person content-person';
+	if (!empty($class)) {
+	    $content .= ' '.$class;
+	}
+	$content .= '"';
+	
+	if ($schema) {
+	    $content .= ' itemscope itemtype="http://schema.org/Person">';
+	}
+	if ($showargs['format'] == 'kompakt' || $showargs['format'] == 'compactindex') {
+	     $content .= '<div class="compactindex">';
+	}
+	$content .= '<div class="row">';
+	
+	if ($showargs['bild']) {
+	    $content .= Data::create_kontakt_image($id, 'person-thumb-bigger', "person-thumb", true, true,'');	    
+	    $content .= '<div class="person-default-thumb">';
+	} else {
+	    $content .= '<div class="person-default">';
+	}
+	if ($showargs['hstart']) {
+	    $hstart = intval($showargs['hstart']);
+	} else {
+	    $hstart = 2;
+	}
+	if (($hstart <1) || ($hstart > 6)) {
+	    $hstart = 2;
+         }
+	 
+	 
+        $content .= '<h' . $hstart . '>';
+        $content .= $fullname;
+        $content .= '</h' . $hstart . '>';
+	
+	
+	$datacontent = '';	
+	
+	if (isset($showdata['jobTitle']) && (!empty($showdata['jobTitle']))) {
+             $datacontent .= '<span class="person-info-position" itemprop="jobTitle">' . $showdata['jobTitle'] . '</span><br>';
+	}
+	$orgadata = array();
+	if (isset($showdata['worksFor']) && (!empty($showdata['worksFor']))) { 
+	    $orgadata['name'] = $showdata['worksFor'];
+	}
+	if (isset($showdata['department']) && (!empty($showdata['department']))) { 
+	    $orgadata['department'] = $showdata['department'];
+	}
+	$datacontent .= Schema::create_Organization($orgadata,'p','worksFor','',false,false,false);
+	
+	
+	if (isset($showdata['connection_only']) && $showdata['connection_only']==false) {
+	    $adresse = Schema::create_PostalAdress($showdata, 'address','', 'address', true);
+	    if (isset($adresse)) {
+		$datacontent .= $adresse;
+	    } 
+	    $datacontent .= Schema::create_contactpointlist($showdata, 'ul', '', 'contactlist', 'li',$viewopts);
+	      
+	}
+	if (!empty($datacontent)) {
+	     $content .= '<div class="person-info">';
+	     $content .= $datacontent;
+	     $content .= '</div>';
+	}
+        
+
+         if ((!empty($fields['connection_text']) || !empty($fields['connection_options']) || !empty($fields['connections'])) && $showargs['showvia']==true) {
+	    $content .= self::fau_person_connection($fields['connection_text'], $fields['connection_options'], $fields['connections'], $hstart);
+	}
+	
+
+	    if (!($showargs['format'] == 'kompakt' || $showargs['format'] == 'compactindex')) {
+                $content .= '</div><div class="person-default-more">';
+	    }
+            if ($showargs['showoffice'] && $hoursavailable_output && empty($fields['connection_only'])) {
+                $content .= '<ul class="person-info">';
+                $content .= $hoursavailable_output;
+                $content .= '</ul>';
+            }
+	   if ((($showargs['format'] == 'liste') || ($showargs['format'] == 'listentry') || ($showargs['format'] == 'plain')) 
+                 && isset($excerpt) && (!empty($excerpt))) {
+                $content .= '<div class="person-info-description"><p>' . $excerpt . '</p></div>';
+	    }
+            if (($showargs['showdescription'] || $showargs['extended'] || $showargs['format'] == 'sidebar') && (!empty($showargs['showdescription']))) {
+                $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', 'fau-person') . ': </span>' . $fields['description'] . '</div>';
+	    }
+            if ($showargs['showlink'] && $showdata['url_permalink']) {
+		$content .= self::get_more_link($showdata['url_permalink']);
+            }
+      
+
+        $content .= '</div>';
+	
+	$content .= '</div>';
+	if ($showargs['format'] == 'kompakt' || $showargs['format'] == 'compactindex') {
+	     $content .= '</div>';
+	}
+	
+	$content .= '</'.$blocktag.'>';
+	return $content;
+	
+    }
     
     
     public static function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex = 0, $noborder, $hstart, $bg_color) {
@@ -357,7 +516,7 @@ class Data {
 	if (!empty(get_the_title($id))) {
              $data['name'] = get_the_title($id);
          }
-	$fullname = Schema::create_Name($data,'name','',$surroundingtag);
+	$fullname = Schema::create_Name($data,'name','',$surroundingtag,false,$viewopts);
         $hoursavailable_output  = Schema::create_ContactPoint($data);
 	
 	
@@ -458,7 +617,7 @@ class Data {
         $viewopts = self::get_viewsettings();
 	   	
         if ( !$is_shortcode || $showname ) {
-	    $content .= Schema::create_Name($fields,'name','','h2');
+	    $content .= Schema::create_Name($fields,'name','','h2',false,$viewopts);
         }
 	
         
@@ -516,74 +675,87 @@ class Data {
         return $content;
     }
 
-    
-    public static function fau_person_shortlist($id, $showdesc = false, $list = false, $showmail = false, $showtelefon = false) {
-        $fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
-
+    public static function fau_person_tablerow($id = 0, $display) {
+	if ($id == 0) {
+	    return;
+	}
+	$fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
 	$viewopts = self::get_viewsettings();
 	 
-	    
-        if ($fields['link']) {
-            $personlink = $fields['link'];
-        } else {
-            $personlink = get_permalink($id);
-        }
-        $content = '';
-        
+	$content = '';
+	Main::enqueueForeignThemes();
+	
+	$fields['permalink'] = get_permalink($id);
+	$fields['name'] = get_the_title($id);
+	
+	if (get_post_field('post_excerpt', $id)) {
+	    $fields['description']  = get_post_field('post_excerpt', $id);
+	} else {
+	    $post = get_post($id);
+	    if ($post->post_content) {
+		$fields['description']  = wp_trim_excerpt($post->post_content);
+	    }
+	}
+
+	$data = self::filter_fields($fields, $display);
+
+         $content .= '<tr class="person-info" itemscope itemtype="http://schema.org/Person">';
+         $content .= '<td>'.Schema::create_Name($data,'name','','a',false,$viewopts).'</td>';
+	$content .=  Schema::create_contactpointlist($data, '', '', '', 'td', $viewopts,true);
+
+        $content .= '</tr>';
+
+        return $content;	
+	
+    }
+    
+    
+    
+    public static function fau_person_shortlist($id, $display) {
+	if ($id == 0) {
+	    return;
+	}
+         $fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+	$viewopts = self::get_viewsettings();
+	 
+
+        $content = ''; 
 	Main::enqueueForeignThemes();
 
-	$data = $fields;
-	$surroundingtag = 'span';
-	if ($fields['showtitle']==false) {
-	    $data['honorificPrefix'] = '';
-	}
-	if ($fields['showsuffix']==false) {
-	    $data['honorificSuffix'] = '';
-	}
-	if ($personlink) {
-	    $data['url'] = $personlink;
-	    $surroundingtag = 'a';
-	}
-	if (!empty(get_the_title($id))) {
-             $data['name'] = get_the_title($id);
-         }
-        if ( $list ) {
-            $content .= '<div class="list">';
-	}
-	if ($showmail) {
-	    $fielddata['email'] = $fields['email'];
-	}
-	if ($showtelefon) {
-	    $fielddata['telephone'] = $fields['telephone'];
-	}
 
-
+	$fields['permalink'] = get_permalink($id);
+	$fields['name'] = get_the_title($id);
+	if (get_post_field('post_excerpt', $id)) {
+	    $fields['description']  = get_post_field('post_excerpt', $id);
+	} else {
+	    $post = get_post($id);
+	    if ($post->post_content) {
+		$fields['description']  = wp_trim_excerpt($post->post_content);
+	    }
+	}
+	$data = self::filter_fields($fields, $display);
 	
-        $content .= '<span class="person-info" itemscope itemtype="http://schema.org/Person">';
-        $content .=  Schema::create_Name($data,'name','',$surroundingtag);
+	
+
+        if ( $display['format']=='liste' ) {
+            $content .= '<li itemscope itemtype="http://schema.org/Person>';
+	} else {
+	    $content .= '<span itemscope itemtype="http://schema.org/Person">';
+	}
+        $content .=  Schema::create_Name($data,'name','','a',false,$viewopts);
 		
-	if (isset($fields['connection_only']) && $fields['connection_only']==false && $list) {
-	    $content .= Schema::create_contactpointlist($fielddata, 'span', '', 'person-info', 'span',$viewopts);
+	if (isset($data['connection_only']) && $data['connection_only']==false && $list) {
+	    $content .= Schema::create_contactpointlist($data, 'span', '', '', 'span',$viewopts);
 	}
 		
-	if ($showdesc) {
-	    if (get_post_field('post_excerpt', $id)) {
-		$excerpt = get_post_field('post_excerpt', $id);
-	    } else {
-		$post = get_post($id);
-		if ($post->post_content) {
-		    $excerpt = wp_trim_excerpt($post->post_content);
-		}
-	    }
-	    if (!empty($excerpt)) {
-		$content .= "<br>" . $excerpt;
-	    }
+	if ((isset($data['description'])) && (!empty($data['description']))) {	
+		$content .= "<br>" . $data['description'];
 	}
 
-        $content .= '</span>';
-
-        if ( $list ) {
-            $content .= '</div>';        
+        if ( $display['format']=='liste' ) {
+            $content .= '</li>';        
+	} else {
+	    $content .= '</span>';
 	}
         return $content;
     }
@@ -617,7 +789,7 @@ class Data {
 	    if (!empty(get_the_title($id))) {
 		 $data['name'] = get_the_title($id);
 	     }
-	    $fullname = Schema::create_Name($data,'name','',$surroundingtag);
+	    $fullname = Schema::create_Name($data,'name','',$surroundingtag,false,$viewopts);
 
 
              $content = '<div class="fau-person person sidebar" itemscope itemtype="http://schema.org/Person">' . "\n";
@@ -771,21 +943,18 @@ class Data {
 	    
 	    $contactlist .= '<li itemscope itemtype="http://schema.org/Person">';
 	    
+	    $data['permalink'] = get_permalink($data['nr']);
             if ($data['link']) {
-                $personlink = $data['link'];
-            } else {
-                $personlink = get_permalink($data['nr']);
+                $data['url'] = $data['link'];
             }
 	    $oldurl  = $data['url'];
-	    if ($personlink) {
-
-		$data['url'] = $personlink;
+	    if (($data['permalink']) || ($data['url'])) {
 		$surroundingtag = 'a';
 	    }
 	    if (!empty(get_the_title($data['nr']))) {
 		 $data['name'] = get_the_title($data['nr']);
 	     }
-	    $fullname = Schema::create_Name($data,'name','',$surroundingtag);
+	    $fullname = Schema::create_Name($data,'name','',$surroundingtag,false,$viewopts);
 	    $data['url'] = $oldurl;
 	    $contactlist .= $fullname;
 	     
@@ -808,6 +977,29 @@ class Data {
 
         return $content;
     }
+    
+    public static function filter_fields($input, $filter) {
+	if (!isset($input)) {
+	    return;
+	}
+	if (!isset($filter)) {
+	    return $input;
+	}
+	$res = array();
+	foreach ($input as $key => $value) {
+	    if (isset($filter[$key])) {
+		if ($filter[$key] == true) {
+		    $res[$key] = $input[$key];
+		} else {
+		    unset($res[$key]);
+		}
+	    } else {
+	//	$res[$key] = $input[$key];
+	    }
+	}
+	return $res;
+    }
+    
     
     
     public static function create_fau_standort($id, $showfields, $titletag = 'h2') {
@@ -1242,5 +1434,149 @@ class Data {
         return $fields;
     }
     
+
+    
+        public static function get_default_display($format = '') {
+	$display = '';
+	switch($format) {
+	    case 'name':
+		$display = 'titel, familyName, givenName, name, suffix';
+		break;
+	    case 'shortlist':
+		$display = 'titel, familyName, givenName, name, mail, telefon, suffix, permalink';
+		break;
+	    case 'plain':
+		$display = 'familyName, givenName, name';
+		break;
+	     case 'compactindex':
+	     case 'kompakt':
+		$display = 'titel, familyName, givenName, name, suffix, position, telefon, email, email, adresse, bild';		 
+		break;
+	    case 'full':
+	    case 'page':
+		$display = 'titel, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, mobil, email, fax, url, content, adresse, bild, permalink';  
+		break;
+	    case 'listentry':
+	    case 'liste':
+		$display = 'titel, familyName, givenName, name, suffix, telefon, email, fax, url, kurzbeschreibung, permalink';  
+		break;
+	     case 'sidebar':
+		$display = 'titel, familyName, givenName, name, suffix, raum, worksFor, jobTitle, telefon, email, fax, url, adresse, bild, permalink, sprechzeiten';  
+		break;
+	    case 'table': 
+		$display = 'titel, familyName, givenName, name, suffix, telefon, email, url, permalink';  
+		break;
+	    default:
+		$display = 'title, familyName, givenName, name, suffix, telefon, email, fax, url, adresse, bild, permalink';  
+	}	
+	return $display;
+    }
+
+    
+    
+    public static function get_display_field($format = '', $show = '',  $hide = '') {	
+	$display = 'title, name, suffix, telefon, email, permalink, url';
+	if (!empty($format)) {
+	    $display = self::get_default_display($format);
+	}
+	
+	$showfields = self::parse_liste($display,true);
+	
+	if ((isset($show)) && (!empty($show))) {
+	    $showfields = self::parse_liste($show, true, $showfields);
+	}
+	if ((isset($hide)) && (!empty($hide))) {
+	    $showfields = self::parse_liste($hide, false, $showfields);
+	}
+
+	$showfields = self::map_old_keys($showfields);
+	if (!empty($format)) {
+	    $showfields['format'] = $format;
+	}
+	return $showfields;
+    }
+    
+    
+    
+    public static function map_old_keys($liste) {
+	$newlist = array();
+	foreach ($liste as $key => $value) {
+	    switch($key) {
+		case 'kurzauszug':
+		   $newlist['description'] = $liste[$key];
+		   break;
+	         case 'organisation':
+	         case 'institution':
+		   $newlist['worksFor'] = $liste[$key];
+		   break;
+		case 'abteilung':
+		   $newlist['department'] = $liste[$key];
+		   break;
+	         case 'position':
+		   $newlist['jobTitle'] = $liste[$key];
+		   break;
+	         case 'bild':
+		   $newlist['bild'] = $liste[$key];
+		   $newlist['showthumb'] = $liste[$key];
+		   break;
+	       
+		case 'mail':
+		   $newlist['email'] = $liste[$key];
+		   break;   
+		case 'fax':
+		   $newlist['faxNumber'] = $liste[$key];
+		   break;   
+		case 'telefon':
+		   $newlist['telephone'] = $liste[$key];
+		   break;   
+		case 'fax':
+		   $newlist['faxNumber'] = $liste[$key];
+		   break;   
+		case 'mobil':
+		   $newlist['mobilePhone'] = $liste[$key];
+		   break;   
+		case 'webseite':
+		   $newlist['url'] = $liste[$key];
+		   break;   
+		case 'mehrlink':
+		   $newlist['link'] = $liste[$key];
+		   break;   
+		case 'suffix':
+		   $newlist['honorificSuffix'] = $liste[$key];
+		   break;   
+		case 'titel':
+		   $newlist['honorificPrefix'] = $liste[$key];
+		   break;   
+		case 'sprechzeiten':
+		   $newlist['hoursAvailable'] = $liste[$key];
+		   break;
+		case 'ansprechpartner':
+		   $newlist['showvia'] = $liste[$key];
+		   break;
+		case 'rahmen':
+		   $newlist['border'] = $liste[$key];
+		   break;
+	       default:
+		   $newlist[$key] = $liste[$key];
+	   }
+	    
+	}
+	return $newlist;
+	
+    }
+
+    public static function parse_liste($liste = '', $resbool=true, $showarray = array()) {
+	if (!empty($liste)) {
+	    
+	    $showvals = explode(',', $liste);
+	    foreach ($showvals as $value) {
+		$key = esc_attr(strtolower(trim($value)));
+		if (!empty($key)) {
+		    $showarray[$key] = $resbool;
+		}
+	    }
+	}   
+	return $showarray;
+    }
 
 }

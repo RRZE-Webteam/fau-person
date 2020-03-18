@@ -159,9 +159,25 @@ class Schema {
     
     
      
-    public static function create_Name( $data, $itemprop = 'name', $class = '', $surroundingtag = 'span', $suffixbracket = false ) {
+    public static function create_Name( $data, $itemprop = 'name', $class = '', $surroundingtag = 'span', $suffixbracket = false, $args = array() ) {
 	if (!is_array($data)) {
 	    return;
+	}
+	
+	
+	$url = '';
+	if (isset($args['view_kontakt_linkname'])) {
+	    if (!empty($args['view_kontakt_linkname'])) {
+		$urlsource = $args['view_kontakt_linkname'];
+		if (isset($data[$urlsource])) {
+		    $url = self::get_sanitized_url($data[$urlsource]);
+		}
+	    }
+	} 
+	    
+	    
+	if (($surroundingtag == 'a') && (empty($url))) {
+	    $surroundingtag = 'span';
 	}
 	$res = '<'.$surroundingtag;
 	
@@ -169,9 +185,7 @@ class Schema {
 	    $res .= ' class="'.esc_attr($class).'"';
 	}
 	if ($surroundingtag == 'a') {
-	    if ((isset($data['url'])) && (!empty($data['url']))) {
-		$res .= ' href="'.esc_url($data['url']).'"';
-	    }
+	    $res .= ' href="'.esc_url($url).'"';
 	} elseif (!empty($itemprop)) {
 	    $res .= ' itemprop="'.$itemprop.'"';
 	}
@@ -233,20 +247,22 @@ class Schema {
 	return;
     }
     
-    public static function create_contactpointlist($data, $blockstart = 'ul', $itemprop = '', $class = 'person-info', $liststart = 'li', $args = array()) {
+    public static function create_contactpointlist($data, $blockstart = 'ul', $itemprop = '', $class = 'person-info', $liststart = 'li', $args = array(), $fillempty = false) {
 	if (!is_array($data)) {
 	    return;
 	}
 	$filled = false;
-	$res = '<'.$blockstart;
-	if (!empty($itemprop)) {
-	    $res .= ' itemprop="'.$itemprop.'"';
+	$res  = '';
+	if (!empty($blockstart)) {
+	    $res .= '<'.$blockstart;
+	    if (!empty($itemprop)) {
+		$res .= ' itemprop="'.$itemprop.'"';
+	    }
+	    if (!empty($class)) {
+		$res .= ' class="'.esc_attr($class).'"';
+	    }
+	    $res .= '>';
 	}
-	if (!empty($class)) {
-	    $res .= ' class="'.esc_attr($class).'"';
-	}
-	$res .= '>';
-	
 	$phoneuri = true;
 	$intformat = true;
 	if (isset($args) && is_array($args)) {	    
@@ -275,6 +291,10 @@ class Schema {
 	    }
 	    $res .= '</'.$liststart.'>';
 	    $filled = true;
+	} elseif (($fillempty) && isset($data['telephone'])) {
+	    $res .= '<'.$liststart.'>';
+	    $res .= '</'.$liststart.'>';
+	    $filled = true;
 	}
 	
 	if ((isset($data['mobilePhone'])) && (!empty($data['mobilePhone']))) {
@@ -292,7 +312,12 @@ class Schema {
 	    }
 	    $res .= '</'.$liststart.'>';
 	     $filled = true;
+	} elseif (($fillempty)  && isset($data['mobilePhone'])) {
+	    $res .= '<'.$liststart.'>';
+	    $res .= '</'.$liststart.'>';
+	    $filled = true;
 	}
+	
 	
 	if ((isset($data['faxNumber'])) && (!empty($data['faxNumber']))) {
 	    $res .= '<'.$liststart.' class="person-info-fax faxNumber">';
@@ -309,7 +334,12 @@ class Schema {
 	    }
 	    $res .= '</'.$liststart.'>';
 	     $filled = true;
+	} elseif (($fillempty)  && isset($data['faxNumber'])) {
+	    $res .= '<'.$liststart.'>';
+	    $res .= '</'.$liststart.'>';
+	    $filled = true;
 	}
+	
 	
 	if ((isset($data['email'])) && (!empty($data['email']))) {
 	    $res .= '<'.$liststart.' class="person-info-email email">';
@@ -317,7 +347,12 @@ class Schema {
 	    $res .= '<a itemprop="email" href="mailto:'.self::get_email_uri($data['email']).'">' . self::get_email_uri($data['email']) . '</a>';
 	    $res .= '</'.$liststart.'>';
 	     $filled = true;
+	} elseif (($fillempty)  && isset($data['email'])) {
+	    $res .= '<'.$liststart.'>';
+	    $res .= '</'.$liststart.'>';
+	    $filled = true;
 	}
+	
 	
 	if ((isset($data['url'])) && (!empty($data['url']))) {
 	    $res .= '<'.$liststart.' class="person-info-www url">';
@@ -325,9 +360,15 @@ class Schema {
 	    $res .= '<a itemprop="url" href="'.self::get_sanitized_url($data['url']).'">' . self::get_sanitized_url($data['url']) . '</a>';
 	    $res .= '</'.$liststart.'>';
 	     $filled = true;
+	} elseif (($fillempty)  && isset($data['url'])) {
+	    $res .= '<'.$liststart.'>';
+	    $res .= '</'.$liststart.'>';
+	    $filled = true;
 	}
 	
-	$res .= '</'.$blockstart.'>';
+	if (!empty($blockstart)) {
+	    $res .= '</'.$blockstart.'>';
+	}
 	if ( $filled ) {
 	    return $res;
 	}

@@ -30,7 +30,7 @@ class Main {
     public function __construct($pluginFile) {
         $this->pluginFile = $pluginFile;
 	define( 'PLUGIN_FILE', $pluginFile);
-	
+	add_action( 'wp_enqueue_scripts', $this->registerPluginStyles );
     }
 
     /**
@@ -45,8 +45,7 @@ class Main {
 	// $this->options = $settings->options;
 
 	$this->define_image_sizes();
-	 wp_register_style('fau-person', plugins_url('css/fau-person.css', plugin_basename($this->pluginFile)));
-	 //  wp_enqueue_style('fau-person');
+	
 	// Posttypes 
         $taxonomies = new Taxonomy($this->pluginFile, $settings);
         $taxonomies->onLoaded();
@@ -84,10 +83,16 @@ class Main {
 	return;			
     }
     
+    
+    
+    
+    public static function registerPluginStyles() {
+	 wp_register_style('fau-person', plugins_url('css/fau-person.css', plugin_basename($this->pluginFile)));
+    }
 
 
       
-    public function enqueueForeignThemes() {
+    public static function enqueueForeignThemes() {
 	/* $constants = getConstants();
 	$themelist = $constants['fauthemes'];
 	$foreign = 1;

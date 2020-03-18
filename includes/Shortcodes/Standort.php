@@ -28,37 +28,7 @@ class Standort extends Shortcodes {
 	add_shortcode('standort', [$this, 'shortcode_standort'], 10, 2);
     }
    
-/*
-    public function gutenberg_init() {
-        // Skip block registration if Gutenberg is not enabled/merged.
-        if ( ! function_exists( 'register_block_type' ) ) {
-            return;
-        }
-        $js = '../js/gutenberg.js';
-        
-        wp_register_script(
-            'fau-person' . '-editor',
-            plugins_url( $js, __FILE__ ),
-            array(
-                'wp-blocks',
-                'wp-i18n',
-                'wp-element',
-                'wp-components',
-                'wp-editor'
-            ),
-            filemtime( dirname( __FILE__ ) . '/' . $js )
-        );
 
-        wp_localize_script( 'fau-person' . '-editor', 'phpConfig', $this->shortcodesettings );
-
-        register_block_type( 'FAU_Person/Standort', array(
-            'editor_script' => 'fau-person' . '-editor',
-            'render_callback' => [$this, 'shortcode_standort'],
-            'attributes' => $this->shortcodesettings['standort']
-            ) 
-        );
-    }     
-    */
     public static function shortcode_standort( $atts, $content = null) {
 	$defaults = getShortcodeDefaults('standort');
          extract(shortcode_atts($defaults, $atts));
