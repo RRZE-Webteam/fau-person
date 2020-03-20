@@ -30,14 +30,14 @@ class Main {
     public function __construct($pluginFile) {
         $this->pluginFile = $pluginFile;
 	define( 'PLUGIN_FILE', $pluginFile);
-	add_action( 'wp_enqueue_scripts', $this->registerPluginStyles );
+
     }
 
     /**
      * Es wird ausgeführt, sobald die Klasse instanziiert wird.
      */
     public function onLoaded() {
-	
+	 add_action('wp_enqueue_scripts', [$this, 'registerPluginStyles']);
 	// Settings-Klasse wird instanziiert.
         $settings = new Settings($this->pluginFile);
         $settings->onLoaded();
@@ -86,7 +86,7 @@ class Main {
     
     
     
-    public static function registerPluginStyles() {
+    public function registerPluginStyles() {
 	 wp_register_style('fau-person', plugins_url('css/fau-person.css', plugin_basename($this->pluginFile)));
     }
 

@@ -265,7 +265,7 @@ function getFields() {
 		'default' => false,
             ],
 	     [
-		'name'  => 'show_ansprechpartner',
+		'name'  => 'ansprechpartner',
 		'label' => __('Ansprechpartner', 'fau-person'),
 		 'desc'=> __('Im Sidebar-Widget werden nur dann Ansprechpartner gezeigt, wenn dieser Wert aktiviert ist oder alternativ bei dem Personeneintrag eingestellt ist, daß der Kontakt ausschließlich über angegebene Ansprechpartner erfolgt.','fau-person'),
 		'type'  => 'checkbox',
@@ -369,120 +369,7 @@ function getShortcodeSettings(){
 			'label' => __( 'Kategorie', 'fau-person' ),
 			'type' => 'text' // Variablentyp der Eingabe
 		],
-		'showlink' => [
-			'default' => false,
-			'field_type' => 'checkbox', // Art des Feldes im Gutenberg Editor
-			'label' => __( 'Link anzeigen', 'fau-person' ),
-			'type' => 'boolean' // Variablentyp der Eingabe
-		],
-		'showfax' => [
-			'default' => false,
-			'field_type' => 'checkbox', // Art des Feldes im Gutenberg Editor
-			'label' => __( 'Fax anzeigen', 'fau-person' ),
-			'type' => 'boolean' // Variablentyp der Eingabe
-		],
-		'showwebsite' => [
-			'default' => false,
-			'field_type' => 'checkbox', // Art des Feldes im Gutenberg Editor
-			'label' => __( 'Webseite anzeigen', 'fau-person' ),
-			'type' => 'boolean' // Variablentyp der Eingabe
-		],
-		'showaddress' => [
-			'default' => false,
-			'field_type' => 'checkbox', // Art des Feldes im Gutenberg Editor
-			'label' => __( 'Adresse anzeigen', 'fau-person' ),
-			'type' => 'boolean' // Variablentyp der Eingabe
-		],
-		'showroom' => [
-			'default' => false,
-			'field_type' => 'checkbox', // Art des Feldes im Gutenberg Editor
-			'label' => __( 'Raum anzeigen', 'fau-person' ),
-			'type' => 'boolean' // Variablentyp der Eingabe
-		],
-		'showdescription' => [
-			'default' => false,
-			'field_type' => 'checkbox',
-			'label' => __( 'Kurzbeschreibung anzeigen', 'fau-person' ),
-			'type' => 'boolean' 
-		],
-		'showlist' => [
-			'default' => false,
-			'field_type' => 'checkbox',
-			'label' => __( 'Als Listenelement anzeigen', 'fau-person' ),
-			'type' => 'boolean' 
-		],
-		'showsidebar' => [
-			'default' => false,
-			'field_type' => 'checkbox', 
-			'label' => __( 'Als Element der Sidebar anzeigen', 'fau-person' ),
-			'type' => 'boolean'
-		],
-		'showthumb' => [
-			'default' => false,
-			'field_type' => 'checkbox', 
-			'label' => __( 'Personenbild als Thumb anzeigen', 'fau-person' ),
-			'type' => 'boolean' 
-		],
-		'showoffice' => [
-			'default' => false,
-			'field_type' => 'checkbox',
-			'label' => __( 'Büro anzeigen', 'fau-person' ),
-			'type' => 'boolean' 
-		],
-		'showtitle' => [
-			'default' => true,
-			'field_type' => 'checkbox',
-			'label' => __( 'Akademischer Titel anzeigen', 'fau-person' ),
-			'type' => 'boolean' 
-		],
-		'showsuffix' => [
-			'default' => true,
-			'field_type' => 'checkbox',
-			'label' => __( 'Akademischer Fachbereich (nach dem Namen) anzeigen', 'fau-person' ),
-			'type' => 'boolean' 
-		],
-		'showposition' => [
-			'default' => true,
-			'field_type' => 'checkbox',
-			'label' => __( 'Berufsbezeichnung anzeigen', 'fau-person' ),
-			'type' => 'boolean' 
-		],
-		'showinstitution' => [
-			'default' => true,
-			'field_type' => 'checkbox',
-			'label' => __( 'Einrichtung anzeigen', 'fau-person' ),
-			'type' => 'boolean' 
-		],
-		'showabteilung' => [
-			'default' => true,
-			'field_type' => 'checkbox',
-			'label' => __( 'Abteilung oder Referat anzeigen', 'fau-person' ),
-			'type' => 'boolean' 
-		],
-		'showmail' => [
-			'default' => true,
-			'field_type' => 'checkbox',
-			'label' => __( 'E-Mailadresse anzeigen', 'fau-person' ),
-			'type' => 'boolean' 
-		],
-		'showtelefon' => [
-			'default' => true,
-			'field_type' => 'checkbox',
-			'label' => __( 'Telefonnummer anzeigen', 'fau-person' ),
-			'type' => 'boolean' 
-		],
-		'showmobile' => [
-			'default' => false,
-			'field_type' => 'checkbox',
-			'label' => __( 'Telefonnummer (Mobil/Handy) anzeigen', 'fau-person' ),
-			'type' => 'boolean' 
-		],
-		'extended' => [
-			'default' => false,
-			'field_type' => 'checkbox',
-			'label' => __( 'Erweitertes Format anzeigen', 'fau-person' ),
-			'type' => 'boolean' 
-		],
+		
 		'format' => [
 			'default' => '',
 			'field_type' => 'select',
@@ -554,6 +441,22 @@ function getShortcodeSettings(){
 			'label' => __( 'CSS Klassen, die der Shordcode erhalten soll.', 'fau-person' ),
 			'type' => 'string' 
 		],
+		'background' => [
+			'default' => '',
+			'field_type' => 'text',
+			'label' => __( 'Farbcode für den Hintergrund.', 'fau-person' ),
+			'type' => 'array',
+			'values' => [
+				'' => __( 'Kein', 'fau-person' ),
+				'med' => __( 'Med: Blau', 'fau-person' ),
+				'phil' => __( 'Phil: Oker', 'fau-person' ),
+				'tf' => __( 'TF: Silbern', 'fau-person' ),
+				'nat' => __( 'Nat: Meeresgrün', 'fau-person' ),
+				'rw' => __( 'RW: Bordeaurot', 'fau-person' ),
+				'fau' => __( 'FAU: Dunkelblau', 'fau-person' ),
+
+			],
+		],
 	    ],
 	    'kontaktliste' => [
 	       'category' => [
@@ -619,6 +522,28 @@ function getShortcodeSettings(){
 			'field_type' => 'number',
 			'label' => __( 'Überschriftenebene der ersten Überschrift', 'fau-person' ),
 			'type' => 'integer' 
+		],
+		'class' => [
+			'default' => '',
+			'field_type' => 'text',
+			'label' => __( 'CSS Klassen, die der Shordcode erhalten soll.', 'fau-person' ),
+			'type' => 'string' 
+		],
+		'background' => [
+			'default' => '',
+			'field_type' => 'text',
+			'label' => __( 'Farbcode für den Hintergrund.', 'fau-person' ),
+			'type' => 'array',
+			'values' => [
+				'' => __( 'Kein', 'fau-person' ),
+				'med' => __( 'Med: Blau', 'fau-person' ),
+				'phil' => __( 'Phil: Oker', 'fau-person' ),
+				'tf' => __( 'TF: Silbern', 'fau-person' ),
+				'nat' => __( 'Nat: Meeresgrün', 'fau-person' ),
+				'rw' => __( 'RW: Bordeaurot', 'fau-person' ),
+				'fau' => __( 'FAU: Dunkelblau', 'fau-person' ),
+
+			],
 		],
 
 	    ],

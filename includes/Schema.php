@@ -434,10 +434,18 @@ class Schema {
 	    $res .= ' class="'.$class.'"';
 	}
 	$res .= ' itemtype="http://schema.org/OpeningHoursSpecification">';	
-	$hoursAvailable = $data['hoursAvailable'];
-	$hoursAvailable_group = $data['hoursAvailable_group'];
-	$hoursAvailable_text = $data['hoursAvailable_text'];
 	
+	$hoursAvailable = $hoursAvailable_group = $hoursAvailable_text = '';
+	
+	if ((isset($data['hoursAvailable'])) && (!empty($data['hoursAvailable']))) {
+	    $hoursAvailable = $data['hoursAvailable'];
+	}
+	if ((isset($data['hoursAvailable_group'])) && (!empty($data['hoursAvailable_group']))) {
+	    $hoursAvailable_group = $data['hoursAvailable_group'];
+	}
+	if ((isset($data['hoursAvailable_text'])) && (!empty($data['hoursAvailable_text']))) {
+	    $hoursAvailable_text = $data['hoursAvailable_text'];
+	}
 
         if(!empty($hoursAvailable) || !empty($hoursAvailable_group)) {
             

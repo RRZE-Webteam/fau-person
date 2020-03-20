@@ -11,7 +11,7 @@ defined('ABSPATH') || exit;
 class Data {
     
     
-    private static function get_viewsettings() {
+    private static function get_viewsettings($lookup = 'constants') {
 	$settings = new Settings(PLUGIN_FILE);
 	$settings->onLoaded();
 	$options = $settings->options;
@@ -19,13 +19,23 @@ class Data {
 	$viewopt = array();
 	    
 	foreach ($options as $section => $field) {
-	    if (substr($section,0,9) === 'constants') {
-		$keyname = preg_replace('/constants_/i','',$section);
-		$viewopt[$keyname] = $options[$section];
-	    }
+	    if ($lookup == 'sidebar') {
+		if (substr($section,0,7) === 'sidebar') {
+		    $keyname = preg_replace('/sidebar_/i','',$section);
+		    $viewopt[$keyname] = $options[$section];
+		}
+	    } else {
+		if (substr($section,0,9) === 'constants') {
+		    $keyname = preg_replace('/constants_/i','',$section);
+		    $viewopt[$keyname] = $options[$section];
+		}
+	    } 
 	} 
 	return $viewopt;
     }
+    
+    
+   
 
     public static function get_contactdata( $connection=0 ) {            
         $args = array(
@@ -216,7 +226,7 @@ class Data {
     }
     
     // Sortierung eines Arrays mit Objekten (z.B. bei einer Kategorie) alphabetisch nach Titel oder Nachname, je nach Typ
-    public function sort_person_posts( $personlist, $sorttype = 'name', $order = 'asc' ) {
+    public static function sort_person_posts( $personlist, $sorttype = 'name', $order = 'asc' ) {
         if ( is_array( $personlist ) ) {
             foreach( $personlist as $key => $value) {
                 $personlist[$key] = (array) $personlist[$key];
@@ -264,7 +274,7 @@ class Data {
     }
     
 
-    public function create_kontakt_image($id = 0, $size = 'person-thumb-page', $class = '', $defaultimage = false, $showlink = false, $linkttitle) {
+    public static function create_kontakt_image($id = 0, $size = 'person-thumb-page', $class = '', $defaultimage = false, $showlink = false, $linkttitle) {
 	if ($id==0) {
 	    return;
 	}
@@ -319,79 +329,73 @@ class Data {
          return $res;
     }
     
-    public static function create_kontakt_markup($id = 0, $showargs = array(), $blocktag = 'div', $class = '', $schema = true) {
-	if ($id == 0) {
+ 
+    
+    public static function fau_person_markup($id, $display = array(), $arguments = array()) {
+       	if ($id == 0) {
 	    return;
 	}
-	$fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);  	    
-	// $showdata = $fields;
-	
-	if ((isset($showargs)) && (is_array($showargs))) {
-	    foreach ($showargs as $key => $value) {
-		if ($showargs[$key] == true) {
-		    if (isset($fields[$key])) {
-			$showdata[$key] = $fields[$key];
-		    }
-		} 
-	    }
-	} else {
-	    $showdata = $fields;
-	} 
-	
-	Main::enqueueForeignThemes();
+	$fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
 	$viewopts = self::get_viewsettings();
+	 
+	$content = '';
+	Main::enqueueForeignThemes();
 	
-	$data = $showdata;
-	$surroundingtag = 'span';
-	if ($showdata['permalink']) {
-	    $data['url'] = get_permalink($id);
-	    $surroundingtag = 'a';
-	}
-	if (!empty(get_the_title($id))) {
-             $data['name'] = get_the_title($id);
-         }
+	$fields['permalink'] = get_permalink($id);
+	$fields['name'] = get_the_title($id);
+	
 	if (get_post_field('post_excerpt', $id)) {
-            $excerpt = get_post_field('post_excerpt', $id);
-        } else {
-            $post = get_post($id);
-            if ($post->post_content)
-                $excerpt = wp_trim_excerpt($post->post_content);
-        }
-        
-	$fullname = Schema::create_Name($data,'name','',$surroundingtag,false,$viewopts);
-	
-	$hoursavailable_output  = Schema::create_ContactPoint($showdata);
+	    $fields['description']  = get_post_field('post_excerpt', $id);
+	} else {
+	    $post = get_post($id);
+	    if ($post->post_content) {
+		$fields['description']  = wp_trim_excerpt($post->post_content);
+	    }
+	}
+
+	$data = self::filter_fields($fields, $display);
 	
 
-	if (isset($showargs['noborder']) && (!empty($showargs['noborder']))) {
-	   $class .=  esc_attr($showargs['noborder']);
+	
+	$fullname = Schema::create_Name($data,'name','','a',false,$viewopts);
+         $hoursavailable_output  = Schema::create_ContactPoint($data);
+
+
+	$class = 'fau-person person content-person';
+	if ((isset($arguments['class'])) && (!empty($arguments['class']))) {
+	    $class .= ' '.esc_attr($arguments['class']);
 	}
-	if (isset($showargs['bg_color']) && (!empty($showargs['bg_color']))) {
-	    $class .=  esc_attr($showargs['bg_color']);
+	if (isset($display['border'])) {
+	    if ($display['border']) {
+		$class .= ' border';
+	    } else {
+		$class .= ' noborder';
+	    }
+	}
+	if (isset($arguments['background']) && (!empty($arguments['background']))) {
+	    $bg_array = array('grau', 'fau', 'phil', 'med', 'nat', 'tf', 'rw');
+	    if (in_array($arguments['background'], $bg_array)) {
+		$class .=' background-' . esc_attr($arguments['background']);
+	    }
 	}
 	
-	$content = '<'.$blocktag.' class="fau-person person content-person';
-	if (!empty($class)) {
-	    $content .= ' '.$class;
+
+	 $content .= '<div class="'.$class.'" itemscope itemtype="http://schema.org/Person">' . "\n";
+
+	     
+         if (isset($arguments['format']) && $arguments['format'] =='kompakt') {
+            $content .= '<div class="compactindex">';
 	}
-	$content .= '"';
-	
-	if ($schema) {
-	    $content .= ' itemscope itemtype="http://schema.org/Person">';
-	}
-	if ($showargs['format'] == 'kompakt' || $showargs['format'] == 'compactindex') {
-	     $content .= '<div class="compactindex">';
-	}
-	$content .= '<div class="row">';
-	
-	if ($showargs['bild']) {
+        $content .= '<div class="row">';
+
+        if (isset($display['bild']) && (!empty($display['bild']))) {
 	    $content .= Data::create_kontakt_image($id, 'person-thumb-bigger', "person-thumb", true, true,'');	    
 	    $content .= '<div class="person-default-thumb">';
 	} else {
 	    $content .= '<div class="person-default">';
 	}
-	if ($showargs['hstart']) {
-	    $hstart = intval($showargs['hstart']);
+	if ($arguments['hstart']) {
+	    $hstart = intval($arguments['hstart']);
 	} else {
 	    $hstart = 2;
 	}
@@ -399,7 +403,6 @@ class Data {
 	    $hstart = 2;
          }
 	 
-	 
         $content .= '<h' . $hstart . '>';
         $content .= $fullname;
         $content .= '</h' . $hstart . '>';
@@ -407,25 +410,25 @@ class Data {
 	
 	$datacontent = '';	
 	
-	if (isset($showdata['jobTitle']) && (!empty($showdata['jobTitle']))) {
-             $datacontent .= '<span class="person-info-position" itemprop="jobTitle">' . $showdata['jobTitle'] . '</span><br>';
+	if (isset($data['jobTitle']) && (!empty($data['jobTitle']))) {
+             $datacontent .= '<span class="person-info-position" itemprop="jobTitle">' . $data['jobTitle'] . '</span><br>';
 	}
 	$orgadata = array();
-	if (isset($showdata['worksFor']) && (!empty($showdata['worksFor']))) { 
-	    $orgadata['name'] = $showdata['worksFor'];
+	if (isset($data['worksFor']) && (!empty($data['worksFor']))) { 
+	    $orgadata['name'] = $data['worksFor'];
 	}
-	if (isset($showdata['department']) && (!empty($showdata['department']))) { 
-	    $orgadata['department'] = $showdata['department'];
+	if (isset($data['department']) && (!empty($data['department']))) { 
+	    $orgadata['department'] = $data['department'];
 	}
 	$datacontent .= Schema::create_Organization($orgadata,'p','worksFor','',false,false,false);
 	
 	
-	if (isset($showdata['connection_only']) && $showdata['connection_only']==false) {
-	    $adresse = Schema::create_PostalAdress($showdata, 'address','', 'address', true);
+	if (isset($data['connection_only']) && $data['connection_only']==false) {
+	    $adresse = Schema::create_PostalAdress($data, 'address','', 'address', true);
 	    if (isset($adresse)) {
 		$datacontent .= $adresse;
 	    } 
-	    $datacontent .= Schema::create_contactpointlist($showdata, 'ul', '', 'contactlist', 'li',$viewopts);
+	    $datacontent .= Schema::create_contactpointlist($data, 'ul', '', 'contactlist', 'li',$viewopts);
 	      
 	}
 	if (!empty($datacontent)) {
@@ -434,230 +437,127 @@ class Data {
 	     $content .= '</div>';
 	}
         
+	    
+	if ((!empty($data['connection_text']) || !empty($data['connection_options']) || !empty($data['connections'])) && isset($display['ansprechpartner']) && $display['ansprechpartner']==true) {
+	    $content .= self::fau_person_connection($data['connection_text'], $data['connection_options'], $data['connections'], $hstart);
+	}
 
-         if ((!empty($fields['connection_text']) || !empty($fields['connection_options']) || !empty($fields['connections'])) && $showargs['showvia']==true) {
-	    $content .= self::fau_person_connection($fields['connection_text'], $fields['connection_options'], $fields['connections'], $hstart);
+	
+	 if (!isset($arguments['format']) || $arguments['format'] !=='kompakt') {
+                $content .= '</div><div class="person-default-more">';
+	}
+	    
+	    
+	    
+	if (isset($data['connection_only']) && ($data['connection_only']==false) && isset($display['hoursAvailable']) && ($display['hoursAvailable'])) {
+	    $content .=   Schema::create_ContactPoint($data);
 	}
 	
+	if (!empty($data['description']) && isset($display['kurzbeschreibung']) && (!empty($display['kurzbeschreibung']))) {
+             $content .= '<div class="person-info-description" itemprop="description"><p>' . $data['description'] . '</p></div>' . "\n";
+	}
 
-	    if (!($showargs['format'] == 'kompakt' || $showargs['format'] == 'compactindex')) {
-                $content .= '</div><div class="person-default-more">';
-	    }
-            if ($showargs['showoffice'] && $hoursavailable_output && empty($fields['connection_only'])) {
-                $content .= '<ul class="person-info">';
-                $content .= $hoursavailable_output;
-                $content .= '</ul>';
-            }
-	   if ((($showargs['format'] == 'liste') || ($showargs['format'] == 'listentry') || ($showargs['format'] == 'plain')) 
-                 && isset($excerpt) && (!empty($excerpt))) {
-                $content .= '<div class="person-info-description"><p>' . $excerpt . '</p></div>';
-	    }
-            if (($showargs['showdescription'] || $showargs['extended'] || $showargs['format'] == 'sidebar') && (!empty($showargs['showdescription']))) {
-                $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', 'fau-person') . ': </span>' . $fields['description'] . '</div>';
-	    }
-            if ($showargs['showlink'] && $showdata['url_permalink']) {
-		$content .= self::get_more_link($showdata['url_permalink']);
+
+
+            if (isset($display['link']) && (!empty($display['link']))) {
+		$content .= self::get_more_link($data['permalink'] );
             }
       
 
         $content .= '</div>';
-	
-	$content .= '</div>';
-	if ($showargs['format'] == 'kompakt' || $showargs['format'] == 'compactindex') {
-	     $content .= '</div>';
-	}
-	
-	$content .= '</'.$blocktag.'>';
-	return $content;
-	
-    }
-    
-    
-    public static function fau_person_markup($id, $extended, $showlink, $showfax, $showwebsite, $showaddress, $showroom, $showdescription, $showlist, $showsidebar, $showthumb, $showoffice, $showtitle, $showsuffix, $showposition, $showinstitution, $showabteilung, $showmail, $showtelefon, $showmobile, $showvia, $compactindex = 0, $noborder, $hstart, $bg_color) {
-        $fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
-        // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
-        extract($fields);
-        if ($showvia !== 0 && !empty($connections))
-            $showvia = 1;
-        if ($showvia === 0 && !empty($connection_only))
-            $connection_only = '';
-        
-        Main::enqueueForeignThemes();
-	$viewopts = self::get_viewsettings();
-	   
-
-        if ($link) {
-            $personlink = $link;
-        } else {
-            $personlink = get_permalink($id);
-        }
-
-        if (get_post_field('post_excerpt', $id)) {
-            $excerpt = get_post_field('post_excerpt', $id);
-        } else {
-            $post = get_post($id);
-            if ($post->post_content)
-                $excerpt = wp_trim_excerpt($post->post_content);
-        }
-        
-	
-	$data = $fields;
-	$surroundingtag = 'span';
-	if ($showtitle==false) {
-	    $data['honorificPrefix'] = '';
-	}
-	if ($showsuffix==false) {
-	    $data['honorificSuffix'] = '';
-	}
-	if ($personlink) {
-	    $data['url'] = $personlink;
-	    $surroundingtag = 'a';
-	}
-	if (!empty(get_the_title($id))) {
-             $data['name'] = get_the_title($id);
-         }
-	$fullname = Schema::create_Name($data,'name','',$surroundingtag,false,$viewopts);
-        $hoursavailable_output  = Schema::create_ContactPoint($data);
-	
-	
-        $content = '<div class="fau-person person content-person' . $noborder . $bg_color . '" itemscope itemtype="http://schema.org/Person">';
-        if ($compactindex) {
-            $content .= '<div class="compactindex">';
-	}
-        $content .= '<div class="row">';
-
-        if ($showthumb) {
-	    $content .= Data::create_kontakt_image($id, 'person-thumb-bigger', "person-thumb", true, true,'');	    
-	    $content .= '<div class="person-default-thumb">';
-	} else {
-	    $content .= '<div class="person-default">';
-	}
-
-        $content .= '<h' . $hstart . '>';
-        $content .= $fullname;
-        $content .= '</h' . $hstart . '>';
-	
-	
-	$datacontent = '';	
-	
-	if (isset($fields['jobTitle']) && (!empty($fields['jobTitle']))) {
-             $datacontent .= '<span class="person-info-position" itemprop="jobTitle">' . $fields['jobTitle'] . '</span><br>';
-	}
-	$orgadata = array();
-	if (isset($fields['worksFor']) && (!empty($fields['worksFor']))) { 
-	    $orgadata['name'] = $fields['worksFor'];
-	}
-	if (isset($fields['department']) && (!empty($fields['department']))) { 
-	    $orgadata['department'] = $fields['department'];
-	}
-	$datacontent .= Schema::create_Organization($orgadata,'p','worksFor','',false,false,false);
-	
-	
-	if (isset($fields['connection_only']) && $fields['connection_only']==false) {
-	    $adresse = Schema::create_PostalAdress($fields, 'address','', 'address', true);
-	    if (isset($adresse)) {
-		$datacontent .= $adresse;
-	    } 
-	    $datacontent .= Schema::create_contactpointlist($fields, 'ul', '', 'contactlist', 'li',$viewopts);
-	      
-	}
-	if (!empty($datacontent)) {
-	     $content .= '<div class="person-info">';
-	     $content .= $datacontent;
-	     $content .= '</div>';
-	}
-        
-
-        if ((!empty($connection_text) || !empty($connection_options) || !empty($connections)) && $showvia === 1)
-            $content .= self::fau_person_connection($connection_text, $connection_options, $connections, $hstart);
-
-        if (($showoffice && $hoursavailable_output && empty($connection_only)) 
-	    || ($showlist && isset($excerpt)) 
-	    || (($showsidebar || $extended) && (!empty($description))) 
-	    || ($showlink && $personlink)) {
-
-
-            if (!$compactindex) {
-                $content .= '</div><div class="person-default-more">';
-	    }
-            if ($showoffice && $hoursavailable_output && empty($connection_only)) {
-                $content .= '<ul class="person-info">';
-                $content .= $hoursavailable_output;
-                $content .= '</ul>';
-            }
-
-            if ($showlist && isset($excerpt) && (!empty($excerpt))) {
-                $content .= '<div class="person-info-description"><p>' . $excerpt . '</p></div>';
-	    }
-            if (($showdescription || $extended || $showsidebar) && (!empty($description))) {
-                $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', 'fau-person') . ': </span>' . $description . '</div>';
-	    }
-            if ($showlink && $personlink) {
-		$content .= self::get_more_link($personlink);
-            }
-        }
-
-        $content .= '</div>';
         $content .= '</div> <!-- /row-->';
 
-        if ($compactindex) {
+        if (isset($arguments['format']) && $arguments['format'] =='kompakt') {
             $content .= '</div>';   // ende div class compactindex
 	}
         $content .= '</div>';
         return $content;
     }
 
-    public static function fau_person_page($id, $is_shortcode = false, $showname = false) {
-        $content = '<div class="fau-person person page" itemscope itemtype="http://schema.org/Person">';
+    public static function fau_person_page($id, $display = array(), $arguments= array(), $is_shortcode = false) {
+    
         $fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
-        // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
-        extract($fields);
 
         Main::enqueueForeignThemes();
         $viewopts = self::get_viewsettings();
 	   	
-        if ( !$is_shortcode || $showname ) {
-	    $content .= Schema::create_Name($fields,'name','','h2',false,$viewopts);
-        }
+	$data = self::filter_fields($fields, $display);
+
+
+	if ((isset($arguments['hstart'])) && (!empty($arguments['hstart']))) {
+	    $hstart = intval($arguments['hstart']);
+	} else {
+	    $hstart = 2;
+	}
+	if (($hstart <1) || ($hstart > 6)) {
+	    $hstart = 2;
+         }
+	 
 	
-        
+	$class = 'fau-person person page';
+	if ((isset($arguments['class'])) && (!empty($arguments['class']))) {
+	    $class .= ' '.esc_attr($arguments['class']);
+	}
+	if (isset($display['border'])) {
+	    if ($display['border']) {
+		$class .= ' border';
+	    } else {
+		$class .= ' noborder';
+	    }
+	}
+	if (isset($arguments['background']) && (!empty($arguments['background']))) {
+	    $bg_array = array('grau', 'fau', 'phil', 'med', 'nat', 'tf', 'rw');
+	    if (in_array($arguments['background'], $bg_array)) {
+		$class .=' background-' . esc_attr($arguments['background']);
+	    }
+	}
+
+
+
+
+	$content = '<div class="'.$class.'" itemscope itemtype="http://schema.org/Person">';
+	     
+	
+	if ( $is_shortcode) {
+	    $content .= Schema::create_Name($data,'name','','h'.$hstart,false,$viewopts);
+         }
 	$content .= '<div class="person-meta">';
 	
 	$content .= Data::create_kontakt_image($id, 'person-thumb-page', "person-image alignright", false, false,'');	    
 
          $content .= '<div class="person-info">';
-         if (isset($fields['jobTitle']) && (!empty($fields['jobTitle']))) {
-             $content .= '<span class="person-info-position" itemprop="jobTitle">' . $fields['jobTitle'] . '</span><br>';
+         if (isset($data['jobTitle']) && (!empty($data['jobTitle']))) {
+             $content .= '<span class="person-info-position" itemprop="jobTitle">' . $data['jobTitle'] . '</span><br>';
 	}
 	$orgadata = array();
-	if (isset($fields['worksFor']) && (!empty($fields['worksFor']))) { 
-	    $orgadata['name'] = $fields['worksFor'];
+	if (isset($data['worksFor']) && (!empty($data['worksFor']))) { 
+	    $orgadata['name'] = $data['worksFor'];
 	}
-	if (isset($fields['department']) && (!empty($fields['department']))) { 
-	    $orgadata['department'] = $fields['department'];
+	if (isset($data['department']) && (!empty($data['department']))) { 
+	    $orgadata['department'] = $data['department'];
 	}
 	$content .= Schema::create_Organization($orgadata,'p','worksFor','',false,false,false);
 	
 	
-	if (isset($fields['connection_only']) && $fields['connection_only']==false) {
-	    $adresse = Schema::create_PostalAdress($fields, 'address','', 'address', true);
+	if (isset($data['connection_only']) && $data['connection_only']==false) {
+	    $adresse = Schema::create_PostalAdress($data, 'address','', 'address', true);
 	    if (isset($adresse)) {
 		$content .= $adresse;
 	    } 
 
-	    $content .= Schema::create_contactpointlist($fields, 'ul', '', 'contactlist', 'li',$viewopts);
+	    $content .= Schema::create_contactpointlist($data, 'ul', '', 'contactlist', 'li',$viewopts);
 	      
 	}
-	if ($fields['connection_only']==false) {
-	    $content .=   Schema::create_ContactPoint($fields);
+	 if (($data['connection_only']==false) && (isset($display['hoursAvailable'])) && $display['hoursAvailable']==true) {
+	    $content .=   Schema::create_ContactPoint($data);
 	}
            
 
 	$content .= '</div>';
 	$content .= '</div>';
 
-        if (!empty($connection_text) || !empty($connection_options) || !empty($connections)) {
-            $content .= self::fau_person_connection($connection_text, $connection_options, $connections, 2);
+        if (!empty($data['connection_text']) || !empty($data['connection_options']) || !empty($data['connections'])) {
+            $content .= self::fau_person_connection($data['connection_text'], $data['connection_options'], $data['connections'], $hstart);
 	}
 
         if ( is_singular( 'person' ) && in_the_loop() ) {
@@ -675,7 +575,7 @@ class Data {
         return $content;
     }
 
-    public static function fau_person_tablerow($id = 0, $display) {
+    public static function fau_person_tablerow($id = 0, $display = array(), $arguments = array()) {
 	if ($id == 0) {
 	    return;
 	}
@@ -702,7 +602,14 @@ class Data {
          $content .= '<tr class="person-info" itemscope itemtype="http://schema.org/Person">';
          $content .= '<td>'.Schema::create_Name($data,'name','','a',false,$viewopts).'</td>';
 	$content .=  Schema::create_contactpointlist($data, '', '', '', 'td', $viewopts,true);
-
+	
+	if ((isset($data['description'])) && (!empty($data['description'])) && isset($display['kurzbeschreibung']) && $display['kurzbeschreibung'] ) {	
+		$content .= "<td>" . $data['description'].'</td>';
+	}
+	
+	if (isset($data['connection_only']) && ($data['connection_only']==false) && isset($display['hoursAvailable']) && ($display['hoursAvailable'])) {
+	    $content .= '<td>'.  Schema::create_ContactPoint($data).'</td>';
+	}
         $content .= '</tr>';
 
         return $content;	
@@ -711,7 +618,7 @@ class Data {
     
     
     
-    public static function fau_person_shortlist($id, $display) {
+    public static function fau_person_shortlist($id, $display = array(), $arguments = array()) {
 	if ($id == 0) {
 	    return;
 	}
@@ -744,14 +651,19 @@ class Data {
 	}
         $content .=  Schema::create_Name($data,'name','','a',false,$viewopts);
 		
-	if (isset($data['connection_only']) && $data['connection_only']==false && $list) {
-	    $content .= Schema::create_contactpointlist($data, 'span', '', '', 'span',$viewopts);
-	}
-		
-	if ((isset($data['description'])) && (!empty($data['description']))) {	
-		$content .= "<br>" . $data['description'];
+	if (isset($data['connection_only']) && $data['connection_only']==false) {
+	    if ($display['format']=='liste' ) {
+		$content .= Schema::create_contactpointlist($data, 'span', '', '', 'span',$viewopts);
+	    }
+	    if (isset($display['hoursAvailable']) && $display['hoursAvailable']) {
+		$content .=   Schema::create_ContactPoint($data);
+	    }
 	}
 
+	if ((isset($data['description'])) && (!empty($data['description'])) && isset($display['kurzbeschreibung']) && $display['kurzbeschreibung']) {	
+		$content .= "<br>" . $data['description'];
+	}
+	
         if ( $display['format']=='liste' ) {
             $content .= '</li>';        
 	} else {
@@ -762,55 +674,86 @@ class Data {
 
    
     
-    public static function fau_person_sidebar($id, $title, $showlist = 0, $showinstitution = 0, $showabteilung = 0, $showposition = 0, $showtitle = 0, $showsuffix = 0, $showaddress = 0, $showroom = 0, $showtelefon = 0, $showfax = 0, $showmobile = 0, $showmail = 0, $showwebsite = 0, $showlink = 0, $showdescription = 0, $showoffice = 0, $showthumb = 0, $showvia = false, $hstart = 3) {
-        if (!empty($id)) {
-            $post = get_post($id);
+    public static function fau_person_sidebar($id, $display, $arguments = array()) {
+        	if ($id == 0) {
+	    return;
+	}
+         $fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+	$viewopts = self::get_viewsettings();
+	
 
-            $fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
-            // Jede Feldbezeichnung wird als Variable ansprechbar gemacht
-            extract($fields);
-	    $viewopts = self::get_viewsettings();
-	   
-	    Main::enqueueForeignThemes();
+        $content = ''; 
+	Main::enqueueForeignThemes();
 
-             if ($fields['link']) {
-                $personlink = $fields['link'];
-             } else {
-                $personlink = get_permalink($id);
-             }
-	    $data = $fields;
-	    $surroundingtag = 'span';
-	    
 
-	    if ($showlink && $personlink) {
-		$data['url'] = $personlink;
-		$surroundingtag = 'a';
+	$fields['permalink'] = get_permalink($id);
+	$fields['name'] = get_the_title($id);
+	if (get_post_field('post_excerpt', $id)) {
+	    $fields['description']  = get_post_field('post_excerpt', $id);
+	} else {
+	    $post = get_post($id);
+	    if ($post->post_content) {
+		$fields['description']  = wp_trim_excerpt($post->post_content);
 	    }
-	    if (!empty(get_the_title($id))) {
-		 $data['name'] = get_the_title($id);
-	     }
-	    $fullname = Schema::create_Name($data,'name','',$surroundingtag,false,$viewopts);
+	}
+	
+	
+	
+	$data = self::filter_fields($fields, $display);
+	$sitebaropts = self::map_old_keys(self::get_viewsettings('sidebar'));
+	foreach ($sitebaropts as $key => $value) {
+	    if (empty($sitebaropts[$key])) {
+		$display[$key] = false;
+	    } else {
+		$display[$key] = true;
+	    }
+	}
+	
+	$data = self::filter_fields($data, $sitebaropts);
 
+		
+	if (isset($arguments['hstart'])) {
+	    $hstart = intval($arguments['hstart']);
+	} else {
+	    $hstart = 2;
+	}
+	if (($hstart <1) || ($hstart > 6)) {
+	    $hstart = 2;
+         }
 
-             $content = '<div class="fau-person person sidebar" itemscope itemtype="http://schema.org/Person">' . "\n";
-             $content .= '<div class="side">';         
+	    $fullname = Schema::create_Name($data,'name','','a',false,$viewopts);
+
+	 
+
+	    $class = 'fau-person person sidebar';
+	    if ((isset($arguments['class'])) && (!empty($arguments['class']))) {
+		$class .= ' '.esc_attr($arguments['class']);
+	    }
+	    if (isset($display['border'])) {
+		if ($display['border']) {
+		    $class .= ' border';
+		} else {
+		    $class .= ' noborder';
+		}
+	    }
+	    if (isset($arguments['background']) && (!empty($arguments['background']))) {
+		$bg_array = array('grau', 'fau', 'phil', 'med', 'nat', 'tf', 'rw');
+		if (in_array($arguments['background'], $bg_array)) {
+		    $class .=' background-' . esc_attr($arguments['background']);
+		}
+	    }
 	
 	    
-	    if ($showtitle && (!empty($title))) {
-                $content .= '<h' . ($hstart-1) . ' class="small">' . $title . '</h' . ($hstart-1) . '>' . "\n";
-	    }
+		
+             $content = '<div class="'.$class.'" itemscope itemtype="http://schema.org/Person">' . "\n";
+             $content .= '<div class="side">';         
+		   
 	    $content .= '<div class="row">' . "\n";
-
-	    if (has_post_thumbnail($id) && $showthumb) {
+	    
+	    if ((isset($display['bild'])) && (!empty($display['bild'])) && (has_post_thumbnail($id) )) {
 		
-		$alttext = get_the_title($id);
-		$alttext = esc_html($alttext);
-		$targettitle = $targetlink = '';
-		
+		$alttext = esc_html($data['name']);		
 		$imagedata['alt'] = $alttext;
-		if ($showlink) {
-		    $targetlink = $personlink;
-		}
 		$image_id = get_post_thumbnail_id( $id ); 
 		$size = 'person-thumb-bigger';  // 'person-thumb-page', person-thumb-bigger
 		
@@ -824,7 +767,7 @@ class Data {
 		    $imagedata['srcset'] = $imgsrcset;
 		    $imagedata['sizes'] = $imgsrcsizes;
 		}
-                $content .= Schema::create_Image($imagedata, 'figure', 'image', 'person-thumb', true, $targetlink, $targettitle);
+                $content .= Schema::create_Image($imagedata, 'figure', 'image', 'person-thumb', true);
              }            
 
             $content .= '<div class="person-sidebar">' . "\n";
@@ -833,70 +776,49 @@ class Data {
             $content .= '</h' . $hstart . '>' . "\n";
             
              $content .= '<div class="person-info">';
-	     if ($showposition && isset($fields['jobTitle']) && (!empty($fields['jobTitle']))) {
-		 $content .= '<span class="person-info-position" itemprop="jobTitle">' . $fields['jobTitle'] . '</span><br>';
+	     if (isset($data['jobTitle']) && (!empty($data['jobTitle']))) {
+		 $content .= '<span class="person-info-position" itemprop="jobTitle">' . $data['jobTitle'] . '</span><br>';
 	    }
 	    $orgadata = array();
-	    if ($showinstitution && isset($fields['worksFor']) && (!empty($fields['worksFor']))) { 
+	    if (isset($data['worksFor']) && (!empty($data['worksFor']))) { 
 		$orgadata['name'] = $fields['worksFor'];
 	    }
-	    if ($showabteilung && isset($fields['department']) && (!empty($fields['department']))) { 
-		$orgadata['department'] = $fields['department'];
+	    if (isset($data['department']) && (!empty($data['department']))) { 
+		$orgadata['department'] = $data['department'];
 	    }
 	    $content .= Schema::create_Organization($orgadata,'p','worksFor','',false,false,false);
 
 
-
-	    if ($showroom==false) {
-		$fields['workLocation'] = '';
-	    } 
-	    if ($showtelefon==false) {
-		$fields['telephone'] = '';
-	    } 
-	    if ($showfax==false) {
-		$fields['faxNumber'] = '';
-	    } 
-	    if ($showmobile==false) {
-		$fields['mobilePhone'] = '';
-	    } 
-	    if ($showmail==false) {
-		$fields['email'] = '';
-	    } 
-	    if ($showwebsite==false) {
-		$fields['url'] = '';
-	    } 
-	    if ($showdescription==false) {
-		$fields['description'] = '';
-	    } 
-
-	    if (isset($fields['connection_only']) && $fields['connection_only']==false) {
-		$adresse = Schema::create_PostalAdress($fields, 'address','', 'address', true);
-		if ($showaddress && isset($adresse)) {
+	    if (isset($data['connection_only']) && $data['connection_only']==false) {
+		$adresse = Schema::create_PostalAdress($data, 'address','', 'address', true);
+		if (isset($adresse)) {
 		    $content .= $adresse;
 		} 
-		$content .= Schema::create_contactpointlist($fields, 'ul', '', 'contactlist', 'li',$viewopts); 
+		$content .= Schema::create_contactpointlist($data, 'ul', '', 'contactlist', 'li',$viewopts); 
+	    
+		if (isset($display['hoursAvailable']) && $display['hoursAvailable']) {
+		    $sprechzeitentitletag = 'h'.($hstart+1);
+		    $content .=   Schema::create_ContactPoint($data,'div','contactPoint','',$sprechzeitentitletag);
+		}
 	    }
-
-	    if ($showoffice && $fields['connection_only']==false) {
-		$sprechzeitentitletag = 'h'.($hstart+1);
-		$content .=   Schema::create_ContactPoint($fields,'div','contactPoint','',$sprechzeitentitletag);
-	    }
-
 	    $content .= '</div>';
 	
 
-            if ($description && $showdescription) {
-                $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', 'fau-person') . ': </span>' . $description . '</div>' . "\n";
-	    }
-            if ($showvia || $connection_only) {
-                $content .= self::fau_person_connection($connection_text, $connection_options, $connections, $hstart);
+            if (!empty($data['description']) && isset($display['kurzbeschreibung'])) {
+                $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', 'fau-person') . ': </span><span itemprop="description">' . $data['description'] . '</span></div>' . "\n";
 	    }
 	    
+	    if ((!empty($data['connection_text']) || !empty($data['connection_options']) || !empty($data['connections'])) && $display['ansprechpartner']==true) {
+		$content .= self::fau_person_connection($data['connection_text'], $data['connection_options'], $data['connections'], $hstart);
+	    }
+
+         
+
             $content .= '</div><!-- /sidebar -->';
             $content .= '</div><!-- /row -->';
             $content .= '</div><!-- /side -->';
             $content .= '</div><!-- /fau-person -->';
-        }
+   
         return $content;
     }
 
@@ -947,7 +869,11 @@ class Data {
             if ($data['link']) {
                 $data['url'] = $data['link'];
             }
-	    $oldurl  = $data['url'];
+	    
+	    $oldurl = '';
+	    if (isset($data['url'])) {
+		$oldurl = $data['url'];
+	    }
 	    if (($data['permalink']) || ($data['url'])) {
 		$surroundingtag = 'a';
 	    }
@@ -994,7 +920,7 @@ class Data {
 		    unset($res[$key]);
 		}
 	    } else {
-	//	$res[$key] = $input[$key];
+		$res[$key] = $input[$key];
 	    }
 	}
 	return $res;
@@ -1450,36 +1376,32 @@ class Data {
 		break;
 	     case 'compactindex':
 	     case 'kompakt':
-		$display = 'titel, familyName, givenName, name, suffix, position, telefon, email, email, adresse, bild';		 
+		$display = 'titel, familyName, givenName, name, suffix, position, telefon, email, email, adresse, bild, border';		 
 		break;
 	    case 'full':
 	    case 'page':
-		$display = 'titel, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, mobil, email, fax, url, content, adresse, bild, permalink';  
+		$display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, department, jobTitle, telefon, mobil, email, fax, url, content, adresse, bild, permalink, ansprechpartner';  
 		break;
 	    case 'listentry':
 	    case 'liste':
 		$display = 'titel, familyName, givenName, name, suffix, telefon, email, fax, url, kurzbeschreibung, permalink';  
 		break;
 	     case 'sidebar':
-		$display = 'titel, familyName, givenName, name, suffix, raum, worksFor, jobTitle, telefon, email, fax, url, adresse, bild, permalink, sprechzeiten';  
+		$display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, jobTitle, telefon, email, fax, url, adresse, bild, permalink, sprechzeiten, ansprechpartner';  
 		break;
 	    case 'table': 
 		$display = 'titel, familyName, givenName, name, suffix, telefon, email, url, permalink';  
 		break;
 	    default:
-		$display = 'title, familyName, givenName, name, suffix, telefon, email, fax, url, adresse, bild, permalink';  
+		$display = 'title, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, email, permalink';  
 	}	
 	return $display;
     }
 
     
-    
     public static function get_display_field($format = '', $show = '',  $hide = '') {	
-	$display = 'title, name, suffix, telefon, email, permalink, url';
-	if (!empty($format)) {
-	    $display = self::get_default_display($format);
-	}
-	
+	$display = self::get_default_display($format);
+
 	$showfields = self::parse_liste($display,true);
 	
 	if ((isset($show)) && (!empty($show))) {
@@ -1519,7 +1441,9 @@ class Data {
 		   $newlist['bild'] = $liste[$key];
 		   $newlist['showthumb'] = $liste[$key];
 		   break;
-	       
+	         case 'compactindex':
+		   $newlist['kompakt'] = $liste[$key];
+		   break;   
 		case 'mail':
 		   $newlist['email'] = $liste[$key];
 		   break;   
@@ -1551,7 +1475,7 @@ class Data {
 		   $newlist['hoursAvailable'] = $liste[$key];
 		   break;
 		case 'ansprechpartner':
-		   $newlist['showvia'] = $liste[$key];
+		   $newlist['ansprechpartner'] = $liste[$key];
 		   break;
 		case 'rahmen':
 		   $newlist['border'] = $liste[$key];
@@ -1570,7 +1494,7 @@ class Data {
 	    
 	    $showvals = explode(',', $liste);
 	    foreach ($showvals as $value) {
-		$key = esc_attr(strtolower(trim($value)));
+		$key = esc_attr(trim($value));
 		if (!empty($key)) {
 		    $showarray[$key] = $resbool;
 		}
