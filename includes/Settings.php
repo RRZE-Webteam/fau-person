@@ -657,6 +657,66 @@ class Settings {
     }
 
     /**
+     * Zeigt eine Auswahlliste (Selectbox) für ein Einstellungsfeld an zur Auswahl der im System verfügbaren Imagesizes an.
+     * @param array   $args Argumente des Einstellungsfelds
+     */
+    public function callbackSelectimagesizes($args)     {
+	global $_wp_additional_image_sizes;
+
+        $value = esc_attr($this->getOption($args['section'], $args['id'], $args['default']));
+        $size  = isset($args['size']) && !is_null($args['size']) ? $args['size'] : 'regular';
+        $html  = sprintf(
+            '<select class="%1$s" id="%3$s-%4$s" name="%2$s[%3$s_%4$s]">',
+            $size,
+            $this->optionName,
+            $args['section'],
+            $args['id']
+        );
+	
+	
+	
+	
+	$optionsizes = $args['options'];
+	$default_image_sizes = get_intermediate_image_sizes();
+
+	foreach ( $default_image_sizes as $size ) {
+	    $width= intval( get_option( "{$size}_size_w" ) );
+	    $height = intval( get_option( "{$size}_size_h" ) );
+	    if (($width > 0) && ($height > 0)) {
+		$label = ucfirst($size).' ('.$width.' x '.$height.')';
+		$optionsizes[$size] = $label;
+	    }
+	    
+	}
+
+	
+	if ( isset( $_wp_additional_image_sizes ) && count( $_wp_additional_image_sizes ) ) {	    
+	    foreach ($_wp_additional_image_sizes as $key => $val) {
+		$label = ucfirst($key).' ('.$val['width'].' x '.$val['height'].')';
+		$optionsizes[$key] = $label;
+	    }
+	}
+
+    
+    
+        foreach ($optionsizes as $key => $label) {
+            $html .= sprintf(
+                '<option value="%s"%s>%s</option>',
+                $key,
+                selected($value, $key, false),
+                $label
+            );
+ 
+        }
+
+        $html .= sprintf('</select>');
+        $html .= $this->getFieldDescription($args);
+
+        echo $html;
+    }
+
+    
+    /**
      * Zeigt ein Textfeld für ein Einstellungsfeld an.
      * @param array   $args Argumente des Einstellungsfelds
      */

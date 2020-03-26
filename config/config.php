@@ -21,15 +21,10 @@ function getConstants() {
 	    'UnivIS_Transient' => 'sui_1k4fu7056Kl12a5',
 	    'images' => [
 		/* Thumb for person-type; small for sidebar - Name: person-thumb */
-		'default_person_thumb_width'	=> 60,
-		'default_person_thumb_height'	=> 80,
+		'default_person_thumb_width'	=> 90,
+		'default_person_thumb_height'	=> 120,
 		'default_person_thumb_crop'	=> true,
 
-		/* Thumb for person-type; small for content - Name: person-thumb-bigger */
-		'default_person_thumb_bigger_width' => 90,
-		'default_person_thumb_bigger_height'=> 120,
-		'default_person_thumb_bigger_crop'  => true,
-		
 		/* Thumb for person-type; small for content - Name: person-thumb-page */
 		'default_person_thumb_page_width'   => 200,
 		'default_person_thumb_page_height'  => 300,
@@ -178,6 +173,17 @@ function getSections() {
  * @return array [description]
  */
 function getFields() {
+    $imagesizes = array();
+    $isizes = get_all_image_sizes();
+	
+    foreach ($isizes as $key => $value) {
+	if (($value['width'] > 0) && ($value['height'] > 0)) {
+	    $name = ucfirst($key);
+	    $imagesizes[$key] = $name. ' ('.$value['width'].' x '.$value['height'].')';
+	}
+    }
+    
+    
     return [
 	'sidebar' => [
 	    [
@@ -308,6 +314,23 @@ function getFields() {
 			''  => __( 'Nicht verlinken', 'fau-person' ),
 		],
 	    ],
+	    [
+		'name'  => 'view_kontakt_page_imagecaption',
+		'label' => __('Bildbeschrift Kontaktseite', 'fau-person'),	
+		'desc'  => __('Zeigt auf der Kontaktvisitenkarte und bei Nutzung des Shortcodes mit dem Attribut <code>format="page"</code> die Bildunterschriften eines Kontaktbildes an.', 'fau-person'),
+		'default' => 'permalink',
+		'type'  => 'checkbox',
+		'checked'   => true,
+		'default' => true,
+	    ],
+	     [
+		'name'  => 'view_kontakt_page_imagesize',
+		'label' => __('Bildformat Kontaktseite', 'fau-person'),	
+		'desc'  => __('Setzt auf der Kontaktseite oder bei Nutzung des Shortcodes mit dem Attribut <code>format="page"</code> das zu verwendete Bildformat.', 'fau-person'),
+		'default' => 'person-thumb-page',
+		'type' => 'Selectimagesizes', 
+		'options' => $imagesizes,
+	    ],
 
 	    [
 		'name'  => 'has_archive_page',
@@ -320,6 +343,28 @@ function getFields() {
 	
        
     ];
+}
+
+function get_all_image_sizes() {
+   
+   $image_sizes = array();
+
+   
+    $ownsizes = getConstants();
+    if (isset($ownsizes['images']['default_person_thumb_width' ])) {
+	$image_sizes['person-thumb']['width'] = $ownsizes['images']['default_person_thumb_width' ];
+	$image_sizes['person-thumb']['height'] = $ownsizes['images']['default_person_thumb_height'];
+
+    }
+    if (isset($ownsizes['images']['default_person_thumb_page_width' ])) {
+	$image_sizes['person-thumb-page']['width'] = $ownsizes['images']['default_person_thumb_page_width' ];
+	$image_sizes['person-thumb-page']['height'] = $ownsizes['images']['default_person_thumb_page_height'];
+    }
+    
+   
+    
+    
+    return $image_sizes;
 }
 
 

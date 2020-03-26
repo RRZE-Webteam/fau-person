@@ -145,7 +145,7 @@ class Kontakt extends Shortcodes {
 			    $content .= Data::fau_person_page($value, $displayfield, $arguments, true);
 			    break;
 			case 'sidebar':
-			    $content .= Data::fau_person_sidebar($value, $displayfield. $arguments);
+			    $content .= Data::fau_person_sidebar($value, $displayfield, $arguments);
 			    break;
 
 			default:

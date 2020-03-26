@@ -274,7 +274,7 @@ class Data {
     }
     
 
-    public static function create_kontakt_image($id = 0, $size = 'person-thumb-page', $class = '', $defaultimage = false, $showlink = false, $linkttitle) {
+    public static function create_kontakt_image($id = 0, $size = 'person-thumb-page', $class = '', $defaultimage = false, $showlink = false, $linkttitle = '', $showcaption = true) {
 	if ($id==0) {
 	    return;
 	}
@@ -302,6 +302,14 @@ class Data {
 		$imagedata['srcset'] = $imgsrcset;
 		$imagedata['sizes'] = $imgsrcsizes;
 	    }
+	    if ($showcaption) {	    
+		$attachment = get_post($image_id);	    
+		if (isset($attachment) && isset($attachment->post_excerpt)) {
+		    $imagedata['caption'] = trim(strip_tags( $attachment->post_excerpt ));
+		}
+		
+	    }
+	    
          }  elseif ($defaultimage) {
 	    $type = get_post_meta($id, 'fau_person_typ', true);
 	    if (defined(PLUGIN_FILE)) {
@@ -389,7 +397,7 @@ class Data {
         $content .= '<div class="row">';
 
         if (isset($display['bild']) && (!empty($display['bild']))) {
-	    $content .= Data::create_kontakt_image($id, 'person-thumb-bigger', "person-thumb", true, true,'');	    
+	    $content .= Data::create_kontakt_image($id, 'person-thumb', "person-thumb", true, true,'',false);	    
 	    $content .= '<div class="person-default-thumb">';
 	} else {
 	    $content .= '<div class="person-default">';
@@ -423,7 +431,8 @@ class Data {
 	$datacontent .= Schema::create_Organization($orgadata,'p','worksFor','',false,false,false);
 	
 	
-	if (isset($data['connection_only']) && $data['connection_only']==false) {
+	if ( (!isset($data['connection_only'])) 
+	    || ((isset($data['connection_only']) && $data['connection_only']==false))) {
 	    $adresse = Schema::create_PostalAdress($data, 'address','', 'address', true);
 	    if (isset($adresse)) {
 		$datacontent .= $adresse;
@@ -448,10 +457,13 @@ class Data {
 	}
 	    
 	    
-	    
-	if (isset($data['connection_only']) && ($data['connection_only']==false) && isset($display['hoursAvailable']) && ($display['hoursAvailable'])) {
-	    $content .=   Schema::create_ContactPoint($data);
-	}
+	 if ( (!isset($data['connection_only'])) 
+	    || ((isset($data['connection_only']) && $data['connection_only']==false))) {
+	     if (isset($data['hoursAvailable']) && ($data['hoursAvailable'])) {
+		$content .=   Schema::create_ContactPoint($data);
+	    }
+	 }   
+	
 	
 	if (!empty($data['description']) && isset($display['kurzbeschreibung']) && (!empty($display['kurzbeschreibung']))) {
              $content .= '<div class="person-info-description" itemprop="description"><p>' . $data['description'] . '</p></div>' . "\n";
@@ -512,18 +524,24 @@ class Data {
 	    }
 	}
 
-
+	$viewcaption = true;
+	if (isset($viewopts['view_kontakt_page_imagecaption'])) {
+	    $viewcaption = $viewopts['view_kontakt_page_imagecaption'];
+	}
+	$use_size = 'person-thumb-page';
+	if (isset($viewopts['view_kontakt_page_imagesize'])) {
+	    $use_size = $viewopts['view_kontakt_page_imagesize'];
+	}
 
 
 	$content = '<div class="'.$class.'" itemscope itemtype="http://schema.org/Person">';
-	     
+	
 	
 	if ( $is_shortcode) {
 	    $content .= Schema::create_Name($data,'name','','h'.$hstart,false,$viewopts);
          }
 	$content .= '<div class="person-meta">';
-	
-	$content .= Data::create_kontakt_image($id, 'person-thumb-page', "person-image alignright", false, false,'');	    
+	$content .= Data::create_kontakt_image($id, $use_size, "person-image alignright", false, false,'',$viewcaption);	    
 
          $content .= '<div class="person-info">';
          if (isset($data['jobTitle']) && (!empty($data['jobTitle']))) {
@@ -539,7 +557,8 @@ class Data {
 	$content .= Schema::create_Organization($orgadata,'p','worksFor','',false,false,false);
 	
 	
-	if (isset($data['connection_only']) && $data['connection_only']==false) {
+	if ((!isset($data['connection_only'])) || 
+	    ((isset($data['connection_only']) && $data['connection_only']===false))) {
 	    $adresse = Schema::create_PostalAdress($data, 'address','', 'address', true);
 	    if (isset($adresse)) {
 		$content .= $adresse;
@@ -547,9 +566,10 @@ class Data {
 
 	    $content .= Schema::create_contactpointlist($data, 'ul', '', 'contactlist', 'li',$viewopts);
 	      
-	}
-	 if (($data['connection_only']==false) && (isset($display['hoursAvailable'])) && $display['hoursAvailable']==true) {
-	    $content .=   Schema::create_ContactPoint($data);
+	
+	    if ((isset($data['hoursAvailable'])) && $data['hoursAvailable']==true) {
+		$content .=   Schema::create_ContactPoint($data);
+	    }
 	}
            
 
@@ -606,10 +626,13 @@ class Data {
 	if ((isset($data['description'])) && (!empty($data['description'])) && isset($display['kurzbeschreibung']) && $display['kurzbeschreibung'] ) {	
 		$content .= "<td>" . $data['description'].'</td>';
 	}
-	
-	if (isset($data['connection_only']) && ($data['connection_only']==false) && isset($display['hoursAvailable']) && ($display['hoursAvailable'])) {
-	    $content .= '<td>'.  Schema::create_ContactPoint($data).'</td>';
+	if ((!isset($data['connection_only'])) ||
+		((isset($data['connection_only']) && $data['connection_only']==false))) {
+	    if (isset($data['hoursAvailable']) && ($data['hoursAvailable'])) {
+		$content .= '<td>'.  Schema::create_ContactPoint($data).'</td>';
+	    }
 	}
+	
         $content .= '</tr>';
 
         return $content;	
@@ -650,12 +673,12 @@ class Data {
 	    $content .= '<span itemscope itemtype="http://schema.org/Person">';
 	}
         $content .=  Schema::create_Name($data,'name','','a',false,$viewopts);
-		
-	if (isset($data['connection_only']) && $data['connection_only']==false) {
+	if ((!isset($data['connection_only'])) ||
+	    ((isset($data['connection_only']) && $data['connection_only']==false))) {
 	    if ($display['format']=='liste' ) {
 		$content .= Schema::create_contactpointlist($data, 'span', '', '', 'span',$viewopts);
 	    }
-	    if (isset($display['hoursAvailable']) && $display['hoursAvailable']) {
+	    if (isset($data['hoursAvailable']) && $data['hoursAvailable']) {
 		$content .=   Schema::create_ContactPoint($data);
 	    }
 	}
@@ -674,7 +697,7 @@ class Data {
 
    
     
-    public static function fau_person_sidebar($id, $display, $arguments = array()) {
+    public static function fau_person_sidebar($id, $display = array(), $arguments = array()) {
         	if ($id == 0) {
 	    return;
 	}
@@ -699,18 +722,18 @@ class Data {
 	
 	
 	
-	$data = self::filter_fields($fields, $display);
+	
 	$sitebaropts = self::map_old_keys(self::get_viewsettings('sidebar'));
 	foreach ($sitebaropts as $key => $value) {
-	    if (empty($sitebaropts[$key])) {
+	    if (empty($value)) {
 		$display[$key] = false;
 	    } else {
 		$display[$key] = true;
 	    }
 	}
+	$data = self::filter_fields($fields, $display);
 	
-	$data = self::filter_fields($data, $sitebaropts);
-
+	
 		
 	if (isset($arguments['hstart'])) {
 	    $hstart = intval($arguments['hstart']);
@@ -789,14 +812,15 @@ class Data {
 	    $content .= Schema::create_Organization($orgadata,'p','worksFor','',false,false,false);
 
 
-	    if (isset($data['connection_only']) && $data['connection_only']==false) {
+	    if ((!isset($data['connection_only'])) ||
+		((isset($data['connection_only']) && $data['connection_only']==false))) {
 		$adresse = Schema::create_PostalAdress($data, 'address','', 'address', true);
 		if (isset($adresse)) {
 		    $content .= $adresse;
 		} 
 		$content .= Schema::create_contactpointlist($data, 'ul', '', 'contactlist', 'li',$viewopts); 
 	    
-		if (isset($display['hoursAvailable']) && $display['hoursAvailable']) {
+		if (isset($data['hoursAvailable']) && $data['hoursAvailable']) {
 		    $sprechzeitentitletag = 'h'.($hstart+1);
 		    $content .=   Schema::create_ContactPoint($data,'div','contactPoint','',$sprechzeitentitletag);
 		}

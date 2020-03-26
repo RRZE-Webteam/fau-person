@@ -285,7 +285,7 @@ class Data {
             $repeat_submode = explode( ',', $repeat_submode );
         }
 
-        if( $repeat ) {
+        if (($repeat ) && ($repeat !== '-') ) {
             $dict = array(
                 'd1' => __('Täglich', 'fau-person'),
                 'w1' => __('Jede Woche', 'fau-person'),

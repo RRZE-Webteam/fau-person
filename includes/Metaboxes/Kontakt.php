@@ -294,6 +294,7 @@ class Kontakt extends Metaboxes {
 			    'id' => 'repeat',
 			    'type' => 'radio_inline',
 			    'options' => array(
+				'-' => __('Keine', 'fau-person'), 
 				'd1' => __('täglich', 'fau-person'), 
 				'w1' => __('wöchentlich', 'fau-person'),
 				'w2' => __('alle 2 Wochen', 'fau-person'),
