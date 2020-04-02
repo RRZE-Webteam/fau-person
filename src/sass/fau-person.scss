@@ -8,15 +8,10 @@ CSS Settings
 
 
 .fau-person {
-   // .person-info {
-    	ul.contactlist {
-	    margin: 0 15px 10px 0;
-	    
-	   
-	}
-	
-    // }
-    
+    ul.contactlist {
+	margin: 0 15px 10px 0;
+    }
+
     
     [itemprop="telephone"]:before { 
 	@extend .fa;
@@ -82,6 +77,73 @@ CSS Settings
 	    list-style-type: none;
 	}
     }   
+    
+    .socialmedia {
+	margin: 0;
+	
+	
+	li {
+	    display: inline;
+	    list-style: none;
+	    a {
+		margin: 3px;
+		padding: 0;
+	    }
+	    
+	}
+	a {
+	    width: 1.4em;
+	    height: 1.4em;
+	    overflow: hidden;
+	    display: inline-block;
+	    padding: 3px 0 0 0;
+	    
+	    
+	    &:before {
+		   @extend .fa; 
+		   @extend .fa-bookmark-o;
+	    }
+			
+			
+	    &[href*="twitter.com"] {
+		@extend .fa-twitter;   
+	    }
+	    &[href*="facebook.com"] {
+		@extend .fa-facebook;   
+	    }
+
+	    &[href*="github.com"] {
+		@extend .fa-github;
+	    }
+
+	    &[href*="instagram.com"] {
+		@extend .fa-instagram;
+	    }
+
+	    &[href*="linkedin.com"] {
+		@extend .fa-linkedin;
+	    }
+	    
+	     &[href*="xing.com"] {
+		@extend .fa-xing;
+	    }
+	    
+	     &[href*="tiktok.com"] {
+		@extend .fa-tiktok;
+	    }
+	     &[href*="youtube.com"] {
+		@extend .fa-youtube;
+	    }
+	
+	}
+    }
+    span.socialmedia  {
+	padding-left: 10px;
+	span {
+	    margin-left: 4px;
+	}
+    }
+    
 }
 
 .liste-person {

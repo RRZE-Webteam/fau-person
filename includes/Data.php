@@ -4,7 +4,7 @@ namespace FAU_Person;
 use RRZE\Lib\UnivIS\Data as UnivIS_Data;
 use RRZE\Lib\UnivIS\Config;
 use RRZE\Lib\UnivIS\Sanitizer;
-
+use function FAU_Person\Config\getSocialMediaList;
 defined('ABSPATH') || exit;
 
 
@@ -362,9 +362,7 @@ class Data {
 	}
 
 	$data = self::filter_fields($fields, $display);
-	
 
-	
 	$fullname = Schema::create_Name($data,'name','','a',false,$viewopts);
          $hoursavailable_output  = Schema::create_ContactPoint($data);
 
@@ -417,7 +415,11 @@ class Data {
 	
 	
 	$datacontent = '';	
-	
+	if ((isset($viewopts['view_raum_prefix'])) && (!empty(trim($viewopts['view_raum_prefix']))) 
+	&& (isset($data['workLocation']) && (!empty($data['workLocation'])))) {
+	    $data['workLocation'] = $viewopts['view_raum_prefix'].' '.$data['workLocation'];
+	}
+
 	if (isset($data['jobTitle']) && (!empty($data['jobTitle']))) {
              $datacontent .= '<span class="person-info-position" itemprop="jobTitle">' . $data['jobTitle'] . '</span><br>';
 	}
@@ -438,8 +440,11 @@ class Data {
 		$datacontent .= $adresse;
 	    } 
 	    $datacontent .= Schema::create_contactpointlist($data, 'ul', '', 'contactlist', 'li',$viewopts);
-	      
 	}
+	
+	$datacontent .= Schema::create_SocialMedialist($data);
+	
+	
 	if (!empty($datacontent)) {
 	     $content .= '<div class="person-info">';
 	     $content .= $datacontent;
@@ -465,7 +470,7 @@ class Data {
 	 }   
 	
 	
-	if (!empty($data['description']) && isset($display['kurzbeschreibung']) && (!empty($display['kurzbeschreibung']))) {
+	if (!empty($data['description']) && isset($display['description']) && (!empty($display['description']))) {
              $content .= '<div class="person-info-description" itemprop="description"><p>' . $data['description'] . '</p></div>' . "\n";
 	}
 
@@ -486,13 +491,14 @@ class Data {
         return $content;
     }
 
-    public static function fau_person_page($id, $display = array(), $arguments= array(), $is_shortcode = false) {
-    
+    public static function fau_person_page($id, $display = array(), $arguments= array(), $is_shortcode = false) {    
         $fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
 
         Main::enqueueForeignThemes();
         $viewopts = self::get_viewsettings();
-	   	
+	if (empty($display)) {
+	    $display = self::get_display_field('page');
+	}   	
 	$data = self::filter_fields($fields, $display);
 
 
@@ -532,6 +538,10 @@ class Data {
 	if (isset($viewopts['view_kontakt_page_imagesize'])) {
 	    $use_size = $viewopts['view_kontakt_page_imagesize'];
 	}
+	if ((isset($viewopts['view_raum_prefix'])) && (!empty(trim($viewopts['view_raum_prefix']))) 
+	&& (isset($data['workLocation']) && (!empty($data['workLocation'])))) {
+	    $data['workLocation'] = $viewopts['view_raum_prefix'].' '.$data['workLocation'];
+	}
 
 
 	$content = '<div class="'.$class.'" itemscope itemtype="http://schema.org/Person">';
@@ -558,7 +568,7 @@ class Data {
 	
 	
 	if ((!isset($data['connection_only'])) || 
-	    ((isset($data['connection_only']) && $data['connection_only']===false))) {
+	    ((isset($data['connection_only']) && $data['connection_only']==false))) {
 	    $adresse = Schema::create_PostalAdress($data, 'address','', 'address', true);
 	    if (isset($adresse)) {
 		$content .= $adresse;
@@ -566,7 +576,12 @@ class Data {
 
 	    $content .= Schema::create_contactpointlist($data, 'ul', '', 'contactlist', 'li',$viewopts);
 	      
+	}
 	
+	$content .= Schema::create_SocialMedialist($data);
+		
+	if ((!isset($data['connection_only'])) || 
+	    ((isset($data['connection_only']) && $data['connection_only']==false))) {	
 	    if ((isset($data['hoursAvailable'])) && $data['hoursAvailable']==true) {
 		$content .=   Schema::create_ContactPoint($data);
 	    }
@@ -618,12 +633,15 @@ class Data {
 	}
 
 	$data = self::filter_fields($fields, $display);
-
+	if ((isset($viewopts['view_raum_prefix'])) && (!empty(trim($viewopts['view_raum_prefix']))) 
+	    && (isset($data['workLocation']) && (!empty($data['workLocation'])))) {
+	    $data['workLocation'] = $viewopts['view_raum_prefix'].' '.$data['workLocation'];
+	}
          $content .= '<tr class="person-info" itemscope itemtype="http://schema.org/Person">';
          $content .= '<td>'.Schema::create_Name($data,'name','','a',false,$viewopts).'</td>';
-	$content .=  Schema::create_contactpointlist($data, '', '', '', 'td', $viewopts,true);
+	$content .=  Schema::create_contactpointlist($data, '', '', '', 'td', $viewopts,true,false);
 	
-	if ((isset($data['description'])) && (!empty($data['description'])) && isset($display['kurzbeschreibung']) && $display['kurzbeschreibung'] ) {	
+	if ((isset($data['description'])) && (!empty($data['description'])) && isset($display['description']) && $display['description'] ) {	
 		$content .= "<td>" . $data['description'].'</td>';
 	}
 	if ((!isset($data['connection_only'])) ||
@@ -632,6 +650,11 @@ class Data {
 		$content .= '<td>'.  Schema::create_ContactPoint($data).'</td>';
 	    }
 	}
+	
+	if (isset($display['socialmedia']) && $display['socialmedia'] ) {	
+		$content .= "<td>" . Schema::create_SocialMedialist($data).'</td>';
+	}
+	
 	
         $content .= '</tr>';
 
@@ -663,27 +686,50 @@ class Data {
 		$fields['description']  = wp_trim_excerpt($post->post_content);
 	    }
 	}
+	
+
 	$data = self::filter_fields($fields, $display);
 	
 	
+	if ((isset($viewopts['view_raum_prefix'])) && (!empty(trim($viewopts['view_raum_prefix']))) 
+		&& (isset($data['workLocation']) && (!empty($data['workLocation'])))) {
+	    $data['workLocation'] = $viewopts['view_raum_prefix'].' '.$data['workLocation'];
+	}
+	
 
         if ( $display['format']=='liste' ) {
-            $content .= '<li itemscope itemtype="http://schema.org/Person>';
+             $content .= '<li itemscope itemtype="http://schema.org/Person">';
+	    $content .= Schema::create_Name($data,'name','','a',false,$viewopts);
 	} else {
 	    $content .= '<span itemscope itemtype="http://schema.org/Person">';
+	    $content .= Schema::create_Name($data,'name','','a',true,$viewopts);
 	}
-        $content .=  Schema::create_Name($data,'name','','a',false,$viewopts);
+//	$content .= Helper::get_html_var_dump($data);
+//	$content .= Helper::get_html_var_dump($viewopts);
+        
+	$cp = '';
 	if ((!isset($data['connection_only'])) ||
 	    ((isset($data['connection_only']) && $data['connection_only']==false))) {
 	    if ($display['format']=='liste' ) {
-		$content .= Schema::create_contactpointlist($data, 'span', '', '', 'span',$viewopts);
-	    }
-	    if (isset($data['hoursAvailable']) && $data['hoursAvailable']) {
-		$content .=   Schema::create_ContactPoint($data);
-	    }
+		 
+		$cp = Schema::create_contactpointlist($data, 'span', '', '', 'span',$viewopts,false,true);
+		if (!empty($cp)) {
+			  $content .= ' ('.$cp.')';
+		}
+	    } 
 	}
+	if (isset($display['socialmedia']) && $display['socialmedia'] ) {	
+		$sm = Schema::create_SocialMedialist($data,'span','socialmedia','span');
+		if (!empty($sm)) {
+		    $content .= ' '.$sm;
+		}
+	}
+	//  $blockstart = 'ul', $class = 'socialmedia', $itemel = 'li', $itemprop = 'sameAs') {
+	
+	
+	
 
-	if ((isset($data['description'])) && (!empty($data['description'])) && isset($display['kurzbeschreibung']) && $display['kurzbeschreibung']) {	
+	if ((isset($data['description'])) && (!empty($data['description'])) && isset($display['description']) && $display['description']) {	
 		$content .= "<br>" . $data['description'];
 	}
 	
@@ -766,7 +812,10 @@ class Data {
 		}
 	    }
 	
-	    
+	    if ((isset($viewopts['view_raum_prefix'])) && (!empty(trim($viewopts['view_raum_prefix']))) 
+		&& (isset($data['workLocation']) && (!empty($data['workLocation'])))) {
+		$data['workLocation'] = $viewopts['view_raum_prefix'].' '.$data['workLocation'];
+	    }
 		
              $content = '<div class="'.$class.'" itemscope itemtype="http://schema.org/Person">' . "\n";
              $content .= '<div class="side">';         
@@ -791,6 +840,7 @@ class Data {
 		    $imagedata['sizes'] = $imgsrcsizes;
 		}
                 $content .= Schema::create_Image($imagedata, 'figure', 'image', 'person-thumb', true);
+		
              }            
 
             $content .= '<div class="person-sidebar">' . "\n";
@@ -818,8 +868,12 @@ class Data {
 		if (isset($adresse)) {
 		    $content .= $adresse;
 		} 
-		$content .= Schema::create_contactpointlist($data, 'ul', '', 'contactlist', 'li',$viewopts); 
-	    
+		$content .= Schema::create_contactpointlist($data, 'ul', '', 'contactlist', 'li',$viewopts); 	
+	    }
+	    $content .= Schema::create_SocialMedialist($data);
+	    if ((!isset($data['connection_only'])) ||
+		((isset($data['connection_only']) && $data['connection_only']==false))) {
+		     
 		if (isset($data['hoursAvailable']) && $data['hoursAvailable']) {
 		    $sprechzeitentitletag = 'h'.($hstart+1);
 		    $content .=   Schema::create_ContactPoint($data,'div','contactPoint','',$sprechzeitentitletag);
@@ -893,7 +947,10 @@ class Data {
             if ($data['link']) {
                 $data['url'] = $data['link'];
             }
-	    
+	    if ((isset($viewopts['view_raum_prefix'])) && (!empty(trim($viewopts['view_raum_prefix']))) 
+		&& (isset($data['workLocation']) && (!empty($data['workLocation'])))) {
+		$data['workLocation'] = $viewopts['view_raum_prefix'].' '.$data['workLocation'];
+	    }
 	    $oldurl = '';
 	    if (isset($data['url'])) {
 		$oldurl = $data['url'];
@@ -936,6 +993,12 @@ class Data {
 	    return $input;
 	}
 	$res = array();
+
+	if ((isset($filter['_all'])) && ($filter['_all'])) {
+	     return $input;
+	}
+	    
+	    
 	foreach ($input as $key => $value) {
 	    if (isset($filter[$key])) {
 		if ($filter[$key] == true) {
@@ -943,10 +1006,24 @@ class Data {
 		} else {
 		    unset($res[$key]);
 		}
-	    } else {
-		$res[$key] = $input[$key];
 	    }
 	}
+	
+	/*
+	 * Sonderbehandlung für Gruppenfilter, bei denen sonst Infos wegfallen
+	 */
+	if ((isset($filter['socialmedia'])) && ($filter['socialmedia'])) {
+	    $list = getSocialMediaList();
+	    foreach ($list as $key => $value) {
+		$datakey = $key."_url";
+		if (isset($input[$datakey])) {
+		    $res[$datakey] = $input[$datakey];
+		}	
+	    }
+	    
+	}
+	
+	
 	return $res;
     }
     
@@ -1167,6 +1244,10 @@ class Data {
         $fields_univis_orgunits = array(
             'worksFor' => 'orgunit',            
         );
+	
+	/*
+	 * Felder, die nur aus FAU Person kommen und nicht aus UnivIS:
+	 */
         $fields_fauperson = array(
             'contactPoint' => '',
             'typ' => '',
@@ -1178,6 +1259,9 @@ class Data {
             'description' => '',
             'mobilePhone' => '',
         );
+	
+		
+	
         $fields_exception = array(
             'postalCode' => '',
         );            
@@ -1345,6 +1429,16 @@ class Data {
             $value = get_post_meta($id, 'fau_person_'.$key, true);
             $fields[$key] = $value;            
         }
+	
+	$SocialMedia = Schema::get_SocialMediaList();
+	 foreach( $SocialMedia as $key => $value ) {
+	    $datakey = $key."_url";
+	    $value = get_post_meta($id, 'fau_person_'.$datakey, true);
+	    $fields[$datakey] = $value;            
+        }
+	
+	
+	
         foreach( $fields_exception as $key => $value ) {
             if( $key == 'postalCode' ) {
                 if( get_post_meta($id, 'fau_person_univis_sync', true) && array_key_exists( 'locations', $person ) && array_key_exists( 'location', $person['locations'][0] ) && array_key_exists('ort', $person['locations'][0]['location'][0]) ) {
@@ -1400,18 +1494,18 @@ class Data {
 		break;
 	     case 'compactindex':
 	     case 'kompakt':
-		$display = 'titel, familyName, givenName, name, suffix, position, telefon, email, email, adresse, bild, border';		 
+		$display = 'titel, familyName, givenName, name, suffix, position, telefon, email, email, socialmedia, adresse, bild, border';		 
 		break;
 	    case 'full':
 	    case 'page':
-		$display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, department, jobTitle, telefon, mobil, email, fax, url, content, adresse, bild, permalink, ansprechpartner';  
+		$display = '_all';  
 		break;
 	    case 'listentry':
 	    case 'liste':
-		$display = 'titel, familyName, givenName, name, suffix, telefon, email, fax, url, kurzbeschreibung, permalink';  
+		$display = 'titel, familyName, givenName, name, suffix, description, permalink, socialmedia';  
 		break;
 	     case 'sidebar':
-		$display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, jobTitle, telefon, email, fax, url, adresse, bild, permalink, sprechzeiten, ansprechpartner';  
+		$display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, jobTitle, telefon, email, socialmedia, fax, url, adresse, bild, permalink, sprechzeiten, ansprechpartner';  
 		break;
 	    case 'table': 
 		$display = 'titel, familyName, givenName, name, suffix, telefon, email, url, permalink';  
@@ -1448,6 +1542,7 @@ class Data {
 	$newlist = array();
 	foreach ($liste as $key => $value) {
 	    switch($key) {
+		case 'kurzbeschreibung':
 		case 'kurzauszug':
 		   $newlist['description'] = $liste[$key];
 		   break;
@@ -1493,6 +1588,7 @@ class Data {
 		   $newlist['honorificSuffix'] = $liste[$key];
 		   break;   
 		case 'titel':
+   	         case 'prefix':
 		   $newlist['honorificPrefix'] = $liste[$key];
 		   break;   
 		case 'sprechzeiten':

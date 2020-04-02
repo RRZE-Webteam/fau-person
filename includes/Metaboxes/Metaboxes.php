@@ -31,6 +31,8 @@ class Metaboxes  {
          add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));        
 
 	add_action( 'cmb2_render_text_number', array( $this, 'sm_cmb_render_text_number' ) );
+
+	
 //	add_filter( 'cmb2_show_on', array( $this, 'mb_show_on_person' ) );
 	
 	$kontaktmetabox = new Kontakt($this->pluginFile,  $this->settings);
@@ -65,9 +67,8 @@ class Metaboxes  {
 	$new = filter_var($new, FILTER_SANITIZE_NUMBER_INT);
 	return $new;
     }
-
     
-
+   
     function validate_univis_id( $str ) {   
 	if( ctype_digit( $str ) && strlen( $str ) == 8 )
 	    return $str;
@@ -86,5 +87,5 @@ class Metaboxes  {
     }
 
 
-    
+
 }

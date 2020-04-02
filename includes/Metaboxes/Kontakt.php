@@ -21,7 +21,13 @@ class Kontakt extends Metaboxes {
 
     public function onLoaded()    {
 	require_once(plugin_dir_path($this->pluginFile) . 'vendor/UnivIS/UnivIS.php');
+
+
+	
 	add_filter('cmb2_meta_boxes', array( $this, 'cmb2_kontakt_metaboxes') );	
+	
+	
+	
     }
 
     public function cmb2_kontakt_metaboxes( $meta_boxes ) {
@@ -215,17 +221,6 @@ class Kontakt extends Metaboxes {
 		    'sanitization_cb' => 'validate_number',
 		    'id' => $prefix . 'mobilePhone'
 		),
-	    )
-	);
-
-	// Meta-Box Social Media - fau_person_social_media
-	$meta_boxes['fau_person_social_media'] = array(
-	    'id' => 'fau_person_social_media',
-	    'title' => __('Social Media', 'fau-person'),
-	    'object_types' => array('person'), // post type
-	    'context' => 'normal',
-	    'priority' => 'default',
-	    'fields' => array(
 		array(
 		    'name' => __('E-Mail', 'fau-person'),
 		    'desc' => '',
@@ -240,14 +235,67 @@ class Kontakt extends Metaboxes {
 		    'id' => $prefix . 'url',
 		    'after' => $univis_default['url'] 
 		),
+	    )
+	);
+
+	// Meta-Box Social Media - fau_person_social_media
+	$meta_boxes['fau_person_social_media'] = array(
+	    'id' => 'fau_person_social_media',
+	    'title' => __('Social Media', 'fau-person'),
+	    'object_types' => array('person'), // post type
+	    'context' => 'normal',
+	    'priority' => 'default',
+	    'fields' => array(
 		array(
-		    'name' => __('Name und "Mehr"-Link verlinken auf Seite ...', 'fau-person'),
-		    'desc' => __('Bitte vollständigen Permalink der ausführlichen Kontaktseite angeben.', 'fau-person'),
+		    'name' => __('Twitter URL', 'fau-person'),
+		    'desc' => '',
 		    'type' => 'text_url',
-		    'id' => $prefix . 'link',
-		    'after' => sprintf(__('<p class="cmb_metabox_description">[Standardwert wenn leer: %s]</p>', 'fau-person'), get_permalink( $person_id )),
-		    //'after' => '<hr>' . __('Zum Anzeigen der Person verwenden Sie bitte die ID', 'fau-person') . ' ' . $helpuse,                
-		)            
+		    'id' => $prefix . 'twitter_url',
+		     'protocols' => array( 'https')
+		),
+		array(
+		    'name' => __('Facebook URL', 'fau-person'),
+		    'desc' => '',
+		    'type' => 'text_url',
+		    'id' => $prefix . 'facebook_url',
+		     'protocols' => array( 'https')
+		),
+		array(
+		    'name' => __('LinkedIn URL', 'fau-person'),
+		    'desc' => '',
+		    'type' => 'text_url',
+		    'id' => $prefix . 'linkedin_url',
+		     'protocols' => array( 'https')
+		),
+		array(
+		    'name' => __('Instagram URL', 'fau-person'),
+		    'desc' => '',
+		    'type' => 'text_url',
+		    'id' => $prefix . 'instagram_url',
+		     'protocols' => array( 'https')
+		),
+		array(
+		    'name' => __('XING URL', 'fau-person'),
+		    'desc' => '',
+		    'type' => 'text_url',
+		    'id' => $prefix . 'xing_url',
+		    'protocols' => array(  'https')
+		),
+		array(
+		    'name' => __('YouTube URL', 'fau-person'),
+		    'desc' => '',
+		    'type' => 'text_url',
+		    'id' => $prefix . 'youtube_url',
+		    'protocols' => array(  'https')
+		),
+		array(
+		    'name' => __('TikTok URL', 'fau-person'),
+		    'desc' => '',
+		    'type' => 'text_url',
+		    'id' => $prefix . 'tiktok_url',
+		    'protocols' => array(  'https')
+		),
+		     
 	    )
 	);
 
@@ -265,6 +313,14 @@ class Kontakt extends Metaboxes {
 		    'type' => 'textarea_small',
 		    'id' => $prefix . 'description'
 		),
+		array(
+		    'name' => __('Name und "Mehr"-Link verlinken auf Seite ...', 'fau-person'),
+		    'desc' => __('Bitte vollständigen Permalink der ausführlichen Kontaktseite angeben.', 'fau-person'),
+		    'type' => 'text_url',
+		    'id' => $prefix . 'link',
+		    'after' => sprintf(__('<p class="cmb_metabox_description">[Standardwert wenn leer: %s]</p>', 'fau-person'), get_permalink( $person_id )),
+		    //'after' => '<hr>' . __('Zum Anzeigen der Person verwenden Sie bitte die ID', 'fau-person') . ' ' . $helpuse,                
+		),       
 		array(
 		    'name' => __('Sprechzeiten: Überschrift', 'fau-person'),
 		    'desc' => __('Wird in Fettdruck über den Sprechzeiten ausgegeben.', 'fau-person'),

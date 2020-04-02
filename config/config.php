@@ -60,7 +60,46 @@ function getMenuSettings() {
         'title'         => __('Kontakt Einstellungen', 'fau-person'),
     ];
 }
+function getSocialMediaList() {
+	$SocialMedia = array(
+	    "twitter" => [
+		'title'  => 'Twitter',
+		'class' => 'twitter'
+	    ],
+	    "facebook"=> [
+		'title'  => 'Facebook',
+		'class' => 'facebook'
+	    ],
+	    "linkedin"=> [
+		'title'  => 'LinkedIn',
+		'class' => 'linkedin'
+	    ],
+	    "instagram"=> [
+		'title'  => 'Instagram',
+		'class' => 'instagram'
+	    ],
+	    "xing"=> [
+		'title'  => 'Xing',
+		'class' => 'xing'
+	    ],
+	    "youtube"=> [
+		'title'  => 'YouTube',
+		'class' => 'youtube'
+	    ],
+	     "github"=> [
+		'title'  => 'GitHub',
+		'class' => 'github'
+	    ],
+	    "tiktok"=> [
+		'title'  => 'TikTok',
+		'class' => 'tiktok'
+	    ]
+	);
 
+           // für ergänzende Optionen aus anderen Plugins
+        $SocialMedia = apply_filters('fau_person_socialmedialist', $SocialMedia);
+        return $SocialMedia; // Standard-Array für zukünftige Optionen
+    } 
 /**
  * Gibt die Einstellungen der Inhaltshilfe zurück.
  * @return array [description]
@@ -270,6 +309,13 @@ function getFields() {
 		'checked'   => true,
 		'default' => false,
             ],
+	    [
+		'name'  => 'socialmedia',
+		'label' => __('Social Media Links', 'fau-person'),
+		'type'  => 'checkbox',
+		'checked'   => true,
+		'default' => true,
+            ],
 	     [
 		'name'  => 'ansprechpartner',
 		'label' => __('Ansprechpartner', 'fau-person'),
@@ -295,6 +341,14 @@ function getFields() {
 		'type'  => 'checkbox',
 		'default' => true,
             ],
+	     [
+		'name'  => 'view_raum_prefix',
+		'default' => __('Raum', 'fau-person'),
+		'placeholder' => __('Raum', 'fau-person'),
+		'label' => __('Anzuzeigender Text vor der Raumangabe', 'fau-person'),
+		'field_type' => 'text',
+		'type' => 'text' 
+	    ],
 	    [
 		'name'  => 'view_kontakt_linktext',
 		'default' => __('Mehr', 'fau-person') . ' ›',

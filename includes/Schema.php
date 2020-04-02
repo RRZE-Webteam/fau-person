@@ -1,6 +1,7 @@
 <?php
 
 namespace FAU_Person;
+use function FAU_Person\Config\getSocialMediaList;
 
 defined('ABSPATH') || exit;
 
@@ -9,6 +10,11 @@ class Schema {
     /*
      * Create Schema Markup for Place
      */
+    
+    public static function get_SocialMediaList() {
+        return getSocialMediaList(); // Standard-Array für zukünftige Optionen
+    } 
+    
     public static function create_Place($data, $itemprop = 'location', $class = '', $surroundingtag = 'div', $widthbreak = true, $widthaddress = true, $phoneuri = true ) {
 
 	if (!is_array($data)) {
@@ -170,15 +176,14 @@ class Schema {
 	    if (!empty($args['view_kontakt_linkname'])) {
 		$urlsource = $args['view_kontakt_linkname'];
 		if (isset($data[$urlsource])) {
-		    $url = self::get_sanitized_url($data[$urlsource]);
+		    $url = $data[$urlsource];
+		    $surroundingtag = 'a';
 		}
 	    }
 	} 
 	    
 	    
-	if (($surroundingtag == 'a') && (empty($url))) {
-	    $surroundingtag = 'span';
-	}
+
 	$res = '<'.$surroundingtag;
 	
 	if (!empty($class)) {
@@ -240,14 +245,13 @@ class Schema {
 	    }
 
 	    $res .= '</'.$surroundingtag.'>';
-
 	    return $res;
 	}
 
 	return;
     }
     
-    public static function create_contactpointlist($data, $blockstart = 'ul', $itemprop = '', $class = 'person-info', $liststart = 'li', $args = array(), $fillempty = false) {
+    public static function create_contactpointlist($data, $blockstart = 'ul', $itemprop = '', $class = 'person-info', $liststart = 'li', $args = array(), $fillempty = false, $addcomma = false) {
 	if (!is_array($data)) {
 	    return;
 	}
@@ -290,6 +294,9 @@ class Schema {
 		$res .= '<span itemprop="telephone">' . $displaynumber . '</span>';
 	    }
 	    $res .= '</'.$liststart.'>';
+	    if (($blockstart !=='ul') && ($addcomma)) {
+		 $res .= ', ';
+	    }
 	    $filled = true;
 	} elseif (($fillempty) && isset($data['telephone'])) {
 	    $res .= '<'.$liststart.'>';
@@ -311,6 +318,9 @@ class Schema {
 		$res .= '<span class="mobile" itemprop="telephone">' . $displaynumber . '</span>';
 	    }
 	    $res .= '</'.$liststart.'>';
+	    if (($blockstart !=='ul') && ($addcomma)) {
+		 $res .= ', ';
+	    }
 	     $filled = true;
 	} elseif (($fillempty)  && isset($data['mobilePhone'])) {
 	    $res .= '<'.$liststart.'>';
@@ -333,6 +343,9 @@ class Schema {
 		$res .= '<span itemprop="faxNumber">' . $displaynumber . '</span>';
 	    }
 	    $res .= '</'.$liststart.'>';
+	    if (($blockstart !=='ul') && ($addcomma)) {
+		 $res .= ', ';
+	    }
 	     $filled = true;
 	} elseif (($fillempty)  && isset($data['faxNumber'])) {
 	    $res .= '<'.$liststart.'>';
@@ -346,6 +359,9 @@ class Schema {
 	    $res .= '<span class="screen-reader-text">' . __('E-Mail', 'fau-person') . ': </span>';
 	    $res .= '<a itemprop="email" href="mailto:'.self::get_email_uri($data['email']).'">' . self::get_email_uri($data['email']) . '</a>';
 	    $res .= '</'.$liststart.'>';
+	    if (($blockstart !=='ul') && ($addcomma)) {
+		 $res .= ', ';
+	    }
 	     $filled = true;
 	} elseif (($fillempty)  && isset($data['email'])) {
 	    $res .= '<'.$liststart.'>';
@@ -359,6 +375,9 @@ class Schema {
 	    $res .= '<span class="screen-reader-text">' . __('Webseite', 'fau-person') . ': </span>';
 	    $res .= '<a itemprop="url" href="'.self::get_sanitized_url($data['url']).'">' . self::get_sanitized_url($data['url']) . '</a>';
 	    $res .= '</'.$liststart.'>';
+	    if (($blockstart !=='ul') && ($addcomma)) {
+		 $res .= ', ';
+	    }
 	     $filled = true;
 	} elseif (($fillempty)  && isset($data['url'])) {
 	    $res .= '<'.$liststart.'>';
@@ -370,11 +389,50 @@ class Schema {
 	    $res .= '</'.$blockstart.'>';
 	}
 	if ( $filled ) {
+	     if (($blockstart !=='ul')  && ($addcomma)) {
+		 $res = preg_replace('/, $/', '', $res);
+	    }
+	    
+	    
 	    return $res;
 	}
 	return;
     }
-    
+    public static function create_SocialMedialist($data, $blockstart = 'ul', $class = 'socialmedia', $itemel = 'li', $itemprop = 'sameAs') {
+	if (!is_array($data)) {
+	    return;
+	}
+	$res  = '';
+	$filled = false;
+	if (!empty($blockstart)) {
+	    $res .= '<'.$blockstart;
+	    if (!empty($class)) {
+		$res .= ' class="'.esc_attr($class).'"';
+	    }
+	    $res .= '>';
+	}
+	
+	$SocialMedia = self::get_SocialMediaList();
+	foreach ($SocialMedia as $key => $value) {
+	    $datakey = $key."_url";
+	    $name = $SocialMedia[$key]['title'];
+	    $iclass = $SocialMedia[$key]['class'];
+	    if (isset($data[$datakey]) && (!empty($data[$datakey]))) {
+		$res .= '<'.$itemel.' class="'.$iclass.'">'.'<a itemprop="'.$itemprop.'" href="'.$data[$datakey].'">'.$name.'</a></'.$itemel.'>';
+		$filled = true;
+	    }	
+	}
+	
+
+	if (!empty($blockstart)) {
+	    $res .= '</'.$blockstart.'>';
+	}
+	if ( $filled ) {
+	    return $res;
+	}
+
+	return;
+    }
     
     public static function create_ContactPoint( $data, $blockstart = 'div', $itemprop = 'contactPoint', $class = '', $titletagopeninghours = 'strong') {	
 	if (!is_array($data)) {
