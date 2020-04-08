@@ -474,11 +474,9 @@ class Data {
              $content .= '<div class="person-info-description" itemprop="description"><p>' . $data['description'] . '</p></div>' . "\n";
 	}
 
-
-
-            if (isset($display['link']) && (!empty($display['link']))) {
+           if (isset($display['link']) && (!empty($display['link']))) {
 		$content .= self::get_more_link($data['permalink'] );
-            }
+          }
       
 
         $content .= '</div>';
@@ -583,7 +581,7 @@ class Data {
 	if ((!isset($data['connection_only'])) || 
 	    ((isset($data['connection_only']) && $data['connection_only']==false))) {	
 	    if ((isset($data['hoursAvailable'])) && $data['hoursAvailable']==true) {
-		$content .=   Schema::create_ContactPoint($data);
+		$content .=   Schema::create_ContactPoint($data,'div','contactPoint','','h3');
 	    }
 	}
            
@@ -641,16 +639,15 @@ class Data {
          $content .= '<td>'.Schema::create_Name($data,'name','','a',false,$viewopts).'</td>';
 	$content .=  Schema::create_contactpointlist($data, '', '', '', 'td', $viewopts,true,false);
 	
-	if ((isset($data['description'])) && (!empty($data['description'])) && isset($display['description']) && $display['description'] ) {	
+	if (isset($display['description']) && $display['description'] ) {	
 		$content .= "<td>" . $data['description'].'</td>';
 	}
-	if ((!isset($data['connection_only'])) ||
-		((isset($data['connection_only']) && $data['connection_only']==false))) {
-	    if (isset($data['hoursAvailable']) && ($data['hoursAvailable'])) {
-		$content .= '<td>'.  Schema::create_ContactPoint($data).'</td>';
+	if (isset($display['hoursAvailable']) && $display['hoursAvailable'] ) {	
+	    if ((!isset($data['connection_only'])) ||
+		    ((isset($data['connection_only']) && $data['connection_only']==false))) {	    
+		    $content .= '<td>'.  Schema::create_ContactPoint($data).'</td>';
 	    }
 	}
-	
 	if (isset($display['socialmedia']) && $display['socialmedia'] ) {	
 		$content .= "<td>" . Schema::create_SocialMedialist($data).'</td>';
 	}
@@ -1494,7 +1491,7 @@ class Data {
 		break;
 	     case 'compactindex':
 	     case 'kompakt':
-		$display = 'titel, familyName, givenName, name, suffix, position, telefon, email, email, socialmedia, adresse, bild, border';		 
+		$display = 'titel, familyName, givenName, name, suffix, position, telefon, email, email, socialmedia, adresse, bild, link, border';		 
 		break;
 	    case 'full':
 	    case 'page':
@@ -1511,7 +1508,7 @@ class Data {
 		$display = 'titel, familyName, givenName, name, suffix, telefon, email, url, permalink';  
 		break;
 	    default:
-		$display = 'title, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, email, permalink';  
+		$display = 'title, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, email, permalink, link';  
 	}	
 	return $display;
     }

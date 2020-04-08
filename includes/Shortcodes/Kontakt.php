@@ -338,7 +338,7 @@ class Kontakt extends Shortcodes {
 	    }
 	}
 	
-	$oldparams = 'showlink, showfax, showwebsite, showaddress, showroom, showdescription, showthumb, showoffice, showtitle, showsuffix, showposition,showinstitution,showabteilung,showmail,showtelefon,showmobile,border';
+	$oldparams = 'showlink, showfax, showwebsite, showaddress, showroom, showdescription, showthumb, showoffice, showtitle, showsuffix, showposition,showinstitution,showabteilung,showmail,showtelefon,showmobile,showborder';
 	$oldargs = explode(',', $oldparams);
 	foreach ($oldargs as $value) {
 	    $key = esc_attr(strtolower(trim($value)));
@@ -349,24 +349,35 @@ class Kontakt extends Shortcodes {
 		    || ($arguments[$key] == "true")
 		    || ($arguments[$key] == "+")
 		    || ($arguments[$key] == "x")) {
-		    $show .= $key.', ';
+		    
+		    if (!empty($show)) {
+			 $show .= ', '.$key;
+		    } else {
+			 $show = $key;
+		    }
+		   
 		} elseif (($arguments[$key] == 0) 
 		    || empty($arguments[$key])
 		    || ($arguments[$key] == "-")
 		    || ($arguments[$key] == "nein")
 		    || ($arguments[$key] == "false")
 		    || ($arguments[$key] == "no")) {
-		    $hide .= $key.', ';
+	
+		    if (!empty($hide)) {
+			 $hide .= ', '.$key;
+		    } else {
+			 $hide = $key;
+		    }
 		}
 	    }
 	}
 	if (!empty($show)) {    
-	    $res['show'] = rtrim($show, " ,");
+	    $res['show'] = $show;
 	} else {
 	    $res['show'] = '';
 	}
 	if (!empty($hide)) {
-	    $res['hide'] = rtrim($hide, " ,");
+	    $res['hide'] = $hide;
 	} else {
 	    $res['hide'] = '';
 	}

@@ -469,19 +469,17 @@ class Schema {
 	
 	$desctag = 'span';
 	$descbreak = '<br>';
-	$titletagbreak = '';
+	$titletagbreak = ': ';
 	
-	if ((substr($titletagopeninghours,0,1)=='h') && (substr($titletagopeninghours,0,3)== 'div')) {
+	if (substr($titletagopeninghours,0,1)=='h')  {
 	    $desctag = 'p';
 	    $descbreak = '';
-	    if ($blockstart == 'p') {
-		$blockstart = 'div';
-	    }
-	} elseif ($blockstart == 'div') {
+	    $blockstart = 'div';
+	    $titletagbreak = '';
+	    
+	} elseif ($blockstart == 'p') {
 	    $titletagopeninghours = 'strong';
 	    $titletagbreak = '<br>';
-	    $desctag = 'p';
-	    $descbreak = '';
 	}
 	
 	$res = '<'.$blockstart;
