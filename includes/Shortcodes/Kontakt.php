@@ -97,19 +97,22 @@ class Kontakt extends Shortcodes {
 		
 		switch($format) {
 		    case 'table':
-			   $content = '<table class="'.$class.'">';
-			 break;
+			$content = '<table class="'.$class.'">';
+			break;
 		    case 'name':
 		    case 'shortlist':
 			$class .= ' person liste-person';
-			 $content = '<span class="'.$class.'">';
-			 break;
+			$content = '<span class="'.$class.'">';
+			break;
 		    case 'liste':
 			$class .= ' person liste-person';
-			  $content = '<ul class="'.$class.'">';
-			 break;
-		     default:
-			 $content = '';
+			$content = '<ul class="'.$class.'">';
+			break;
+		    case 'card':
+			$content = '<div class="'.$class.'">';
+			break;
+		    default:
+			$content = '';
 		}
 			
 
@@ -147,6 +150,9 @@ class Kontakt extends Shortcodes {
 			case 'sidebar':
 			    $content .= Data::fau_person_sidebar($value, $displayfield, $arguments);
 			    break;
+			case 'card':
+			    $content .= Data::fau_person_card($value, $displayfield, $arguments);
+			    break;
 
 			default:
 			    $content .= Data::fau_person_markup($value, $displayfield, $arguments);		    }
@@ -161,16 +167,19 @@ class Kontakt extends Shortcodes {
 
 		switch($format) {
 		    case 'table':
-			   $content .= '</table>';
-			 break;
+			$content .= '</table>';
+			break;
 		    case 'name':
 		    case 'shortlist':
-			 $content .= '</span>';
-			 break;
+			$content .= '</span>';
+			break;
 		    case 'liste':
-			  $content .= '</ul>';
-			 break;
-		     default:
+			$content .= '</ul>';
+			break;
+		    case 'card':
+			$content .= '</div>';
+			break;
+		    default:
 		} 
 		
                 return $content;
@@ -245,6 +254,9 @@ class Kontakt extends Shortcodes {
 		    $class .= ' person liste-person';
 		      $content = '<ul class="'.$class.'">';
 		     break;
+		  case 'card':
+			$content = '<div class="'.$class.'">';
+			break;
 		 default:
 		     $content = '';
 	    }
@@ -282,6 +294,9 @@ class Kontakt extends Shortcodes {
 		    case 'sidebar':
 			$content .= Data::fau_person_sidebar($value, $displayfield,$arguments);
 			break;		    
+		    case 'card':
+			    $content .= Data::fau_person_card($value, $displayfield, $arguments);
+			    break;
 		    default:
 			$content .= Data::fau_person_markup($value, $displayfield,$arguments);		
 		}
@@ -299,7 +314,10 @@ class Kontakt extends Shortcodes {
 		case 'liste':
 		      $content .= '</ul>';
 		     break;
-		 default:
+		case 'card':
+		    $content .= '</div>';
+		    break;
+		default:
 	    } 
 
         } else {

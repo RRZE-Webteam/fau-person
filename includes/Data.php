@@ -385,7 +385,6 @@ class Data {
 	    }
 	}
 	
-
 	 $content .= '<div class="'.$class.'" itemscope itemtype="http://schema.org/Person">' . "\n";
 
 	     
@@ -659,7 +658,63 @@ class Data {
 	
     }
     
-    
+  public static function fau_person_card($id = 0, $display = array(), $arguments = array()) {
+	if ($id == 0) {
+	    return;
+	}
+	$fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+	$viewopts = self::get_viewsettings();
+	 
+	$content = '';
+	Main::enqueueForeignThemes();
+	
+	$fields['permalink'] = get_permalink($id);
+	$fields['name'] = get_the_title($id);
+	
+	
+	$data = self::filter_fields($fields, $display);
+
+         $content .= '<div class="person-card" itemscope itemtype="http://schema.org/Person">';
+	 
+	 if ((isset($display['bild'])) && (!empty($display['bild'])) && (has_post_thumbnail($id) )) {
+		
+		$alttext = esc_html($data['name']);		
+		$imagedata['alt'] = $alttext;
+		$image_id = get_post_thumbnail_id( $id ); 
+		$size = 'medium';  // 'person-thumb-page', person-thumb-bigger
+		
+		$imga = wp_get_attachment_image_src($image_id, $size);
+		if (is_array($imga)) {
+		    $imgsrcset =  wp_get_attachment_image_srcset($image_id, $size);
+		    $imgsrcsizes = wp_get_attachment_image_sizes($image_id, $size);
+		    $imagedata['src'] = $imga[0];
+		    $imagedata['width'] = $imga[1];
+		    $imagedata['height'] = $imga[2];
+		    $imagedata['srcset'] = $imgsrcset;
+		    $imagedata['sizes'] = $imgsrcsizes;
+		}
+                $content .= Schema::create_Image($imagedata, 'figure', 'image', 'person-thumb', true);
+		
+             }   
+	 
+         $content .= Schema::create_Name($data,'name','','a',false,$viewopts);
+	 
+	if (isset($data['jobTitle']) && (!empty($data['jobTitle']))) {
+             $content .= '<span class="person-info-position" itemprop="jobTitle">' . $data['jobTitle'] . '</span><br>';
+	}
+	 
+	$content .=  Schema::create_contactpointlist($data, 'ul', '', '', 'li', $viewopts);	
+	
+	if (isset($display['socialmedia']) && $display['socialmedia'] ) {	
+	    $content .=  Schema::create_SocialMedialist($data);
+	}
+	
+	
+        $content .= '</div>';
+
+        return $content;	
+	
+    }  
     
     public static function fau_person_shortlist($id, $display = array(), $arguments = array()) {
 	if ($id == 0) {
@@ -1481,17 +1536,17 @@ class Data {
 	$display = '';
 	switch($format) {
 	    case 'name':
-		$display = 'titel, familyName, givenName, name, suffix';
+		$display = 'titel, familyName, givenName, name, suffix, permalink, url';
 		break;
 	    case 'shortlist':
-		$display = 'titel, familyName, givenName, name, mail, telefon, suffix, permalink';
+		$display = 'titel, familyName, givenName, name, mail, telefon, suffix, permalink, url';
 		break;
 	    case 'plain':
-		$display = 'familyName, givenName, name';
+		$display = 'titel, familyName, givenName, name';
 		break;
 	     case 'compactindex':
 	     case 'kompakt':
-		$display = 'titel, familyName, givenName, name, suffix, position, telefon, email, email, socialmedia, adresse, bild, link, border';		 
+		$display = 'titel, familyName, givenName, name, suffix, position, telefon, email, email,  socialmedia, adresse, bild, permalink, url, border, link';		 
 		break;
 	    case 'full':
 	    case 'page':
@@ -1499,16 +1554,19 @@ class Data {
 		break;
 	    case 'listentry':
 	    case 'liste':
-		$display = 'titel, familyName, givenName, name, suffix, description, permalink, socialmedia';  
+		$display = 'titel, familyName, givenName, name, suffix, description, permalink, url, socialmedia';  
 		break;
 	     case 'sidebar':
-		$display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, jobTitle, telefon, email, socialmedia, fax, url, adresse, bild, permalink, sprechzeiten, ansprechpartner';  
+		$display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, jobTitle, telefon, email, socialmedia, fax, url, adresse, bild, permalink, url, sprechzeiten, ansprechpartner';  
 		break;
 	    case 'table': 
-		$display = 'titel, familyName, givenName, name, suffix, telefon, email, url, permalink';  
+		$display = 'titel, familyName, givenName, name, suffix, telefon, email, permalink, url';  
+		break;
+	    case 'card':
+		$display = 'titel, familyName, givenName, name, suffix, bild, position, telefon, email, permalink, url, socialmedia';  
 		break;
 	    default:
-		$display = 'title, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, email, permalink, link';  
+		$display = 'title, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, email, permalink, url, link';  
 	}	
 	return $display;
     }

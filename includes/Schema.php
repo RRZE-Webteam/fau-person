@@ -175,13 +175,15 @@ class Schema {
 	if (isset($args['view_kontakt_linkname'])) {
 	    if (!empty($args['view_kontakt_linkname'])) {
 		$urlsource = $args['view_kontakt_linkname'];
-		if (isset($data[$urlsource])) {
+		if ((isset($data[$urlsource])) && (!empty(esc_url($data[$urlsource])))) {
 		    $url = $data[$urlsource];
 		    $surroundingtag = 'a';
 		}
 	    }
 	} 
-	    
+	if (($surroundingtag == 'a') && (empty(esc_url($url)))) {
+	     $surroundingtag = 'span';
+	}    
 	    
 
 	$res = '<'.$surroundingtag;
