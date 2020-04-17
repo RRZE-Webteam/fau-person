@@ -21,13 +21,13 @@ function getConstants() {
 	    'UnivIS_Transient' => 'sui_1k4fu7056Kl12a5',
 	    'images' => [
 		/* Thumb for person-type; small for sidebar - Name: person-thumb */
-		'default_person_thumb_width'	=> 90,
-		'default_person_thumb_height'	=> 120,
+		'default_person_thumb_width'	=> 120,
+		'default_person_thumb_height'	=> 160,
 		'default_person_thumb_crop'	=> true,
 
 		/* Thumb for person-type; small for content - Name: person-thumb-page */
-		'default_person_thumb_page_width'   => 200,
-		'default_person_thumb_page_height'  => 300,
+		'default_person_thumb_page_width'   => 240,
+		'default_person_thumb_page_height'  => 320,
 		'default_person_thumb_page_crop'    => true,
 	    ],
 	    'has_archive_page'	=> true,

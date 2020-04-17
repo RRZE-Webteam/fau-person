@@ -274,7 +274,7 @@ class Data {
     }
     
 
-    public static function create_kontakt_image($id = 0, $size = 'person-thumb-page', $class = '', $defaultimage = false, $showlink = false, $linkttitle = '', $showcaption = true) {
+    public static function create_kontakt_image($id = 0, $size = 'person-thumb-page-v3', $class = '', $defaultimage = false, $showlink = false, $linkttitle = '', $showcaption = true) {
 	if ($id==0) {
 	    return;
 	}
@@ -328,8 +328,8 @@ class Data {
 	    }
              if ($bild) {
 		$imagedata['src'] = $bild;
-		$imagedata['width'] = 90;
-		$imagedata['height'] = 120;
+		$imagedata['width'] = 120;
+		$imagedata['height'] = 160;
 	    }
                     
 	 }         
@@ -394,7 +394,7 @@ class Data {
         $content .= '<div class="row">';
 
         if (isset($display['bild']) && (!empty($display['bild']))) {
-	    $content .= Data::create_kontakt_image($id, 'person-thumb', "person-thumb", true, true,'',false);	    
+	    $content .= Data::create_kontakt_image($id, 'person-thumb-v3', "person-thumb", true, true,'',false);	    
 	    $content .= '<div class="person-default-thumb">';
 	} else {
 	    $content .= '<div class="person-default">';
@@ -1072,9 +1072,18 @@ class Data {
 		    $res[$datakey] = $input[$datakey];
 		}	
 	    }
-	    
 	}
-	
+	if ((isset($filter['adresse'])) && ($filter['adresse'])) {
+	    $adressfields = "streetAddress, postalCode, addressLocality, addressRegion, addressCountry";
+
+	    $adresskeys = explode(',', $adressfields);
+	    foreach ($adresskeys as $value) {
+		$key = esc_attr(trim($value));
+		if ((!empty($key)) && isset($input[$key])) {
+		     $res[$key] = $input[$key];
+		}
+	    }
+	}
 	
 	return $res;
     }
@@ -1546,7 +1555,7 @@ class Data {
 		break;
 	     case 'compactindex':
 	     case 'kompakt':
-		$display = 'titel, familyName, givenName, name, suffix, position, telefon, email, email,  socialmedia, adresse, bild, permalink, url, border, link';		 
+		$display = 'titel, familyName, givenName, name, suffix, position, telefon, email, email,  socialmedia, adresse, bild, permalink, url, border';		 
 		break;
 	    case 'full':
 	    case 'page':

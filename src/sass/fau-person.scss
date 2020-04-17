@@ -220,11 +220,28 @@ CSS Settings
 	    
 
 	}
-	.compactindex  .row .person-thumb {
-		order: 2;
-	 }
-	 
-	 .person-info-more {
+	.person-info-more {
 		text-align: right;
+	 }
+	.compactindex .row {
+	    .person-thumb {
+		order: 2;
+	     }
+	     .person-default,  .person-default-thumb {
+		 order: 1;
+	     }
+	     .person-info-more {
+		text-align: left;
+	     }
+	     
+	}
+	
+	 
+	
+	 
+	 .person-thumb {
+	     img {
+		 max-width: inherit;
+	     }
 	 }
 }

@@ -109,11 +109,11 @@ class Main {
     public function define_image_sizes() {
 	
 	/* Thumb for person-type; small for sidebar - Name: person-thumb */
-	add_image_size( 'person-thumb', $this->settings->constants['images']['default_person_thumb_width' ], $this->settings->constants['images']['default_person_thumb_height'], $this->settings->constants['images']['default_person_thumb_crop'	]); // 60, 80, true
+	add_image_size( 'person-thumb-v3', $this->settings->constants['images']['default_person_thumb_width' ], $this->settings->constants['images']['default_person_thumb_height'], $this->settings->constants['images']['default_person_thumb_crop'	]); // 60, 80, true
 	
     
 	 /* Thumb for person-type; big for content - Name: person-thumb-page */
-	add_image_size( 'person-thumb-page', $this->settings->constants['images']['default_person_thumb_page_width'], $this->settings->constants['images'][ 'default_person_thumb_page_height'], $this->settings->constants['images']['default_person_thumb_page_crop']); // 200,300,true
+	add_image_size( 'person-thumb-page-v3', $this->settings->constants['images']['default_person_thumb_page_width'], $this->settings->constants['images'][ 'default_person_thumb_page_height'], $this->settings->constants['images']['default_person_thumb_page_crop']); // 200,300,true
 
     }
 	
