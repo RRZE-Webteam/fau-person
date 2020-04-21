@@ -686,11 +686,13 @@ class Data {
 	    if ((isset($arguments['class'])) && (!empty($arguments['class'])) && (preg_match("/card\-/i",$arguments['class']))) {
 		// thumb-size ist in der Class bereits enthalten, daher ignoriere ich die globale Setting einstweile
 		// und lass es über die Class individuell durch den Redakteuer steuern, der es als class eingibt
+		$class .= ' '.esc_attr($arguments['class']);
+		
 	    } else {
 		$class .= ' card-'.esc_attr($viewopts['view_card_size']);
 	    }
 	}
-
+	
 
          $content .= '<div class="'.$class.'" itemscope itemtype="http://schema.org/Person">';
 	 
@@ -720,7 +722,11 @@ class Data {
 	if (isset($data['jobTitle']) && (!empty($data['jobTitle']))) {
              $content .= '<span class="person-info-position" itemprop="jobTitle">' . $data['jobTitle'] . '</span><br>';
 	}
-	 
+	
+	if ((isset($arguments['class'])) && (!empty($arguments['class'])) && (preg_match("/shrink\-contact/i",$arguments['class']))) {
+	    $viewopts['view_telefonlink'] = true;
+	}
+	
 	$content .=  Schema::create_contactpointlist($data, 'ul', '', 'contactpoints', 'li', $viewopts);	
 	
 	if (isset($display['socialmedia']) && $display['socialmedia'] ) {	
@@ -1602,7 +1608,7 @@ class Data {
 		$display = 'titel, familyName, givenName, name, suffix, telefon, email, permalink, url';  
 		break;
 	    case 'card':
-		$display = 'titel, familyName, givenName, name, suffix, bild, position, telefon, email, permalink, url, socialmedia';  
+		$display = 'titel, familyName, givenName, name, suffix, bild, position, permalink, socialmedia';  
 		break;
 	    default:
 		$display = 'title, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, email, permalink, url, border';  

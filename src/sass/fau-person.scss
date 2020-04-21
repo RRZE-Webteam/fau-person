@@ -45,6 +45,19 @@ CSS Settings
     [itemprop="hoursAvaible"] {
 	margin-bottom: 10px;
     }
+    
+    .shrink-contact .contactpoints {
+	li {
+	    display: inline;
+	}
+	a {
+	    width: 20px;
+	    overflow: hidden;
+	    display: inline-block;
+	}
+    }
+    
+    
     .person-info ul.hoursAvailable_group,
     [itemprop="hoursAvaible"] ul,
     ul.hoursAvailable_group {
@@ -91,8 +104,8 @@ CSS Settings
 	    
 	}
 	a {
-	    width: 1.4em;
-	    height: 1.4em;
+	    width: 20px;
+	    height: 20px;
 	    overflow: hidden;
 	    display: inline-block;
 	    padding: 3px 0 0 0;
@@ -101,40 +114,102 @@ CSS Settings
 	    &:before {
 		   @extend .fa; 
 		   @extend .fa-bookmark-o;
+		  
+		  width: 20px;
+		  text-align: center;
+		  font-size: 0.9em;
 	    }
 			
 			
 	    &[href*="twitter.com"] {
 		@extend .fa-twitter;   
+
 	    }
 	    &[href*="facebook.com"] {
-		@extend .fa-facebook;   
+		@extend .fa-facebook; 
+
 	    }
 
 	    &[href*="github.com"] {
 		@extend .fa-github;
+
 	    }
 
 	    &[href*="instagram.com"] {
 		@extend .fa-instagram;
+
 	    }
 
 	    &[href*="linkedin.com"] {
 		@extend .fa-linkedin;
+
 	    }
 	    
 	     &[href*="xing.com"] {
 		@extend .fa-xing;
+
 	    }
 	    
 	     &[href*="tiktok.com"] {
 		@extend .fa-tiktok;
+
 	    }
 	     &[href*="youtube.com"] {
 		@extend .fa-youtube;
+
 	    }
+	  
 	
 	}
+	 
+	
+    }
+    .color-some .socialmedia {
+	a[href*="twitter.com"] {
+	    background-color: #55acee;
+	    color: #fff;
+	    border-radius: 50%;
+	}
+	a[href*="facebook.com"] {
+	    background-color: #3b5999;
+	    color: #fff;
+	    border-radius: 50%;
+	}
+
+	a[href*="github.com"] {
+	    background-color: #000;
+	    color: #fff;
+	    border-radius: 50%;
+	}
+
+	a[href*="instagram.com"] {
+	    background-color: #e4405f;
+	    color: #fff;
+	    border-radius: 50%;
+	}
+	a[href*="linkedin.com"] {
+	    background-color: #0077B5;
+	    color: #fff;
+	    border-radius: 50%;
+	}
+
+	a[href*="xing.com"] {
+	    background-color: #009090;
+	    color: #fff;
+	    border-radius: 50%;
+	}
+	a[href*="tiktok.com"] {
+	    background-color: #fe2c55;
+	    color: #fff;
+	    border-radius: 50%;
+	}
+	a[href*="youtube.com"] {
+	    background-color: #cd201f;
+	    color: #fff;
+	    border-radius: 50%;
+	}
+	
+	
     }
     span.socialmedia  {
 	padding-left: 10px;

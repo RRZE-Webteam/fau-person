@@ -1,1 +1,366 @@
-.fa,.fau-person .mobile[itemprop=telephone]:before,.fau-person .socialmedia a:before,.fau-person [itemprop=email]:before,.fau-person [itemprop=faxNumber]:before,.fau-person [itemprop=telephone]:before,.fau-person [itemprop=url]:before{display:inline-block;font:normal normal normal 14px/1 FontAwesome;font-size:inherit}.fa-phone:before,.fau-person [itemprop=telephone]:before{content:"\f095"}.fa-mobile-phone:before,.fa-mobile:before,.fau-person .mobile[itemprop=telephone]:before{content:"\f10b"}.fa-phone-square:before{content:"\f098"}.fa-home:before,.fau-person [itemprop=url]:before{content:"\f015"}.fa-square-o:before{content:"\f096"}.fa-envelope:before{content:"\f0e0"}.fa-envelope-o:before,.fau-person [itemprop=email]:before{content:"\f003"}.fa-bookmark:before{content:"\f02e"}.fa-fax:before,.fau-person [itemprop=faxNumber]:before{content:"\f1ac"}.fa-print:before{content:"\f02f"}.fa-bookmark-o:before,.fau-person .socialmedia a:before{content:"\f097"}.fa-info-circle:before{content:"\f05a"}.fa-building:before{content:"\f1ad"}.fa-twitter:before,.fau-person .socialmedia a[href*="twitter.com"]:before{content:"\f099"}.fa-facebook-f:before,.fa-facebook:before,.fau-person .socialmedia a[href*="facebook.com"]:before{content:"\f09a"}.fa-github:before,.fau-person .socialmedia a[href*="github.com"]:before{content:"\f09b"}.fa-linkedin:before,.fau-person .socialmedia a[href*="linkedin.com"]:before{content:"\f0e1"}.fa-instagram:before,.fau-person .socialmedia a[href*="instagram.com"]:before{content:"\f16d"}.fa-xing:before,.fau-person .socialmedia a[href*="xing.com"]:before{content:"\f168"}.fa-tiktok:before,.fau-person .socialmedia a[href*="tiktok.com"]:before{content:"d"}.fa-youtube:before,.fau-person .socialmedia a[href*="youtube.com"]:before{content:"\f167"}.fau-person ul.contactlist{margin:0 15px 10px 0}.fau-person [itemprop=telephone]:before{width:20px}.fau-person [itemprop=telephone].mobile:before{width:20px}.fau-person [itemprop=faxNumber]:before{width:20px}.fau-person [itemprop=email]:before{width:20px}.fau-person [itemprop=url]:before{width:20px}.fau-person .fullname,.fau-person [itemprop=honorificSuffix]{white-space:nowrap}.fau-person [itemprop=hoursAvaible]{margin-bottom:10px}.fau-person .person-info ul.hoursAvailable_group li,.fau-person [itemprop=hoursAvaible] ul li,.fau-person ul.hoursAvailable_group li{list-style:disc;margin-left:15px}.widget .fau-person .person-info ul.hoursAvailable_group li,.widget .fau-person [itemprop=hoursAvaible] ul li,.widget .fau-person ul.hoursAvailable_group li{display:list-item}.widget .fau-person .person-info ul.hoursAvailable_group li::before,.widget .fau-person [itemprop=hoursAvaible] ul li::before,.widget .fau-person ul.hoursAvailable_group li::before{display:none}.fau-person ul.contactlist li{list-style-type:none}.widget .fau-person ul.contactlist li::before{display:none}.fau-person .connection-list{margin-left:0}.fau-person .connection-list li{list-style-type:none}.fau-person .socialmedia{margin:0}.fau-person .socialmedia li{display:inline;list-style:none}.fau-person .socialmedia li a{margin:3px;padding:0}.fau-person .socialmedia a{width:1.4em;height:1.4em;overflow:hidden;display:inline-block;padding:3px 0 0 0}.fau-person span.socialmedia{padding-left:10px}.fau-person span.socialmedia span{margin-left:4px}.liste-person li{list-style:circle}.person-info .person-info-email:before,.person-info .person-info-fax:before,.person-info .person-info-mobile:before,.person-info .person-info-phone:before,.person-info .person-info-www:before{display:none}.content-inline .person .row,.fau-person .row{display:flex;flex-wrap:wrap;align-content:flex-start;margin-left:0;margin-right:0}.content-inline .person .row .person-default,.content-inline .person .row .person-default-thumb,.fau-person .row .person-default,.fau-person .row .person-default-thumb{margin-left:5px;margin-right:5px;padding:0 5px}.content-inline .person .row .person-thumb,.fau-person .row .person-thumb{flex:0 0 80px;float:none;order:1;margin:0;padding:5px 5px 5px 0}.content-inline .person .row .person-default,.content-inline .person .row .person-default-thumb,.content-inline .person .row .person-sidebar,.fau-person .row .person-default,.fau-person .row .person-default-thumb,.fau-person .row .person-sidebar{flex:1 0 200px;float:none;order:2;max-width:inherit;width:inherit}.content-inline .person .row .person-compact-thumb,.fau-person .row .person-compact-thumb{margin-left:5px;margin-right:5px;flex:1 0 200px;order:1;width:inherit}@media (min-width:768px){.content-inline .person .row .person-compact-thumb,.fau-person .row .person-compact-thumb{flex-basis:350px;padding:5px}}.content-inline .person .row .person-default-more,.fau-person .row .person-default-more{float:none;flex:1 1 200px;order:3;padding:5px}.content-inline .person .person-info-more,.fau-person .person-info-more{text-align:right}.content-inline .person .compactindex .row .person-thumb,.fau-person .compactindex .row .person-thumb{order:2;padding-left:5px;padding-right:0}.content-inline .person .compactindex .row .person-default,.content-inline .person .compactindex .row .person-default-thumb,.fau-person .compactindex .row .person-default,.fau-person .compactindex .row .person-default-thumb{order:1}.content-inline .person .compactindex .row .person-info-more,.fau-person .compactindex .row .person-info-more{text-align:left}.content-inline .person .person-thumb img,.fau-person .person-thumb img{max-width:100%}.fau-person.thumb-size-small .row .person-thumb{flex-basis:80px}.fau-person.thumb-size-small .row .person-thumb img{width:80px;max-width:inherit}.fau-person.thumb-size-medium .row .person-thumb{flex-basis:100px}.fau-person.thumb-size-medium .row .person-thumb img{width:100px;max-width:inherit}.fau-person.thumb-size-large .row .person-thumb{flex-basis:120px}.fau-person.thumb-size-large .row .person-thumb img{width:120px;max-width:inherit}.sidebar-inline .person .row .person-thumb{padding-left:0}.person-card{display:flex;justify-content:space-around;flex-wrap:wrap;align-items:flex-start;align-content:stretch}.person-card .card-item{flex:1 0 250px;text-align:center;margin:8px 0;border:2px solid transparent}.person-card .card-item p{-webkit-hyphens:manual;-ms-hyphens:manual;hyphens:manual}.person-card .card-item figure{width:230px;height:230px;border-radius:50%;overflow:hidden;margin:0 auto;background:#eee}.person-card .card-item figure img{width:100%;height:100%;object-fit:cover;transition:1s ease-in-out}.person-card .card-item .person-info-position{display:inline-block}.person-card .card-item ul.contactpoints{margin:0 0 10px 0}.person-card .card-item ul.contactpoints li{list-style:none;padding:1px;white-space:nowrap}.person-card .card-item ul.contactpoints li a::before,.person-card .card-item ul.contactpoints li span::before{margin-right:5px}.person-card .card-item:focus,.person-card .card-item:hover{border-color:#eee}.person-card .card-item:focus img,.person-card .card-item:hover img{width:110%;height:110%}.person-card .card-item.card-xsmall{flex-basis:150px}.person-card .card-item.card-xsmall figure{width:130px;height:130px}.person-card .card-item.card-small{flex-basis:200px}.person-card .card-item.card-small figure{width:180px;height:180px}.person-card .card-item.card-large{flex-basis:300px}.person-card .card-item.card-large figure{width:280px;height:280px}
+/*
+CSS Settings 
+*/
+/*
+* Minimal Font Awesome Settings.
+* without font path definition, Font will be asumed to come from theme or will be loaded extra.
+*/
+.fa, .fau-person [itemprop="telephone"]:before, .fau-person .mobile[itemprop="telephone"]:before, .fau-person [itemprop="faxNumber"]:before, .fau-person [itemprop="email"]:before, .fau-person [itemprop="url"]:before, .fau-person .socialmedia a:before {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit; }
+
+.fa-phone:before, .fau-person [itemprop="telephone"]:before {
+  content: "\f095"; }
+
+.fa-mobile-phone:before, .fa-mobile:before, .fau-person .mobile[itemprop="telephone"]:before {
+  content: "\f10b"; }
+
+.fa-phone-square:before {
+  content: "\f098"; }
+
+.fa-home:before, .fau-person [itemprop="url"]:before {
+  content: "\f015"; }
+
+.fa-square-o:before {
+  content: "\f096"; }
+
+.fa-envelope:before {
+  content: "\f0e0"; }
+
+.fa-envelope-o:before, .fau-person [itemprop="email"]:before {
+  content: "\f003"; }
+
+.fa-bookmark:before {
+  content: "\f02e"; }
+
+.fa-fax:before, .fau-person [itemprop="faxNumber"]:before {
+  content: "\f1ac"; }
+
+.fa-print:before {
+  content: "\f02f"; }
+
+.fa-bookmark-o:before, .fau-person .socialmedia a:before {
+  content: "\f097"; }
+
+.fa-info-circle:before {
+  content: "\f05a"; }
+
+.fa-building:before {
+  content: "\f1ad"; }
+
+/*
+ * Social media
+ */
+.fa-twitter:before, .fau-person .socialmedia a[href*="twitter.com"]:before {
+  content: "\f099"; }
+
+.fa-facebook-f:before, .fa-facebook:before, .fau-person .socialmedia a[href*="facebook.com"]:before {
+  content: "\f09a"; }
+
+.fa-github:before, .fau-person .socialmedia a[href*="github.com"]:before {
+  content: "\f09b"; }
+
+.fa-linkedin:before, .fau-person .socialmedia a[href*="linkedin.com"]:before {
+  content: "\f0e1"; }
+
+.fa-instagram:before, .fau-person .socialmedia a[href*="instagram.com"]:before {
+  content: "\f16d"; }
+
+.fa-xing:before, .fau-person .socialmedia a[href*="xing.com"]:before {
+  content: "\f168"; }
+
+.fa-tiktok:before, .fau-person .socialmedia a[href*="tiktok.com"]:before {
+  content: "d"; }
+
+.fa-youtube:before, .fau-person .socialmedia a[href*="youtube.com"]:before {
+  content: "\f167"; }
+
+.fau-person ul.contactlist {
+  margin: 0 15px 10px 0; }
+
+.fau-person [itemprop="telephone"]:before {
+  width: 20px; }
+
+.fau-person [itemprop="telephone"].mobile:before {
+  width: 20px; }
+
+.fau-person [itemprop="faxNumber"]:before {
+  width: 20px; }
+
+.fau-person [itemprop="email"]:before {
+  width: 20px; }
+
+.fau-person [itemprop="url"]:before {
+  width: 20px; }
+
+.fau-person [itemprop="honorificSuffix"],
+.fau-person .fullname {
+  white-space: nowrap; }
+
+.fau-person [itemprop="hoursAvaible"] {
+  margin-bottom: 10px; }
+
+.fau-person .shrink-contact .contactpoints li {
+  display: inline; }
+
+.fau-person .shrink-contact .contactpoints a {
+  width: 20px;
+  overflow: hidden;
+  display: inline-block; }
+
+.fau-person .person-info ul.hoursAvailable_group li,
+.fau-person [itemprop="hoursAvaible"] ul li,
+.fau-person ul.hoursAvailable_group li {
+  list-style: disc;
+  margin-left: 15px; }
+
+.widget .fau-person .person-info ul.hoursAvailable_group li, .widget
+.fau-person [itemprop="hoursAvaible"] ul li, .widget
+.fau-person ul.hoursAvailable_group li {
+  display: list-item; }
+
+.widget .fau-person .person-info ul.hoursAvailable_group li::before, .widget
+.fau-person [itemprop="hoursAvaible"] ul li::before, .widget
+.fau-person ul.hoursAvailable_group li::before {
+  display: none; }
+
+.fau-person ul.contactlist li {
+  list-style-type: none; }
+
+.widget .fau-person ul.contactlist li::before {
+  display: none; }
+
+.fau-person .connection-list {
+  margin-left: 0; }
+  .fau-person .connection-list li {
+    list-style-type: none; }
+
+.fau-person .socialmedia {
+  margin: 0; }
+  .fau-person .socialmedia li {
+    display: inline;
+    list-style: none; }
+    .fau-person .socialmedia li a {
+      margin: 3px;
+      padding: 0; }
+  .fau-person .socialmedia a {
+    width: 20px;
+    height: 20px;
+    overflow: hidden;
+    display: inline-block;
+    padding: 3px 0 0 0; }
+    .fau-person .socialmedia a:before {
+      width: 20px;
+      text-align: center;
+      font-size: 0.9em; }
+
+.fau-person .color-some .socialmedia a[href*="twitter.com"] {
+  background-color: #55acee;
+  color: #fff;
+  border-radius: 50%; }
+
+.fau-person .color-some .socialmedia a[href*="facebook.com"] {
+  background-color: #3b5999;
+  color: #fff;
+  border-radius: 50%; }
+
+.fau-person .color-some .socialmedia a[href*="github.com"] {
+  background-color: #000;
+  color: #fff;
+  border-radius: 50%; }
+
+.fau-person .color-some .socialmedia a[href*="instagram.com"] {
+  background-color: #e4405f;
+  color: #fff;
+  border-radius: 50%; }
+
+.fau-person .color-some .socialmedia a[href*="linkedin.com"] {
+  background-color: #0077B5;
+  color: #fff;
+  border-radius: 50%; }
+
+.fau-person .color-some .socialmedia a[href*="xing.com"] {
+  background-color: #009090;
+  color: #fff;
+  border-radius: 50%; }
+
+.fau-person .color-some .socialmedia a[href*="tiktok.com"] {
+  background-color: #fe2c55;
+  color: #fff;
+  border-radius: 50%; }
+
+.fau-person .color-some .socialmedia a[href*="youtube.com"] {
+  background-color: #cd201f;
+  color: #fff;
+  border-radius: 50%; }
+
+.fau-person span.socialmedia {
+  padding-left: 10px; }
+  .fau-person span.socialmedia span {
+    margin-left: 4px; }
+
+.liste-person li {
+  list-style: circle; }
+
+.person-info .person-info-phone:before,
+.person-info .person-info-mobile:before,
+.person-info .person-info-fax:before,
+.person-info .person-info-email:before,
+.person-info .person-info-www:before {
+  display: none; }
+
+.content-inline .person .row,
+.fau-person .row {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  margin-left: 0;
+  margin-right: 0; }
+  .content-inline .person .row .person-default-thumb,
+  .content-inline .person .row .person-default,
+  .fau-person .row .person-default-thumb,
+  .fau-person .row .person-default {
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 0 5px; }
+  .content-inline .person .row .person-thumb,
+  .fau-person .row .person-thumb {
+    flex: 0 0 80px;
+    float: none;
+    order: 1;
+    margin: 0;
+    padding: 5px 5px 5px 0; }
+  .content-inline .person .row .person-default,
+  .content-inline .person .row .person-sidebar,
+  .content-inline .person .row .person-default-thumb,
+  .fau-person .row .person-default,
+  .fau-person .row .person-sidebar,
+  .fau-person .row .person-default-thumb {
+    flex: 1 0 200px;
+    float: none;
+    order: 2;
+    max-width: inherit;
+    width: inherit; }
+  .content-inline .person .row .person-compact-thumb,
+  .fau-person .row .person-compact-thumb {
+    margin-left: 5px;
+    margin-right: 5px;
+    flex: 1 0 200px;
+    order: 1;
+    width: inherit; }
+    @media (min-width: 768px) {
+      .content-inline .person .row .person-compact-thumb,
+      .fau-person .row .person-compact-thumb {
+        flex-basis: 350px;
+        padding: 5px; } }
+  .content-inline .person .row .person-default-more,
+  .fau-person .row .person-default-more {
+    float: none;
+    flex: 1 1 200px;
+    order: 3;
+    padding: 5px; }
+
+.content-inline .person .person-info-more,
+.fau-person .person-info-more {
+  text-align: right; }
+
+.content-inline .person .compactindex .row .person-thumb,
+.fau-person .compactindex .row .person-thumb {
+  order: 2;
+  padding-left: 5px;
+  padding-right: 0; }
+
+.content-inline .person .compactindex .row .person-default,
+.content-inline .person .compactindex .row .person-default-thumb,
+.fau-person .compactindex .row .person-default,
+.fau-person .compactindex .row .person-default-thumb {
+  order: 1; }
+
+.content-inline .person .compactindex .row .person-info-more,
+.fau-person .compactindex .row .person-info-more {
+  text-align: left; }
+
+.content-inline .person .person-thumb img,
+.fau-person .person-thumb img {
+  max-width: 100%; }
+
+.fau-person.thumb-size-small .row .person-thumb {
+  flex-basis: 80px; }
+  .fau-person.thumb-size-small .row .person-thumb img {
+    width: 80px;
+    max-width: inherit; }
+
+.fau-person.thumb-size-medium .row .person-thumb {
+  flex-basis: 100px; }
+  .fau-person.thumb-size-medium .row .person-thumb img {
+    width: 100px;
+    max-width: inherit; }
+
+.fau-person.thumb-size-large .row .person-thumb {
+  flex-basis: 120px; }
+  .fau-person.thumb-size-large .row .person-thumb img {
+    width: 120px;
+    max-width: inherit; }
+
+.sidebar-inline .person .row .person-thumb {
+  padding-left: 0px; }
+
+.person-card {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  align-content: stretch; }
+  .person-card .card-item {
+    flex: 1 0 250px;
+    text-align: center;
+    margin: 8px 0;
+    border: 2px solid transparent; }
+    .person-card .card-item p {
+      -webkit-hyphens: manual;
+          -ms-hyphens: manual;
+              hyphens: manual; }
+    .person-card .card-item figure {
+      width: 230px;
+      height: 230px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin: 0 auto;
+      background: #eee; }
+      .person-card .card-item figure img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: 1s ease-in-out; }
+    .person-card .card-item .person-info-position {
+      display: inline-block; }
+    .person-card .card-item ul.contactpoints {
+      margin: 0 0 10px 0; }
+      .person-card .card-item ul.contactpoints li {
+        list-style: none;
+        padding: 1px;
+        white-space: nowrap; }
+        .person-card .card-item ul.contactpoints li a::before,
+        .person-card .card-item ul.contactpoints li span::before {
+          margin-right: 5px; }
+    .person-card .card-item:hover, .person-card .card-item:focus {
+      border-color: #eee; }
+      .person-card .card-item:hover img, .person-card .card-item:focus img {
+        width: 110%;
+        height: 110%; }
+    .person-card .card-item.card-xsmall {
+      flex-basis: 150px; }
+      .person-card .card-item.card-xsmall figure {
+        width: 130px;
+        height: 130px; }
+    .person-card .card-item.card-small {
+      flex-basis: 200px; }
+      .person-card .card-item.card-small figure {
+        width: 180px;
+        height: 180px; }
+    .person-card .card-item.card-large {
+      flex-basis: 300px; }
+      .person-card .card-item.card-large figure {
+        width: 280px;
+        height: 280px; }
