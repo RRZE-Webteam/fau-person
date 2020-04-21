@@ -38,8 +38,7 @@ CSS Settings
 	width: 20px; 
 	@extend .fa-home; 
     }
-
-
+    [itemprop="honorificSuffix"],
     .fullname {
        white-space: nowrap;
     }
@@ -164,9 +163,8 @@ CSS Settings
 	}
 
 }
-
+.content-inline .person,
 .fau-person {
-	
 	.row {
 	    display: flex;
 	    flex-wrap: wrap; 
@@ -182,11 +180,11 @@ CSS Settings
 		padding: 0 5px;	
 	    }
 	    .person-thumb {
-		flex: 0 0 90px;
+		flex: 0 0 80px;
 		float: none;
 		order: 1;
 		margin: 0;
-		padding: 5px;
+		padding: 5px 5px 5px 0;	
 	    }
 	    .person-default,
 	    .person-sidebar,
@@ -226,9 +224,13 @@ CSS Settings
 	.compactindex .row {
 	    .person-thumb {
 		order: 2;
+		padding-left: 5px;
+		padding-right: 0;
 	     }
-	     .person-default,  .person-default-thumb {
+	     .person-default,  
+	     .person-default-thumb {
 		 order: 1;
+		 
 	     }
 	     .person-info-more {
 		text-align: left;
@@ -241,7 +243,120 @@ CSS Settings
 	 
 	 .person-thumb {
 	     img {
-		 max-width: inherit;
+		 max-width: 100%;
 	     }
 	 }
+}
+
+.fau-person.thumb-size-small {
+    .row .person-thumb {
+	flex-basis: 80px;
+	img {
+	    width: 80px;
+	    max-width: inherit;
+	}
+    }
+}
+.fau-person.thumb-size-medium {
+    .row .person-thumb {
+	flex-basis: 100px;
+	img {
+	    width: 100px;
+	    max-width: inherit;
+	}
+    }
+}
+.fau-person.thumb-size-large {
+    .row .person-thumb {
+	flex-basis: 120px;
+	img {
+	    width: 120px;
+	    max-width: inherit;
+	}
+    }
+}
+
+.sidebar-inline .person .row .person-thumb {
+    padding-left: 0px;
+}
+
+.person-card {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    align-content: stretch;
+    
+    .card-item {
+	flex: 1 0 250px;
+	text-align: center;
+	margin: 8px 0;
+	border: 2px solid transparent;
+	p {
+	    hyphens: manual;
+	} 
+	figure {
+	    width: 230px;
+	    height: 230px;
+	    border-radius: 50%;
+	    overflow: hidden;
+	    margin: 0 auto;
+	    background: #eee;
+	    
+	    img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: 1s ease-in-out;
+	    }
+	}
+	
+	.person-info-position {
+	    display: inline-block;	    
+	}
+	ul.contactpoints {
+	    margin: 0 0 10px 0;
+	    li {
+		list-style: none;
+		padding: 1px;
+		white-space: nowrap;
+		a::before,
+		span::before {
+		    margin-right: 5px;
+		}
+	    }
+	}
+	&:hover,
+	&:focus {
+	    border-color: #eee;
+	    
+	    img {
+		width: 110%;
+		height: 110%;
+		
+	    }
+	}
+
+	&.card-xsmall {
+	    flex-basis: 150px;
+	    figure {
+		width: 130px;
+		height: 130px;
+	    }
+	}
+	&.card-small {
+	    flex-basis: 200px;
+	    figure {
+		width: 180px;
+		height: 180px;
+	    }
+	}
+	&.card-large {
+	    flex-basis: 300px;
+	    figure {
+		width: 280px;
+		height: 280px;
+	    }
+	}
+    }
 }

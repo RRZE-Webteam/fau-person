@@ -379,7 +379,7 @@ class Settings {
             [$this, 'pageOutput']
         );
 
-        add_action('load-' . $this->optionsPage, [$this, 'adminHelpTab']);
+   //     add_action('load-' . $this->optionsPage, [$this, 'adminHelpTab']);
     }
 
     /**

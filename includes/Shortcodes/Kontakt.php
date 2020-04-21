@@ -109,6 +109,7 @@ class Kontakt extends Shortcodes {
 			$content = '<ul class="'.$class.'">';
 			break;
 		    case 'card':
+			$class .= ' person-card';
 			$content = '<div class="'.$class.'">';
 			break;
 		    default:
@@ -255,6 +256,7 @@ class Kontakt extends Shortcodes {
 		      $content = '<ul class="'.$class.'">';
 		     break;
 		  case 'card':
+		      $class .= ' person-card';
 			$content = '<div class="'.$class.'">';
 			break;
 		 default:

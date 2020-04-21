@@ -368,6 +368,14 @@ class Data {
 
 
 	$class = 'fau-person person content-person';
+	if (isset($viewopts['view_thumb_size'])) {
+	    if ((isset($arguments['class'])) && (!empty($arguments['class'])) && (preg_match("/thumb\-size\-/i",$arguments['class']))) {
+		// thumb-size ist in der Class bereits enthalten, daher ignoriere ich die globale Setting einstweile
+		// und lass es über die Class individuell durch den Redakteuer steuern, der es als class eingibt
+	    } else {
+		$class .= ' thumb-size-'.esc_attr($viewopts['view_thumb_size']);
+	    }
+	}
 	if ((isset($arguments['class'])) && (!empty($arguments['class']))) {
 	    $class .= ' '.esc_attr($arguments['class']);
 	}
@@ -673,37 +681,47 @@ class Data {
 	
 	
 	$data = self::filter_fields($fields, $display);
+	$class = 'card-item';
+	if (isset($viewopts['view_card_size'])) {
+	    if ((isset($arguments['class'])) && (!empty($arguments['class'])) && (preg_match("/card\-/i",$arguments['class']))) {
+		// thumb-size ist in der Class bereits enthalten, daher ignoriere ich die globale Setting einstweile
+		// und lass es über die Class individuell durch den Redakteuer steuern, der es als class eingibt
+	    } else {
+		$class .= ' card-'.esc_attr($viewopts['view_card_size']);
+	    }
+	}
 
-         $content .= '<div class="person-card" itemscope itemtype="http://schema.org/Person">';
+
+         $content .= '<div class="'.$class.'" itemscope itemtype="http://schema.org/Person">';
 	 
-	 if ((isset($display['bild'])) && (!empty($display['bild'])) && (has_post_thumbnail($id) )) {
-		
-		$alttext = esc_html($data['name']);		
-		$imagedata['alt'] = $alttext;
-		$image_id = get_post_thumbnail_id( $id ); 
-		$size = 'medium';  // 'person-thumb-page', person-thumb-bigger
-		
-		$imga = wp_get_attachment_image_src($image_id, $size);
-		if (is_array($imga)) {
-		    $imgsrcset =  wp_get_attachment_image_srcset($image_id, $size);
-		    $imgsrcsizes = wp_get_attachment_image_sizes($image_id, $size);
-		    $imagedata['src'] = $imga[0];
-		    $imagedata['width'] = $imga[1];
-		    $imagedata['height'] = $imga[2];
-		    $imagedata['srcset'] = $imgsrcset;
-		    $imagedata['sizes'] = $imgsrcsizes;
-		}
-                $content .= Schema::create_Image($imagedata, 'figure', 'image', 'person-thumb', true);
-		
-             }   
+	if ((isset($display['bild'])) && (!empty($display['bild'])) ) {
+//	    $content .= Data::create_kontakt_image($id, 'person-thumb-page-v3', "person-thumb", true, false,'',false);
+	     $content .= Data::create_kontakt_image($id, 'medium', "person-thumb", true, false,'',false);
+         }   
 	 
-         $content .= Schema::create_Name($data,'name','','a',false,$viewopts);
+         $fullname = Schema::create_Name($data,'name','','a',false,$viewopts);
+	 
+	 
+	if ($arguments['hstart']) {
+	    $hstart = intval($arguments['hstart']);
+	} else {
+	    $hstart = 3;
+	}
+	if (($hstart <1) || ($hstart > 6)) {
+	    $hstart = 3;
+         }
+	 
+        $content .= '<h' . $hstart . '>';
+        $content .= $fullname;
+        $content .= '</h' . $hstart . '>';
+	 
+	 
 	 
 	if (isset($data['jobTitle']) && (!empty($data['jobTitle']))) {
              $content .= '<span class="person-info-position" itemprop="jobTitle">' . $data['jobTitle'] . '</span><br>';
 	}
 	 
-	$content .=  Schema::create_contactpointlist($data, 'ul', '', '', 'li', $viewopts);	
+	$content .=  Schema::create_contactpointlist($data, 'ul', '', 'contactpoints', 'li', $viewopts);	
 	
 	if (isset($display['socialmedia']) && $display['socialmedia'] ) {	
 	    $content .=  Schema::create_SocialMedialist($data);
@@ -847,6 +865,14 @@ class Data {
 	 
 
 	    $class = 'fau-person person sidebar';
+	    if (isset($viewopts['view_thumb_size'])) {
+		if ((isset($arguments['class'])) && (!empty($arguments['class'])) && (preg_match("/thumb\-size\-/i",$arguments['class']))) {
+		    // thumb-size ist in der Class bereits enthalten, daher ignoriere ich die globale Setting einstweile
+		    // und lass es über die Class individuell durch den Redakteuer steuern, der es als class eingibt
+		} else {
+		    $class .= ' thumb-size-'.esc_attr($viewopts['view_thumb_size']);
+		}
+	    }
 	    if ((isset($arguments['class'])) && (!empty($arguments['class']))) {
 		$class .= ' '.esc_attr($arguments['class']);
 	    }
@@ -875,7 +901,7 @@ class Data {
 	    $content .= '<div class="row">' . "\n";
 	    
 	    if ((isset($display['bild'])) && (!empty($display['bild'])) && (has_post_thumbnail($id) )) {
-		
+		/*
 		$alttext = esc_html($data['name']);		
 		$imagedata['alt'] = $alttext;
 		$image_id = get_post_thumbnail_id( $id ); 
@@ -892,6 +918,10 @@ class Data {
 		    $imagedata['sizes'] = $imgsrcsizes;
 		}
                 $content .= Schema::create_Image($imagedata, 'figure', 'image', 'person-thumb', true);
+		 */
+		
+		$content .= Data::create_kontakt_image($id, 'person-thumb-v3', "person-thumb", false, false,'',false);	  
+
 		
              }            
 
@@ -1575,7 +1605,7 @@ class Data {
 		$display = 'titel, familyName, givenName, name, suffix, bild, position, telefon, email, permalink, url, socialmedia';  
 		break;
 	    default:
-		$display = 'title, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, email, permalink, url, link';  
+		$display = 'title, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, email, permalink, url, border';  
 	}	
 	return $display;
     }

@@ -1,6 +1,6 @@
 {
   "name": "fau-person",
-  "version": "3.0.29-3",
+  "version": "3.0.29",
   "description": "Kontakt-Plugin für FAU Webauftritte.",
   "main": "fau-person.php",
   "textdomain": "fau-person",
