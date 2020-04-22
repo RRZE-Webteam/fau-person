@@ -337,6 +337,24 @@ class Data {
          return $res;
     }
     
+    public static function get_description($id = 0, $format = 'page', $fields = array()) {
+	if ($id = 0) {
+	    return;
+	}
+	if (($format == 'sidebar') || ($format == 'kompakt')) {	   
+	     if ((isset($fields)) && isset($fields['small_description']) && (!empty($fields['small_description']))) {
+		return esc_html($fields['small_description']);
+	    }    
+	}
+	if ((isset($fields)) && isset($fields['description']) && (!empty($fields['description']))) {
+	    return esc_html($fields['description']);
+	}    
+	$fallbackexcerpt = get_post_field('post_excerpt', $id);
+	if ($fallbackexcerpt) {
+	    return esc_html($fallbackexcerpt);
+	}
+	return;
+    }
  
     
     public static function fau_person_markup($id, $display = array(), $arguments = array()) {
@@ -352,15 +370,8 @@ class Data {
 	$fields['permalink'] = get_permalink($id);
 	$fields['name'] = get_the_title($id);
 	
-	if (get_post_field('post_excerpt', $id)) {
-	    $fields['description']  = get_post_field('post_excerpt', $id);
-	} else {
-	    $post = get_post($id);
-	    if ($post->post_content) {
-		$fields['description']  = wp_trim_excerpt($post->post_content);
-	    }
-	}
-
+	$fields['description'] = self::get_description($id, $arguments['format'], $fields);
+	
 	$data = self::filter_fields($fields, $display);
 
 	$fullname = Schema::create_Name($data,'name','','a',false,$viewopts);
@@ -632,14 +643,7 @@ class Data {
 	$fields['permalink'] = get_permalink($id);
 	$fields['name'] = get_the_title($id);
 	
-	if (get_post_field('post_excerpt', $id)) {
-	    $fields['description']  = get_post_field('post_excerpt', $id);
-	} else {
-	    $post = get_post($id);
-	    if ($post->post_content) {
-		$fields['description']  = wp_trim_excerpt($post->post_content);
-	    }
-	}
+	$fields['description'] = self::get_description($id, $arguments['format'], $fields);
 
 	$data = self::filter_fields($fields, $display);
 	if ((isset($viewopts['view_raum_prefix'])) && (!empty(trim($viewopts['view_raum_prefix']))) 
@@ -682,7 +686,7 @@ class Data {
 	
 	$fields['permalink'] = get_permalink($id);
 	$fields['name'] = get_the_title($id);
-	
+	$fields['description'] = self::get_description($id, $arguments['format'], $fields);
 	
 	$data = self::filter_fields($fields, $display);
 	$class = 'card-item';
@@ -758,14 +762,7 @@ class Data {
 
 	$fields['permalink'] = get_permalink($id);
 	$fields['name'] = get_the_title($id);
-	if (get_post_field('post_excerpt', $id)) {
-	    $fields['description']  = get_post_field('post_excerpt', $id);
-	} else {
-	    $post = get_post($id);
-	    if ($post->post_content) {
-		$fields['description']  = wp_trim_excerpt($post->post_content);
-	    }
-	}
+	$fields['description'] = self::get_description($id, $arguments['format'], $fields);
 	
 
 	$data = self::filter_fields($fields, $display);
@@ -837,17 +834,7 @@ class Data {
 
 	$fields['permalink'] = get_permalink($id);
 	$fields['name'] = get_the_title($id);
-	/*
-	if (get_post_field('post_excerpt', $id)) {
-	    $fields['description']  = get_post_field('post_excerpt', $id);
-	} else {
-	    $post = get_post($id);
-	    if ($post->post_content) {
-		$fields['description']  = wp_trim_excerpt($post->post_content);
-	    }
-	}
-	*/
-	
+	$fields['description'] = self::get_description($id, 'sidebar', $fields);
 	
 	
 	$sitebaropts = self::map_old_keys(self::get_viewsettings('sidebar'));
@@ -912,28 +899,7 @@ class Data {
 	    $content .= '<div class="row">' . "\n";
 	    
 	    if ((isset($display['bild'])) && (!empty($display['bild'])) && (has_post_thumbnail($id) )) {
-		/*
-		$alttext = esc_html($data['name']);		
-		$imagedata['alt'] = $alttext;
-		$image_id = get_post_thumbnail_id( $id ); 
-		$size = 'person-thumb-bigger';  // 'person-thumb-page', person-thumb-bigger
-		
-		$imga = wp_get_attachment_image_src($image_id, $size);
-		if (is_array($imga)) {
-		    $imgsrcset =  wp_get_attachment_image_srcset($image_id, $size);
-		    $imgsrcsizes = wp_get_attachment_image_sizes($image_id, $size);
-		    $imagedata['src'] = $imga[0];
-		    $imagedata['width'] = $imga[1];
-		    $imagedata['height'] = $imga[2];
-		    $imagedata['srcset'] = $imgsrcset;
-		    $imagedata['sizes'] = $imgsrcsizes;
-		}
-                $content .= Schema::create_Image($imagedata, 'figure', 'image', 'person-thumb', true);
-		 */
-		
 		$content .= Data::create_kontakt_image($id, 'person-thumb-v3', "person-thumb", false, false,'',false);	  
-
-		
              }            
 
             $content .= '<div class="person-sidebar">' . "\n";
@@ -1359,6 +1325,7 @@ class Data {
             'hoursAvailable_text' => '',
             'hoursAvailable' => '',
             'description' => '',
+	   'small_description' => '',
             'mobilePhone' => '',
         );
 	
@@ -1610,7 +1577,7 @@ class Data {
 		$display = 'titel, familyName, givenName, name, suffix, description, permalink, url, socialmedia';  
 		break;
 	     case 'sidebar':
-		$display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, jobTitle, telefon, email, socialmedia, fax, url, adresse, bild, permalink, url, sprechzeiten, ansprechpartner';  
+		$display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, jobTitle, telefon, email, socialmedia, fax, url, adresse, bild, permalink, url, sprechzeiten, ansprechpartner, description';  
 		break;
 	    case 'table': 
 		$display = 'titel, familyName, givenName, name, suffix, telefon, email, permalink, url';  

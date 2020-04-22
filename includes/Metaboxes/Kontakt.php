@@ -294,11 +294,9 @@ class Kontakt extends Metaboxes {
 		    'desc' => __('Die Adressdaten werden aus dem Standort bezogen; die folgenden optionalen Felder und Adressdaten aus UnivIS werden überschrieben.', 'fau-person'),
 		    'type' => 'checkbox',
 		    'id' => $prefix . 'standort_sync',
-		    //'before' => $standort_sync,
 		),
 		array(
 		    'name' => __('Straße und Hausnummer', 'fau-person'),
-		    'desc' => '',
 		    'type' => 'text',
 		    'id' => $prefix . 'streetAddress',
 		    'after' =>  $standort_default['streetAddress'],
@@ -310,7 +308,6 @@ class Kontakt extends Metaboxes {
 		array(
 		    'name' => __('Postleitzahl', 'fau-person'),
 		    //'desc' => 'Wenn der Ort aus UnivIS übernommen werden soll bitte leer lassen!',
-		    'desc' => __('Nur 5-stellige Zahlen erlaubt.', 'fau-person'),
 		    'type' => 'text_small',
 		    'id' => $prefix . 'postalCode',
 		    'sanitization_cb' => 'validate_plz',
@@ -321,7 +318,6 @@ class Kontakt extends Metaboxes {
 		),
 		array(
 		    'name' => __('Ort', 'fau-person'),
-		    'desc' => '',
 		    'type' => 'text',
 		    'id' => $prefix . 'addressLocality',
 		    'after' => $standort_default['addressLocality'],
@@ -331,7 +327,6 @@ class Kontakt extends Metaboxes {
 		),
 		array(
 		    'name' => __('Land', 'fau-person'),
-		    'desc' => '',
 		    'type' => 'text',
 		    'id' => $prefix . 'addressCountry',
 		    'after' => $standort_default['addressCountry'],
