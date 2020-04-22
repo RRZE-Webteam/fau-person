@@ -501,12 +501,12 @@ function getShortcodeSettings(){
 				'desc' => __( 'Von Z bis A', 'fau-person' ),
 			],
 		],
-		'border' => [
+/*		'border' => [
 			'default' => true,
 			'field_type' => 'checkbox',
 			'label' => __( 'Rahmen anzeigen', 'fau-person' ),
 			'type' => 'boolean' 
-		],
+		], */
 		'hstart' => [
 			'default' => 3,
 			'field_type' => 'number',

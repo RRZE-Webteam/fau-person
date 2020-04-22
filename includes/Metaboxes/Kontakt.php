@@ -21,15 +21,10 @@ class Kontakt extends Metaboxes {
 
     public function onLoaded()    {
 	require_once(plugin_dir_path($this->pluginFile) . 'vendor/UnivIS/UnivIS.php');
-
-
-	
-	add_filter('cmb2_meta_boxes', array( $this, 'cmb2_kontakt_metaboxes') );	
-	
-	
-	
+	add_filter('cmb2_meta_boxes', array( $this, 'cmb2_kontakt_metaboxes') );		
     }
 
+    
     public function cmb2_kontakt_metaboxes( $meta_boxes ) {
 	$prefix = $this->prefix;
 
@@ -48,51 +43,50 @@ class Kontakt extends Metaboxes {
 	
 	
 
-	
-	if(UnivIS_Data::get_person($person_id) ) {
+	 $univis_id = get_post_meta($person_id, 'fau_person_univis_id', true);
+	 $univisdata = Data::get_fields($person_id, $univis_id, 0, false, true);
+		    
+	if($univisdata ) {
 	    $univis_sync = '';
-//	    $univis_sync = '<p class="cmb2_metabox_description">' . __('Es können aktuell keine Daten aus UnivIS angezeigt werden. Bitte überprüfen Sie, ob Sie das Plugin univis-data installiert und aktiviert haben.', 'fau-person') . '</p>';
 	} else {
 	    $univis_sync = '<p class="cmb2_metabox_description">' . __('Derzeit sind keine Daten aus UnivIS syncronisiert.', 'fau-person') . '</p>';
 	}
 	$standort_default = Data::get_standort_defaults($person_id);  
 	$univis_default = Data::univis_defaults($person_id);  
 
-	// Meta-Box Zuordnung - fau_person_orga
-	$meta_boxes['fau_person_orga'] = array(
-	    'id' => 'fau_person_orga',
-	    'title' => __( 'Zuordnung', 'fau-person' ),
+	$defaultkurzauszug = '';
+	if (get_post_field('post_excerpt', $person_id)) {
+	    $defaultkurzauszug  = get_post_field('post_excerpt', $person_id);
+	}
+	// Meta-Box Weitere Informationen - fau_person_adds
+	$meta_boxes['fau_person_textinfos'] = array(
+	    'id' => 'fau_person_textinfos',
+	    'title' => __('Kontakt Beschreibung in Kurzform', 'fau-person'),
 	    'object_types' => array('person'), // post type
 	    'context' => 'normal',
-	    'priority' => 'default',
-	//    'show_on_cb' => 'callback_cmb2_show_on_person',
-	    'fields' => array(        
+	    'priority' => 'high',
+	    'fields' => array(
 		array(
-		    'name' => __('Organisation', 'fau-person'),
-		    'desc' => __('Geben Sie hier die Organisation (Lehrstuhl oder Einrichtung) ein.', 'fau-person'),
-		    'type' => 'text',
-		    'id' => $prefix . 'worksFor',
-		    'after' => $univis_default['worksFor']
+		    'name' => __('Kurzbeschreibung', 'fau-person'),
+		    'desc' => __('Kurzform und Zusammenfassung der Kontaktbeschreibung bei Nutzung des Attributs <code>show="description"</code>.', 'fau-person'),
+		    'type' => 'textarea_small',
+		    'id' => $prefix . 'description',
+		    'default'	=> $defaultkurzauszug
 		),
-		array(
-		    'name' => __('Abteilung', 'fau-person'),
-		    'desc' => __('Geben Sie hier die Abteilung oder Arbeitsgruppe ein.', 'fau-person'),
-		    'type' => 'text',
-		    'id' => $prefix . 'department',
-		    'after' => $univis_default['department'],
-		   
-		),
-		array(
-		    'name' => __('Position/Funktion', 'fau-person'),
-		    'desc' => '',
-		    'id' => $prefix . 'jobTitle',
-		    'type' => 'text',
-		    'after' => $univis_default['jobTitle'],
-		   
-		),
-	    )
-	);
 
+		array(
+		    'name' => __('Kurzbeschreibung (Sidebar und Kompakt)', 'fau-person'),
+		    'desc' => __('Diese Kurzbeschreibung wird bei der Anzeige von <code>show="description"</code> in einer Sidebar (<code>format="sidebar"</code>) oder einer Liste (<code>format="kompakt"</code>) verwendet.', 'fau-person'),
+		    'type' => 'textarea_small',
+		    'id' => $prefix . 'small_description',
+		    'default'	=> $defaultkurzauszug
+		),
+
+	    )   
+	);
+	
+	
+	
 	// Meta-Box Kontaktinformation - fau_person_info
 	$meta_boxes['fau_person_info'] = array(
 	    'id' => 'fau_person_info',
@@ -124,7 +118,10 @@ class Kontakt extends Metaboxes {
 		    'type' => 'text',
 		    'id' => $prefix . 'givenName',
 		    'after' => $univis_default['givenName'],
-		    'show_on_cb' => 'callback_cmb2_show_on_person'
+		    'show_on_cb' => 'callback_cmb2_show_on_person',
+		    'attributes'  => array(
+			'placeholder' => $univisdata['givenName'],
+		    ),
 		),
 		array(
 		    'name' => __('Nachname', 'fau-person'),
@@ -132,6 +129,9 @@ class Kontakt extends Metaboxes {
 		    'type' => 'text',
 		    'id' => $prefix . 'familyName',
 		    'after' => $univis_default['familyName'],
+		    'attributes'  => array(
+			'placeholder' => $univisdata['familyName'],
+		    ),
 		    'show_on_cb' => 'callback_cmb2_show_on_person'
 		),
 		array(
@@ -139,6 +139,9 @@ class Kontakt extends Metaboxes {
 		    'desc' => __('Wird für die Kategoriensortierung nach Nachname als Sortierkriterium verwendet.', 'fau-person'),
 		    'type' => 'text',
 		    'id' => $prefix . 'alternateName',
+		     'attributes'  => array(
+			'placeholder' => $univisdata['alternateName'],
+		    ),
 		    'show_on_cb' => 'callback_cmb2_show_on_einrichtung'
 		),
 		array(
@@ -147,44 +150,53 @@ class Kontakt extends Metaboxes {
 		    'type' => 'text',
 		    'id' => $prefix . 'honorificSuffix',
 		    'after' => $univis_default['honorificSuffix'],
+		    'attributes'  => array(
+			'placeholder' => $univisdata['honorificSuffix'],
+		    ),
 		    'show_on_cb' => 'callback_cmb2_show_on_person'
 		),
 		array(
-		    'name' => __('Straße und Hausnummer', 'fau-person'),
+		    'name' => __('Position/Funktion', 'fau-person'),
 		    'desc' => '',
+		    'id' => $prefix . 'jobTitle',
 		    'type' => 'text',
-		    'id' => $prefix . 'streetAddress',
-		    'after' => $univis_default['streetAddress'] . $standort_default['streetAddress'] 
+		    'after' => $univis_default['jobTitle'],
+		   'attributes'  => array(
+			'placeholder' => $univisdata['jobTitle'],
+		    ),
 		),
 		array(
-		    'name' => __('Postleitzahl', 'fau-person'),
-		    //'desc' => 'Wenn der Ort aus UnivIS übernommen werden soll bitte leer lassen!',
-		    'desc' => __('Nur 5-stellige Zahlen erlaubt.', 'fau-person'),
-		    'type' => 'text_small',
-		    'id' => $prefix . 'postalCode',
-		    'sanitization_cb' => 'validate_plz',
-		    'after' => $standort_default['postalCode'] 
+		    'name' => __('Organisation', 'fau-person'),
+		    'desc' => __('Geben Sie hier die Organisation (Lehrstuhl oder Einrichtung) ein.', 'fau-person'),
+		    'type' => 'text',
+		    'id' => $prefix . 'worksFor',
+		    'after' => $univis_default['worksFor'],
+		    'attributes'  => array(
+			'placeholder' => $univisdata['worksFor'],
+		    ),
 		),
 		array(
-		    'name' => __('Ort', 'fau-person'),
-		    'desc' => '',
+		    'name' => __('Abteilung', 'fau-person'),
+		    'desc' => __('Geben Sie hier die Abteilung oder Arbeitsgruppe ein.', 'fau-person'),
 		    'type' => 'text',
-		    'id' => $prefix . 'addressLocality',
-		    'after' => $univis_default['addressLocality'] . $standort_default['addressLocality'] 
+		    'id' => $prefix . 'department',
+		    'after' => $univis_default['department'],
+		    'attributes'  => array(
+			'placeholder' => $univisdata['department'],
+		    ),
+		   
 		),
-		array(
-		    'name' => __('Land', 'fau-person'),
-		    'desc' => '',
-		    'type' => 'text',
-		    'id' => $prefix . 'addressCountry',
-		    'after' => $standort_default['addressCountry'] 
-		),
+		
+		
 		array(
 		    'name' => __('Raum', 'fau-person'),
 		    'desc' => '',
 		    'type' => 'text',
 		    'id' => $prefix . 'workLocation',
-		    'after' => $univis_default['workLocation'] 
+		    'after' => $univis_default['workLocation'],
+		     'attributes'  => array(
+			'placeholder' => $univisdata['workLocation'],
+		    ),
 		),
 		array(
 		    'name' => __('Standort Telefon- und Faxanschluss', 'fau-person'),
@@ -204,7 +216,10 @@ class Kontakt extends Metaboxes {
 		    'type' => 'text',
 		    'id' => $prefix . 'telephone',
 		    'sanitization_cb' => 'validate_number',
-		    'after' => $univis_default['telephone'] 
+		    'after' => $univis_default['telephone'],
+		     'attributes'  => array(
+			'placeholder' => $univisdata['telephone'],
+		    ),
 		),
 		array(
 		    'name' => __('Telefax', 'fau-person'),
@@ -212,32 +227,124 @@ class Kontakt extends Metaboxes {
 		    'type' => 'text',
 		    'id' => $prefix . 'faxNumber',
 		    'sanitization_cb' => 'validate_number',
-		    'after' => $univis_default['faxNumber'] 
+		    'after' => $univis_default['faxNumber'],
+		       'attributes'  => array(
+			'placeholder' => $univisdata['faxNumber'],
+		    ),
 		),
 		array(
 		    'name' => __('Mobiltelefon', 'fau-person'),
 		    'desc' => __('Bitte geben Sie die Nummer in der internationalen Form +49 176 1111111 an.', 'fau-person'),
 		    'type' => 'text',
 		    'sanitization_cb' => 'validate_number',
-		    'id' => $prefix . 'mobilePhone'
+		    'id' => $prefix . 'mobilePhone',
+		      'attributes'  => array(
+			'placeholder' => $univisdata['mobilePhone'],
+		    ),
 		),
 		array(
 		    'name' => __('E-Mail', 'fau-person'),
 		    'desc' => '',
 		    'type' => 'text_email',
 		    'id' => $prefix . 'email',
-		    'after' => $univis_default['email'] 
+		    'after' => $univis_default['email'],
+		    'attributes'  => array(
+			'placeholder' => $univisdata['email'],
+		    ),
 		),
 		array(
 		    'name' => __('Webseite', 'fau-person'),
 		    'desc' => '',
 		    'type' => 'text_url',
 		    'id' => $prefix . 'url',
-		    'after' => $univis_default['url'] 
+		    'after' => $univis_default['url'],
+		    'attributes'  => array(
+			'placeholder' => $univisdata['url'],
+		    ),
 		),
+		array(
+		    'name' => __('Name und "Mehr"-Link verlinken auf Seite ...', 'fau-person'),
+		    'desc' => __('Optionale URL-Angabe zu einer selbst gepflegten Seite für Details zum Kontakt. Wenn diese Angabe leer gelassen wird, wird zu der automatisch erstellten Kontaktseite verlinkt.', 'fau-person'),
+		    'type' => 'text_url',
+		    'id' => $prefix . 'link',
+		    'attributes'  => array(
+			'placeholder' => get_permalink( $person_id ),
+		    ),
+		    //'after' => '<hr>' . __('Zum Anzeigen der Person verwenden Sie bitte die ID', 'fau-person') . ' ' . $helpuse,                
+		),       
 	    )
 	);
 
+	$meta_boxes['fau_person_adressdaten'] = array(
+	    'id' => 'fau_person_adressdaten',
+	    'title' => __('Postalische Adressdaten', 'fau-person'),
+	    'object_types' => array('person'), // post type
+	    'context' => 'normal',
+	    'priority' => 'default',
+	    'fields' => array(
+		array(
+		    'name' => __('Zugeordneter Standort', 'fau-person'),
+		    //'desc' => 'Der Standort, von dem die Daten angezeigt werden sollen.',
+		    'type' => 'select',
+		    'id' => $prefix . 'standort_id',
+		    'options' => $standortselect,
+		),
+		array(
+		    'name' => __('Standort-Daten für Adressanzeige nutzen', 'fau-person'),
+		    'desc' => __('Die Adressdaten werden aus dem Standort bezogen; die folgenden optionalen Felder und Adressdaten aus UnivIS werden überschrieben.', 'fau-person'),
+		    'type' => 'checkbox',
+		    'id' => $prefix . 'standort_sync',
+		    //'before' => $standort_sync,
+		),
+		array(
+		    'name' => __('Straße und Hausnummer', 'fau-person'),
+		    'desc' => '',
+		    'type' => 'text',
+		    'id' => $prefix . 'streetAddress',
+		    'after' =>  $standort_default['streetAddress'],
+		    'attributes'  => array(
+			'placeholder' => $univisdata['streetAddress'],
+		    ),
+	    
+		),
+		array(
+		    'name' => __('Postleitzahl', 'fau-person'),
+		    //'desc' => 'Wenn der Ort aus UnivIS übernommen werden soll bitte leer lassen!',
+		    'desc' => __('Nur 5-stellige Zahlen erlaubt.', 'fau-person'),
+		    'type' => 'text_small',
+		    'id' => $prefix . 'postalCode',
+		    'sanitization_cb' => 'validate_plz',
+		    'after' => $standort_default['postalCode'],
+		    'attributes'  => array(
+			'placeholder' => $univisdata['postalCode'],
+		    ),
+		),
+		array(
+		    'name' => __('Ort', 'fau-person'),
+		    'desc' => '',
+		    'type' => 'text',
+		    'id' => $prefix . 'addressLocality',
+		    'after' => $standort_default['addressLocality'],
+		    'attributes'  => array(
+			'placeholder' => $univisdata['addressLocality'],
+		    ),
+		),
+		array(
+		    'name' => __('Land', 'fau-person'),
+		    'desc' => '',
+		    'type' => 'text',
+		    'id' => $prefix . 'addressCountry',
+		    'after' => $standort_default['addressCountry'],
+		    'attributes'  => array(
+			'placeholder' => $univisdata['addressCountry'],
+		    ),
+		),
+
+	    )   
+	);
+	
+	
+	
 	// Meta-Box Social Media - fau_person_social_media
 	$meta_boxes['fau_person_social_media'] = array(
 	    'id' => 'fau_person_social_media',
@@ -302,25 +409,12 @@ class Kontakt extends Metaboxes {
 	// Meta-Box Weitere Informationen - fau_person_adds
 	$meta_boxes['fau_person_adds'] = array(
 	    'id' => 'fau_person_adds',
-	    'title' => __('Weitere Informationen', 'fau-person'),
+	    'title' => __('Sprechzeiten', 'fau-person'),
 	    'object_types' => array('person'), // post type
 	    'context' => 'normal',
 	    'priority' => 'default',
 	    'fields' => array(
-		array(
-		    'name' => __('Kurzauszug', 'fau-person'),
-		    'desc' => __('Wird bei der Anzeige in einer Sidebar verwendet, bis zu 160 Zeichen.', 'fau-person'),
-		    'type' => 'textarea_small',
-		    'id' => $prefix . 'description'
-		),
-		array(
-		    'name' => __('Name und "Mehr"-Link verlinken auf Seite ...', 'fau-person'),
-		    'desc' => __('Bitte vollständigen Permalink der ausführlichen Kontaktseite angeben.', 'fau-person'),
-		    'type' => 'text_url',
-		    'id' => $prefix . 'link',
-		    'after' => sprintf(__('<p class="cmb_metabox_description">[Standardwert wenn leer: %s]</p>', 'fau-person'), get_permalink( $person_id )),
-		    //'after' => '<hr>' . __('Zum Anzeigen der Person verwenden Sie bitte die ID', 'fau-person') . ' ' . $helpuse,                
-		),       
+		
 		array(
 		    'name' => __('Sprechzeiten: Überschrift', 'fau-person'),
 		    'desc' => __('Wird in Fettdruck über den Sprechzeiten ausgegeben.', 'fau-person'),
@@ -405,52 +499,13 @@ class Kontakt extends Metaboxes {
 	// Meta-Box Synchronisierung mit externen Daten - fau_person_sync ab hier
 	$meta_boxes['fau_person_sync'] = array(
 	    'id' => 'fau_person_sync',
-	    'title' => __('Daten aus UnivIS', 'fau-person'),
+	    'title' => __('Metadaten zum Kontakt', 'fau-person'),
 	    'object_types' => array('person'), // post type
 	    'context' => 'side',
 	    'priority' => 'high',
 	    'fields' => array(
 		array(
-		    'name' => __('UnivIS-ID', 'fau-person'),
-		    'desc' => 'UnivIS-ID der Person (8-stellige Zahl)',
-		    'type' => 'text',
-		    'id' => $prefix . 'univis_id',
-		    'sanitization_cb' => 'validate_univis_id',
-		    'show_on_cb' => 'callback_cmb2_show_on_person'
-		),
-		array(
-		    'name' => __('UnivIS-Daten in Ausgabe anzeigen', 'fau-person'),
-		    'desc' => __('Titel (Präfix), Vorname, Nachname, Abschluss (Suffix), Organisation bzw. Abteilung, Position/Funktion, Adresse, Telefon- und Telefaxnummer, E-Mail, Webseite. Die hier in diesen Feldern eingegebenen Werte werden in der Ausgabe nicht angezeigt.', 'fau-person'),
-		    'type' => 'checkbox',
-		    'id' => $prefix . 'univis_sync',
-		    'after' => $univis_sync,
-		    'show_on_cb' => 'callback_cmb2_show_on_person'
-		),
-	//	array(
-	//	    'name' => __('UnivIS-OrgNr', 'fau-person'),
-	//	    'desc' => __('Aktuell können noch keine Einrichtungsdaten aus UnivIS übernommen werden.', 'fau-person'),
-	//	    'type' => 'text',
-	//	    'id' => $prefix . 'univis_org_nr',
-	//	    'show_on_cb' => 'callback_cmb2_show_on_einrichtung'
-		    //'sanitization_cb' => 'validate_univis_id',
-	//	),
-
-	    )
-	);
-
-
-	// Meta-Box Synchronisierung mit externen Daten - fau_person_sync ab hier
-	$meta_boxes['fau_person_options'] = array(
-	    'id' => 'fau_person_options',
-	    'title' => __('Zusatzoptionen', 'fau-person'),
-	    'object_types' => array('person'), // post type
-	    'context' => 'side',
-	    'priority' => 'default',
-	    'show_names' => true, // Show field names on the left
-	    'fields' => array(
-		array(
 		    'name' => __('Typ des Eintrags', 'fau-person'),
-		    //'desc' => __('Bei Einrichtungen und Pseudonymen wird die Bezeichnung angezeigt, ansonsten Vor- und Nachname.', 'fau-person'),
 		    'type' => 'select',
 		    'options' => array('realperson' => __('Person (allgemein)', 'fau-person'),
 			'realmale' => __('Person (männlich)', 'fau-person'),
@@ -462,22 +517,27 @@ class Kontakt extends Metaboxes {
 		    'default' => $default_fau_person_typ
 		),
 		array(
-		    'name' => __('Zugeordneter Standort', 'fau-person'),
-		    //'desc' => 'Der Standort, von dem die Daten angezeigt werden sollen.',
-		    'type' => 'select',
-		    'id' => $prefix . 'standort_id',
-		    'options' => $standortselect,
+		    'name' => __('UnivIS-Id', 'fau-person'),
+		    'desc' => 'UnivIS-Id des Kontakts (<a href="/wp-admin/edit.php?post_type=person&page=search-univis-id">UnivIS-Id suchen</a>)',
+		    'type' => 'text_small',
+		    'id' => $prefix . 'univis_id',
+		    'sanitization_cb' => 'validate_univis_id',
+		    'show_on_cb' => 'callback_cmb2_show_on_person'
 		),
 		array(
-		    'name' => __('Standort-Daten in Ausgabe anzeigen', 'fau-person'),
-		    'desc' => __('Straße, Postleitzahl, Ort, Land. Die hier in diesen Feldern eingegebenen Werte werden in der Ausgabe nicht angezeigt.', 'fau-person'),
+		    'name' => __('UnivIS-Daten verwenden', 'fau-person'),
+		    'desc' => __('Daten aus UnivIS überschreiben die Kontaktdaten.', 'fau-person'),
 		    'type' => 'checkbox',
-		    'id' => $prefix . 'standort_sync',
-		    //'before' => $standort_sync,
+		    'id' => $prefix . 'univis_sync',
+		    'after' => $univis_sync,
+		    'show_on_cb' => 'callback_cmb2_show_on_person'
 		),
-	    )
-	);    
 
+	    )
+	);
+
+
+	
 	
 //	$meta_boxes['fau_person_gmail_contacts'] = apply_filters('fau_person_gmail_contacts', array());
 

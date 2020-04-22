@@ -13,4 +13,7 @@ namespace {
 	    return FAU_Person\Shortcodes\Kontakt::shortcode_kontakt($args);
 	}
     }
+    class FAU_Person  {
+	// for downwards compatibility
+    }
 }					

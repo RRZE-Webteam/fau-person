@@ -45,7 +45,7 @@ class TinyMCE {
     }
 
     public function person_rte_add_buttons( $plugin_array ) {
-        $plugin_array['personrteshortcodes'] = plugin_dir_url(__FILE__) . 'js/tinymce-shortcodes.js';
+        $plugin_array['personrteshortcodes'] = plugin_dir_url($this->pluginFile) . 'js/tinymce-shortcodes.js';
         return $plugin_array;
     }
     

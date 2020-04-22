@@ -8,7 +8,7 @@ namespace RRZE\Lib\UnivIS;
 use RRZE\Lib\UnivIS\Config;
 use RRZE\Lib\UnivIS\Sanitizer;
 
-add_action('univis_data_async_task', array('UnivIS_Data', 'async_task'));
+add_action('univis_data_async_task', array('RRZE\Lib\UnivIS\Data', 'async_task'));
 
 add_action('save_post', function() {
     wp_schedule_single_event(time(), 'univis_data_async_task');
@@ -259,7 +259,7 @@ class Data {
         //if( !empty( $person[$univis_var] ) && get_post_meta($id, 'fau_person_'.$fau_person_var_sync', true) ) {
         if( $defaults ) {
             if( !empty( $person[$univis_var] ) ) {
-                $val = sprintf(__('<p class="cmb_metabox_description">[Aus UnivIS angezeigter Wert: %s]</p>', 'fau-person'), $person[$univis_var]);
+                $val = sprintf(__('<p class="cmb_metabox_description">[Aus UnivIS entnommener Wert: %s]</p>', 'fau-person'), $person[$univis_var]);
             } else {
                 $val = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', 'fau-person');
             }

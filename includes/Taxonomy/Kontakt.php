@@ -48,7 +48,7 @@ class Kontakt extends Taxonomy {
 	    'label'		=> __('Kontakt', 'fau-person'),
 	    'description'		=> __('Kontaktinformationen', 'fau-person'),
 	    'labels'		=> $labels,
-	    'supports'		=> array('title', 'editor', 'excerpt', 'thumbnail', 'revisions'),
+	    'supports'		=> array('title', 'editor', 'thumbnail', 'revisions'),
 	    'taxonomies'		=> array('persons_category'),
 	    'hierarchical'	=> false,
 	    'public'		=> true,

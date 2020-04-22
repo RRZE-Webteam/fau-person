@@ -5,7 +5,6 @@ use function FAU_Person\Config\getShortcodeSettings;
 use function FAU_Person\Config\getShortcodeDefaults;
 use FAU_Person\Main;
 use FAU_Person\Data;
-use RRZE\Lib\UnivIS\Data as UnivIS_Data;
 
 
 defined('ABSPATH') || exit;

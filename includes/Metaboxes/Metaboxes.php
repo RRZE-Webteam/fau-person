@@ -9,6 +9,7 @@ use FAU_Person\Metaboxes\Kontakt;
 use FAU_Person\Metaboxes\Standort;
 use FAU_Person\Metaboxes\Pages;
 use FAU_Person\Metaboxes\Posts;
+use RRZE\Lib\UnivIS\Data as UnivIS_Data;
 
 
 class Metaboxes  {
@@ -25,10 +26,7 @@ class Metaboxes  {
 	
 
 	require_once(plugin_dir_path($this->pluginFile) . 'vendor/cmb2/init.php');
-	
-         
-         //Excerpt-Meta-Box umbenennen
-         add_action( 'do_meta_boxes', array( $this, 'modified_excerpt_metabox' ));        
+   
 
 	add_action( 'cmb2_render_text_number', array( $this, 'sm_cmb_render_text_number' ) );
 
@@ -45,18 +43,7 @@ class Metaboxes  {
 	$postsmb->onLoaded();
     }
     
-     //Excerpt Metabox entfernen um Titel zu ändern und Länge zu modifizieren
-    public function modified_excerpt_metabox() {
-            remove_meta_box( 'postexcerpt', 'person', 'normal' ); 
-            add_meta_box( 
-                    'postexcerpt'
-                    , __( 'Kurzbeschreibung in Listenansichten (bis zu 400 Zeichen)', 'fau-person' )
-                    , 'post_excerpt_meta_box'
-                    , 'person'
-                    , 'normal'
-                    , 'high' 
-            );
-    }
+    
     
     function sm_cmb_render_text_number( $field_args, $escaped_value, $object_id, $object_type, $field_type_object ) {
 	echo $field_type_object->input( array( 'class' => 'cmb_text_small', 'type' => 'text' ) );
@@ -80,10 +67,12 @@ class Metaboxes  {
     }
 
     function validate_number( $str ) {
-	$location = get_post_meta( cmb_Meta_Box::get_object_id(), 'fau_person_telephone_select', true );
-	$str = UnivIS_Data::correct_phone_number( $str, $location );
-	add_action( 'admin_notices', array( 'FAU_Person', 'admin_notice_phone_number' ) );
-	return $str;
+	if ($str) {
+	    $location = get_post_meta( cmb2_Meta_Box::get_object_id(), 'fau_person_telephone_select', true );
+	    $str = UnivIS_Data::correct_phone_number( $str, $location );
+	 //   add_action( 'admin_notices', array( 'FAU_Person\Helper', 'admin_notice_phone_number' ) );
+	    return $str;
+	}
     }
 
 

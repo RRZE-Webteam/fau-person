@@ -464,34 +464,38 @@ class Data {
 	}
 
 	
-	 if (!isset($arguments['format']) || $arguments['format'] !=='kompakt') {
-                $content .= '</div><div class="person-default-more">';
-	}
 	    
+	$morecontent = '';
 	    
-	 if ( (!isset($data['connection_only'])) 
+	if ( (!isset($data['connection_only'])) 
 	    || ((isset($data['connection_only']) && $data['connection_only']==false))) {
 	     if (isset($data['hoursAvailable']) && ($data['hoursAvailable'])) {
-		$content .=   Schema::create_ContactPoint($data);
+		$morecontent .=   Schema::create_ContactPoint($data);
 	    }
-	 }   
+	}   
 	
 	
 	if (!empty($data['description']) && isset($display['description']) && (!empty($display['description']))) {
-             $content .= '<div class="person-info-description" itemprop="description"><p>' . $data['description'] . '</p></div>' . "\n";
+             $morecontent .= '<div class="person-info-description" itemprop="description"><p>' . $data['description'] . '</p></div>' . "\n";
 	}
 
-           if (isset($display['link']) && (!empty($display['link']))) {
-		$content .= self::get_more_link($data['permalink'] );
-          }
-      
+         if (isset($display['link']) && (!empty($display['link']))) {
+		$morecontent .= self::get_more_link($data['permalink'] );
+         }
+	 
+	if (!empty($morecontent)) {
+	    if (isset($arguments['format']) && $arguments['format'] =='kompakt') {
+		 $content .= '</div><div class="person-default-more">';   // ende div class compactindex
+	    }
+	    $content .= $morecontent;
+	    if (isset($arguments['format']) && $arguments['format'] =='kompakt') {
+		 $content .= '</div>';   // ende div class compactindex
+	    }
+	}
+	 
 
         $content .= '</div>';
-        $content .= '</div> <!-- /row-->';
-
-        if (isset($arguments['format']) && $arguments['format'] =='kompakt') {
-            $content .= '</div>';   // ende div class compactindex
-	}
+        $content .= '</div> <!-- /row-->';    
         $content .= '</div>';
         return $content;
     }
@@ -833,6 +837,7 @@ class Data {
 
 	$fields['permalink'] = get_permalink($id);
 	$fields['name'] = get_the_title($id);
+	/*
 	if (get_post_field('post_excerpt', $id)) {
 	    $fields['description']  = get_post_field('post_excerpt', $id);
 	} else {
@@ -841,7 +846,7 @@ class Data {
 		$fields['description']  = wp_trim_excerpt($post->post_content);
 	    }
 	}
-	
+	*/
 	
 	
 	
@@ -970,7 +975,7 @@ class Data {
 	    $content .= '</div>';
 	
 
-            if (!empty($data['description']) && isset($display['kurzbeschreibung'])) {
+            if (!empty($data['description']) && isset($display['description'])) {
                 $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', 'fau-person') . ': </span><span itemprop="description">' . $data['description'] . '</span></div>' . "\n";
 	    }
 	    
@@ -1271,7 +1276,7 @@ class Data {
     //Übergabewerte: ID der Person, UnivIS-ID der Person, 
     //Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular, 
     //$ignore_connection=1 wenn die verknüpften Kontakte einer Person ignoriert werden sollen (z.B. wenn die Person selbst schon eine verknüpfte Kontaktperson ist)
-    public static function get_fields( $id, $univis_id, $defaults, $ignore_connection=0 ) {
+    public static function get_fields( $id, $univis_id, $defaults, $ignore_connection=0, $setfields = false ) {
         $univis_sync = 0;
         $person = array();
         if( $univis_id  ) {
@@ -1402,6 +1407,9 @@ class Data {
                     $value = get_post_meta($id, 'fau_person_'.$key, true);                          
                 }
             }
+	    if (($setfields) && (!isset($value))) {
+		$value = '';
+	    }
             $fields[$key] = $value;
         }
         foreach( $fields_univis_location as $key => $value ) {
@@ -1567,8 +1575,8 @@ class Data {
             }
             $fields['connections'] = $connection;
         }
-
-        if( !$defaults && !get_post_meta($id, 'fau_person_univis_sync', true) ) {
+	
+	if( get_post_meta($id, 'fau_person_standort_sync', true) && get_post_meta($id, 'fau_person_standort_id', true) ) {
             $fields_standort = self::get_fields_standort( $id, get_post_meta($id, 'fau_person_standort_id', true), 0 );
             $fields = array_merge( $fields, $fields_standort );
         }
@@ -1644,6 +1652,7 @@ class Data {
 	    switch($key) {
 		case 'kurzbeschreibung':
 		case 'kurzauszug':
+		case 'excerpt':
 		   $newlist['description'] = $liste[$key];
 		   break;
 	         case 'organisation':

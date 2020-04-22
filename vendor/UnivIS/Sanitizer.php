@@ -82,7 +82,7 @@ class Sanitizer {
                                     $phone_number = "+49 911 " . $durchwahl[1];
                                     break;
                                 }
-                                add_action( 'admin_notices', array( 'FAU_Person', 'admin_notice_phone_number' ) );
+                     //           add_action( 'admin_notices', array( 'FAU_Person\Helper', 'admin_notice_phone_number' ) );
                                 
                         }
                 

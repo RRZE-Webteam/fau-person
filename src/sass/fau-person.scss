@@ -367,6 +367,7 @@ CSS Settings
 	text-align: center;
 	margin: 8px 0;
 	border: 2px solid transparent;
+	padding: 5px 0;
 	p {
 	    hyphens: manual;
 	} 
@@ -404,6 +405,7 @@ CSS Settings
 	&:hover,
 	&:focus {
 	    border-color: #eee;
+	    box-shadow: 4px 4px 15px rgba(0,0,0,0.1);
 	    
 	    img {
 		width: 110%;
