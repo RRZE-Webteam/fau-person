@@ -366,6 +366,13 @@ function getFields() {
 		],
 	    ],
 	    [
+		'name'  => 'backend_view_metabox_kontaktlist',
+		'label' => __('Metabox Kontakte', 'fau-person'),
+		'desc'  => __('Zeigt in der Bearbeitung von Seiten und Beiträgen eine Kontakt-Box an, aus der man bequem die Liste der Kontakte ablesen kann.', 'fau-person'),
+		'type'  => 'checkbox',
+		'default' => true,
+            ],
+	    [
 		'name'  => 'has_archive_page',
 		'label' => __('Kontakt-Übersichtsseite', 'fau-person'),
 		'desc'  => __('Zeige die Standard-Übersichtsseite aller Kontakte an. Bevor diese Option deaktiviert wird, muss eine eigene Seite mit der Titelform (slug) "person" direkt unterhalb der Hauptebene angelegt werden.', 'fau-person'),

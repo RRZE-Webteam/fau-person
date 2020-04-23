@@ -39,6 +39,8 @@ class Main {
     public function onLoaded() {
 	 add_action('wp_enqueue_scripts', [$this, 'registerPluginStyles']);
 	// Settings-Klasse wird instanziiert.
+	 add_action('admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
+	 
         $settings = new Settings($this->pluginFile);
         $settings->onLoaded();
 	$this->settings = $settings;
@@ -87,11 +89,18 @@ class Main {
     
     
     public function registerPluginStyles() {
-	 wp_register_style('fau-person', plugins_url('css/fau-person.css', plugin_basename($this->pluginFile)));
+	wp_register_style('fau-person', plugins_url('css/fau-person.css', plugin_basename($this->pluginFile)));
+    }
+    
+     public function enqueueAdminScripts() {
+	wp_register_script('fau-person-adminscripts', plugins_url('js/fau-person-admin.js', plugin_basename($this->pluginFile)));
+	wp_enqueue_script('fau-person-adminscripts');
+	wp_enqueue_script('jquery');
+	
     }
 
-
-      
+    
+    
     public static function enqueueForeignThemes() {
 	/* $constants = getConstants();
 	$themelist = $constants['fauthemes'];
