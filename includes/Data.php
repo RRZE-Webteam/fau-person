@@ -464,10 +464,16 @@ class Data {
 	    if (isset($adresse)) {
 		$datacontent .= $adresse;
 	    } 
+
 	    $datacontent .= Schema::create_contactpointlist($data, 'ul', '', 'contactlist', 'li',$viewopts);
 	}
 	if (isset($viewopts['view_some_position']) && $viewopts['view_some_position'] !== 'nach-name') {
 	    $datacontent .= Schema::create_SocialMedialist($data);
+	}
+	
+	    
+	if ((!empty($data['connection_text']) || !empty($data['connection_options']) || !empty($data['connections'])) && isset($display['ansprechpartner']) && $display['ansprechpartner']==true) {
+	    $datacontent .= self::fau_person_connection($data['connection_text'], $data['connection_options'], $data['connections'], $hstart);
 	}
 	if (!empty($datacontent)) {
 	     $content .= '<div class="person-info">';
@@ -475,11 +481,6 @@ class Data {
 	     $content .= '</div>';
 	}
         
-	    
-	if ((!empty($data['connection_text']) || !empty($data['connection_options']) || !empty($data['connections'])) && isset($display['ansprechpartner']) && $display['ansprechpartner']==true) {
-	    $content .= self::fau_person_connection($data['connection_text'], $data['connection_options'], $data['connections'], $hstart);
-	}
-
 	
 	    
 	$morecontent = '';
@@ -1586,11 +1587,11 @@ class Data {
 	    case 'plain':
 		$display = 'titel, familyName, givenName, name';
 		break;
+    	    case 'full':
 	     case 'compactindex':
 	     case 'kompakt':
 		$display = 'titel, familyName, givenName, name, suffix, position, telefon, email, email,  socialmedia, adresse, bild, permalink, url, border, border';		 
 		break;
-	    case 'full':
 	    case 'page':
 		$display = '_all';  
 		break;
