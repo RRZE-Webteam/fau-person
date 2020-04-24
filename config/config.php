@@ -90,10 +90,10 @@ function getSocialMediaList() {
 		'title'  => 'GitHub',
 		'class' => 'github'
 	    ],
-	    "tiktok"=> [
-		'title'  => 'TikTok',
-		'class' => 'tiktok'
-	    ]
+	//    "tiktok"=> [
+	//	'title'  => 'TikTok',
+	//	'class' => 'tiktok'
+	  //  ]
 	);
 
            // für ergänzende Optionen aus anderen Plugins
@@ -296,6 +296,17 @@ function getFields() {
 		'type'  => 'checkbox',
 		'default' => true,
             ],
+	    [
+		'name'  => 'view_some_position',
+		'label' => __('Position Social Media Icons', 'fau-person'),		
+		'default' => 'nach-kontakt',
+		'type' => 'Select', 
+		'options' => [
+			'nach-kontakt' => __( 'Nach den Kontaktdaten', 'fau-person' ),
+			'nach-name' => __( 'Direkt nach dem Namen', 'fau-person' ),
+		],
+	    ],
+
 	     [
 		'name'  => 'view_raum_prefix',
 		'default' => __('Raum', 'fau-person'),

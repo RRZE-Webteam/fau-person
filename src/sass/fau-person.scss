@@ -1,6 +1,6 @@
 /*
-CSS Settings 
-*/
+ * FAU Person CSS Settings Frontend 
+ */
 
 // Framework
 @import "awesome/fontawesome-min";
@@ -12,7 +12,27 @@ CSS Settings
 	margin: 0 15px 10px 0;
     }
 
-    
+    h3, h4, h5 {
+	a {
+	    text-decoration: none;
+	    &:hover, 
+	    &:focus {
+		    text-decoration: underline;
+	    }
+	}
+    }
+    h3 {
+	    padding-bottom: 0;
+	    padding-top: 5px;
+	    margin-bottom: 5px;
+    }
+
+    h4 {
+	    padding-top: 0;
+	    padding-bottom: 0;
+
+    }
+	
     [itemprop="telephone"]:before { 
 	@extend .fa;
 	width: 20px; 
@@ -89,74 +109,92 @@ CSS Settings
 	    list-style-type: none;
 	}
     }   
-    
+    .connection {
+	    margin-top: 10px;
+	    ul {
+		margin-top: 5px;
+	    }
+	    li {
+		padding: 0;
+	    }
+    }
+	
     .socialmedia {
 	margin: 0;
 	
 	
 	li {
-	    display: inline;
+	    display: inline-block;
 	    list-style: none;
-	    a {
-		margin: 3px;
+	    overflow: hidden;
+	    width: 25px;
+	    height: 25px;
+	    
+	    
+	    a {	
 		padding: 0;
+	    }
+	    &::before {
+		content: inherit;
 	    }
 	    
 	}
+	span {
+	    a::before {
+		 margin-top: 5px;
+	    }
+	}
 	a {
-	    width: 20px;
-	    height: 20px;
+	    width: 25px;
+	    height: 25px;
 	    overflow: hidden;
 	    display: inline-block;
-	    padding: 3px 0 0 0;
+	    padding: 0;
 	    
 	    
 	    &:before {
 		   @extend .fa; 
 		   @extend .fa-bookmark-o;
-		  
-		  width: 20px;
+	  
+		   width: 20px;
+		  height: 20px;
+		  line-height: 20px;
 		  text-align: center;
-		  font-size: 0.9em;
+		  font-size: 14px;
+		   border-radius: 50%;
+		   margin-right: 5px;
+		     margin-bottom: 5px;
 	    }
 			
 			
-	    &[href*="twitter.com"] {
+	    &[href*="twitter.com"]:before {
 		@extend .fa-twitter;   
-
 	    }
-	    &[href*="facebook.com"] {
+	    &[href*="facebook.com"]:before {
 		@extend .fa-facebook; 
-
 	    }
 
-	    &[href*="github.com"] {
+	    &[href*="github.com"]:before {
 		@extend .fa-github;
-
 	    }
 
-	    &[href*="instagram.com"] {
+	    &[href*="instagram.com"]:before {
 		@extend .fa-instagram;
-
 	    }
 
-	    &[href*="linkedin.com"] {
+	    &[href*="linkedin.com"]:before {
 		@extend .fa-linkedin;
-
 	    }
 	    
-	     &[href*="xing.com"] {
+	     &[href*="xing.com"]:before {
 		@extend .fa-xing;
-
 	    }
 	    
-	     &[href*="tiktok.com"] {
+	     &[href*="tiktok.com"]:before {
 		@extend .fa-tiktok;
-
 	    }
-	     &[href*="youtube.com"] {
+	     &[href*="youtube.com"]:before {
 		@extend .fa-youtube;
-
 	    }
 	  
 	
@@ -164,49 +202,48 @@ CSS Settings
 	 
 	
     }
+    &.color-some .socialmedia, 
     .color-some .socialmedia {
-	a[href*="twitter.com"] {
+	a:before {
+	    background-color: #aaa;
+	    color: #fff;
+	}
+	a[href*="twitter.com"]:before {
 	    background-color: #55acee;
 	    color: #fff;
-	    border-radius: 50%;
+
 	}
-	a[href*="facebook.com"] {
+	a[href*="facebook.com"]:before {
 	    background-color: #3b5999;
 	    color: #fff;
 	    border-radius: 50%;
 	}
 
-	a[href*="github.com"] {
+	a[href*="github.com"]:before {
 	    background-color: #000;
 	    color: #fff;
-	    border-radius: 50%;
 	}
 
-	a[href*="instagram.com"] {
+	a[href*="instagram.com"]:before {
 	    background-color: #e4405f;
 	    color: #fff;
-	    border-radius: 50%;
 	}
-	a[href*="linkedin.com"] {
+	a[href*="linkedin.com"]:before {
 	    background-color: #0077B5;
 	    color: #fff;
-	    border-radius: 50%;
 	}
 
-	a[href*="xing.com"] {
+	a[href*="xing.com"]:before {
 	    background-color: #009090;
 	    color: #fff;
-	    border-radius: 50%;
 	}
-	a[href*="tiktok.com"] {
+	a[href*="tiktok.com"]:before {
 	    background-color: #fe2c55;
 	    color: #fff;
-	    border-radius: 50%;
 	}
-	a[href*="youtube.com"] {
+	a[href*="youtube.com"]:before {
 	    background-color: #cd201f;
 	    color: #fff;
-	    border-radius: 50%;
 	}
 	
 	
@@ -217,6 +254,7 @@ CSS Settings
 	    margin-left: 4px;
 	}
     }
+    
     
 }
 
@@ -236,7 +274,28 @@ CSS Settings
 	.person-info-www:before { 
 	    display: none;
 	}
+	.person-info-position {
+	    font-weight: bold;
+	}
+	
+	.person-info-address {
+	    margin-top: 10px;
+	    padding-left: 0px;
+	}
+	
+	.person-info-description {
+	    margin-top: 10px;
+	    padding-left: 20px;
+	}
+	li {
+	    list-style: none;
+	    margin: 0;
+	    padding: 0;
+	    padding-left: 0px;
+	    min-height: 20px;
 
+	}
+	
 }
 .content-inline .person,
 .fau-person {
@@ -270,7 +329,11 @@ CSS Settings
 		max-width: inherit;
 		width: inherit;
 	    } 
-
+	    .person-default-thumb {
+		@media (min-width: 768px) {
+		    flex-basis: 250px; 
+		}
+	    }
 
 	    .person-compact-thumb {
 		margin-left: 5px;
@@ -287,14 +350,22 @@ CSS Settings
 	    .person-default-more {
 		 float: none;
 		 flex: 1 1 200px;
-		 order: 3;
 		 padding: 5px;
 	    }
 	    
 
 	}
+	.person-info-description {
+	    order: 3;
+	     padding: 5px;
+	     flex: 1 0 200px;
+	}
+	
+	// set to .standard-btn .primary-btn
 	.person-info-more {
 		text-align: right;
+		order: 4;
+
 	 }
 	.compactindex .row {
 	    .person-thumb {
@@ -351,8 +422,89 @@ CSS Settings
     }
 }
 
+.fau-person.border {
+    border: 1px solid #e9edf2;
+    margin: 0 0 10px 0;
+    padding: 0 5px;
+}
+
 .sidebar-inline .person .row .person-thumb {
     padding-left: 0px;
+}
+
+.person-info-more {
+		a {
+		    display: inline-block;
+		    border-radius: 3px;
+		    font-size: 0.9333333333rem;
+		    line-height: 1.3626666667rem;
+		    color: #fff;
+		    background: #036;
+		    padding: 6px 10px;
+		    margin: 10px 0;
+		}
+		a:hover, 
+  	         a:focus {
+		    background: #24598f;
+		    text-decoration: none;
+		}
+	 }
+
+.widget .fau-person {
+    ul.person-info ul {
+	margin: 0 0 10px 25px;
+    }   
+
+    li.person-info-address,
+    li.person-info-description,
+    li.person-info-office {
+	display: block;
+	margin-top: 10px;
+    }
+    li.person-info-address {
+	margin-bottom: 5px;
+    }
+    
+    div[itemprop="contactPoint"] {
+	margin-top: 10px;
+    }
+    
+}
+
+// Page view
+.fau-person {
+    .person-meta {
+	display: flex;
+	flex-wrap: wrap; 
+	align-content: flex-start;
+	margin-left: 0;
+	margin-right: 0;
+	    
+	.person-image {
+	    order: 3;
+	    flex: 1 1 100px;
+	    margin: 0;
+	    
+	    @media (min-width: 768px) {
+		    flex: 1 0 240px;
+	    }
+	    figcaption {
+			font-size: 0.9em;
+		    }
+	}
+	.person-info {
+	    order: 2;
+	    flex: 1 0 200px;
+	    
+	    @media (min-width: 768px) {
+		     flex: 1 0 350px;
+		}
+	}
+	.person-image.alignleft {
+	    order: 1;
+	}
+	
+    }
 }
 
 .person-card {

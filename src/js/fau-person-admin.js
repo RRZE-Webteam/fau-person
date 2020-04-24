@@ -24,23 +24,25 @@ jQuery(document).ready(function($){
     });
     
 
-    
-    $(".cmb2-id-fau-person-streetAddress").show();
-    $(".cmb2-id-fau-person-postalCode").show();
-    $(".cmb2-id-fau-person-addressLocality").show();
-    $(".cmb2-id-fau-person-addressCountry").show();
+    if($("#fau_person_standort_sync").is(":checked")) {
+	$(".cmb2-id-fau-person-streetAddress").hide();
+	$(".cmb2-id-fau-person-postalCode").hide();
+	$(".cmb2-id-fau-person-addressLocality").hide();
+	$(".cmb2-id-fau-person-addressCountry").hide();
+    } 
+
     $("#fau_person_standort_sync").click(function() {
-    if($(this).is(":checked")) {
-	$(".cmb2-id-fau-person-streetAddress").hide(300);
-	$(".cmb2-id-fau-person-postalCode").hide(300);
-	$(".cmb2-id-fau-person-addressLocality").hide(300);
-	$(".cmb2-id-fau-person-addressCountry").hide(300);
-    } else {
-	$(".cmb2-id-fau-person-streetAddress").show(200);
-	$(".cmb2-id-fau-person-postalCode").show(200);
-	$(".cmb2-id-fau-person-addressLocality").show(200);
-	$(".cmb2-id-fau-person-addressCountry").show(200);
-    }
-});
+	if($(this).is(":checked")) {
+	    $(".cmb2-id-fau-person-streetAddress").hide(300);
+	    $(".cmb2-id-fau-person-postalCode").hide(300);
+	    $(".cmb2-id-fau-person-addressLocality").hide(300);
+	    $(".cmb2-id-fau-person-addressCountry").hide(300);
+	} else {
+	    $(".cmb2-id-fau-person-streetAddress").show(200);
+	    $(".cmb2-id-fau-person-postalCode").show(200);
+	    $(".cmb2-id-fau-person-addressLocality").show(200);
+	    $(".cmb2-id-fau-person-addressCountry").show(200);
+	}
+    });
     
 });

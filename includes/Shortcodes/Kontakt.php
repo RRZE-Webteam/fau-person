@@ -296,8 +296,8 @@ class Kontakt extends Shortcodes {
 			$content .= Data::fau_person_sidebar($value, $displayfield,$arguments);
 			break;		    
 		    case 'card':
-			    $content .= Data::fau_person_card($value, $displayfield, $arguments);
-			    break;
+			$content .= Data::fau_person_card($value, $displayfield, $arguments);
+			break;
 		    default:
 			$content .= Data::fau_person_markup($value, $displayfield,$arguments);		
 		}

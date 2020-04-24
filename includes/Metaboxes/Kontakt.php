@@ -3,6 +3,7 @@
 namespace FAU_Person\Metaboxes;
 use FAU_Person\Data;
 use RRZE\Lib\UnivIS\Data as UnivIS_Data;
+use function FAU_Person\Config\getSocialMediaList;
 
 defined('ABSPATH') || exit;
 
@@ -339,6 +340,33 @@ class Kontakt extends Metaboxes {
 	);
 	
 	
+	/*  "instagram"=> [
+		'title'  => 'Instagram',
+		'class' => 'instagram'
+	    ],
+	*/
+	
+	$somes = getSocialMediaList();
+	$somefields = array();
+	
+	       
+	       
+	foreach ($somes as $key => $value) {
+	    $name = $somes[$key]['title'];
+	    $desc = '';
+	    if (isset($somes[$key]['desc'])) {
+		$desc = $somes[$key]['desc'];
+	    }
+	    $thissome['name'] = $name.' URL';
+	    $thissome['desc'] = $desc;
+	    $thissome['type'] = 'text_url';
+	    $thissome['id'] =  $prefix.$key.'_url';
+	    $thissome['protocols'] = array( 'https');
+	 
+	    array_push($somefields, $thissome);
+	}
+
+	
 	
 	// Meta-Box Social Media - fau_person_social_media
 	$meta_boxes['fau_person_social_media'] = array(
@@ -347,58 +375,8 @@ class Kontakt extends Metaboxes {
 	    'object_types' => array('person'), // post type
 	    'context' => 'normal',
 	    'priority' => 'default',
-	    'fields' => array(
-		array(
-		    'name' => __('Twitter URL', 'fau-person'),
-		    'desc' => '',
-		    'type' => 'text_url',
-		    'id' => $prefix . 'twitter_url',
-		     'protocols' => array( 'https')
-		),
-		array(
-		    'name' => __('Facebook URL', 'fau-person'),
-		    'desc' => '',
-		    'type' => 'text_url',
-		    'id' => $prefix . 'facebook_url',
-		     'protocols' => array( 'https')
-		),
-		array(
-		    'name' => __('LinkedIn URL', 'fau-person'),
-		    'desc' => '',
-		    'type' => 'text_url',
-		    'id' => $prefix . 'linkedin_url',
-		     'protocols' => array( 'https')
-		),
-		array(
-		    'name' => __('Instagram URL', 'fau-person'),
-		    'desc' => '',
-		    'type' => 'text_url',
-		    'id' => $prefix . 'instagram_url',
-		     'protocols' => array( 'https')
-		),
-		array(
-		    'name' => __('XING URL', 'fau-person'),
-		    'desc' => '',
-		    'type' => 'text_url',
-		    'id' => $prefix . 'xing_url',
-		    'protocols' => array(  'https')
-		),
-		array(
-		    'name' => __('YouTube URL', 'fau-person'),
-		    'desc' => '',
-		    'type' => 'text_url',
-		    'id' => $prefix . 'youtube_url',
-		    'protocols' => array(  'https')
-		),
-		array(
-		    'name' => __('TikTok URL', 'fau-person'),
-		    'desc' => '',
-		    'type' => 'text_url',
-		    'id' => $prefix . 'tiktok_url',
-		    'protocols' => array(  'https')
-		),
-		     
-	    )
+	    'fields' => $somefields,
+
 	);
 
 	// Meta-Box Weitere Informationen - fau_person_adds

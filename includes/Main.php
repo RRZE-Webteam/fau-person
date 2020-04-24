@@ -93,6 +93,8 @@ class Main {
     }
     
      public function enqueueAdminScripts() {
+	wp_register_style('fau-person-adminstyle', plugins_url('css/fau-person-admin.css', plugin_basename($this->pluginFile)));
+	wp_enqueue_style('fau-person-adminstyle');
 	wp_register_script('fau-person-adminscripts', plugins_url('js/fau-person-admin.js', plugin_basename($this->pluginFile)));
 	wp_enqueue_script('fau-person-adminscripts');
 	wp_enqueue_script('jquery');

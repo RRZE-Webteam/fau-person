@@ -173,6 +173,9 @@ class Data {
 	    if (!empty($class)) {
 		$res .= ' class="'.esc_attr($class).'"';
 	    }
+	} else {
+	    $res .= ' class="standard-btn primary-btn"';
+	    
 	}
 	if (!empty($linktitle)) {
 	    $res .= ' title="'.esc_attr($linktitle).'"';
@@ -378,7 +381,7 @@ class Data {
          $hoursavailable_output  = Schema::create_ContactPoint($data);
 
 
-	$class = 'fau-person person content-person';
+	$class = 'fau-person';
 	if (isset($viewopts['view_thumb_size'])) {
 	    if ((isset($arguments['class'])) && (!empty($arguments['class'])) && (preg_match("/thumb\-size\-/i",$arguments['class']))) {
 		// thumb-size ist in der Class bereits enthalten, daher ignoriere ich die globale Setting einstweile
@@ -393,8 +396,6 @@ class Data {
 	if (isset($display['border'])) {
 	    if ($display['border']) {
 		$class .= ' border';
-	    } else {
-		$class .= ' noborder';
 	    }
 	}
 	if (isset($arguments['background']) && (!empty($arguments['background']))) {
@@ -432,7 +433,13 @@ class Data {
         $content .= '</h' . $hstart . '>';
 	
 	
+	
+	
 	$datacontent = '';	
+	if (isset($viewopts['view_some_position']) && $viewopts['view_some_position'] == 'nach-name') {
+	    $datacontent .= Schema::create_SocialMedialist($data);
+	}
+	
 	if ((isset($viewopts['view_raum_prefix'])) && (!empty(trim($viewopts['view_raum_prefix']))) 
 	&& (isset($data['workLocation']) && (!empty($data['workLocation'])))) {
 	    $data['workLocation'] = $viewopts['view_raum_prefix'].' '.$data['workLocation'];
@@ -459,10 +466,9 @@ class Data {
 	    } 
 	    $datacontent .= Schema::create_contactpointlist($data, 'ul', '', 'contactlist', 'li',$viewopts);
 	}
-	
-	$datacontent .= Schema::create_SocialMedialist($data);
-	
-	
+	if (isset($viewopts['view_some_position']) && $viewopts['view_some_position'] !== 'nach-name') {
+	    $datacontent .= Schema::create_SocialMedialist($data);
+	}
 	if (!empty($datacontent)) {
 	     $content .= '<div class="person-info">';
 	     $content .= $datacontent;
@@ -477,7 +483,6 @@ class Data {
 	
 	    
 	$morecontent = '';
-	    
 	if ( (!isset($data['connection_only'])) 
 	    || ((isset($data['connection_only']) && $data['connection_only']==false))) {
 	     if (isset($data['hoursAvailable']) && ($data['hoursAvailable'])) {
@@ -494,19 +499,20 @@ class Data {
 		$morecontent .= self::get_more_link($data['permalink'] );
          }
 	 
+	
+	 
+
+        $content .= '</div>';
 	if (!empty($morecontent)) {
 	    if (isset($arguments['format']) && $arguments['format'] =='kompakt') {
 		 $content .= '</div><div class="person-default-more">';   // ende div class compactindex
 	    }
 	    $content .= $morecontent;
-	    if (isset($arguments['format']) && $arguments['format'] =='kompakt') {
+	}
+	$content .= '</div>';   // row 
+	 if (isset($arguments['format']) && $arguments['format'] =='kompakt') {
 		 $content .= '</div>';   // ende div class compactindex
 	    }
-	}
-	 
-
-        $content .= '</div>';
-        $content .= '</div> <!-- /row-->';    
         $content .= '</div>';
         return $content;
     }
@@ -532,7 +538,8 @@ class Data {
          }
 	 
 	
-	$class = 'fau-person person page';
+//	$class = 'fau-person person page';
+	$class = 'fau-person page';
 	if ((isset($arguments['class'])) && (!empty($arguments['class']))) {
 	    $class .= ' '.esc_attr($arguments['class']);
 	}
@@ -569,11 +576,18 @@ class Data {
 	
 	if ( $is_shortcode) {
 	    $content .= Schema::create_Name($data,'name','','h'.$hstart,false,$viewopts);
+	    
+	    
          }
 	$content .= '<div class="person-meta">';
 	$content .= Data::create_kontakt_image($id, $use_size, "person-image alignright", false, false,'',$viewcaption);	    
 
          $content .= '<div class="person-info">';
+	 
+	if (isset($viewopts['view_some_position']) && $viewopts['view_some_position'] == 'nach-name') {
+		$content .= Schema::create_SocialMedialist($data);
+	    } 
+	 
          if (isset($data['jobTitle']) && (!empty($data['jobTitle']))) {
              $content .= '<span class="person-info-position" itemprop="jobTitle">' . $data['jobTitle'] . '</span><br>';
 	}
@@ -597,8 +611,9 @@ class Data {
 	    $content .= Schema::create_contactpointlist($data, 'ul', '', 'contactlist', 'li',$viewopts);
 	      
 	}
-	
-	$content .= Schema::create_SocialMedialist($data);
+	if (isset($viewopts['view_some_position']) && $viewopts['view_some_position'] !== 'nach-name') {
+		$content .= Schema::create_SocialMedialist($data);
+	}
 		
 	if ((!isset($data['connection_only'])) || 
 	    ((isset($data['connection_only']) && $data['connection_only']==false))) {	
@@ -781,8 +796,7 @@ class Data {
 	    $content .= '<span itemscope itemtype="http://schema.org/Person">';
 	    $content .= Schema::create_Name($data,'name','','a',true,$viewopts);
 	}
-//	$content .= Helper::get_html_var_dump($data);
-//	$content .= Helper::get_html_var_dump($viewopts);
+
         
 	$cp = '';
 	if ((!isset($data['connection_only'])) ||
@@ -908,6 +922,11 @@ class Data {
             $content .= '</h' . $hstart . '>' . "\n";
             
              $content .= '<div class="person-info">';
+	    if (isset($viewopts['view_some_position']) && $viewopts['view_some_position'] == 'nach-name') {
+		$content .= Schema::create_SocialMedialist($data);
+	    }    
+	     
+	     
 	     if (isset($data['jobTitle']) && (!empty($data['jobTitle']))) {
 		 $content .= '<span class="person-info-position" itemprop="jobTitle">' . $data['jobTitle'] . '</span><br>';
 	    }
@@ -929,7 +948,10 @@ class Data {
 		} 
 		$content .= Schema::create_contactpointlist($data, 'ul', '', 'contactlist', 'li',$viewopts); 	
 	    }
-	    $content .= Schema::create_SocialMedialist($data);
+	    if (isset($viewopts['view_some_position']) && $viewopts['view_some_position'] !== 'nach-name') {
+		$content .= Schema::create_SocialMedialist($data);
+	    }
+
 	    if ((!isset($data['connection_only'])) ||
 		((isset($data['connection_only']) && $data['connection_only']==false))) {
 		     
@@ -1566,7 +1588,7 @@ class Data {
 		break;
 	     case 'compactindex':
 	     case 'kompakt':
-		$display = 'titel, familyName, givenName, name, suffix, position, telefon, email, email,  socialmedia, adresse, bild, permalink, url, border';		 
+		$display = 'titel, familyName, givenName, name, suffix, position, telefon, email, email,  socialmedia, adresse, bild, permalink, url, border, border';		 
 		break;
 	    case 'full':
 	    case 'page':

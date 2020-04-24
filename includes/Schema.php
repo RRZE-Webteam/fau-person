@@ -387,15 +387,14 @@ class Schema {
 	    $filled = true;
 	}
 	
+	if (($blockstart !=='ul')  && ($addcomma)) {
+	    $res = preg_replace('/\s*,\s*$/i', '', $res);
+	}
+	    
 	if (!empty($blockstart)) {
 	    $res .= '</'.$blockstart.'>';
 	}
 	if ( $filled ) {
-	     if (($blockstart !=='ul')  && ($addcomma)) {
-		 $res = preg_replace('/, $/', '', $res);
-	    }
-	    
-	    
 	    return $res;
 	}
 	return;
