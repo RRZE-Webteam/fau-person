@@ -153,24 +153,24 @@ class Kontakt extends Taxonomy {
         }
     }
     public function person_restrict_manage_posts() {
-        global $typenow;
-        $post_types = get_post_types( array( '_builtin' => false ) );
-        if ( in_array( $typenow, $post_types ) ) {
-            $filters = get_object_taxonomies($typenow);
-            foreach ($filters as $tax_slug) {
-                $tax_obj = get_taxonomy($tax_slug);
-                wp_dropdown_categories(array(
-                    'show_option_all' => sprintf(__('Alle %s anzeigen', 'fau-person'), $tax_obj->label),
-                    'taxonomy' => $tax_slug,
-                    'name' => $tax_obj->name,
-                    'orderby' => 'name',
-                    'selected' => isset($_GET[$tax_slug]) ? $_GET[$tax_slug] : '',
-                    'hierarchical' => $tax_obj->hierarchical,
-                    'show_count' => true,
-                    'hide_if_empty' => true
-                ));
-            }
-        }
+        global $typenow;	
+	if ($typenow == 'person') {
+	    $typenow = $this->postType;
+	    $filters = get_object_taxonomies($typenow);
+	    foreach ($filters as $tax_slug) {
+		$tax_obj = get_taxonomy($tax_slug);
+		wp_dropdown_categories(array(
+		    'show_option_all' => sprintf(__('Alle %s anzeigen', 'fau-person'), $tax_obj->label),
+		    'taxonomy' => $tax_slug,
+		    'name' => $tax_obj->name,
+		    'orderby' => 'name',
+		    'selected' => isset($_GET[$tax_slug]) ? $_GET[$tax_slug] : '',
+		    'hierarchical' => $tax_obj->hierarchical,
+		    'show_count' => true,
+		    'hide_if_empty' => true
+		));
+	    }
+       }
     }
         
     // Change the columns for the edit CPT screen
@@ -199,31 +199,7 @@ class Kontakt extends Taxonomy {
 		 $thumb = Data::create_kontakt_image($post_id, 'person-thumb-v3', '', true, false,'',false);
 		echo $thumb;
 		break;
-	    /*
-	     * Removed, cause thumb replaces this
-	    case "typ":
-		$typ = get_post_meta( $post_id, 'fau_person_typ', true);
-		switch ( $typ ) {
-		    case 'realperson':
-			$typ = __('Person (allgemein)', 'fau-person');
-			break;
-		    case 'realmale':
-			$typ = __('Person (männlich)', 'fau-person');
-			break;
-		    case 'realfemale':
-			$typ = __('Person (weiblich)', 'fau-person');
-			break;
-		    case 'pseudo':
-			$typ = __('Einrichtung (Pseudonym)', 'fau-person');
-			break;
-		    case 'einrichtung':
-			$typ = __('Einrichtung', 'fau-person');
-			break;
-		}
-		echo $typ;
-		break;
-	     * *
-	     */
+
 	    case 'fullname':
 		
 		$fullname = Schema::create_Name( $data, '', '', 'span', false );		

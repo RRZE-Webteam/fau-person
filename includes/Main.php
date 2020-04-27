@@ -104,17 +104,7 @@ class Main {
     
     
     public static function enqueueForeignThemes() {
-	/* $constants = getConstants();
-	$themelist = $constants['fauthemes'];
-	$foreign = 1;
-	$active_theme = wp_get_theme();
-	$active_theme = $active_theme->get( 'Name' );
-	if (in_array($active_theme, $themelist)) {
-	    $foreign = 0;
-	}
-	if ($foreign) {	*/
-	    wp_enqueue_style('fau-person');
-	/* } */   
+	 wp_enqueue_style('fau-person');  
     }
     
     public function define_image_sizes() {
