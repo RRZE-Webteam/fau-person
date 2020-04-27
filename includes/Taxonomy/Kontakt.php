@@ -45,13 +45,16 @@ class Kontakt extends Taxonomy {
 	    'not_found'		=> __('Keine Kontakte gefunden', 'fau-person'),
 	    'not_found_in_trash'    => __('Keine Kontakte in Papierkorb gefunden', 'fau-person'),
         ];
+	$has_archive_page  = true;
+	if (isset($this->settings->options) && isset($this->settings->options['has_archive_page'])) {
+	    $has_archive_page = $this->settings->options['has_archive_page'];
+	}
 	
-	$has_archive_page = $this->settings->getOption('constants', 'has_archive_page');
 	$person_args = array(
 	    'label'		=> __('Kontakt', 'fau-person'),
 	    'description'		=> __('Kontaktinformationen', 'fau-person'),
 	    'labels'		=> $labels,
-	    'supports'		=> array('title', 'editor', 'thumbnail', 'revisions'),
+	    'supports'		=> array('title', 'editor', 'author', 'thumbnail', 'revisions'),
 	    'taxonomies'		=> array('persons_category'),
 	    'hierarchical'	=> false,
 	    'public'		=> true,
@@ -91,8 +94,6 @@ class Kontakt extends Taxonomy {
 	    'map_meta_cap' => true
 	);
 	
-	
-       
 
 	
 	register_post_type($this->postType, $person_args);	
@@ -140,17 +141,19 @@ class Kontakt extends Taxonomy {
     
     public function taxonomy_filter_post_type_request( $query ) {
 	global $pagenow, $typenow;
-        if ( 'edit.php' == $pagenow ) {
-            $filters = get_object_taxonomies( $typenow );
+	if ($typenow == 'person') {
+	    if ( 'edit.php' == $pagenow ) {
+		$filters = get_object_taxonomies( $typenow );
 
-            foreach ( $filters as $tax_slug ) {
-                $var = &$query->query_vars[$tax_slug];
-                if ( isset( $var ) ) {
-                    $term = get_term_by( 'id', $var, $tax_slug );
-                    if ( !empty( $term ) )      $var = $term->slug;
-                }
-            }
-        }
+		foreach ( $filters as $tax_slug ) {
+		    $var = &$query->query_vars[$tax_slug];
+		    if ( isset( $var ) ) {
+			$term = get_term_by( 'id', $var, $tax_slug );
+			if ( !empty( $term ) )      $var = $term->slug;
+		    }
+		}
+	    }
+	}
     }
     public function person_restrict_manage_posts() {
         global $typenow;	
@@ -182,6 +185,7 @@ class Kontakt extends Taxonomy {
 	    'fullname'  => __( 'Angezeigter Name', 'fau-person' ),
 	    'contact' => __( 'Kontakt', 'fau-person' ),
 	    'source'	=> __( 'Datenquelle', 'fau-person' ),
+	    'author'	=> __( 'Bearbeiter', 'fau-person' ),
             'date' => __( 'Datum', 'fau-person' ),
 	);
 
