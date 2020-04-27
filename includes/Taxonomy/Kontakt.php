@@ -1,6 +1,9 @@
 <?php
 
 namespace FAU_Person\Taxonomy;
+use FAU_Person\Data;
+use FAU_Person\Schema;
+use RRZE\Lib\UnivIS\Config;
 
 defined('ABSPATH') || exit;
 
@@ -119,11 +122,18 @@ class Kontakt extends Taxonomy {
         add_action( 'restrict_manage_posts', [ $this, 'person_restrict_manage_posts' ] );
         add_filter('parse_query', [$this, 'taxonomy_filter_post_type_request']);
 	        // Kontakttyp als zusätzliche Spalte in Übersicht
+	
         add_filter( 'manage_person_posts_columns', array( $this, 'change_columns' ));
         add_action( 'manage_person_posts_custom_column', array( $this, 'custom_columns'), 10, 2 ); 
         // Sortierung der zusätzlichen Spalte
+	
+	
+	
         add_filter( 'manage_edit-person_sortable_columns', array( $this, 'sortable_columns' ));
         add_action( 'pre_get_posts', array( $this, 'custom_columns_orderby') );
+	
+	
+	
     }
 
     
@@ -167,8 +177,11 @@ class Kontakt extends Taxonomy {
     public function change_columns( $cols ) {
 	$cols = array(
 	    'cb' => '<input type="checkbox" />',
-	    'title' => __( 'Neuer Titel', 'fau-person' ),
-            'typ' => __( 'Typ', 'fau-person' ),
+	    'title' => __( 'Titel', 'fau-person' ),
+	    'thumb' => __( 'Bild', 'fau-person' ),
+	    'fullname'  => __( 'Angezeigter Name', 'fau-person' ),
+	    'contact' => __( 'Kontakt', 'fau-person' ),
+	    'source'	=> __( 'Datenquelle', 'fau-person' ),
             'date' => __( 'Datum', 'fau-person' ),
 	);
 
@@ -176,28 +189,62 @@ class Kontakt extends Taxonomy {
     }
 
     public function custom_columns( $column, $post_id ) {
+	$univisid = get_post_meta($post_id, 'fau_person_univis_id', true);
+	$data = Data::get_fields($post_id, $univisid, 0);
+	$univisconfig = Config::get_Config();
+	$api_url = $univisconfig['api_url'];
+	
 	switch ( $column ) {
+	    case 'thumb':
+		 $thumb = Data::create_kontakt_image($post_id, 'person-thumb-v3', '', true, false,'',false);
+		echo $thumb;
+		break;
+	    /*
+	     * Removed, cause thumb replaces this
 	    case "typ":
-                $typ = get_post_meta( $post_id, 'fau_person_typ', true);
-                switch ( $typ ) {
-                    case 'realperson':
-                        $typ = __('Person (allgemein)', 'fau-person');
-                        break;
-                    case 'realmale':
-                        $typ = __('Person (männlich)', 'fau-person');
-                        break;
-                    case 'realfemale':
-                        $typ = __('Person (weiblich)', 'fau-person');
-                        break;
-                    case 'pseudo':
-                        $typ = __('Einrichtung (Pseudonym)', 'fau-person');
-                        break;
-                    case 'einrichtung':
-                        $typ = __('Einrichtung', 'fau-person');
-                        break;
-                }
-                echo $typ;
-                break;
+		$typ = get_post_meta( $post_id, 'fau_person_typ', true);
+		switch ( $typ ) {
+		    case 'realperson':
+			$typ = __('Person (allgemein)', 'fau-person');
+			break;
+		    case 'realmale':
+			$typ = __('Person (männlich)', 'fau-person');
+			break;
+		    case 'realfemale':
+			$typ = __('Person (weiblich)', 'fau-person');
+			break;
+		    case 'pseudo':
+			$typ = __('Einrichtung (Pseudonym)', 'fau-person');
+			break;
+		    case 'einrichtung':
+			$typ = __('Einrichtung', 'fau-person');
+			break;
+		}
+		echo $typ;
+		break;
+	     * *
+	     */
+	    case 'fullname':
+		
+		$fullname = Schema::create_Name( $data, '', '', 'span', false );		
+		if (empty(trim($fullname))) {
+		    $fullname = get_the_title($post_id);
+		}
+		echo $fullname;
+		break;
+	    case 'contact':
+		// echo $data['email'];
+		echo Schema::create_contactpointlist($data,  'ul', '',  '', 'li');
+		
+		break;
+	    case 'source':
+		if ($univisid) {
+		    echo __('UnivIS', 'fau-person').' (Id: <a target="univis" href="'.$api_url.'?search=persons&id='.$univisid.'&show=info">'.$univisid.'</a>)';
+		} else {
+		    echo __('Lokal', 'fau-person');
+		}
+		break;
+		
 	}
     }
     
@@ -205,8 +252,8 @@ class Kontakt extends Taxonomy {
     public function sortable_columns( $columns ) {
 	$columns = array(
 	    'title' => 'title',
-	    'typ' => 'typ',
-	    'date' => 'date'
+	    'source' => 'source',
+	    'date' => 'date',
 	);
         return $columns;
     }	
@@ -216,11 +263,13 @@ class Kontakt extends Taxonomy {
             return;
  
         $orderby = $query->get( 'orderby' );
- 
-        if( 'typ' == $orderby ) {
-            $query->set('meta_key','fau_person_typ');
-            $query->set('orderby','meta_value');
-        }        
+	
+
+	if( 'source' == $orderby ) {
+	    $query->set('meta_key','fau_person_univis_id');
+             $query->set('orderby','meta_value');
+	    
+	}
     }
   
     

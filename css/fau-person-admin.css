@@ -1,1 +1,169 @@
-#cmb2-metabox-fau_person_social_media label:before,.fa{display:inline-block;font:normal normal normal 14px/1 FontAwesome;font-size:inherit}.fa-phone:before{content:"\f095"}.fa-mobile-phone:before,.fa-mobile:before{content:"\f10b"}.fa-phone-square:before{content:"\f098"}.fa-home:before{content:"\f015"}.fa-square-o:before{content:"\f096"}.fa-envelope:before{content:"\f0e0"}.fa-envelope-o:before{content:"\f003"}.fa-bookmark:before{content:"\f02e"}.fa-fax:before{content:"\f1ac"}.fa-print:before{content:"\f02f"}#cmb2-metabox-fau_person_social_media label:before,.fa-bookmark-o:before{content:"\f097"}.fa-info-circle:before{content:"\f05a"}.fa-building:before{content:"\f1ad"}#cmb2-metabox-fau_person_social_media label[for*=twitter]:before,.fa-twitter:before{content:"\f099"}#cmb2-metabox-fau_person_social_media label[for*=facebook]:before,.fa-facebook-f:before,.fa-facebook:before{content:"\f09a"}#cmb2-metabox-fau_person_social_media label[for*=github]:before,.fa-github:before{content:"\f09b"}#cmb2-metabox-fau_person_social_media label[for*=linkedin]:before,.fa-linkedin:before{content:"\f0e1"}#cmb2-metabox-fau_person_social_media label[for*=instagram]:before,.fa-instagram:before{content:"\f16d"}#cmb2-metabox-fau_person_social_media label[for*=xing]:before,.fa-xing:before{content:"\f168"}#cmb2-metabox-fau_person_social_media label[for*=tiktok]:before,.fa-tiktok:before{content:"d"}#cmb2-metabox-fau_person_social_media label[for*=youtube]:before,.fa-youtube:before{content:"\f167"}#fau_person_adressdaten.cmb2-postbox .cmb-row,#fau_person_connection.cmb2-postbox .cmb-row,#fau_person_info.cmb2-postbox .cmb-row,#fau_person_textinfos.cmb2-postbox .cmb-row{border:none;padding:1.2em 0}#fau_person_sync .cmb-row,#side-sortables #fau_person_sync .cmb2-wrap>.cmb-field-list>.cmb-row{border:none;padding:.5em 0;margin:0}#fau_person_sync .cmb-row label,#side-sortables #fau_person_sync .cmb2-wrap>.cmb-field-list>.cmb-row label{margin:0}#fau_person_sync .cmb-row .cmb2-metabox-description,#side-sortables #fau_person_sync .cmb2-wrap>.cmb-field-list>.cmb-row .cmb2-metabox-description{padding-bottom:1em}#cmb2-metabox-fau_person_social_media{display:flex;flex-wrap:wrap;justify-content:space-between}#cmb2-metabox-fau_person_social_media .cmb-row{flex:1 1 50%;border:0;display:flex;flex-wrap:wrap;margin:0;padding:10px 0;justify-content:flex-start}#cmb2-metabox-fau_person_social_media .cmb-row .cmb-td,#cmb2-metabox-fau_person_social_media .cmb-row .cmb-th{float:inherit;width:inherit;padding:0;margin:0}#cmb2-metabox-fau_person_social_media .cmb-row .cmb-th{flex-basis:150px;flex-shrink:0;order:1}#cmb2-metabox-fau_person_social_media .cmb-row .cmb-td{flex-grow:1;order:2}#cmb2-metabox-fau_person_social_media .cmb-row:after{display:inherit;width:inherit}#cmb2-metabox-fau_person_social_media label:before{width:1.4em;height:1.4em;line-height:1.4em;text-align:center;font-size:1.1em;margin-right:10px;border-radius:50%;background-color:#aaa;color:#fff}#cmb2-metabox-fau_person_social_media label[for*=twitter]:before{background-color:#55acee}#cmb2-metabox-fau_person_social_media label[for*=facebook]:before{background-color:#3b5999}#cmb2-metabox-fau_person_social_media label[for*=github]:before{background-color:#000}#cmb2-metabox-fau_person_social_media label[for*=instagram]:before{background-color:#e4405f}#cmb2-metabox-fau_person_social_media label[for*=linkedin]:before{background-color:#0077b5}#cmb2-metabox-fau_person_social_media label[for*=xing]:before{background-color:#009090}#cmb2-metabox-fau_person_social_media label[for*=tiktok]:before{background-color:#fe2c55}#cmb2-metabox-fau_person_social_media label[for*=youtube]:before{background-color:#cd201f}
+/*
+ * FAU Person CSS Settings Backend (Admin)) 
+ */
+/*
+* Minimal Font Awesome Settings.
+* without font path definition, Font will be asumed to come from theme or will be loaded extra.
+*/
+.fa, #cmb2-metabox-fau_person_social_media label:before, .wp-list-table [itemprop="telephone"]:before, .wp-list-table .mobile[itemprop="telephone"]:before, .wp-list-table [itemprop="faxNumber"]:before, .wp-list-table [itemprop="email"]:before, .wp-list-table [itemprop="url"]:before {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit; }
+
+.fa-phone:before, .wp-list-table [itemprop="telephone"]:before {
+  content: "\f095"; }
+
+.fa-mobile-phone:before, .fa-mobile:before, .wp-list-table .mobile[itemprop="telephone"]:before {
+  content: "\f10b"; }
+
+.fa-phone-square:before {
+  content: "\f098"; }
+
+.fa-home:before, .wp-list-table [itemprop="url"]:before {
+  content: "\f015"; }
+
+.fa-square-o:before {
+  content: "\f096"; }
+
+.fa-envelope:before, .wp-list-table [itemprop="email"]:before {
+  content: "\f0e0"; }
+
+.fa-envelope-o:before {
+  content: "\f003"; }
+
+.fa-bookmark:before {
+  content: "\f02e"; }
+
+.fa-fax:before, .wp-list-table [itemprop="faxNumber"]:before {
+  content: "\f1ac"; }
+
+.fa-print:before {
+  content: "\f02f"; }
+
+.fa-bookmark-o:before, #cmb2-metabox-fau_person_social_media label:before {
+  content: "\f097"; }
+
+.fa-info-circle:before {
+  content: "\f05a"; }
+
+.fa-building:before {
+  content: "\f1ad"; }
+
+/*
+ * Social media
+ */
+.fa-twitter:before, #cmb2-metabox-fau_person_social_media label[for*="twitter"]:before {
+  content: "\f099"; }
+
+.fa-facebook-f:before, .fa-facebook:before, #cmb2-metabox-fau_person_social_media label[for*="facebook"]:before {
+  content: "\f09a"; }
+
+.fa-github:before, #cmb2-metabox-fau_person_social_media label[for*="github"]:before {
+  content: "\f09b"; }
+
+.fa-linkedin:before, #cmb2-metabox-fau_person_social_media label[for*="linkedin"]:before {
+  content: "\f0e1"; }
+
+.fa-instagram:before, #cmb2-metabox-fau_person_social_media label[for*="instagram"]:before {
+  content: "\f16d"; }
+
+.fa-xing:before, #cmb2-metabox-fau_person_social_media label[for*="xing"]:before {
+  content: "\f168"; }
+
+.fa-tiktok:before, #cmb2-metabox-fau_person_social_media label[for*="tiktok"]:before {
+  content: "d"; }
+
+.fa-youtube:before, #cmb2-metabox-fau_person_social_media label[for*="youtube"]:before {
+  content: "\f167"; }
+
+#fau_person_textinfos.cmb2-postbox .cmb-row,
+#fau_person_info.cmb2-postbox .cmb-row,
+#fau_person_adressdaten.cmb2-postbox .cmb-row,
+#fau_person_connection.cmb2-postbox .cmb-row {
+  border: none;
+  padding: 1.2em 0; }
+
+#side-sortables #fau_person_sync .cmb2-wrap > .cmb-field-list > .cmb-row,
+#fau_person_sync .cmb-row {
+  border: none;
+  padding: 0.5em 0;
+  margin: 0; }
+  #side-sortables #fau_person_sync .cmb2-wrap > .cmb-field-list > .cmb-row label,
+  #fau_person_sync .cmb-row label {
+    margin: 0; }
+  #side-sortables #fau_person_sync .cmb2-wrap > .cmb-field-list > .cmb-row .cmb2-metabox-description,
+  #fau_person_sync .cmb-row .cmb2-metabox-description {
+    padding-bottom: 1em; }
+
+#cmb2-metabox-fau_person_social_media {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; }
+  #cmb2-metabox-fau_person_social_media .cmb-row {
+    flex: 1 1 50%;
+    border: 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 10px 0;
+    justify-content: flex-start; }
+    #cmb2-metabox-fau_person_social_media .cmb-row .cmb-th, #cmb2-metabox-fau_person_social_media .cmb-row .cmb-td {
+      float: inherit;
+      width: inherit;
+      padding: 0;
+      margin: 0; }
+    #cmb2-metabox-fau_person_social_media .cmb-row .cmb-th {
+      flex-basis: 150px;
+      flex-shrink: 0;
+      order: 1; }
+    #cmb2-metabox-fau_person_social_media .cmb-row .cmb-td {
+      flex-grow: 1;
+      order: 2; }
+    #cmb2-metabox-fau_person_social_media .cmb-row:after {
+      display: inherit;
+      width: inherit; }
+  #cmb2-metabox-fau_person_social_media label:before {
+    width: 1.4em;
+    height: 1.4em;
+    line-height: 1.4em;
+    text-align: center;
+    font-size: 1.1em;
+    margin-right: 10px;
+    border-radius: 50%;
+    background-color: #aaa;
+    color: #fff; }
+  #cmb2-metabox-fau_person_social_media label[for*="twitter"]:before {
+    background-color: #55acee; }
+  #cmb2-metabox-fau_person_social_media label[for*="facebook"]:before {
+    background-color: #3b5999; }
+  #cmb2-metabox-fau_person_social_media label[for*="github"]:before {
+    background-color: #000; }
+  #cmb2-metabox-fau_person_social_media label[for*="instagram"]:before {
+    background-color: #e4405f; }
+  #cmb2-metabox-fau_person_social_media label[for*="linkedin"]:before {
+    background-color: #0077B5; }
+  #cmb2-metabox-fau_person_social_media label[for*="xing"]:before {
+    background-color: #009090; }
+  #cmb2-metabox-fau_person_social_media label[for*="tiktok"]:before {
+    background-color: #fe2c55; }
+  #cmb2-metabox-fau_person_social_media label[for*="youtube"]:before {
+    background-color: #cd201f; }
+
+.wp-list-table .column-thumb figure {
+  margin: 0;
+  padding: 0; }
+
+.wp-list-table [itemprop="telephone"]:before {
+  width: 20px; }
+
+.wp-list-table [itemprop="telephone"].mobile:before {
+  width: 20px; }
+
+.wp-list-table [itemprop="faxNumber"]:before {
+  width: 20px; }
+
+.wp-list-table [itemprop="email"]:before {
+  width: 20px; }
+
+.wp-list-table [itemprop="url"]:before {
+  width: 20px; }

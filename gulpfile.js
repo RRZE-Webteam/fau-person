@@ -70,7 +70,9 @@ function updatepot()  {
       wpPot({
         domain: info.textdomain,
         package: info.name,
-	team: info.author.name
+	team: info.author.name,
+	bugReport: info.repository.issues,
+	ignoreTemplateNameHeader: true
  
       })
     )

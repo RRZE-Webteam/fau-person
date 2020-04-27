@@ -128,3 +128,37 @@
     
     }
 }
+
+.wp-list-table {
+    .column-thumb {
+	figure {
+	    margin: 0;
+	    padding: 0;
+	}
+    }
+ [itemprop="telephone"]:before { 
+	@extend .fa;
+	width: 20px; 
+	@extend .fa-phone; 
+    }
+    [itemprop="telephone"].mobile:before { 
+	@extend .fa;
+	width: 20px; 
+	@extend .fa-mobile; 
+    }
+    [itemprop="faxNumber"]:before { 
+	@extend .fa;
+	width: 20px; 
+	@extend .fa-fax; 
+    }
+    [itemprop="email"]:before { 
+	@extend .fa;
+	width: 20px; 
+	@extend .fa-envelope; 
+    }
+    [itemprop="url"]:before { 
+	@extend .fa;
+	width: 20px; 
+	@extend .fa-home; 
+    }
+}

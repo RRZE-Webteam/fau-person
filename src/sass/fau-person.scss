@@ -136,6 +136,7 @@
 	    }
 	    &::before {
 		content: inherit;
+		display: none;
 	    }
 	    
 	}
@@ -455,7 +456,7 @@
     ul.person-info ul {
 	margin: 0 0 10px 25px;
     }   
-
+    
     li.person-info-address,
     li.person-info-description,
     li.person-info-office {

@@ -297,13 +297,13 @@ class Data {
 
             if( is_array( $repeat_submode ) && !empty($repeat_submode[0] )) {
                 $days_short = array(
-                    1 => __('Mo', 'fau-person'),
-                    2 => __('Di', 'fau-person'),
-                    3 => __('Mi', 'fau-person'),
-                    4 => __('Do', 'fau-person'),
-                    5 => __('Fr', 'fau-person'),
-                    6 => __('Sa', 'fau-person'),
-                    7 => __('So', 'fau-person')
+                    1 => __('<abbr title="Montag">Mo</abbr>', 'fau-person'),
+                    2 => __('<abbr title="Dienstag">Di</abbr>', 'fau-person'),
+                    3 => __('<abbr title="Mittwoch">Mi</abbr>', 'fau-person'),
+                    4 => __('<abbr title="Donnerstag">Do</abbr>', 'fau-person'),
+                    5 => __('<abbr title="Freitag">Fr</abbr>', 'fau-person'),
+                    6 => __('<abbr title="Samstag">Sa</abbr>', 'fau-person'),
+                    7 => __('<abbr title="Sonntag">So</abbr>', 'fau-person')
                 );
 
                 $days_long = array(

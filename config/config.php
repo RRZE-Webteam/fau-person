@@ -57,7 +57,7 @@ function getMenuSettings() {
         'menu_title'    => __('FAU Person', 'fau-person'),
         'capability'    => 'manage_options',
         'menu_slug'     => 'fau-person',
-        'title'         => __('Kontakt Einstellungen', 'fau-person'),
+        'title'         => __('FAU Person', 'fau-person').' '.__('Einstellungen', 'fau-person'),
     ];
 }
 function getSocialMediaList() {
@@ -336,7 +336,7 @@ function getFields() {
 	    ],
 	    [
 		'name'  => 'view_kontakt_page_imagecaption',
-		'label' => __('Bildbeschrift Kontaktseite', 'fau-person'),	
+		'label' => __('Bildbeschriftung Kontaktseite', 'fau-person'),	
 		'desc'  => __('Zeigt auf der Kontaktvisitenkarte und bei Nutzung des Shortcodes mit dem Attribut <code>format="page"</code> die Bildunterschriften eines Kontaktbildes an.', 'fau-person'),
 		'type'  => 'checkbox',
 		'checked'   => true,
