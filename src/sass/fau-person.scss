@@ -51,7 +51,7 @@
     [itemprop="email"]:before { 
 	@extend .fa;
 	width: 20px; 
-	@extend .fa-envelope-o; 
+	@extend .fa-envelope; 
     }
     [itemprop="url"]:before { 
 	@extend .fa;

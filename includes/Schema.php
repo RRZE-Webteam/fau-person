@@ -514,7 +514,8 @@ class Schema {
 	    $res .= $titletagbreak;
 	    
             if ( $hoursAvailable ) {
-                $res  .= '<'.$desctag.' itemprop="description">' . esc_html($hoursAvailable). '</'.$desctag.'>'; 
+                $res  .= '<'.$desctag.' itemprop="description">' . $hoursAvailable. '</'.$desctag.'>'; 
+		// Notice: We allow HTML here, therfor no escapting
 		$res  .= $descbreak;
             }
             if ( $hoursAvailable_group ) {
