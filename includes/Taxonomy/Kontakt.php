@@ -4,6 +4,7 @@ namespace FAU_Person\Taxonomy;
 use FAU_Person\Data;
 use FAU_Person\Schema;
 use RRZE\Lib\UnivIS\Config;
+use function FAU_Person\Config\get_fau_person_capabilities;
 
 defined('ABSPATH') || exit;
 
@@ -49,7 +50,7 @@ class Kontakt extends Taxonomy {
 	if (isset($this->settings->options) && isset($this->settings->options['has_archive_page'])) {
 	    $has_archive_page = $this->settings->options['has_archive_page'];
 	}
-	
+	$caps = get_fau_person_capabilities();
 	$person_args = array(
 	    'label'		=> __('Kontakt', 'fau-person'),
 	    'description'		=> __('Kontaktinformationen', 'fau-person'),
@@ -76,29 +77,11 @@ class Kontakt extends Taxonomy {
 		'feeds'	    => true,
 	    ],
 	    'capability_type' => $this->postType,
-	    'capabilities' => [
-		'edit_post'	=> 'edit_person',
-		'read_post'	=> 'read_person',
-		'delete_post'	=> 'delete_person',
-		'edit_posts'	=> 'edit_persons',
-		'edit_others_posts' => 'edit_others_persons',
-		'publish_posts'	=> 'publish_persons',
-		'read_private_posts' => 'read_private_persons',
-		'delete_posts'	=> 'delete_persons',
-		'delete_private_posts' => 'delete_private_persons',
-		'delete_published_posts' => 'delete_published_persons',
-		'delete_others_posts' => 'delete_others_persons',
-		'edit_private_posts' => 'edit_private_persons',
-		'edit_published_posts' => 'edit_published_persons'
-	    ],
+	    'capabilities' => $caps,
 	    'map_meta_cap' => true
 	);
-	
 
-	
 	register_post_type($this->postType, $person_args);	
-	
-	
 	
 	
          register_taxonomy(
@@ -117,7 +100,7 @@ class Kontakt extends Taxonomy {
             ]
         );
     }
-
+   
     public function register() {
         register_taxonomy_for_object_type($this->taxonomy, $this->postType);
         add_action( 'restrict_manage_posts', [ $this, 'person_restrict_manage_posts' ] );
@@ -131,13 +114,10 @@ class Kontakt extends Taxonomy {
 	
 	
         add_filter( 'manage_edit-person_sortable_columns', array( $this, 'sortable_columns' ));
-        add_action( 'pre_get_posts', array( $this, 'custom_columns_orderby') );
-	
-	
-	
+        add_action( 'pre_get_posts', array( $this, 'posttype_person_custom_columns_orderby') );
+
     }
 
-    
     
     public function taxonomy_filter_post_type_request( $query ) {
 	global $pagenow, $typenow;
@@ -238,33 +218,49 @@ class Kontakt extends Taxonomy {
         return $columns;
     }	
     
-    public function custom_columns_orderby( $query ) {
+    public function posttype_person_custom_columns_orderby( $query ) {
         if( ! is_admin() )
             return;
  
-        $orderby = $query->get( 'orderby' );
-	
+	$post_type = $query->query['post_type'];
+         if ($post_type == 'person') {
+	    $admin_posts_per_page = 25;	
+	    if (isset($this->settings->constants) && isset($this->settings->constants['admin_posts_per_page'])) {
+		$admin_posts_per_page = $this->settings->constants['admin_posts_per_page'];
+	    }
+	    $orderby = $query->get( 'orderby' );
 
-	if( 'source' == $orderby ) {
-	    $query->set('meta_key','fau_person_univis_id');
-             $query->set('orderby','meta_value');
-	    
+	    $query->set( 'posts_per_page', $admin_posts_per_page );
+	    if (!isset($query->query['orderby'])) {
+                    $query->set('orderby', 'title');
+                    $query->set('order', 'ASC');
+             }
+		
+	    if( 'source' == $orderby ) {
+		$query->set('orderby','meta_value'); 
+		 
+		$meta_query = array(
+		    'relation' => 'OR',
+			array( 
+			    'key' => 'fau_person_univis_id',
+			    'compare' => 'NOT EXISTS',
+			    'value'   => 0,
+			),
+			array( 
+			    'key' => 'fau_person_univis_id',
+			    'compare' => 'EXISTS'           
+			)
+		    );
+		 
+		 
+		 $query->set('meta_query',$meta_query);
+	    }
 	}
     }
   
     
     
-    public function person_post_types_admin_order($wp_query) {
-        if (is_admin()) {
-            $post_type = $wp_query->query['post_type'];
-            if ($post_type == 'person') {
-                if (!isset($wp_query->query['orderby'])) {
-                    $wp_query->set('orderby', 'title');
-                    $wp_query->set('order', 'ASC');
-                }
-            }
-        }
-    }    
+   
 }
 
 

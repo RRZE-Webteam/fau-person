@@ -4,7 +4,7 @@
  Plugin URI: https://github.com/RRZE-Webteam/fau-person
  GitHub Plugin URI: https://github.com/RRZE-Webteam/fau-person
  Description: Visitenkarten-Plugin für FAU Webauftritte
- Version: 3.0.40
+ Version: 3.0.41
  Author: RRZE-Webteam
  Author URI: http://blogs.fau.de/webworking/
  License: GPLv3 or later
@@ -91,10 +91,8 @@ function activation() {
     
     
    // CPT-Capabilities für die Administrator-Rolle zuweisen
-    $caps_person = get_caps('person');
-    add_caps('administrator', $caps_person);
-    $caps_standort = get_caps('standort');
-    add_caps('administrator', $caps_standort);
+    fau_person_add_kontakteditor_role();
+    fau_person_set_caps_to_roles();		    
 	
 
 }
@@ -102,12 +100,9 @@ function activation() {
 /**
  * Wird durchgeführt, nachdem das Plugin deaktiviert wurde.
  */
-function deactivation() {
-    $caps_person = get_caps('person');
-    remove_caps('administrator', $caps_person);
-    $caps_standort = get_caps('standort');
-    remove_caps('administrator', $caps_standort);
-	//remove_caps('editor', $caps);
+function deactivation() {  
+    fau_person_remove_caps();
+    remove_role('person_editor_role');
     flush_rewrite_rules();    
 }
 
@@ -137,47 +132,77 @@ function loaded() {
         return;
     }
 
-    // Hauptklasse (Main) wird instanziiert.
-
-	
+    // Hauptklasse (Main) wird instanziiert.	
     $main = new Main(__FILE__);
     $main->onLoaded();
+    
+    // Check if Editor role was already defined or if this is an updated plugin, where 
+    // the old activation did not had this 
+    
+    $role = get_role('person_editor_role');
+    if (!isset($role)) {
+	fau_person_add_kontakteditor_role();
+	fau_person_set_caps_to_roles();	
+    }
+    
 }
 
+ function fau_person_remove_caps() {    
+	$roles = array('person_editor_role', 'editor','administrator');   
+	$caps_person = Config\get_fau_person_capabilities();
+	foreach($roles as $the_role) {
+	    $role = get_role($the_role);
+	    if (isset($role)) {
+		foreach($caps_person as $cap => $value) {
+		    $role->remove_cap($value);
+		}  
+	    }
+	}    
+    }
 
- function get_caps($cap_type) {
-        $caps = array(
-            "edit_" . $cap_type,
-            "read_" . $cap_type,
-            "delete_" . $cap_type,
-            "edit_" . $cap_type . "s",
-            "edit_others_" . $cap_type . "s",
-            "publish_" . $cap_type . "s",
-            "read_private_" . $cap_type . "s",
-            "delete_" . $cap_type . "s",
-            "delete_private_" . $cap_type . "s",
-            "delete_published_" . $cap_type . "s",
-            "delete_others_" . $cap_type . "s",
-            "edit_private_" . $cap_type . "s",
-            "edit_published_" . $cap_type . "s",                
+    
+    function fau_person_set_caps_to_roles() {    
+	$roles = array('person_editor_role', 'editor','administrator');   
+	$caps_person = Config\get_fau_person_capabilities();
+
+	foreach($roles as $the_role) {
+	    $role = get_role($the_role);
+	    if (isset($role)) {
+		foreach($caps_person as $cap => $value) {
+		    if ($the_role == 'person_editor_role') {
+			switch ($value) {
+			    case 'delete_persons':
+			    case 'delete_private_persons':
+			    case 'delete_published_persons':
+			    case 'delete_others_persons':
+			    case 'publish_persons':	
+			       break;
+
+			    default:
+			       $role->add_cap($value);
+		       }
+
+		    } else {
+			$role->add_cap($value);
+		    }
+		}  
+	   }
+	}    
+	return;
+    }
+
+
+
+    function fau_person_add_kontakteditor_role() {
+	add_role('person_editor_role',
+            __( 'Kontakt-Bearbeiter', 'fau-person' ),
+            array(
+                'read' => true,
+                'edit_posts' => true,
+                'delete_posts' => false,
+                'publish_posts' => false,
+                'upload_files' => true,
+            )
         );
-
-        return $caps;
     }
-
-    function add_caps($role, $caps) {
-        $role = get_role($role);
-        foreach($caps as $cap) {
-            $role->add_cap($cap);
-        }        
-    }
-    
- function remove_caps($role, $caps) {
-        $role = get_role($role);
-        foreach($caps as $cap) {
-            $role->remove_cap($cap);
-        }        
-    }    
-    
- 
     
