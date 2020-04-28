@@ -182,14 +182,12 @@ class BackendMenu {
 
     public function einrichtung_menu() {
         wp_redirect( admin_url( 'post-new.php?post_type=person&fau_person_typ=einrichtung' ) );
-        //$metaboxes = array();
-        //do_action('cmb_meta_boxes', $metaboxes);
+
     }
     
     public function standort_menu() {
         wp_redirect( admin_url( 'post-new.php?post_type=standort' ) );
-        //$metaboxes = array();
-        //do_action('cmb_meta_boxes', $metaboxes);
+
     }    
 
 }
