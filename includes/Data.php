@@ -499,22 +499,20 @@ class Data {
          if (isset($display['link']) && (!empty($display['link']))) {
 		$morecontent .= self::get_more_link($data['permalink'] );
          }
-	 
-	
-	 
 
-        $content .= '</div>';
 	if (!empty($morecontent)) {
-	    if (isset($arguments['format']) && $arguments['format'] =='kompakt') {
+	//    if (isset($arguments['format']) && $arguments['format'] =='kompakt') {
 		 $content .= '</div><div class="person-default-more">';   // ende div class compactindex
-	    }
+	 //   }
 	    $content .= $morecontent;
-	}
+	} 
+	
 	$content .= '</div>';   // row 
 	 if (isset($arguments['format']) && $arguments['format'] =='kompakt') {
 		 $content .= '</div>';   // ende div class compactindex
 	    }
         $content .= '</div>';
+	  $content .= '</div>';
         return $content;
     }
 
