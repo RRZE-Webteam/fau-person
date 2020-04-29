@@ -266,7 +266,6 @@ class Data {
                 $temp[$key] = strtolower($name);
             }
 	    if ($order=='desc') {
-		echo "ORDER DESC";
 		  array_multisort($temp, SORT_DESC, SORT_STRING, $personlist);
 	    } else {
 		  array_multisort($temp, SORT_ASC, SORT_STRING, $personlist);
@@ -1595,7 +1594,7 @@ class Data {
 		break;
 	    case 'listentry':
 	    case 'liste':
-		$display = 'titel, familyName, givenName, name, suffix, description, permalink, url, socialmedia';  
+		$display = 'titel, familyName, givenName, name, suffix, description, permalink, url';  
 		break;
 	     case 'sidebar':
 		$display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, jobTitle, telefon, email, socialmedia, fax, url, adresse, bild, permalink, url, sprechzeiten, ansprechpartner, description';  
