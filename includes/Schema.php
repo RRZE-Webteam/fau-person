@@ -170,30 +170,13 @@ class Schema {
 	    return;
 	}
 	
-	
 	$url = '';
-	if ((isset($data['link'])) && (!empty(esc_url($data['link'])))) {
-	    $url = $data['link'];
+	$thisurl = Data::get_morelink_url($data,$args);
+	if (isset($thisurl) && (!empty(esc_url($thisurl)))) {
+	    $url = $thisurl;
 	    $surroundingtag = 'a';
 	}
-	if (isset($args['view_kontakt_linkname'])) {
-	    if (!empty($args['view_kontakt_linkname'])) {
-		if ($args['view_kontakt_linkname'] == 'force-nolink') {
-		    $url = '';
-		} elseif ($args['view_kontakt_linkname'] == 'use-link') {
-		    if ((isset($data['link'])) && (!empty(esc_url($data['link'])))) {
-			$url = $data['link'];
-			$surroundingtag = 'a';
-		    }
-		} else {
-		    $urlsource = $args['view_kontakt_linkname'];
-		    if ((isset($data[$urlsource])) && (!empty(esc_url($data[$urlsource])))) {
-			$url = $data[$urlsource];
-			$surroundingtag = 'a';
-		    }
-		}
-	    }
-	} 
+	
 	if (($surroundingtag == 'a') && (empty(esc_url($url)))) {
 	     $surroundingtag = 'span';
 	}    

@@ -1098,7 +1098,7 @@ class Data {
 	if ((isset($filter['_all'])) && ($filter['_all'])) {
 	     return $input;
 	}
-	    
+	
 	    
 	foreach ($input as $key => $value) {
 	    if (isset($filter[$key])) {
@@ -1108,6 +1108,18 @@ class Data {
 		    unset($res[$key]);
 		}
 	    }
+	}
+	
+	/*
+	 * Felder, die nicht gelöscht werden sollen, wieder einfügen
+	 */
+	$dontfilter = "url, link, permalink, connection_only";
+	$stay = explode(',', $dontfilter);   
+	foreach ($stay as $value) {
+		$key = esc_attr(trim($value));
+		if ((!empty($key)) && isset($input[$key])) {
+		     $res[$key] = $input[$key];
+		}
 	}
 	
 	/*
