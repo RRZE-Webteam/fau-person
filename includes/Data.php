@@ -439,7 +439,7 @@ class Data {
 
 	     
          if (isset($arguments['format']) && $arguments['format'] =='kompakt') {
-            $content .= '<div class="compactindex">';
+    //        $content .= '<div class="compactindex">';
 	}
         $content .= '<div class="row">';
 
@@ -516,9 +516,7 @@ class Data {
 	$morecontent = '';
 	if ( (!isset($data['connection_only'])) 
 	    || ((isset($data['connection_only']) && $data['connection_only']==false))) {
-	     if (isset($data['hoursAvailable']) && ($data['hoursAvailable'])) {
 		$morecontent .=   Schema::create_ContactPoint($data);
-	    }
 	}   
 	
 	
@@ -540,7 +538,7 @@ class Data {
 	
 	$content .= '</div>';   // row 
 	 if (isset($arguments['format']) && $arguments['format'] =='kompakt') {
-		 $content .= '</div>';   // ende div class compactindex
+//		 $content .= '</div>';   // ende div class compactindex
 	    }
         $content .= '</div>';
 	  $content .= '</div>';
@@ -647,9 +645,7 @@ class Data {
 		
 	if ((!isset($data['connection_only'])) || 
 	    ((isset($data['connection_only']) && $data['connection_only']==false))) {	
-	    if ((isset($data['hoursAvailable'])) && $data['hoursAvailable']==true) {
 		$content .=   Schema::create_ContactPoint($data,'div','contactPoint','','h3');
-	    }
 	}
            
 
@@ -702,12 +698,12 @@ class Data {
 	if (isset($display['description']) && $display['description'] ) {	
 		$content .= "<td>" . $data['description'].'</td>';
 	}
-	if (isset($display['hoursAvailable']) && $display['hoursAvailable'] ) {	
-	    if ((!isset($data['connection_only'])) ||
-		    ((isset($data['connection_only']) && $data['connection_only']==false))) {	    
-		    $content .= '<td>'.  Schema::create_ContactPoint($data).'</td>';
-	    }
+	
+	if ((!isset($data['connection_only'])) ||
+		((isset($data['connection_only']) && $data['connection_only']==false))) {	    
+		$content .= '<td>'.  Schema::create_ContactPoint($data).'</td>';
 	}
+
 	if (isset($display['socialmedia']) && $display['socialmedia'] ) {	
 		$content .= "<td>" . Schema::create_SocialMedialist($data).'</td>';
 	}
@@ -979,12 +975,10 @@ class Data {
 	    }
 
 	    if ((!isset($data['connection_only'])) ||
-		((isset($data['connection_only']) && $data['connection_only']==false))) {
-		     
-		if (isset($data['hoursAvailable']) && $data['hoursAvailable']) {
+		((isset($data['connection_only']) && $data['connection_only']==false))) {  
 		    $sprechzeitentitletag = 'h'.($hstart+1);
 		    $content .=   Schema::create_ContactPoint($data,'div','contactPoint','',$sprechzeitentitletag);
-		}
+	
 	    }
 	    $content .= '</div>';
 	
@@ -1130,6 +1124,17 @@ class Data {
 	}
 	if ((isset($filter['adresse'])) && ($filter['adresse'])) {
 	    $adressfields = "streetAddress, postalCode, addressLocality, addressRegion, addressCountry";
+
+	    $adresskeys = explode(',', $adressfields);
+	    foreach ($adresskeys as $value) {
+		$key = esc_attr(trim($value));
+		if ((!empty($key)) && isset($input[$key])) {
+		     $res[$key] = $input[$key];
+		}
+	    }
+	}
+	if ((isset($filter['sprechzeiten'])) && ($filter['sprechzeiten'])) {
+	    $adressfields = "officehours, hoursAvailable_group, hoursAvailable_text";  
 
 	    $adresskeys = explode(',', $adressfields);
 	    foreach ($adresskeys as $value) {
@@ -1294,7 +1299,7 @@ class Data {
 	    $univis_default = self::get_fields($id, $univis_id, 1);
 	    return $univis_default;
 	} else {
-	$univis_default = Config::get_keys_fields('persons');
+	    $univis_default = Config::get_keys_fields('persons');
 	    return $univis_default;
 	}
     }
