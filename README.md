@@ -1,4 +1,4 @@
-#  FAU-Person
+# FAU-Person
 
 Kontakte und Visitenkarten-Plugin für FAU Webauftritte  
 

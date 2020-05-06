@@ -154,7 +154,7 @@ class Data {
         return $fields;
     }
     public static function get_more_link($targeturl, $linktitle = '', $class = 'person-info-more', $withdiv = true) {
-	if (!isset($targeturl)) {
+	if ((!isset($targeturl)) || empty($targeturl)) {
 	    return;
 	}
 	
@@ -345,19 +345,49 @@ class Data {
 	}
 	if (($format == 'sidebar') || ($format == 'kompakt')) {	   
 	     if ((isset($fields)) && isset($fields['small_description']) && (!empty($fields['small_description']))) {
-		return esc_html($fields['small_description']);
+		return $fields['small_description'];
 	    }    
 	}
 	if ((isset($fields)) && isset($fields['description']) && (!empty($fields['description']))) {
-	    return esc_html($fields['description']);
+	    return $fields['description'];
 	}    
 	$fallbackexcerpt = get_post_field('post_excerpt', $id);
 	if ($fallbackexcerpt) {
-	    return esc_html($fallbackexcerpt);
+	    return $fallbackexcerpt;
 	}
 	return;
     }
- 
+    public static function get_morelink_url($data, $args) {
+	$url = '';
+	if ((isset($data['link'])) && (!empty(esc_url($data['link'])))) {
+	    $url = $data['link'];
+	} elseif ((isset($data['url'])) && (!empty(esc_url($data['url'])))) {
+	    $url = $data['url'];
+	} else {
+	    $url = $data['permalink'];
+	}
+	if (isset($args['view_kontakt_linkname'])) {
+	    if (!empty($args['view_kontakt_linkname'])) {
+		
+		if ($args['view_kontakt_linkname'] == 'force-nolink') {
+		    $url = '';
+		} elseif ($args['view_kontakt_linkname'] == 'url') {
+		    if ((isset($data['url'])) && (!empty(esc_url($data['url'])))) {
+			$url = $data['url'];
+		    }    
+		} elseif ($args['view_kontakt_linkname'] == 'permalink') {
+		    if ((isset($data['permalink'])) && (!empty(esc_url($data['permalink'])))) {
+			$url = $data['permalink'];
+		    }
+		} elseif ($args['view_kontakt_linkname'] == 'use-link') {
+		    if ((isset($data['link'])) && (!empty(esc_url($data['link'])))) {
+			$url = $data['link'];
+		    }
+		} 
+	    }
+	} 
+	return $url;
+    }
     
     public static function fau_person_markup($id, $display = array(), $arguments = array()) {
        	if ($id == 0) {
@@ -376,6 +406,7 @@ class Data {
 	
 	$data = self::filter_fields($fields, $display);
 
+	
 	$fullname = Schema::create_Name($data,'name','','a',false,$viewopts);
          $hoursavailable_output  = Schema::create_ContactPoint($data);
 
@@ -408,7 +439,7 @@ class Data {
 
 	     
          if (isset($arguments['format']) && $arguments['format'] =='kompakt') {
-            $content .= '<div class="compactindex">';
+    //        $content .= '<div class="compactindex">';
 	}
         $content .= '<div class="row">';
 
@@ -470,7 +501,7 @@ class Data {
 	    $datacontent .= Schema::create_SocialMedialist($data);
 	}
 	
-	    
+
 	if ((!empty($data['connection_text']) || !empty($data['connection_options']) || !empty($data['connections'])) && isset($display['ansprechpartner']) && $display['ansprechpartner']==true) {
 	    $datacontent .= self::fau_person_connection($data['connection_text'], $data['connection_options'], $data['connections'], $hstart);
 	}
@@ -485,9 +516,7 @@ class Data {
 	$morecontent = '';
 	if ( (!isset($data['connection_only'])) 
 	    || ((isset($data['connection_only']) && $data['connection_only']==false))) {
-	     if (isset($data['hoursAvailable']) && ($data['hoursAvailable'])) {
 		$morecontent .=   Schema::create_ContactPoint($data);
-	    }
 	}   
 	
 	
@@ -496,7 +525,8 @@ class Data {
 	}
 
          if (isset($display['link']) && (!empty($display['link']))) {
-		$morecontent .= self::get_more_link($data['permalink'] );
+	    $morelink = self::get_morelink_url($data, $viewopts);
+	    $morecontent .= self::get_more_link($morelink);
          }
 
 	if (!empty($morecontent)) {
@@ -508,7 +538,7 @@ class Data {
 	
 	$content .= '</div>';   // row 
 	 if (isset($arguments['format']) && $arguments['format'] =='kompakt') {
-		 $content .= '</div>';   // ende div class compactindex
+//		 $content .= '</div>';   // ende div class compactindex
 	    }
         $content .= '</div>';
 	  $content .= '</div>';
@@ -615,9 +645,7 @@ class Data {
 		
 	if ((!isset($data['connection_only'])) || 
 	    ((isset($data['connection_only']) && $data['connection_only']==false))) {	
-	    if ((isset($data['hoursAvailable'])) && $data['hoursAvailable']==true) {
 		$content .=   Schema::create_ContactPoint($data,'div','contactPoint','','h3');
-	    }
 	}
            
 
@@ -670,12 +698,12 @@ class Data {
 	if (isset($display['description']) && $display['description'] ) {	
 		$content .= "<td>" . $data['description'].'</td>';
 	}
-	if (isset($display['hoursAvailable']) && $display['hoursAvailable'] ) {	
-	    if ((!isset($data['connection_only'])) ||
-		    ((isset($data['connection_only']) && $data['connection_only']==false))) {	    
-		    $content .= '<td>'.  Schema::create_ContactPoint($data).'</td>';
-	    }
+	
+	if ((!isset($data['connection_only'])) ||
+		((isset($data['connection_only']) && $data['connection_only']==false))) {	    
+		$content .= '<td>'.  Schema::create_ContactPoint($data).'</td>';
 	}
+
 	if (isset($display['socialmedia']) && $display['socialmedia'] ) {	
 		$content .= "<td>" . Schema::create_SocialMedialist($data).'</td>';
 	}
@@ -813,10 +841,6 @@ class Data {
 		    $content .= ' '.$sm;
 		}
 	}
-	//  $blockstart = 'ul', $class = 'socialmedia', $itemel = 'li', $itemprop = 'sameAs') {
-	
-	
-	
 
 	if ((isset($data['description'])) && (!empty($data['description'])) && isset($display['description']) && $display['description']) {	
 		$content .= "<br>" . $data['description'];
@@ -951,12 +975,10 @@ class Data {
 	    }
 
 	    if ((!isset($data['connection_only'])) ||
-		((isset($data['connection_only']) && $data['connection_only']==false))) {
-		     
-		if (isset($data['hoursAvailable']) && $data['hoursAvailable']) {
+		((isset($data['connection_only']) && $data['connection_only']==false))) {  
 		    $sprechzeitentitletag = 'h'.($hstart+1);
 		    $content .=   Schema::create_ContactPoint($data,'div','contactPoint','',$sprechzeitentitletag);
-		}
+	
 	    }
 	    $content .= '</div>';
 	
@@ -1111,6 +1133,31 @@ class Data {
 		}
 	    }
 	}
+	if ((isset($filter['sprechzeiten'])) && ($filter['sprechzeiten'])) {
+	    $adressfields = "officehours, hoursAvailable_group, hoursAvailable_text";  
+
+	    $adresskeys = explode(',', $adressfields);
+	    foreach ($adresskeys as $value) {
+		$key = esc_attr(trim($value));
+		if ((!empty($key)) && isset($input[$key])) {
+		     $res[$key] = $input[$key];
+		}
+	    }
+	}
+	
+	
+	
+	if (((isset($filter['ansprechpartner'])) && ($filter['ansprechpartner'])) || ((isset($input['connection_only']) && $input['connection_only']==false))) {
+	    $adressfields = "connections, connection_text, connection_options, connection_only";
+
+	    $adresskeys = explode(',', $adressfields);
+	    foreach ($adresskeys as $value) {
+		$key = esc_attr(trim($value));
+		if ((!empty($key)) && isset($input[$key])) {
+		     $res[$key] = $input[$key];
+		}
+	    }
+	}
 	
 	return $res;
     }
@@ -1252,7 +1299,7 @@ class Data {
 	    $univis_default = self::get_fields($id, $univis_id, 1);
 	    return $univis_default;
 	} else {
-	$univis_default = Config::get_keys_fields('persons');
+	    $univis_default = Config::get_keys_fields('persons');
 	    return $univis_default;
 	}
     }
@@ -1576,10 +1623,10 @@ class Data {
 	$display = '';
 	switch($format) {
 	    case 'name':
-		$display = 'titel, familyName, givenName, name, suffix, permalink, url';
+		$display = 'titel, familyName, givenName, name, suffix, permalink, url, link';
 		break;
 	    case 'shortlist':
-		$display = 'titel, familyName, givenName, name, mail, telefon, suffix, permalink, url';
+		$display = 'titel, familyName, givenName, name, mail, telefon, suffix, permalink, url, link';
 		break;
 	    case 'plain':
 		$display = 'titel, familyName, givenName, name';
@@ -1587,26 +1634,26 @@ class Data {
     	    case 'full':
 	     case 'compactindex':
 	     case 'kompakt':
-		$display = 'titel, familyName, givenName, name, suffix, position, telefon, email, email,  socialmedia, adresse, bild, permalink, url, border, border';		 
+		$display = 'titel, familyName, givenName, name, suffix, position, telefon, email, email,  socialmedia, adresse, bild, permalink, url, border, border, link';		 
 		break;
 	    case 'page':
 		$display = '_all';  
 		break;
 	    case 'listentry':
 	    case 'liste':
-		$display = 'titel, familyName, givenName, name, suffix, description, permalink, url';  
+		$display = 'titel, familyName, givenName, name, suffix, description, permalink, url, link';  
 		break;
 	     case 'sidebar':
-		$display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, jobTitle, telefon, email, socialmedia, fax, url, adresse, bild, permalink, url, sprechzeiten, ansprechpartner, description';  
+		$display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, jobTitle, telefon, email, socialmedia, fax, url, adresse, bild, permalink, url, sprechzeiten, ansprechpartner, description, link';  
 		break;
 	    case 'table': 
-		$display = 'titel, familyName, givenName, name, suffix, telefon, email, permalink, url';  
+		$display = 'titel, familyName, givenName, name, suffix, telefon, email, permalink, url, link';  
 		break;
 	    case 'card':
-		$display = 'titel, familyName, givenName, name, suffix, bild, position, permalink, socialmedia';  
+		$display = 'titel, familyName, givenName, name, suffix, bild, position, permalink, socialmedia, link';  
 		break;
 	    default:
-		$display = 'title, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, email, permalink, url, border';  
+		$display = 'title, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, email, permalink, border, link';  
 	}	
 	return $display;
     }
