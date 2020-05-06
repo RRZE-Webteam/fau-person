@@ -327,12 +327,13 @@ function getFields() {
 	    [
 		'name'  => 'view_kontakt_linkname',
 		'label' => __('Link auf Kontaktname', 'fau-person'),		
-		'default' => 'permalink',
+		'default' => 'use-link',
 		'type' => 'Select', 
 		'options' => [
-			'permalink' => __( 'Kontaktseite', 'fau-person' ),
+			'use-link' => __( 'Linkziel im Kontakteintrag', 'fau-person' ),
+   			'permalink' => __( 'Kontaktseite', 'fau-person' ),
 			'url' => __( 'URL aus Profil', 'fau-person' ),
-			''  => __( 'Nicht verlinken', 'fau-person' ),
+			'force-nolink'  => __( 'Nicht verlinken, URL im Kontakteintrag ignorieren', 'fau-person' ),
 		],
 	    ],
 	    [

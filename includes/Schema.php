@@ -172,12 +172,25 @@ class Schema {
 	
 	
 	$url = '';
+	if ((isset($data['link'])) && (!empty(esc_url($data['link'])))) {
+	    $url = $data['link'];
+	    $surroundingtag = 'a';
+	}
 	if (isset($args['view_kontakt_linkname'])) {
 	    if (!empty($args['view_kontakt_linkname'])) {
-		$urlsource = $args['view_kontakt_linkname'];
-		if ((isset($data[$urlsource])) && (!empty(esc_url($data[$urlsource])))) {
-		    $url = $data[$urlsource];
-		    $surroundingtag = 'a';
+		if ($args['view_kontakt_linkname'] == 'force-nolink') {
+		    $url = '';
+		} elseif ($args['view_kontakt_linkname'] == 'use-link') {
+		    if ((isset($data['link'])) && (!empty(esc_url($data['link'])))) {
+			$url = $data['link'];
+			$surroundingtag = 'a';
+		    }
+		} else {
+		    $urlsource = $args['view_kontakt_linkname'];
+		    if ((isset($data[$urlsource])) && (!empty(esc_url($data[$urlsource])))) {
+			$url = $data[$urlsource];
+			$surroundingtag = 'a';
+		    }
 		}
 	    }
 	} 
