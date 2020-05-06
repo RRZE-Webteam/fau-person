@@ -470,7 +470,7 @@ class Data {
 	    $datacontent .= Schema::create_SocialMedialist($data);
 	}
 	
-	    
+
 	if ((!empty($data['connection_text']) || !empty($data['connection_options']) || !empty($data['connections'])) && isset($display['ansprechpartner']) && $display['ansprechpartner']==true) {
 	    $datacontent .= self::fau_person_connection($data['connection_text'], $data['connection_options'], $data['connections'], $hstart);
 	}
@@ -1112,6 +1112,20 @@ class Data {
 	    }
 	}
 	
+	
+	
+	if (((isset($filter['ansprechpartner'])) && ($filter['ansprechpartner'])) || ((isset($input['connection_only']) && $input['connection_only']==false))) {
+	    $adressfields = "connections, connection_text, connection_options, connection_only";
+
+	    $adresskeys = explode(',', $adressfields);
+	    foreach ($adresskeys as $value) {
+		$key = esc_attr(trim($value));
+		if ((!empty($key)) && isset($input[$key])) {
+		     $res[$key] = $input[$key];
+		}
+	    }
+	}
+	
 	return $res;
     }
     
@@ -1606,7 +1620,7 @@ class Data {
 		$display = 'titel, familyName, givenName, name, suffix, bild, position, permalink, socialmedia';  
 		break;
 	    default:
-		$display = 'title, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, email, permalink, url, border';  
+		$display = 'title, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, email, permalink, border';  
 	}	
 	return $display;
     }
