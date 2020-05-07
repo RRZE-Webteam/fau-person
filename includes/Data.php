@@ -363,7 +363,7 @@ class Data {
 	    $url = $data['link'];
 	} elseif ((isset($data['url'])) && (!empty(esc_url($data['url'])))) {
 	    $url = $data['url'];
-	} else {
+	} elseif ((isset($data['permalink'])) && (!empty(esc_url($data['permalink'])))) {
 	    $url = $data['permalink'];
 	}
 	if (isset($args['view_kontakt_linkname'])) {
@@ -400,8 +400,7 @@ class Data {
 	Main::enqueueForeignThemes();
 	
 	$fields['permalink'] = get_permalink($id);
-	$fields['name'] = get_the_title($id);
-	
+	$fields['name'] = get_the_title($id);	
 	$fields['description'] = self::get_description($id, $arguments['format'], $fields);
 	
 	$data = self::filter_fields($fields, $display);
@@ -514,11 +513,12 @@ class Data {
 	
 	    
 	$morecontent = '';
-	if ( (!isset($data['connection_only'])) 
-	    || ((isset($data['connection_only']) && $data['connection_only']==false))) {
-		$morecontent .=   Schema::create_ContactPoint($data);
-	}   
-	
+	if (isset($display['sprechzeiten']) && $display['sprechzeiten']==true) {
+	    if ( (!isset($data['connection_only'])) 
+		|| ((isset($data['connection_only']) && $data['connection_only']==false))) {
+		    $morecontent .=   Schema::create_ContactPoint($data);		
+	    }   
+	}
 	
 	if (!empty($data['description']) && isset($display['description']) && (!empty($display['description']))) {
              $morecontent .= '<div class="person-info-description" itemprop="description"><p>' . $data['description'] . '</p></div>' . "\n";
@@ -642,7 +642,7 @@ class Data {
 	if (isset($viewopts['view_some_position']) && $viewopts['view_some_position'] !== 'nach-name') {
 		$content .= Schema::create_SocialMedialist($data);
 	}
-		
+		    
 	if ((!isset($data['connection_only'])) || 
 	    ((isset($data['connection_only']) && $data['connection_only']==false))) {	
 		$content .=   Schema::create_ContactPoint($data,'div','contactPoint','','h3');
@@ -698,12 +698,12 @@ class Data {
 	if (isset($display['description']) && $display['description'] ) {	
 		$content .= "<td>" . $data['description'].'</td>';
 	}
-	
-	if ((!isset($data['connection_only'])) ||
-		((isset($data['connection_only']) && $data['connection_only']==false))) {	    
-		$content .= '<td>'.  Schema::create_ContactPoint($data).'</td>';
+	if (isset($display['sprechzeiten']) && (!empty($display['sprechzeiten']))) {
+	    if ((!isset($data['connection_only'])) ||
+		    ((isset($data['connection_only']) && $data['connection_only']==false))) {	    
+		    $content .= '<td>'.  Schema::create_ContactPoint($data).'</td>';
+	    }
 	}
-
 	if (isset($display['socialmedia']) && $display['socialmedia'] ) {	
 		$content .= "<td>" . Schema::create_SocialMedialist($data).'</td>';
 	}
@@ -973,12 +973,13 @@ class Data {
 	    if (isset($viewopts['view_some_position']) && $viewopts['view_some_position'] !== 'nach-name') {
 		$content .= Schema::create_SocialMedialist($data);
 	    }
+	    if (isset($display['sprechzeiten']) && (!empty($display['sprechzeiten']))) {
+		if ((!isset($data['connection_only'])) ||
+		    ((isset($data['connection_only']) && $data['connection_only']==false))) {  
+			$sprechzeitentitletag = 'h'.($hstart+1);
+			$content .=   Schema::create_ContactPoint($data,'div','contactPoint','',$sprechzeitentitletag);
 
-	    if ((!isset($data['connection_only'])) ||
-		((isset($data['connection_only']) && $data['connection_only']==false))) {  
-		    $sprechzeitentitletag = 'h'.($hstart+1);
-		    $content .=   Schema::create_ContactPoint($data,'div','contactPoint','',$sprechzeitentitletag);
-	
+		}
 	    }
 	    $content .= '</div>';
 	
@@ -1113,7 +1114,7 @@ class Data {
 	/*
 	 * Felder, die nicht gelöscht werden sollen, wieder einfügen
 	 */
-	$dontfilter = "url, link, permalink, connection_only";
+	$dontfilter = "url, link, permalink, connection_only, hoursAvailable_group";
 	$stay = explode(',', $dontfilter);   
 	foreach ($stay as $value) {
 		$key = esc_attr(trim($value));
@@ -1146,8 +1147,8 @@ class Data {
 	    }
 	}
 	if ((isset($filter['sprechzeiten'])) && ($filter['sprechzeiten'])) {
-	    $adressfields = "officehours, hoursAvailable_group, hoursAvailable_text";  
-
+	    $adressfields = "officehours, hoursAvailable, hoursAvailable_text";  
+   
 	    $adresskeys = explode(',', $adressfields);
 	    foreach ($adresskeys as $value) {
 		$key = esc_attr(trim($value));
@@ -1160,7 +1161,7 @@ class Data {
 	
 	
 	if (((isset($filter['ansprechpartner'])) && ($filter['ansprechpartner'])) || ((isset($input['connection_only']) && $input['connection_only']==false))) {
-	    $adressfields = "connections, connection_text, connection_options, connection_only";
+	    $adressfields = "connections, connection_text, connection_options";
 
 	    $adresskeys = explode(',', $adressfields);
 	    foreach ($adresskeys as $value) {
@@ -1748,6 +1749,7 @@ class Data {
 		   break;   
 		case 'sprechzeiten':
 		   $newlist['hoursAvailable'] = $liste[$key];
+		   $newlist['sprechzeiten'] = $liste[$key];
 		   break;
 		case 'ansprechpartner':
 		   $newlist['ansprechpartner'] = $liste[$key];
