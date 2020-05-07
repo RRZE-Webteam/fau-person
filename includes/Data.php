@@ -1656,16 +1656,16 @@ class Data {
 		$display = 'titel, familyName, givenName, name, suffix, description, permalink, url, link';  
 		break;
 	     case 'sidebar':
-		$display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, jobTitle, telefon, email, socialmedia, fax, url, adresse, bild, permalink, url, sprechzeiten, ansprechpartner, description, link';  
+		$display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, jobTitle, telefon, email, socialmedia, fax, url, adresse, bild, permalink, url, sprechzeiten, ansprechpartner, description';  
 		break;
 	    case 'table': 
 		$display = 'titel, familyName, givenName, name, suffix, telefon, email, permalink, url, link';  
 		break;
 	    case 'card':
-		$display = 'titel, familyName, givenName, name, suffix, bild, position, permalink, socialmedia, link';  
+		$display = 'titel, familyName, givenName, name, suffix, bild, position, permalink, socialmedia';  
 		break;
 	    default:
-		$display = 'title, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, email, permalink, border, link';  
+		$display = 'title, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, email, permalink, border';  
 	}	
 	return $display;
     }
