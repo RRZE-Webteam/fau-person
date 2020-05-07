@@ -532,6 +532,7 @@
 	margin: 8px 0;
 	border: 2px solid transparent;
 	padding: 5px 0;
+	max-width: 300px;
 	p {
 	    hyphens: manual;
 	} 
@@ -563,6 +564,9 @@
 		a::before,
 		span::before {
 		    margin-right: 5px;
+		}
+		a {
+		    white-space: normal;
 		}
 	    }
 	}
