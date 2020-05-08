@@ -1523,8 +1523,8 @@ class Data {
                                 array_push($officehours, $officehour);
                             }
                             if ( $defaults ) {
-                                $officehours = implode($officehours, '</p></li><li><p class="cmb_metabox_description">');
-                                $officehours = sprintf(__('<p class="cmb_metabox_description">[Aus UnivIS angezeigter Wert: </p><ul><li><p class="cmb_metabox_description">%s</p></li></ul><p class="cmb_metabox_description">]</p>', 'fau-person'), $officehours); 
+                                $officehours = implode(',',$officehours);
+                                $officehours = sprintf(__('<p class="cmb_metabox_description">[Aus UnivIS angezeigter Wert: <em>%s</em>]</p>', 'fau-person'), $officehours); 
                             }
                             break;
                         }  

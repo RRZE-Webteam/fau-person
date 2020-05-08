@@ -78,7 +78,6 @@ class Settings {
 	
 	add_action('admin_init', [$this, 'adminInit']);
 	add_action('admin_menu', [$this, 'adminMenu']);
-	add_action('admin_enqueue_scripts', [$this, 'adminEnqueueScripts']);
     }
 
     protected function setMenu(){
@@ -396,32 +395,7 @@ class Settings {
         $this->currentTab = array_key_exists('current-tab', $_GET) && in_array($_GET['current-tab'], $this->allTabs) ? $_GET['current-tab'] : $this->defaultTab;
     }
 
-    /**
-     * Enqueue Skripte und Style
-     * @return void
-     */
-    public function adminEnqueueScripts($hook) {
-        wp_register_script('wp-color-picker-settings', plugins_url('js/wp-color-picker.js', plugin_basename($this->pluginFile)));
-        wp_register_script('wp-media-settings', plugins_url('js/wp-media.js', plugin_basename($this->pluginFile)));
-	
-	
-        global $post_type;
-        if('person' != $post_type) {
-            return;
-        }
-        wp_register_script('admin', plugin_dir_url( __FILE__ ) . '/js/admin.js', array('jquery'), false, true);
 
-        if ( 'post-new.php' == $hook) {
-            wp_enqueue_script('admin');
-            return;
-        } 
-        if ('post.php' == $hook) {       
-            wp_enqueue_script('admin');
-            return;
-        }
-
-	
-    }
 
     /**
      * Enqueue WP-Color-Picker-Skripte.
