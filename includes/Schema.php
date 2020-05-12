@@ -171,7 +171,7 @@ class Schema {
 	}
 	
 	$url = '';
-	$thisurl = Data::get_morelink_url($data,$args);
+	$thisurl = $data['morelink'];
 	if (isset($thisurl) && (!empty(esc_url($thisurl)))) {
 	    $url = $thisurl;
 	    $surroundingtag = 'a';
