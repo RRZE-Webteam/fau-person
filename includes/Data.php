@@ -607,6 +607,7 @@ class Data {
 	
 	
 	if ( $is_shortcode) {
+	    $data['morelink'] = '';
 	    $content .= Schema::create_Name($data,'name','','h'.$hstart,false,$viewopts);
 	    
 	    

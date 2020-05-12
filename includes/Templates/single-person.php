@@ -9,8 +9,11 @@ get_header();
                 <div class="row">
                     <div class="col-xs-12">
                     <?php 
-		 
-                      echo FAU_Person\Data::fau_person_page($id);
+		 $args = [
+		     'hstart' => 1,
+		 ];
+
+                      echo FAU_Person\Data::fau_person_page($id,array(),$args,true);
                     ?>         
                     </div>
                 </div>
