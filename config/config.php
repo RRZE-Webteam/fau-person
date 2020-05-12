@@ -476,14 +476,13 @@ function getShortcodeSettings(){
 			'values' => [
 				'name' => __( 'Name', 'fau-person' ),
 				'shortlist' => __( 'Kurzliste', 'fau-person' ),
-				'full' => __( 'Komplett', 'fau-person' ),
 				'sidebar' => __( 'Sidebar', 'fau-person' ),
 				'page' => __( 'Seite', 'fau-person' ),
 				'liste' => __( 'Liste', 'fau-person' ),
-				'listentry' => __( 'Listeneintrag', 'fau-person' ),
 				'plain' => __( 'Unformatiert', 'fau-person' ),
 				'kompakt' => __( 'Kompakt', 'fau-person' ),
-				'compactindex' => __( 'Kompakter Index', 'fau-person' ),
+				'card' => __( 'Karte', 'fau-person' ),
+			     'table' => __( 'Tabelle', 'fau-person' ),
 
 			],
 		],

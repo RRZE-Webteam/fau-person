@@ -361,10 +361,11 @@ class Data {
 	$url = '';
 	if ((isset($data['link'])) && (!empty(esc_url($data['link'])))) {
 	    $url = $data['link'];
-	} elseif ((isset($data['url'])) && (!empty(esc_url($data['url'])))) {
-	    $url = $data['url'];
 	} elseif ((isset($data['permalink'])) && (!empty(esc_url($data['permalink'])))) {
 	    $url = $data['permalink'];
+	} elseif ((isset($data['url'])) && (!empty(esc_url($data['url'])))) {
+	    $url = $data['url'];
+	
 	}
 	if (isset($args['view_kontakt_linkname'])) {
 	    if (!empty($args['view_kontakt_linkname'])) {
@@ -402,6 +403,7 @@ class Data {
 	$fields['permalink'] = get_permalink($id);
 	$fields['name'] = get_the_title($id);	
 	$fields['description'] = self::get_description($id, $arguments['format'], $fields);
+	$fields['morelink'] = self::get_morelink_url($fields, $viewopts);
 	
 	$data = self::filter_fields($fields, $display);
 
@@ -456,7 +458,8 @@ class Data {
 	if (($hstart <1) || ($hstart > 6)) {
 	    $hstart = 2;
          }
-	 
+
+
         $content .= '<h' . $hstart . '>';
         $content .= $fullname;
         $content .= '</h' . $hstart . '>';
@@ -547,12 +550,14 @@ class Data {
 
     public static function fau_person_page($id, $display = array(), $arguments= array(), $is_shortcode = false) {    
         $fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
-
+	
+	
         Main::enqueueForeignThemes();
         $viewopts = self::get_viewsettings();
 	if (empty($display)) {
 	    $display = self::get_display_field('page');
 	}   	
+	$fields['morelink'] = self::get_morelink_url($fields, $viewopts);
 	$data = self::filter_fields($fields, $display);
 
 
@@ -566,7 +571,6 @@ class Data {
          }
 	 
 	
-//	$class = 'fau-person person page';
 	$class = 'fau-person page';
 	if ((isset($arguments['class'])) && (!empty($arguments['class']))) {
 	    $class .= ' '.esc_attr($arguments['class']);
@@ -603,6 +607,7 @@ class Data {
 	
 	
 	if ( $is_shortcode) {
+	    $data['morelink'] = '';
 	    $content .= Schema::create_Name($data,'name','','h'.$hstart,false,$viewopts);
 	    
 	    
@@ -683,9 +688,9 @@ class Data {
 	
 	$fields['permalink'] = get_permalink($id);
 	$fields['name'] = get_the_title($id);
-	
 	$fields['description'] = self::get_description($id, $arguments['format'], $fields);
-
+	$fields['morelink'] = self::get_morelink_url($fields, $viewopts);
+	
 	$data = self::filter_fields($fields, $display);
 	if ((isset($viewopts['view_raum_prefix'])) && (!empty(trim($viewopts['view_raum_prefix']))) 
 	    && (isset($data['workLocation']) && (!empty($data['workLocation'])))) {
@@ -795,7 +800,7 @@ class Data {
 	}
          $fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
 	$viewopts = self::get_viewsettings();
-	 
+	
 
         $content = ''; 
 	Main::enqueueForeignThemes();
@@ -804,7 +809,7 @@ class Data {
 	$fields['permalink'] = get_permalink($id);
 	$fields['name'] = get_the_title($id);
 	$fields['description'] = self::get_description($id, $arguments['format'], $fields);
-	
+	$fields['morelink'] = self::get_morelink_url($fields, $viewopts);
 
 	$data = self::filter_fields($fields, $display);
 	
@@ -871,7 +876,7 @@ class Data {
 	$fields['permalink'] = get_permalink($id);
 	$fields['name'] = get_the_title($id);
 	$fields['description'] = self::get_description($id, 'sidebar', $fields);
-	
+	$fields['morelink'] = self::get_morelink_url($fields, $viewopts);
 	
 	$sitebaropts = self::map_old_keys(self::get_viewsettings('sidebar'));
 	foreach ($sitebaropts as $key => $value) {
@@ -1114,7 +1119,7 @@ class Data {
 	/*
 	 * Felder, die nicht gelöscht werden sollen, wieder einfügen
 	 */
-	$dontfilter = "url, link, permalink, connection_only, hoursAvailable_group";
+	$dontfilter = "morelink, permalink, connection_only, hoursAvailable_group";
 	$stay = explode(',', $dontfilter);   
 	foreach ($stay as $value) {
 		$key = esc_attr(trim($value));
@@ -1523,8 +1528,8 @@ class Data {
                                 array_push($officehours, $officehour);
                             }
                             if ( $defaults ) {
-                                $officehours = implode($officehours, '</p></li><li><p class="cmb_metabox_description">');
-                                $officehours = sprintf(__('<p class="cmb_metabox_description">[Aus UnivIS angezeigter Wert: </p><ul><li><p class="cmb_metabox_description">%s</p></li></ul><p class="cmb_metabox_description">]</p>', 'fau-person'), $officehours); 
+                                $officehours = implode(',',$officehours);
+                                $officehours = sprintf(__('<p class="cmb_metabox_description">[Aus UnivIS angezeigter Wert: <em>%s</em>]</p>', 'fau-person'), $officehours); 
                             }
                             break;
                         }  
