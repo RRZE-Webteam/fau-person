@@ -1671,7 +1671,7 @@ class Data {
 		$display = 'titel, familyName, givenName, name, suffix, bild, position, permalink, socialmedia';  
 		break;
 	    default:
-		$display = 'title, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, email, permalink, border';  
+		$display = 'title, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, email, permalink, border, ansprechpartner';  
 	}	
 	return $display;
     }
