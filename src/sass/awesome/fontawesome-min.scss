@@ -1,0 +1,34 @@
+/*
+* Minimal Font Awesome Settings.
+* without font path definition, Font will be asumed to come from theme or will be loaded extra.
+*/ 
+.fa { display: inline-block; font: normal normal normal 14px/1 FontAwesome; font-size: inherit; }
+
+.fa-phone:before { content: "\f095"; }
+.fa-mobile-phone:before, .fa-mobile:before { content: "\f10b"; }
+.fa-phone-square:before { content: "\f098"; }
+.fa-home:before { content: "\f015"; }
+.fa-square-o:before { content: "\f096"; }
+.fa-envelope:before { content: "\f0e0"; }
+.fa-envelope-o:before { content: "\f003"; }
+
+.fa-bookmark:before { content: "\f02e"; }
+.fa-fax:before { content: "\f1ac"; }
+.fa-print:before { content: "\f02f"; }
+.fa-bookmark-o:before { content: "\f097"; }
+.fa-info-circle:before { content: "\f05a"; }
+.fa-building:before { content: "\f1ad"; }
+
+
+/*
+ * Social media
+ */
+.fa-twitter:before { content: "\f099"; }
+.fa-facebook-f:before, .fa-facebook:before { content: "\f09a"; }
+.fa-github:before { content: "\f09b"; }
+.fa-linkedin:before { content: "\f0e1"; }
+
+.fa-instagram:before { content: "\f16d";  }
+.fa-xing:before { content: "\f168"; }
+.fa-tiktok:before { content: "d"; }
+.fa-youtube:before { content: "\f167"; }

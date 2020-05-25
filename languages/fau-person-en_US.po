@@ -2,67 +2,64 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FAU-Person\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-07-18 17:28+0100\n"
-"PO-Revision-Date: \n"
-"Last-Translator: \n"
-"Language-Team: RRZE-Webteam\n"
-"Language: de\n"
+"POT-Creation-Date: 2020-04-27 14:09+0000\n"
+"PO-Revision-Date: 2020-04-27 14:21+0000\n"
+"Last-Translator: Wolfgang Wiese <wolfgang.wiese@fau.de>\n"
+"Language-Team: English (US)\n"
+"Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Poedit-KeywordsList: __;_e;_ex:1,2c;esc_attr__;esc_attr_e;_n:1,2;"
-"_nx:4c,1,2;_x:1,2c\n"
+"X-Poedit-KeywordsList: __;_e;_ex:1,2c;esc_attr__;esc_attr_e;_n:1,2;_nx:4c,1,"
+"2;_x:1,2c\n"
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 1.6.5\n"
+"X-Generator: Loco https://localise.biz/\n"
 "X-Poedit-SearchPath-0: ..\n"
+"X-Loco-Version: 2.3.3; wp-5.4"
 
-#: ../fau-person.php:162
-msgid "My Meta Box"
-msgstr "My Meta Box"
-
-#: ../fau-person.php:203
-#, php-format
+#: fau-person.php:70
 msgid ""
-"Ihre PHP-Version %s ist veraltet. Bitte aktualisieren Sie mindestens auf die "
-"PHP-Version %s."
+"The server is running PHP version %1$s. The Plugin requires at least PHP "
+"version %2$s."
 msgstr ""
-"Your server is running PHP version %s. Please upgrade at least to PHP "
-"version %s."
+"The server is running PHP version %1$s. The Plugin requires at least PHP "
+"version %2$s."
 
-#: ../fau-person.php:207
-#, php-format
+#: fau-person.php:73
 msgid ""
-"Ihre Wordpress-Version %s ist veraltet. Bitte aktualisieren Sie mindestens "
-"auf die Wordpress-Version %s."
+"The server is running WordPress version %1$s. The Plugin requires at least "
+"WordPress version %2$s."
 msgstr ""
-"Your Wordpress version is %s. Please upgrade at least to Wordpress version "
-"%s."
+"The server is running WordPress version %1$s. The Plugin requires at least "
+"WordPress version %2$s."
 
-#: ../fau-person.php:330
-msgid "Kein Kontakt ausgewählt."
-msgstr "Select the type of contact"
+#: fau-person.php:130
+msgid "Plugins: %1$s: %2$s"
+msgstr "Plugins: %1$s: %2$s"
 
-#: ../fau-person.php:334
-msgid "Noch keine Kontakte eingepflegt."
-msgstr "No contacts found"
+#: config/config.php:56, config/config.php:57, config/config.php:60
+msgid "FAU Person"
+msgstr "FAU Person"
 
-#: ../fau-person.php:352
-msgid "Kein Standort ausgewählt."
-msgstr "No location selected."
+#: config/config.php:60
+msgid "Einstellungen"
+msgstr "Settings"
 
-#: ../fau-person.php:355
-msgid "Noch kein Standort eingepflegt."
-msgstr "Add a location first."
+#: config/config.php:111
+msgid "Übersicht"
+msgstr "Overview"
 
-#: ../fau-person.php:397
-msgid ""
-"Bitte korrigieren Sie das Format der Telefon- oder Faxnummer, die Anzeige "
-"ist nicht einheitlich!"
-msgstr "Please correct the format of the phone- or fax number!"
+#: config/config.php:112
+msgid "Zuordnung von Personen und Kontakten zu verschiedenen Kategorien"
+msgstr "Assignment of persons and contacts to various categories"
 
-#: ../fau-person.php:413
+#: config/config.php:117
+msgid "Kontakt eingeben"
+msgstr "Add new contact"
+
+#: config/config.php:118
 msgid ""
 "Geben Sie auf dieser Seite alle gewünschten Daten zu einem Kontakt ein. Die "
 "Einbindung der Kontaktdaten erfolgt dann in den Beiträgen oder Seiten über "
@@ -71,285 +68,11 @@ msgstr ""
 "Please enter all required data to a person on this page. To embed the "
 "contact informations in posts or pages use a short code or a widget."
 
-#: ../fau-person.php:418
-msgid "Zur Einbindung dieses Kontaktes verwenden Sie folgenden Shortcode"
-msgstr "Embed of contact information via short code"
+#: config/config.php:123
+msgid "UnivIS Id suchen"
+msgstr "Search UnivIS Id"
 
-#: ../fau-person.php:425
-msgid "Kontakte eingeben"
-msgstr "New contacts"
-
-#: ../fau-person.php:429 ../fau-person.php:492 ../fau-person.php:517
-#: ../fau-person.php:707 ../fau-person.php:758
-msgid "Für mehr Information"
-msgstr "Additional information"
-
-#: ../fau-person.php:429 ../fau-person.php:492 ../fau-person.php:517
-#: ../fau-person.php:707 ../fau-person.php:758
-msgid "RRZE-Webteam in Github"
-msgstr "RRZE-Webteam on Github"
-
-#: ../fau-person.php:445
-msgid "Einbindung der Kontakt-Visitenkarte über Shortcode"
-msgstr "Embed of contact information via short code"
-
-#: ../fau-person.php:446
-msgid ""
-"Binden Sie die gewünschten Kontaktdaten mit dem Shortcode [kontakt] mit "
-"folgenden Parametern auf Ihren Seiten oder Beiträgen ein:"
-msgstr ""
-"To insert contact informations on your pages oder posts use the short code "
-"[kontakt] with one of the following parameters:"
-
-#: ../fau-person.php:448
-msgid "zwingend:"
-msgstr "oligatory:"
-
-#: ../fau-person.php:450
-msgid ""
-"ID des Kontakteintrags (erkennbar in der Metabox \"Kontaktinformationen\" "
-"auf den Seiten)"
-msgstr ""
-"ID number of the contact entry (you'll find it on pages in the metabox "
-"\"Contact information\")"
-
-#: ../fau-person.php:453
-msgid ""
-"format=\"...\" (optional), je nach Wert unterscheiden sich die "
-"Ausgabedarstellung und die angezeigten Standardparameter:"
-msgstr ""
-"format=\"...\" (optional), the output and the shown default parameters "
-"differ depending on the value:"
-
-#: ../fau-person.php:455
-msgid ""
-"Ausgabe von Titel, Vorname, Nachname und Suffix (sofern vorhanden) im "
-"Fließtext mit Link auf die Kontaktseite der Person"
-msgstr ""
-"Title, given name, family name and suffix (if available) are shown in the "
-"text with link to the contact page of the person"
-
-#: ../fau-person.php:456
-msgid ""
-"vollständige Ausgabe des ganzen Kontaktes wie bei der Kontakt-Einzelseite, "
-"die Parameter show und hide haben hierauf keinen Einfluss"
-msgstr ""
-"output of the complete contact information details as you can see it on the "
-"contact information pages, the parameters show and hide have no influence on "
-"it"
-
-#: ../fau-person.php:457
-msgid "Ausgabe wie bei der Anzeige in der Sidebar im Theme"
-msgstr "Output as it can be seen in the sidebar in theme"
-
-#: ../fau-person.php:458
-msgid "Ausgabe der Namen mit Listenpunkten, unten drunter Kurzbeschreibung"
-msgstr "Output of the names with list items and short description below"
-
-#: ../fau-person.php:461
-msgid ""
-"show=\"...\" bzw. hide=\"...\" (optional), wenn ein zusätzliches Feld zu den "
-"Standardfeldern angezeigt werden soll bzw. die Anzeige eines Standardfeldes "
-"nicht gewünscht ist:"
-msgstr ""
-"show=\"...\" or hide=\"...\" (optional), if an additional field should be "
-"displayed or the display of a standard field is not desired:"
-
-#: ../fau-person.php:463
-msgid ""
-"Standardanzeige bei format=\"liste\" (wennn das Feld leer ist wird dann der "
-"Anfang des Inhaltsbereiches angezeigt)"
-msgstr ""
-"Default for format=\"liste\" (if the field is empty the beginning of the "
-"content ist shown)"
-
-#: ../fau-person.php:464 ../fau-person.php:465 ../fau-person.php:466
-msgid ""
-"Standardanzeige ohne format-Angabe, bei format=\"page\" (und bei Widget)"
-msgstr "Default without format-parameter, for format=\"page\" (and for Widget)"
-
-#: ../fau-person.php:467 ../fau-person.php:468
-msgid ""
-"Standardanzeige ohne format-Angabe, bei format=\"name\", \"page\", \"sidebar"
-"\", \"liste\" (und bei Widget)"
-msgstr ""
-"Default without format, for format=\"name\", \"page\", \"sidebar\", \"liste"
-"\" (and for Widget)"
-
-#: ../fau-person.php:469 ../fau-person.php:470 ../fau-person.php:472
-msgid "Standardanzeige bei format=\"page\" (und bei Widget)"
-msgstr "Default for format=\"page\" (and for Widget)"
-
-#: ../fau-person.php:471 ../fau-person.php:474
-msgid ""
-"Standardanzeige ohne format-Angabe, bei format=\"page\", \"sidebar\" (und "
-"bei Widget)"
-msgstr ""
-"Default without format, for format=\"page\", \"sidebar\" (and for Widget)"
-
-#: ../fau-person.php:473 ../fau-person.php:476
-msgid "keine Standardanzeige"
-msgstr "no default"
-
-#: ../fau-person.php:475 ../fau-person.php:480
-msgid "Standardanzeige bei format=\"page\", \"sidebar\" (und bei Widget)"
-msgstr "Default for format=\"page\", \"sidebar\" (and for widget)"
-
-#: ../fau-person.php:477
-msgid "Standardanzeige bei format=\"sidebar\" (und bei Widget)"
-msgstr "Default for format=\"sidebar\" (and for widget)"
-
-#: ../fau-person.php:478 ../fau-person.php:479
-msgid "Standardanzeige bei format=\"page\""
-msgstr "Default for format=\"page\""
-
-#: ../fau-person.php:488 ../fau-person.php:513 ../fau-person.php:703
-#: ../fau-person.php:754
-msgid "Übersicht"
-msgstr "Overview"
-
-#: ../fau-person.php:508
-msgid "Zuordnung von Personen und Kontakten zu verschiedenen Kategorien"
-msgstr "Assignment of persons and contacts to various categories"
-
-#: ../fau-person.php:550 ../fau-person.php:577
-msgid "Suche nach UnivIS-ID"
-msgstr "Find UnivIS-ID"
-
-#: ../fau-person.php:553 ../fau-person.php:725
-msgid "Anzeigeoptionen"
-msgstr "Output options"
-
-#: ../fau-person.php:583
-msgid "Person suchen"
-msgstr "Search person"
-
-#: ../fau-person.php:592
-msgid ""
-"Es konnten keine Daten zur Person gefunden werden. Bitte verändern Sie Ihre "
-"Suchwerte."
-msgstr "No data can be found. Please change your search parameters."
-
-#: ../fau-person.php:595
-msgid "keine Daten in UnivIS eingepflegt"
-msgstr "There is no data in UnivIS"
-
-#: ../fau-person.php:610 ../fau-person.php:636
-#: ../includes/fau-person-metaboxes.php:201
-msgid "Vorname"
-msgstr "Given name"
-
-#: ../fau-person.php:615 ../fau-person.php:637
-#: ../includes/fau-person-metaboxes.php:209
-msgid "Nachname"
-msgstr "Family name"
-
-#: ../fau-person.php:635
-msgid ""
-"Bitte geben Sie den Vor- und/oder Nachnamen der Person ein, von der Sie die "
-"UnivIS-ID benötigen."
-msgstr ""
-"Please enter given and/or family name of the person from whom you need the "
-"UnivIS-ID."
-
-#: ../fau-person.php:638
-msgid "Folgende Daten wurden in UnivIS gefunden:"
-msgstr "Results in UnivIS"
-
-#: ../fau-person.php:644 ../fau-person.php:651
-msgid "Es können auch nur Teile des Namens eingegeben werden."
-msgstr "Also parts of the name are possible."
-
-#: ../fau-person.php:658
-msgid "Geben Sie an, welche Daten angezeigt werden sollen:"
-msgstr "Which data should be shown?"
-
-#: ../fau-person.php:659
-msgid ""
-"Im Widget (bei den FAU-Themes auch in der Sidebar, wenn der Kontakt über das "
-"Feld \"Auswahl Ansprechpartner\" in der Metabox \"Sidebar\" gewählt wird)"
-msgstr ""
-"In widget (if you are using a FAU-Theme additionally in the sidebar, if you "
-"choose the contact in the metabox \"Sidebar\")"
-
-#: ../fau-person.php:660
-msgid "Kontakt-Übersichtsseite:"
-msgstr "Contact-Overview:"
-
-#: ../fau-person.php:661
-msgid "Verwendung der Standard-Übersichtsseite"
-msgstr "Overview-page for all contacts "
-
-#: ../fau-person.php:670
-msgid "Position"
-msgstr "Job title"
-
-#: ../fau-person.php:671 ../includes/fau-person-metaboxes.php:151
-#: ../shortcodes/fau-person-shortcodes.php:671
-#: ../shortcodes/fau-person-shortcodes.php:760
-#: ../shortcodes/fau-person-shortcodes.php:919
-msgid "Organisation"
-msgstr "Organization"
-
-#: ../fau-person.php:672 ../includes/fau-person-metaboxes.php:158
-#: ../shortcodes/fau-person-shortcodes.php:674
-#: ../shortcodes/fau-person-shortcodes.php:762
-#: ../shortcodes/fau-person-shortcodes.php:922
-msgid "Abteilung"
-msgstr "Working group"
-
-#: ../fau-person.php:673 ../includes/fau-person-metaboxes.php:571
-#: ../shortcodes/fau-person-shortcodes.php:1082
-#: ../shortcodes/fau-standort-shortcodes.php:147
-#: ../shortcodes/fau-standort-shortcodes.php:234
-#: ../shortcodes/fau-standort-shortcodes.php:322
-msgid "Adresse"
-msgstr "Address"
-
-#: ../fau-person.php:674 ../includes/fau-person-metaboxes.php:281
-#: ../includes/fau-person-metaboxes.php:572
-msgid "Telefon"
-msgstr "Phone number"
-
-#: ../fau-person.php:675
-msgid "Fax"
-msgstr "Faxnumer"
-
-#: ../fau-person.php:676
-msgid "Mail"
-msgstr "Email"
-
-#: ../fau-person.php:677 ../includes/fau-person-metaboxes.php:322
-#: ../shortcodes/fau-person-shortcodes.php:686
-#: ../shortcodes/fau-person-shortcodes.php:772
-#: ../shortcodes/fau-person-shortcodes.php:934
-msgid "Webseite"
-msgstr "Website"
-
-#: ../fau-person.php:678 ../includes/fau-person-metaboxes.php:575
-#: ../shortcodes/fau-person-shortcodes.php:1045
-msgid "Sprechzeiten"
-msgstr "Office hours"
-
-#: ../fau-person.php:679 ../includes/fau-person-metaboxes.php:349
-msgid "Kurzauszug"
-msgstr "Short extract"
-
-#: ../fau-person.php:680
-msgid "Bild"
-msgstr "Thumbnail"
-
-#: ../fau-person.php:688
-msgid ""
-"Zeige die Standard-Übersichtsseite aller Kontakte an. Bevor diese Option "
-"deaktiviert wird, muss eine eigene Seite mit der Titelform (slug) \"person\" "
-"direkt unterhalb der Hauptebene angelegt werden."
-msgstr ""
-"Show the default overview-page for all contacts. Before deactivating this "
-"option be sure to have a own page with slug \"person\" in the root of the "
-"website."
-
-#: ../fau-person.php:697 ../fau-person.php:748
+#: config/config.php:125
 msgid ""
 "Geben Sie hier den Vor- oder den Nachnamen der Person ein. Es kann auch "
 "beides oder nur Namensteile eingegeben werden. Bitte beachten Sie, dass "
@@ -358,7 +81,7 @@ msgstr ""
 "Enter given or family name of the searched person. You can also use both or "
 "part of the names. Don't use ä, ö, ü oder ß."
 
-#: ../fau-person.php:698 ../fau-person.php:749
+#: config/config.php:126
 msgid ""
 "Mit <i>Person suchen</i> erhalten Sie eine Auflistung aller möglichen "
 "Personen. Suchen Sie die richtige Person aus der Liste heraus, markieren Sie "
@@ -369,408 +92,755 @@ msgstr ""
 "person from the list, mark the UnivIS-ID, copy it with Strg + C and paste it "
 "in the field <i>UnivIS-ID</i> in the appropriate contact."
 
-#: ../fau-person.php:734
-msgid "Änderungen speichern"
-msgstr "Save changes"
+#: config/config.php:131
+msgid "Anzeigeoptionen"
+msgstr "Output options"
 
-#: ../fau-person.php:774
-msgid "Person hinzufügen"
-msgstr "Add new person"
+#: config/config.php:133
+msgid ""
+"In den Anzeigeoptionen kann die standardmäßige Ausgabe bei Nutzung des "
+"[kontakt] Shortcodes definiert werden. Diese kann durch Attribute wieder "
+"überschrieben werden."
+msgstr ""
+"In the display settings you can set the default view of a [kontakt] "
+"shortcode. By using attributes these settings can be overwritten."
 
-#: ../fau-person.php:774
-msgid "Neue Person"
-msgstr "New person"
+#: config/config.php:143
+msgid "Weitere Informationen"
+msgstr "Additional information"
 
-#: ../fau-person.php:776
-msgid "Einrichtung hinzufügen"
-msgstr "Add new institution"
+#: config/config.php:143
+msgid "Plugin Dokumentation"
+msgstr "Plugin documentation"
 
-#: ../fau-person.php:776
-msgid "Neue Einrichtung"
-msgstr "New institiution"
+#: config/config.php:154
+msgid "Sidebar Kontakte"
+msgstr "Sidebar Contacts"
 
-#: ../fau-person.php:778 ../posttypes/fau-standort-posttype.php:10
+#: config/config.php:159
+msgid "Erweiterte Einstellungen"
+msgstr "Advanced settings"
+
+#: config/config.php:185
+msgid "Position"
+msgstr "Job title"
+
+#: config/config.php:192, includes/Metaboxes/Kontakt.php:170
+msgid "Organisation"
+msgstr "Organization"
+
+#: config/config.php:199, includes/Metaboxes/Kontakt.php:180
+msgid "Abteilung"
+msgstr "Working group"
+
+#: config/config.php:206, includes/Metaboxes/Kontakt.php:545
+msgid "Adresse"
+msgstr "Address"
+
+#: config/config.php:213
+msgid "Telefonnummer"
+msgstr "Phone number"
+
+#: config/config.php:220
+msgid "Handynummer anzeigen"
+msgstr "Display handy number"
+
+#: config/config.php:227, includes/Schema.php:336
+msgid "Faxnummer"
+msgstr "Fax number"
+
+#: config/config.php:234
+msgid "E-Mail-Adresse"
+msgstr "EMail address"
+
+#: config/config.php:241
+msgid "Website"
+msgstr "Website"
+
+#: config/config.php:248, includes/Schema.php:512,
+#: includes/Metaboxes/Kontakt.php:385, includes/Metaboxes/Kontakt.php:549
+msgid "Sprechzeiten"
+msgstr "Office hours"
+
+#: config/config.php:255, includes/Metaboxes/Kontakt.php:71
+msgid "Kurzbeschreibung"
+msgstr "Short description"
+
+#: config/config.php:262, includes/Taxonomy/Kontakt.php:181
+msgid "Bild"
+msgstr "Thumbnail"
+
+#: config/config.php:269
+msgid "Social Media Links"
+msgstr "Social Media links"
+
+#: config/config.php:276
+msgid "Ansprechpartner"
+msgstr "Contact"
+
+#: config/config.php:277
+msgid ""
+"Im Sidebar-Widget werden nur dann Ansprechpartner gezeigt, wenn dieser Wert "
+"aktiviert ist oder alternativ bei dem Personeneintrag eingestellt ist, daß "
+"der Kontakt ausschließlich über angegebene Ansprechpartner erfolgt."
+msgstr ""
+"By using a sidebar display of a contact, connection contacts are only shown "
+"if this field is marked true or if the contact is only reachable by "
+"connection contacts."
+
+#: config/config.php:287
+msgid "Telefonnummer als Link"
+msgstr "Format phone number as link"
+
+#: config/config.php:288
+msgid ""
+"Setzt die Telefonnummer als Link, so dass mobile Endgeräte und darauf "
+"vorbereitet Software bei einem Klick die Telefonwahlfunktion aufrufen."
+msgstr ""
+"Displays the phone numbers as link, so that mobile devices are able to call "
+"the number on click."
+
+#: config/config.php:294
+msgid "Internationales Nummernformat"
+msgstr "International number format"
+
+#: config/config.php:295
+msgid "Die Telefonnnummer wird in dem internationalen Format angezeigt."
+msgstr "This will display the phone numbers in international format."
+
+#: config/config.php:301
+msgid "Position Social Media Icons"
+msgstr "Position social media icons"
+
+#: config/config.php:305
+msgid "Nach den Kontaktdaten"
+msgstr "After contact data"
+
+#: config/config.php:306
+msgid "Direkt nach dem Namen"
+msgstr "After the name"
+
+#: config/config.php:312, config/config.php:313, includes/Schema.php:109,
+#: includes/Metaboxes/Kontakt.php:193, includes/Metaboxes/Kontakt.php:453,
+#: vendor/UnivIS/Data.php:334
+msgid "Raum"
+msgstr "Room"
+
+#: config/config.php:314
+msgid "Anzuzeigender Text vor der Raumangabe"
+msgstr "Suffix text prior to room number"
+
+#: config/config.php:320, config/config.php:321, includes/Data.php:187
+msgid "Mehr"
+msgstr "More"
+
+#: config/config.php:322
+msgid "Linktext für Kontaktseite"
+msgstr "Text for the link to the contact page."
+
+#: config/config.php:328
+msgid "Link auf Kontaktname"
+msgstr "Sets link on contact name"
+
+#: config/config.php:332
+msgid "Kontaktseite"
+msgstr "Contact page"
+
+#: config/config.php:333
+msgid "URL aus Profil"
+msgstr "URL from profil data"
+
+#: config/config.php:334
+msgid "Nicht verlinken"
+msgstr "Do not link"
+
+#: config/config.php:339
+msgid "Bildbeschriftung Kontaktseite"
+msgstr "Image description for the contact page"
+
+#: config/config.php:340
+msgid ""
+"Zeigt auf der Kontaktvisitenkarte und bei Nutzung des Shortcodes mit dem "
+"Attribut <code>format=\"page\"</code> die Bildunterschriften eines "
+"Kontaktbildes an."
+msgstr ""
+"Displays an image description on contact pages and on shortcodes with the "
+"attribute <code>format=\"page\"</code>."
+
+#: config/config.php:347
+msgid "Bildformat Kontaktseite"
+msgstr "Format contact image on page view"
+
+#: config/config.php:348
+msgid ""
+"Setzt auf der Kontaktseite oder bei Nutzung des Shortcodes mit dem Attribut "
+"<code>format=\"page\"</code> das zu verwendete Bildformat."
+msgstr ""
+"Sets image size format for contact pages or at shortcodes using the "
+"attribute <code>format=\"page\"</code>."
+
+#: config/config.php:355
+msgid "Größe Thumbnail"
+msgstr "Size Thumbnail"
+
+#: config/config.php:356
+msgid ""
+"Größe der Thumbnails bei der Anzeige von Kontaktlisten und Kontakt-"
+"Shortcodes, die nicht vom Format \"page\" oder \"card\" sind."
+msgstr ""
+"Size of thumbnails at displaying contacts with default shortcodes. (not at "
+"format \"page\" or \"card\")."
+
+#: config/config.php:360
+msgid "Klein (80 Pixel)"
+msgstr "Small (80 pixel)"
+
+#: config/config.php:361
+msgid "Mittel (100 Pixel)"
+msgstr "Medium (100 pixel)"
+
+#: config/config.php:362
+msgid "Groß (120 Pixel)"
+msgstr "Big (120 pixel)"
+
+#: config/config.php:368
+msgid "Größe Personen-Karten"
+msgstr "Size contact cards"
+
+#: config/config.php:369
+msgid ""
+"Größe der Personen-Karten bei Nutzung des Formats <code>"
+"format=\"card\"</code>."
+msgstr ""
+"Size of the contact cards by using the shortcode  <code>[kontakt id=\"\" "
+"format=\"card\"]</code>."
+
+#: config/config.php:373
+msgid "Sehr klein (150 Pixel)"
+msgstr "X-Small (150 pixel)"
+
+#: config/config.php:374
+msgid "Klein (200 Pixel)"
+msgstr "Small (200 pixel)"
+
+#: config/config.php:375
+msgid "Mittel (250 Pixel)"
+msgstr "Medium (250 pixel)"
+
+#: config/config.php:376
+msgid "Groß (300 Pixel)"
+msgstr "Bug (300 pixel)"
+
+#: config/config.php:381
+msgid "Metabox Kontakte"
+msgstr "Metabox Contacts"
+
+#: config/config.php:382
+msgid ""
+"Zeigt in der Bearbeitung von Seiten und Beiträgen eine Kontakt-Box an, aus "
+"der man bequem die Liste der Kontakte ablesen kann."
+msgstr ""
+"Displays a metabox in the page and posts editor for fast search and copy of "
+"contacts."
+
+#: config/config.php:388
+msgid "Kontakt-Übersichtsseite"
+msgstr "Contact overview"
+
+#: config/config.php:389
+msgid ""
+"Zeige die Standard-Übersichtsseite aller Kontakte an. Bevor diese Option "
+"deaktiviert wird, muss eine eigene Seite mit der Titelform (slug) \"person\" "
+"direkt unterhalb der Hauptebene angelegt werden."
+msgstr ""
+"Show the default overview-page for all contacts. Before deactivating this "
+"option be sure to have a own page with slug \"person\" in the root of the "
+"website."
+
+#: config/config.php:451
+msgid "Id-Number des Kontakteintrags"
+msgstr "Id-NUmber of contact"
+
+#: config/config.php:452
+msgid ""
+"Nummer der Eintrags der Kontaktliste im Backend. Nicht identisch mit einer "
+"optionalen UnivIS-Nummer."
+msgstr ""
+"Number of the contact id in the backend. Notice: This is not identical to "
+"the UnivIS-Id!"
+
+#: config/config.php:459, config/config.php:657
+msgid "Slug (URI) des Kontakteintrags"
+msgstr "Slug (URI) of the contact entry."
+
+#: config/config.php:465, config/config.php:561
+msgid "Kategorie"
+msgstr "Category"
+
+#: config/config.php:472, config/config.php:568, config/config.php:675
+msgid "Format"
+msgstr "Format"
+
+#: config/config.php:475, config/config.php:571, config/config.php:678
+msgid "Name"
+msgstr "Name"
+
+#: config/config.php:476, config/config.php:572, config/config.php:679
+msgid "Kurzliste"
+msgstr "Short list"
+
+#: config/config.php:477, config/config.php:573, config/config.php:680
+msgid "Komplett"
+msgstr "Complete"
+
+#: config/config.php:478, config/config.php:574, config/config.php:681
+msgid "Sidebar"
+msgstr "Sidebar"
+
+#: config/config.php:479
+msgid "Seite"
+msgstr "Page"
+
+#: config/config.php:480, config/config.php:575, config/config.php:682
+msgid "Liste"
+msgstr "List"
+
+#: config/config.php:481, config/config.php:576
+msgid "Listeneintrag"
+msgstr "Listentry"
+
+#: config/config.php:482, config/config.php:577
+msgid "Unformatiert"
+msgstr "Unformated"
+
+#: config/config.php:483, config/config.php:578
+msgid "Kompakt"
+msgstr "Compact"
+
+#: config/config.php:484
+msgid "Kompakter Index"
+msgstr "Compact index "
+
+#: config/config.php:491, config/config.php:585, config/config.php:689
+msgid "Anzuzeigende Felder, obige Checkboxen überschreibend"
+msgstr "Felds to display, ignoring default settings."
+
+#: config/config.php:497, config/config.php:591, config/config.php:695
+msgid "Zu versteckende Felder, obige Checkboxen überschreibend"
+msgstr "Fields to hide, ignoring default display settings."
+
+#: config/config.php:503, config/config.php:515, config/config.php:597,
+#: config/config.php:609
+msgid ""
+"Bei der Ausgabe mehrerer Kontakten kann nach diesem Feld sortiert werden."
+msgstr "For displaying a contact list, this field can be used for sort ing."
+
+#: config/config.php:506, config/config.php:600,
+#: includes/Taxonomy/Kontakt.php:180, includes/Widgets/kontakt-widget.php:30
+msgid "Titel"
+msgstr "Academical title"
+
+#: config/config.php:507, config/config.php:601, includes/BackendMenu.php:112,
+#: includes/BackendMenu.php:141, includes/Metaboxes/Kontakt.php:128
+msgid "Nachname"
+msgstr "Family name"
+
+#: config/config.php:508, config/config.php:602
+msgid "Vorname und Nachname"
+msgstr "First Name and Family Name"
+
+#: config/config.php:518, config/config.php:612
+msgid "Von A bis Z"
+msgstr "From A to Z"
+
+#: config/config.php:519, config/config.php:613
+msgid "Von Z bis A"
+msgstr "From Z to A"
+
+#: config/config.php:531, config/config.php:619
+msgid "Überschriftenebene der ersten Überschrift"
+msgstr "Headings Level (number from 1 to 4) for the first headline."
+
+#: config/config.php:537, config/config.php:625
+msgid "CSS Klassen, die der Shordcode erhalten soll."
+msgstr "CSS Classes, displayed by the shortcode"
+
+#: config/config.php:543, config/config.php:631
+msgid "Farbcode für den Hintergrund."
+msgstr "Color code for the background."
+
+#: config/config.php:546, config/config.php:634
+msgid "Kein"
+msgstr "Small"
+
+#: config/config.php:547, config/config.php:635
+msgid "Med: Blau"
+msgstr "Med: Blue"
+
+#: config/config.php:548, config/config.php:636
+msgid "Phil: Oker"
+msgstr "Phil: Orange"
+
+#: config/config.php:549, config/config.php:637
+msgid "TF: Silbern"
+msgstr "TF: SIlver"
+
+#: config/config.php:550, config/config.php:638
+msgid "Nat: Meeresgrün"
+msgstr "Nat: Green"
+
+#: config/config.php:551, config/config.php:639
+msgid "RW: Bordeaurot"
+msgstr "RW: Dark red"
+
+#: config/config.php:552, config/config.php:640
+msgid "FAU: Dunkelblau"
+msgstr "FAU: Dark blue"
+
+#: config/config.php:649
+msgid "Id-Number des Standorteintrags"
+msgstr "Id-Number of the location."
+
+#: config/config.php:650
+msgid "Nummer der Eintrags im Backend."
+msgstr "Id-number in backend."
+
+#: config/config.php:663
+msgid "HTML-Element zur Darstellung des Standortnamens"
+msgstr "HTML element, used to display the location name."
+
+#: config/config.php:669
+msgid "Telefonnummer anzeigen"
+msgstr "Display phone number"
+
+#: includes/BackendMenu.php:46, includes/BackendMenu.php:47,
+#: includes/BackendMenu.php:68
+msgid "Suche nach UnivIS-ID"
+msgstr "Find UnivIS-ID"
+
+#: includes/BackendMenu.php:74
+msgid "Person suchen"
+msgstr "Search person"
+
+#: includes/BackendMenu.php:83
+msgid ""
+"<div class=\"alert alert-warning\">Es konnten keine Daten zur Person "
+"gefunden werden. Bitte verändern Sie Ihre Suchwerte.</div>"
+msgstr ""
+"<div class=\"alert alert-warning\">No data found for this contact entry."
+"</div>"
+
+#: includes/BackendMenu.php:86
+msgid "keine Daten in UnivIS eingepflegt"
+msgstr "There is no data in UnivIS"
+
+#: includes/BackendMenu.php:107, includes/BackendMenu.php:140,
+#: includes/Metaboxes/Kontakt.php:117
+msgid "Vorname"
+msgstr "Given name"
+
+#: includes/BackendMenu.php:139
+msgid ""
+"Bitte geben Sie den Vor- und/oder Nachnamen der Person ein, von der Sie die "
+"UnivIS-ID benötigen."
+msgstr ""
+"Please enter given and/or family name of the person from whom you need the "
+"UnivIS-ID."
+
+#: includes/BackendMenu.php:142
+msgid "Folgende Daten wurden in UnivIS gefunden:"
+msgstr "Results in UnivIS"
+
+#: includes/BackendMenu.php:149, includes/BackendMenu.php:157
+msgid "Es können auch nur Teile des Namens eingegeben werden."
+msgstr "Also parts of the name are possible."
+
+#: includes/BackendMenu.php:171, includes/Taxonomy/Standort.php:34
 msgid "Standort hinzufügen"
 msgstr "Add location"
 
-#: ../fau-person.php:778 ../posttypes/fau-standort-posttype.php:11
+#: includes/BackendMenu.php:171, includes/Taxonomy/Standort.php:35
 msgid "Neuer Standort"
 msgstr "New location"
 
-#: ../fau-person.php:846
-msgid "Kontakt-Kategorien"
-msgstr "Contact categories"
+#: includes/Data.php:86
+msgid "Kein Kontakt ausgewählt."
+msgstr "Select the type of contact"
 
-#: ../fau-person.php:882
-#, php-format
-msgid "Alle %s anzeigen"
-msgstr "Show all %s"
+#: includes/Data.php:90
+msgid "Noch keine Kontakte eingepflegt."
+msgstr "No contacts found"
 
-#: ../fau-person.php:914
-msgid "Neuer Titel"
-msgstr "Academical title"
+#: includes/Data.php:109
+msgid "Kein Standort ausgewählt."
+msgstr "No location selected."
 
-#: ../fau-person.php:915
-msgid "Typ"
-msgstr "Typ"
+#: includes/Data.php:112
+msgid "Noch kein Standort eingepflegt."
+msgstr "Add a location first."
 
-#: ../fau-person.php:916
-msgid "Datum"
-msgstr "Date"
-
-#: ../fau-person.php:928 ../includes/fau-person-metaboxes.php:495
-msgid "Person (allgemein)"
-msgstr "Person (general)"
-
-#: ../fau-person.php:931 ../includes/fau-person-metaboxes.php:496
-msgid "Person (männlich)"
-msgstr "Person (male)"
-
-#: ../fau-person.php:934 ../includes/fau-person-metaboxes.php:497
-msgid "Person (weiblich)"
-msgstr "Person (female)"
-
-#: ../fau-person.php:937
-msgid "Einrichtung (Pseudonym)"
-msgstr "Institution (pseudonym)"
-
-#: ../fau-person.php:940 ../includes/fau-person-metaboxes.php:498
-msgid "Einrichtung"
-msgstr "Institiution"
-
-#: ../fau-person.php:1072
-msgid "Kurzbeschreibung in Listenansichten (bis zu 400 Zeichen)"
-msgstr "Short description in lists (up to 400 letters)"
-
-#: ../includes/cmb/cmb-field.php:68
-msgid "Neu hinzufügen"
-msgstr "Add New"
-
-#: ../includes/cmb/cmb-field.php:69
-msgid "Feld entfernen"
-msgstr "Remove Field"
-
-#: ../includes/cmb/cmb-field.php:1090
-msgid "Keiner"
-msgstr "None"
-
-#: ../includes/cmb/cmb-field.php:1120
-msgid "Suchbegriff eingeben"
-msgstr "Type to search"
-
-#: ../includes/cmb/cmb-field.php:1447
-msgid "Neue Gruppe hinzufügen"
-msgstr "Add New Group"
-
-#: ../includes/cmb/cmb-field.php:1448
-#: ../includes/cmb/helpers/cmb_Meta_Box_field.php:460
-msgid "Gruppe entfernen"
-msgstr "Remove Group"
-
-#: ../includes/cmb/cmb-field.php:1647
-msgid "Ziehen, um die genaue Position einzustellen."
-msgstr "Drag to set the exact location."
-
-#: ../includes/cmb/cmb-meta-box.php:86
-msgid "Sind Sie sicher, dass Sie dieses Feld löschen wollen?"
-msgstr "Are you sure you want to delete this field?"
-
-#: ../includes/cmb/helpers/cmb_Meta_Box_ajax.php:47
-msgid "Bitte versuchen Sie es erneut"
-msgstr "Please try again"
-
-#: ../includes/cmb/helpers/cmb_Meta_Box_ajax.php:131
-msgid "Embed entfernen"
-msgstr "Remove Embed"
-
-#: ../includes/cmb/helpers/cmb_Meta_Box_ajax.php:134
-#, php-format
-msgid "Keine oEmbed Ergebnisse für %s gefunden. Für weitere Infos siehe"
-msgstr "We could not find any results for %s. For further information see"
-
-#: ../includes/cmb/helpers/cmb_Meta_Box_field.php:459
-msgid "Gruppe hinzufügen"
-msgstr "Add New Group"
-
-#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:250
-msgid "Zeile hinzufügen"
-msgstr "Add New"
-
-#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:306
-#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:706
-#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:768
-#: ../includes/cmb/init.php:284
-msgid "Entfernen"
-msgstr "Remove Field"
-
-#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:601
-#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:635
-msgid "Keine Terms"
-msgstr "None"
-
-#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:674
-#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:728
-msgid "Datei hinzufügen"
-msgstr "File upload"
-
-#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:695
-#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:760
-#: ../includes/cmb/init.php:283
-msgid "Bild entfernen"
-msgstr "Remove Image"
-
-#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:706
-#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:768
-#: ../includes/cmb/init.php:285
-msgid "Datei:"
-msgstr "File:"
-
-#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:706
-#: ../includes/cmb/helpers/cmb_Meta_Box_types.php:768
-#: ../includes/cmb/init.php:286
-msgid "Herunterladen"
-msgstr "Download"
-
-#: ../includes/cmb/init.php:260
-msgid "Löschen"
-msgstr "Delete"
-
-#: ../includes/cmb/init.php:261
-msgid "Standard"
-msgstr "Standard"
-
-#: ../includes/cmb/init.php:262
-msgid "Farbe wählen"
-msgstr "Choose color"
-
-#: ../includes/cmb/init.php:263
-msgid "Aktuelle Farbe"
-msgstr "Chosen color"
-
-#: ../includes/cmb/init.php:282
-msgid "Verwenden Sie diese Datei"
-msgstr "Use this file"
-
-#: ../includes/cmb/init.php:288
-msgid "[ ↑ ]&nbsp;"
-msgstr "[ ↑ ]&nbsp;"
-
-#: ../includes/cmb/init.php:289
-msgid "&nbsp;[ ↓ ]"
-msgstr "&nbsp;[ ↓ ]"
-
-#: ../includes/cmb/init.php:290
-msgid "Alle aktivieren / deaktivieren"
-msgstr "Enable / Disable all"
-
-#: ../includes/cmb/init.php:1185
-msgid "Speichern"
-msgstr "Save"
-
-#: ../includes/fau-person-metaboxes.php:112
+#: includes/Data.php:147, includes/Data.php:207
 msgid ""
-"Es können aktuell keine Daten aus UnivIS angezeigt werden. Bitte überprüfen "
-"Sie, ob Sie das Plugin univis-data installiert und aktiviert haben."
+"<p class=\"cmb2_metabox_description\">[Im Standort ist hierfür kein Wert "
+"hinterlegt.]</p>"
 msgstr ""
-"No data from UnivIS can be shown. Please check if the plugin univis-data is "
-"available and activated."
+"<p class=\"cmb2_metabox_description\">[No data set for this location.]</p>"
 
-#: ../includes/fau-person-metaboxes.php:143
-msgid "Zuordnung"
-msgstr "Assignement"
+#: includes/Data.php:205
+msgid ""
+"<p class=\"cmb2_metabox_description\">[Von Standort angezeigter Wert: %s]</p>"
+msgstr ""
+"<p class=\"cmb2_metabox_description\">[Value from location data: %s]</p>"
 
-#: ../includes/fau-person-metaboxes.php:152
-msgid "Geben Sie hier die Organisation (Lehrstuhl oder Einrichtung) ein."
-msgstr "Enter the organization (chair or institution)."
+#: includes/Data.php:968
+msgid "Beschreibung"
+msgstr "Short description"
 
-#: ../includes/fau-person-metaboxes.php:159
-msgid "Geben Sie hier die Abteilung oder Arbeitsgruppe ein."
-msgstr "Enter the department oder workgroup."
+#: includes/Data.php:1395, includes/Data.php:1426, includes/Data.php:1475,
+#: includes/Data.php:1516, vendor/UnivIS/Data.php:264
+msgid ""
+"<p class=\"cmb_metabox_description\">[In UnivIS ist hierfür kein Wert "
+"hinterlegt.]</p>"
+msgstr ""
+"<p class=\"cmb_metabox_description\">[There ist no value in UnivIS.]</p>"
 
-#: ../includes/fau-person-metaboxes.php:165
-msgid "Position/Funktion"
-msgstr "Job title"
+#: includes/Data.php:1470
+msgid ""
+"<p class=\"cmb_metabox_description\">[Aus UnivIS angezeigter Wert: </p><ul>"
+"<li><p class=\"cmb_metabox_description\">%s</p></li></ul><p "
+"class=\"cmb_metabox_description\">]</p>"
+msgstr ""
+"<p class=\"cmb_metabox_description\">[Value from UnivIS: </p><ul><li><p "
+"class=\"cmb_metabox_description\">%s</p></li></ul><p "
+"class=\"cmb_metabox_description\">]</p>"
 
-#: ../includes/fau-person-metaboxes.php:177
-#: ../includes/fau-person-metaboxes.php:524
-#: ../posttypes/fau-person-posttype.php:28
+#: includes/Helper.php:63
+msgid ""
+"Bitte korrigieren Sie das Format der Telefon- oder Faxnummer, die Anzeige "
+"ist nicht einheitlich!"
+msgstr "Please correct the format of the phone- or fax number!"
+
+#: includes/Schema.php:286, includes/Metaboxes/Kontakt.php:215,
+#: includes/Metaboxes/Kontakt.php:546
+msgid "Telefon"
+msgstr "Phone number"
+
+#: includes/Schema.php:311
+msgid "Mobil"
+msgstr "Mobile phone"
+
+#: includes/Schema.php:361, includes/Metaboxes/Kontakt.php:247,
+#: includes/Metaboxes/Kontakt.php:548
+msgid "E-Mail"
+msgstr "Email"
+
+#: includes/Schema.php:377, includes/Metaboxes/Kontakt.php:257
+msgid "Webseite"
+msgstr "Website"
+
+#: includes/Metaboxes/Kontakt.php:53
+msgid "Derzeit sind keine Daten aus UnivIS syncronisiert."
+msgstr "Currently no data are syncronized from UnivIS."
+
+#: includes/Metaboxes/Kontakt.php:65
+msgid "Kontakt Beschreibung in Kurzform"
+msgstr "Short Contact description"
+
+#: includes/Metaboxes/Kontakt.php:72
+msgid ""
+"Kurzform und Zusammenfassung der Kontaktbeschreibung bei Nutzung des "
+"Attributs <code>show=\"description\"</code>."
+msgstr ""
+"Short description of the contact by using the attribut <code>"
+"show=\"description\"</code>.."
+
+#: includes/Metaboxes/Kontakt.php:79
+msgid "Kurzbeschreibung (Sidebar und Kompakt)"
+msgstr "Short description (sidebar and compact contact lists)"
+
+#: includes/Metaboxes/Kontakt.php:80
+msgid ""
+"Diese Kurzbeschreibung wird bei der Anzeige von <code>"
+"show=\"description\"</code> in einer Sidebar (<code>format=\"sidebar\"</code>"
+") oder einer Liste (<code>format=\"kompakt\"</code>) verwendet."
+msgstr ""
+"THis short description will be used on using the attribut <code>"
+"show=\"description\"</code> within a sidebar  (<code>"
+"format=\"sidebar\"</code>)  or a list  (<code>format=\"kompakt\"</code>)."
+
+#: includes/Metaboxes/Kontakt.php:94, includes/Metaboxes/Pages.php:37,
+#: includes/Metaboxes/Posts.php:37, includes/Taxonomy/Kontakt.php:52
 msgid "Kontaktinformationen"
 msgstr "Contact information"
 
-#: ../includes/fau-person-metaboxes.php:185
+#: includes/Metaboxes/Kontakt.php:101
 msgid "Titel (Präfix)"
 msgstr "Honorific prefix"
 
-#: ../includes/fau-person-metaboxes.php:189
+#: includes/Metaboxes/Kontakt.php:105
 msgid "Keine Angabe"
 msgstr "Not specified"
 
-#: ../includes/fau-person-metaboxes.php:190
+#: includes/Metaboxes/Kontakt.php:106
 msgid "Doktor"
 msgstr "Doctor"
 
-#: ../includes/fau-person-metaboxes.php:191
+#: includes/Metaboxes/Kontakt.php:107
 msgid "Professor"
 msgstr "Professor"
 
-#: ../includes/fau-person-metaboxes.php:192
+#: includes/Metaboxes/Kontakt.php:108
 msgid "Professor Doktor"
 msgstr "Professor Doctor"
 
-#: ../includes/fau-person-metaboxes.php:193
+#: includes/Metaboxes/Kontakt.php:109
 msgid "Privatdozent"
 msgstr "Privatdozent"
 
-#: ../includes/fau-person-metaboxes.php:194
+#: includes/Metaboxes/Kontakt.php:110
 msgid "Privatdozent Doktor"
 msgstr "Privatdozent Doctor"
 
-#: ../includes/fau-person-metaboxes.php:217
+#: includes/Metaboxes/Kontakt.php:139
 msgid "Bezeichnung (oder Pseudonym)"
 msgstr "Description"
 
-#: ../includes/fau-person-metaboxes.php:218
+#: includes/Metaboxes/Kontakt.php:140
 msgid ""
 "Wird für die Kategoriensortierung nach Nachname als Sortierkriterium "
 "verwendet."
 msgstr "If you sort categories by family name this field is used."
 
-#: ../includes/fau-person-metaboxes.php:224
+#: includes/Metaboxes/Kontakt.php:149
 msgid "Abschluss (Suffix)"
 msgstr "Honorific suffix"
 
-#: ../includes/fau-person-metaboxes.php:232
-#: ../includes/fau-person-metaboxes.php:600
-msgid "Straße und Hausnummer"
-msgstr "Street address"
+#: includes/Metaboxes/Kontakt.php:160
+msgid "Position/Funktion"
+msgstr "Job title"
 
-#: ../includes/fau-person-metaboxes.php:239
-#: ../includes/fau-person-metaboxes.php:607
-msgid "Postleitzahl"
-msgstr "Postal code"
+#: includes/Metaboxes/Kontakt.php:171
+msgid "Geben Sie hier die Organisation (Lehrstuhl oder Einrichtung) ein."
+msgstr "Enter the organization (chair or institution)."
 
-#: ../includes/fau-person-metaboxes.php:241
-#: ../includes/fau-person-metaboxes.php:609
-msgid "Nur 5-stellige Zahlen erlaubt."
-msgstr "Only five-digit numbers allowed."
+#: includes/Metaboxes/Kontakt.php:181
+msgid "Geben Sie hier die Abteilung oder Arbeitsgruppe ein."
+msgstr "Enter the department oder workgroup."
 
-#: ../includes/fau-person-metaboxes.php:248
-#: ../includes/fau-person-metaboxes.php:615
-msgid "Ort"
-msgstr "City"
-
-#: ../includes/fau-person-metaboxes.php:255
-#: ../includes/fau-person-metaboxes.php:622
-msgid "Land"
-msgstr "Country"
-
-#: ../includes/fau-person-metaboxes.php:262
-#: ../includes/fau-person-metaboxes.php:415
-#: ../includes/fau-person-sync-helper.php:472
-#: ../shortcodes/fau-person-shortcodes.php:1079
-msgid "Raum"
-msgstr "Room"
-
-#: ../includes/fau-person-metaboxes.php:269
+#: includes/Metaboxes/Kontakt.php:203
 msgid "Standort Telefon- und Faxanschluss"
 msgstr "Location of telephone and fax connection"
 
-#: ../includes/fau-person-metaboxes.php:274
+#: includes/Metaboxes/Kontakt.php:208
 msgid "Uni-intern, Standort Erlangen"
 msgstr "University-internal (Erlangen)"
 
-#: ../includes/fau-person-metaboxes.php:275
+#: includes/Metaboxes/Kontakt.php:209
 msgid "Uni-intern, Standort Nürnberg"
 msgstr "University-internal (Nuremberg)"
 
-#: ../includes/fau-person-metaboxes.php:276
+#: includes/Metaboxes/Kontakt.php:210
 msgid "Allgemeine Rufnummer"
 msgstr "General telephone number"
 
-#: ../includes/fau-person-metaboxes.php:282
+#: includes/Metaboxes/Kontakt.php:216
 msgid ""
 "Bitte geben Sie uni-interne Nummern für Erlangen in der internationalen Form "
-"+49 9131 85-22222 und für Nürnberg in der internationalen Form +49 911 "
-"5302-555 an."
+"+49 9131 85-22222 und für Nürnberg in der internationalen Form +49 911 5302-"
+"555 an."
 msgstr ""
-"For university-internal numbers use the international format +49 9131 "
-"85-22222 for Erlangen and +49 911 5302-555 for Nuremberg."
+"For university-internal numbers use the international format +49 9131 85-"
+"22222 for Erlangen and +49 911 5302-555 for Nuremberg."
 
-#: ../includes/fau-person-metaboxes.php:289
-#: ../includes/fau-person-metaboxes.php:573
+#: includes/Metaboxes/Kontakt.php:226, includes/Metaboxes/Kontakt.php:547
 msgid "Telefax"
 msgstr "Fax number"
 
-#: ../includes/fau-person-metaboxes.php:290
+#: includes/Metaboxes/Kontakt.php:227
 msgid ""
 "Bitte geben Sie uni-interne Nummern für Erlangen in der internationalen Form "
-"+49 9131 85-22222 und für Nürnberg in der internationalen Form +49 911 "
-"5302-555 an, uni-externe Nummern in der internationalen Form +49 9131 "
-"1111111."
+"+49 9131 85-22222 und für Nürnberg in der internationalen Form +49 911 5302-"
+"555 an, uni-externe Nummern in der internationalen Form +49 9131 1111111."
 msgstr ""
-"For university-internal numbers use the international format +49 9131 "
-"85-22222 for Erlangen and +49 911 5302-555 for Nuremberg, for numbers "
-"outside the university use the international format +49 9131 1111111."
+"For university-internal numbers use the international format +49 9131 85-"
+"22222 for Erlangen and +49 911 5302-555 for Nuremberg, for numbers outside "
+"the university use the international format +49 9131 1111111."
 
-#: ../includes/fau-person-metaboxes.php:297
-#: ../shortcodes/fau-person-shortcodes.php:984
+#: includes/Metaboxes/Kontakt.php:237
 msgid "Mobiltelefon"
 msgstr "Mobile phone"
 
-#: ../includes/fau-person-metaboxes.php:298
+#: includes/Metaboxes/Kontakt.php:238
 msgid ""
 "Bitte geben Sie die Nummer in der internationalen Form +49 176 1111111 an."
 msgstr "Please use the international format +49 176 1111111."
 
-#: ../includes/fau-person-metaboxes.php:308
-msgid "Social Media"
-msgstr "Social media"
-
-#: ../includes/fau-person-metaboxes.php:315
-#: ../includes/fau-person-metaboxes.php:574
-#: ../shortcodes/fau-person-shortcodes.php:684
-#: ../shortcodes/fau-person-shortcodes.php:770
-#: ../shortcodes/fau-person-shortcodes.php:837
-#: ../shortcodes/fau-person-shortcodes.php:932
-#: ../shortcodes/fau-person-shortcodes.php:988
-msgid "E-Mail"
-msgstr "Email"
-
-#: ../includes/fau-person-metaboxes.php:329
+#: includes/Metaboxes/Kontakt.php:267
 msgid "Name und \"Mehr\"-Link verlinken auf Seite ..."
 msgstr "Name and \"more\"-link link to page ..."
 
-#: ../includes/fau-person-metaboxes.php:330
-msgid "Bitte vollständigen Permalink der ausführlichen Kontaktseite angeben."
+#: includes/Metaboxes/Kontakt.php:268
+msgid ""
+"Optionale URL-Angabe zu einer selbst gepflegten Seite für Details zum "
+"Kontakt. Wenn diese Angabe leer gelassen wird, wird zu der automatisch "
+"erstellten Kontaktseite verlinkt."
 msgstr ""
-"Please enter complete permalink to the detailed contact page of the person."
+"Optional URL for a self defined webpage of the contact. If this field stays "
+"empty, the contact link will be set to the contact page."
 
-#: ../includes/fau-person-metaboxes.php:333
-#, php-format
-msgid "<p class=\"cmb_metabox_description\">[Standardwert wenn leer: %s]</p>"
-msgstr "<p class=\"cmb_metabox_description\">[Default if empty: %s]</p>"
+#: includes/Metaboxes/Kontakt.php:281
+msgid "Postalische Adressdaten"
+msgstr "Postal address data"
 
-#: ../includes/fau-person-metaboxes.php:342
-msgid "Weitere Informationen"
-msgstr "Additional information"
+#: includes/Metaboxes/Kontakt.php:287
+msgid "Zugeordneter Standort"
+msgstr "Parent location"
 
-#: ../includes/fau-person-metaboxes.php:350
-msgid "Wird bei der Anzeige in einer Sidebar verwendet, bis zu 160 Zeichen."
-msgstr "Shown in sidebar, up to 160 letters."
+#: includes/Metaboxes/Kontakt.php:294
+msgid "Standort-Daten für Adressanzeige nutzen"
+msgstr "Use Location data for display"
 
-#: ../includes/fau-person-metaboxes.php:355
+#: includes/Metaboxes/Kontakt.php:295
+msgid ""
+"Die Adressdaten werden aus dem Standort bezogen; die folgenden optionalen "
+"Felder und Adressdaten aus UnivIS werden überschrieben."
+msgstr ""
+"Location data will be used for the address data. Local entrys and data from "
+"UnivIS will be ignored."
+
+#: includes/Metaboxes/Kontakt.php:300, includes/Metaboxes/Standort.php:41
+msgid "Straße und Hausnummer"
+msgstr "Street address"
+
+#: includes/Metaboxes/Kontakt.php:310, includes/Metaboxes/Standort.php:48
+msgid "Postleitzahl"
+msgstr "Postal code"
+
+#: includes/Metaboxes/Kontakt.php:321, includes/Metaboxes/Standort.php:57
+msgid "Ort"
+msgstr "City"
+
+#: includes/Metaboxes/Kontakt.php:330, includes/Metaboxes/Standort.php:64
+msgid "Land"
+msgstr "Country"
+
+#: includes/Metaboxes/Kontakt.php:374
+msgid "Social Media"
+msgstr "Social media"
+
+#: includes/Metaboxes/Kontakt.php:392
 msgid "Sprechzeiten: Überschrift"
 msgstr "Office hours: headline"
 
-#: ../includes/fau-person-metaboxes.php:356
+#: includes/Metaboxes/Kontakt.php:393
 msgid "Wird in Fettdruck über den Sprechzeiten ausgegeben."
 msgstr "Output in bold letters before office hours."
 
-#: ../includes/fau-person-metaboxes.php:361
+#: includes/Metaboxes/Kontakt.php:398
 msgid "Sprechzeiten: Allgemeines oder Anmerkungen"
 msgstr "Office hours: general remarks or comments"
 
-#: ../includes/fau-person-metaboxes.php:362
+#: includes/Metaboxes/Kontakt.php:399
 msgid ""
 "Zur Formatierung können HTML-Befehle verwendet werden (z.B. &lt;br&gt; für "
 "Zeilenumbruch). Wird vor den Sprechzeiten ausgegeben."
@@ -778,158 +848,131 @@ msgstr ""
 "You can use HTML for formatting (e.g. &lt;br&gt; for line break). Output "
 "before office hours."
 
-#: ../includes/fau-person-metaboxes.php:372
+#: includes/Metaboxes/Kontakt.php:409
 msgid "Sprechzeit {#}"
 msgstr "Office hours {#}"
 
-#: ../includes/fau-person-metaboxes.php:373
+#: includes/Metaboxes/Kontakt.php:410
 msgid "Weitere Sprechzeit einfügen"
 msgstr "Add another office hour"
 
-#: ../includes/fau-person-metaboxes.php:374
+#: includes/Metaboxes/Kontakt.php:411
 msgid "Sprechzeit löschen"
 msgstr "Delete office hour"
 
-#: ../includes/fau-person-metaboxes.php:379
+#: includes/Metaboxes/Kontakt.php:416
 msgid "Wiederholung"
 msgstr "Repetition"
 
-#: ../includes/fau-person-metaboxes.php:383
+#: includes/Metaboxes/Kontakt.php:420
+msgid "Keine"
+msgstr "NOne"
+
+#: includes/Metaboxes/Kontakt.php:421
 msgid "täglich"
 msgstr "daily"
 
-#: ../includes/fau-person-metaboxes.php:384
+#: includes/Metaboxes/Kontakt.php:422
 msgid "wöchentlich"
 msgstr "weekly"
 
-#: ../includes/fau-person-metaboxes.php:385
+#: includes/Metaboxes/Kontakt.php:423
 msgid "alle 2 Wochen"
 msgstr "every 2 weeks"
 
-#: ../includes/fau-person-metaboxes.php:389
+#: includes/Metaboxes/Kontakt.php:427
 msgid "am"
 msgstr "date"
 
-#: ../includes/fau-person-metaboxes.php:393
-#: ../includes/fau-person-sync-helper.php:448
+#: includes/Metaboxes/Kontakt.php:431, vendor/UnivIS/Data.php:310
 msgid "Montag"
 msgstr "Monday"
 
-#: ../includes/fau-person-metaboxes.php:394
-#: ../includes/fau-person-sync-helper.php:449
+#: includes/Metaboxes/Kontakt.php:432, vendor/UnivIS/Data.php:311
 msgid "Dienstag"
 msgstr "Tuesday"
 
-#: ../includes/fau-person-metaboxes.php:395
-#: ../includes/fau-person-sync-helper.php:450
+#: includes/Metaboxes/Kontakt.php:433, vendor/UnivIS/Data.php:312
 msgid "Mittwoch"
 msgstr "Wednesday"
 
-#: ../includes/fau-person-metaboxes.php:396
-#: ../includes/fau-person-sync-helper.php:451
+#: includes/Metaboxes/Kontakt.php:434, vendor/UnivIS/Data.php:313
 msgid "Donnerstag"
 msgstr "Thursday"
 
-#: ../includes/fau-person-metaboxes.php:397
-#: ../includes/fau-person-sync-helper.php:452
+#: includes/Metaboxes/Kontakt.php:435, vendor/UnivIS/Data.php:314
 msgid "Freitag"
 msgstr "Friday"
 
-#: ../includes/fau-person-metaboxes.php:398
-#: ../includes/fau-person-sync-helper.php:453
+#: includes/Metaboxes/Kontakt.php:436, vendor/UnivIS/Data.php:315
 msgid "Samstag"
 msgstr "Saturday"
 
-#: ../includes/fau-person-metaboxes.php:399
-#: ../includes/fau-person-sync-helper.php:454
+#: includes/Metaboxes/Kontakt.php:437, vendor/UnivIS/Data.php:316
 msgid "Sonntag"
 msgstr "Sunday"
 
-#: ../includes/fau-person-metaboxes.php:403
+#: includes/Metaboxes/Kontakt.php:441
 msgid "von"
 msgstr "from"
 
-#: ../includes/fau-person-metaboxes.php:409
+#: includes/Metaboxes/Kontakt.php:447
 msgid "bis"
 msgstr "to"
 
-#: ../includes/fau-person-metaboxes.php:420
+#: includes/Metaboxes/Kontakt.php:458
 msgid "Bemerkung"
 msgstr "Comment"
 
-#: ../includes/fau-person-metaboxes.php:439
-msgid "Daten aus UnivIS"
-msgstr "Data from UnivIS"
+#: includes/Metaboxes/Kontakt.php:475
+msgid "Metadaten zum Kontakt"
+msgstr "Meta data for contact"
 
-#: ../includes/fau-person-metaboxes.php:446
-msgid "UnivIS-ID"
-msgstr "UnivIS-ID"
-
-#: ../includes/fau-person-metaboxes.php:454
-msgid "UnivIS-Daten in Ausgabe anzeigen"
-msgstr "Show UnivIS-data in output"
-
-#: ../includes/fau-person-metaboxes.php:455
-msgid ""
-"Titel (Präfix), Vorname, Nachname, Abschluss (Suffix), Organisation bzw. "
-"Abteilung, Position/Funktion, Adresse, Telefon- und Telefaxnummer, E-Mail, "
-"Webseite. Die hier in diesen Feldern eingegebenen Werte werden in der "
-"Ausgabe nicht angezeigt."
-msgstr ""
-"Honorific prefix, given and family name, honorific suffix, organization, "
-"working group, job title, address, phone and fax number, Email, Website. "
-"Inputs in these fields won't be shown in output."
-
-#: ../includes/fau-person-metaboxes.php:462
-msgid "UnivIS-OrgNr"
-msgstr "UnivIS-OrgNr"
-
-#: ../includes/fau-person-metaboxes.php:463
-msgid ""
-"Aktuell können noch keine Einrichtungsdaten aus UnivIS übernommen werden."
-msgstr "No location data can be taken from UnivIS at the moment."
-
-#: ../includes/fau-person-metaboxes.php:485
-msgid "Zusatzoptionen"
-msgstr "Additional options"
-
-#: ../includes/fau-person-metaboxes.php:492
+#: includes/Metaboxes/Kontakt.php:481
 msgid "Typ des Eintrags"
 msgstr "Typ of Contact"
 
-#: ../includes/fau-person-metaboxes.php:499
+#: includes/Metaboxes/Kontakt.php:483
+msgid "Person (allgemein)"
+msgstr "Person (general)"
+
+#: includes/Metaboxes/Kontakt.php:484
+msgid "Person (männlich)"
+msgstr "Person (male)"
+
+#: includes/Metaboxes/Kontakt.php:485
+msgid "Person (weiblich)"
+msgstr "Person (female)"
+
+#: includes/Metaboxes/Kontakt.php:486
+msgid "Einrichtung"
+msgstr "Institiution"
+
+#: includes/Metaboxes/Kontakt.php:487
 msgid "Pseudonym"
 msgstr "Alias"
 
-#: ../includes/fau-person-metaboxes.php:505
-msgid "Zugeordneter Standort"
-msgstr "Parent location"
+#: includes/Metaboxes/Kontakt.php:493
+msgid "UnivIS-Id"
+msgstr "UnivIS-Id"
 
-#: ../includes/fau-person-metaboxes.php:512
-msgid "Standort-Daten in Ausgabe anzeigen"
-msgstr "Show location in output"
+#: includes/Metaboxes/Kontakt.php:501
+msgid "UnivIS-Daten verwenden"
+msgstr "Use UnivIS data"
 
-#: ../includes/fau-person-metaboxes.php:513
-msgid ""
-"Straße, Postleitzahl, Ort, Land. Die hier in diesen Feldern eingegebenen "
-"Werte werden in der Ausgabe nicht angezeigt."
-msgstr ""
-"Street address, postal code, city, country. Inputs in these fields won't be "
-"shown in output."
+#: includes/Metaboxes/Kontakt.php:502
+msgid "Daten aus UnivIS überschreiben die Kontaktdaten."
+msgstr "Use UnivIS-Data for display instead of local data."
 
-#: ../includes/fau-person-metaboxes.php:531
-msgid "Verfügbare Kontakte anzeigen"
-msgstr "Show available contacts"
-
-#: ../includes/fau-person-metaboxes.php:545
+#: includes/Metaboxes/Kontakt.php:520
 msgid "Ansprechpartner / verknüpfte Kontakte"
 msgstr "Contact person / related contacts"
 
-#: ../includes/fau-person-metaboxes.php:552
+#: includes/Metaboxes/Kontakt.php:526
 msgid "Art der Verknüpfung"
 msgstr "Typ of relationship"
 
-#: ../includes/fau-person-metaboxes.php:553
+#: includes/Metaboxes/Kontakt.php:527
 msgid ""
 "Der hier eingegebene Text wird vor der Ausgabe des verknüpften Kontaktes "
 "angezeigt (z.B. Vorzimmer, Kontakt über)."
@@ -937,225 +980,44 @@ msgstr ""
 "This text will be shown in front of the related contacts (e.g. Secretary, "
 "Contact via)."
 
-#: ../includes/fau-person-metaboxes.php:558
+#: includes/Metaboxes/Kontakt.php:532
 msgid "Verknüpfte Kontakte auswählen"
 msgstr "Choose related contacts"
 
-#: ../includes/fau-person-metaboxes.php:566
+#: includes/Metaboxes/Kontakt.php:540
 msgid "Angezeigte Daten der verknüpften Kontakte"
 msgstr "Shown data of related contacts"
 
-#: ../includes/fau-person-metaboxes.php:579
+#: includes/Metaboxes/Kontakt.php:553
 msgid "Eigene Daten ausblenden"
 msgstr "Hide own data"
 
-#: ../includes/fau-person-metaboxes.php:580
+#: includes/Metaboxes/Kontakt.php:554
 msgid ""
 "Ausschließlich die verknüpften Kontakte werden in der Ausgabe angezeigt."
 msgstr "Only informations of related contacts will be shown in output."
 
-#: ../includes/fau-person-metaboxes.php:592
-#: ../posttypes/fau-standort-posttype.php:26
+#: includes/Metaboxes/Pages.php:44, includes/Metaboxes/Posts.php:44
+msgid "Verfügbare Kontakte anzeigen"
+msgstr "Show available contacts"
+
+#: includes/Metaboxes/Pages.php:45, includes/Metaboxes/Posts.php:45
+msgid "Kopieren"
+msgstr "Copy"
+
+#: includes/Metaboxes/Standort.php:34, includes/Taxonomy/Standort.php:50
 msgid "Standortinformationen"
 msgstr "Location information"
 
-#: ../includes/fau-person-sync-helper.php:126
-#: ../includes/fau-person-sync-helper.php:154
-#: ../includes/fau-person-sync-helper.php:203
-#: ../includes/fau-person-sync-helper.php:244
-#: ../includes/fau-person-sync-helper.php:323
-msgid ""
-"<p class=\"cmb_metabox_description\">[In UnivIS ist hierfür kein Wert "
-"hinterlegt.]</p>"
-msgstr ""
-"<p class=\"cmb_metabox_description\">[There ist no value in UnivIS.]</p>"
+#: includes/Metaboxes/Standort.php:50
+msgid "Nur 5-stellige Zahlen erlaubt."
+msgstr "Only five-digit numbers allowed."
 
-#: ../includes/fau-person-sync-helper.php:198
-#, php-format
-msgid ""
-"<p class=\"cmb_metabox_description\">[Aus UnivIS angezeigter Wert: </"
-"p><ul><li><p class=\"cmb_metabox_description\">%s</p></li></ul><p class="
-"\"cmb_metabox_description\">]</p>"
-msgstr ""
-"<p class=\"cmb_metabox_description\">[Value from UnivIS: </p><ul><li><p "
-"class=\"cmb_metabox_description\">%s</p></li></ul><p class="
-"\"cmb_metabox_description\">]</p>"
-
-#: ../includes/fau-person-sync-helper.php:321
-#, php-format
-msgid ""
-"<p class=\"cmb_metabox_description\">[Aus UnivIS angezeigter Wert: %s]</p>"
-msgstr "<p class=\"cmb_metabox_description\">[Value from UnivIS: %s]</p>"
-
-#: ../includes/fau-person-sync-helper.php:428
-msgid "Täglich"
-msgstr "Daily"
-
-#: ../includes/fau-person-sync-helper.php:429
-msgid "Jede Woche"
-msgstr "Weekly"
-
-#: ../includes/fau-person-sync-helper.php:430
-msgid "Alle zwei Wochen"
-msgstr "Every 2 weeks"
-
-#: ../includes/fau-person-sync-helper.php:438
-msgid "Mo"
-msgstr "Mon"
-
-#: ../includes/fau-person-sync-helper.php:439
-msgid "Di"
-msgstr "Tue"
-
-#: ../includes/fau-person-sync-helper.php:440
-msgid "Mi"
-msgstr "Wed"
-
-#: ../includes/fau-person-sync-helper.php:441
-msgid "Do"
-msgstr "Thu"
-
-#: ../includes/fau-person-sync-helper.php:442
-msgid "Fr"
-msgstr "Fri"
-
-#: ../includes/fau-person-sync-helper.php:443
-msgid "Sa"
-msgstr "Sat"
-
-#: ../includes/fau-person-sync-helper.php:444
-msgid "So"
-msgstr "Sun"
-
-#: ../includes/fau-standort-sync-helper.php:24
-#: ../includes/fau-standort-sync-helper.php:42
-msgid ""
-"<p class=\"cmb_metabox_description\">[Im Standort ist hierfür kein Wert "
-"hinterlegt.]</p>"
-msgstr ""
-"<p class=\"cmb_metabox_description\">[There ist no value in the location.]</"
-"p>"
-
-#: ../includes/fau-standort-sync-helper.php:40
-#, php-format
-msgid ""
-"<p class=\"cmb_metabox_description\">[Von Standort angezeigter Wert: %s]</p>"
-msgstr "<p class=\"cmb_metabox_description\">[Value from the location: %s]</p>"
-
-#: ../posttypes/fau-person-posttype.php:4
-msgctxt "Post Type General Name"
-msgid "Kontakte"
-msgstr "Contacts"
-
-#: ../posttypes/fau-person-posttype.php:5
-msgctxt "Post Type Singular Name"
-msgid "Kontakt"
-msgstr "Contact"
-
-#: ../posttypes/fau-person-posttype.php:6
-msgid "Kontakte"
-msgstr "Contacts"
-
-#: ../posttypes/fau-person-posttype.php:7
-msgid "Übergeordneter Kontakt"
-msgstr "Parent Contact"
-
-#: ../posttypes/fau-person-posttype.php:8
-msgid "Alle Kontakte"
-msgstr "All contacts"
-
-#: ../posttypes/fau-person-posttype.php:9
-msgid "Kontakt ansehen"
-msgstr "Show contact"
-
-#: ../posttypes/fau-person-posttype.php:10
-msgid "Kontakt hinzufügen"
-msgstr "Add Contact"
-
-#: ../posttypes/fau-person-posttype.php:11
-msgid "Neuer Kontakt"
-msgstr "Add New"
-
-#: ../posttypes/fau-person-posttype.php:12
-msgid "Kontakt bearbeiten"
-msgstr "Edit contact"
-
-#: ../posttypes/fau-person-posttype.php:13
-msgid "Kontakt aktualisieren"
-msgstr "Update contact"
-
-#: ../posttypes/fau-person-posttype.php:14
-msgid "Kontakte suchen"
-msgstr "Search contacts"
-
-#: ../posttypes/fau-person-posttype.php:15
-msgid "Keine Kontakte gefunden"
-msgstr "No contacts found"
-
-#: ../posttypes/fau-person-posttype.php:16
-msgid "Keine Kontakte in Papierkorb gefunden"
-msgstr "No contacts found in trash"
-
-#: ../posttypes/fau-person-posttype.php:27
-msgid "person"
-msgstr "person"
-
-#: ../posttypes/fau-standort-posttype.php:4
-msgctxt "Post Type General Name"
-msgid "Standorte"
-msgstr "Locations"
-
-#: ../posttypes/fau-standort-posttype.php:5
-msgctxt "Post Type Singular Name"
-msgid "Standort"
-msgstr "Location"
-
-#: ../posttypes/fau-standort-posttype.php:6
-msgid "Standort"
-msgstr "Location"
-
-#: ../posttypes/fau-standort-posttype.php:7
-msgid "Übergeordneter Standort"
-msgstr "Parent location"
-
-#: ../posttypes/fau-standort-posttype.php:8
-msgid "Alle Standorte"
-msgstr "All locations"
-
-#: ../posttypes/fau-standort-posttype.php:9
-msgid "Standort ansehen"
-msgstr "Show location"
-
-#: ../posttypes/fau-standort-posttype.php:12
-msgid "Standort bearbeiten"
-msgstr "Edit location"
-
-#: ../posttypes/fau-standort-posttype.php:13
-msgid "Standort aktualisieren"
-msgstr "Update location"
-
-#: ../posttypes/fau-standort-posttype.php:14
-msgid "Standorte suchen"
-msgstr "Search locations"
-
-#: ../posttypes/fau-standort-posttype.php:15
-msgid "Keine Standorte gefunden"
-msgstr "No locations found"
-
-#: ../posttypes/fau-standort-posttype.php:16
-msgid "Keine Standorte in Papierkorb gefunden"
-msgstr "No locations found in trash"
-
-#: ../posttypes/fau-standort-posttype.php:25
-msgid "standort"
-msgstr "standort"
-
-#: ../shortcodes/fau-person-shortcodes.php:232
+#: includes/Shortcodes/Kontakt.php:60
 msgid "Bitte geben Sie den Titel oder die ID des Kontakteintrags an."
 msgstr "Please enter the title oder ID of the Contact entry."
 
-#: ../shortcodes/fau-person-shortcodes.php:239
-#, php-format
+#: includes/Shortcodes/Kontakt.php:67
 msgid ""
 "Es konnte kein Kontakteintrag mit dem angegebenen Titel %s gefunden werden. "
 "Versuchen Sie statt dessen die Angabe der ID des Kontakteintrags."
@@ -1163,85 +1025,24 @@ msgstr ""
 "We could not find any entry with the given search term %s. Try to use the ID "
 "of the contact information instead."
 
-#: ../shortcodes/fau-person-shortcodes.php:279
-#: ../shortcodes/fau-standort-shortcodes.php:106
-#, php-format
+#: includes/Shortcodes/Kontakt.php:163
 msgid ""
 "Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden."
 msgstr "We could not find any entry with the given search term %s."
 
-#: ../shortcodes/fau-person-shortcodes.php:579
-#, php-format
+#: includes/Shortcodes/Kontakt.php:326
 msgid "Es konnten keine Kontakte in der Kategorie %s gefunden werden."
 msgstr "We could not find any entry in the category %s."
 
-#: ../shortcodes/fau-person-shortcodes.php:581
-#, php-format
+#: includes/Shortcodes/Kontakt.php:328
 msgid "Die Kategorie %s konnte leider nicht gefunden werden."
 msgstr "Category %s could not be found."
 
-#: ../shortcodes/fau-person-shortcodes.php:629
-#: ../shortcodes/fau-person-shortcodes.php:665
-#: ../shortcodes/fau-person-shortcodes.php:714
-#: ../shortcodes/fau-person-shortcodes.php:833
-#: ../shortcodes/fau-person-shortcodes.php:885
-#: ../shortcodes/fau-person-shortcodes.php:905
-#: ../shortcodes/fau-standort-shortcodes.php:181
-#: ../shortcodes/fau-standort-shortcodes.php:202
-#: ../shortcodes/fau-standort-shortcodes.php:300
-#: ../shortcodes/fau-standort-shortcodes.php:361
-#: ../shortcodes/fau-standort-shortcodes.php:369
-#, php-format
-msgid "Weitere Informationen zu %s aufrufen"
-msgstr "Additional information for %s"
-
-#: ../shortcodes/fau-person-shortcodes.php:669
-#: ../shortcodes/fau-person-shortcodes.php:758
-#: ../shortcodes/fau-person-shortcodes.php:917
-msgid "Tätigkeit"
-msgstr "Job title"
-
-#: ../shortcodes/fau-person-shortcodes.php:678
-#: ../shortcodes/fau-person-shortcodes.php:764
-#: ../shortcodes/fau-person-shortcodes.php:835
-#: ../shortcodes/fau-person-shortcodes.php:926
-#: ../shortcodes/fau-person-shortcodes.php:982
-msgid "Telefonnummer"
-msgstr "Phone number"
-
-#: ../shortcodes/fau-person-shortcodes.php:680
-#: ../shortcodes/fau-person-shortcodes.php:766
-#: ../shortcodes/fau-person-shortcodes.php:928
-msgid "Mobil"
-msgstr "Mobile phone"
-
-#: ../shortcodes/fau-person-shortcodes.php:682
-#: ../shortcodes/fau-person-shortcodes.php:768
-#: ../shortcodes/fau-person-shortcodes.php:930
-#: ../shortcodes/fau-person-shortcodes.php:986
-msgid "Faxnummer"
-msgstr "Fax number"
-
-#: ../shortcodes/fau-person-shortcodes.php:688
-#: ../shortcodes/fau-person-shortcodes.php:781
-msgid "Publikationen"
-msgstr "Publications"
-
-#: ../shortcodes/fau-person-shortcodes.php:712
-#: ../shortcodes/fau-person-shortcodes.php:942
-msgid "Beschreibung"
-msgstr "Short description"
-
-#: ../shortcodes/fau-person-shortcodes.php:715
-msgid "Mehr"
-msgstr "More"
-
-#: ../shortcodes/fau-standort-shortcodes.php:61
+#: includes/Shortcodes/Standort.php:93
 msgid "Bitte geben Sie den Titel oder die ID des Standorteintrags an."
 msgstr "Please enter the title oder ID of the Location entry."
 
-#: ../shortcodes/fau-standort-shortcodes.php:68
-#, php-format
+#: includes/Shortcodes/Standort.php:100
 msgid ""
 "Es konnte kein Standorteintrag mit dem angegebenen Titel %s gefunden werden. "
 "Versuchen Sie statt dessen die Angabe der ID des Standorteintrags."
@@ -1249,131 +1050,224 @@ msgstr ""
 "We could not find any entry with the given search term %s. Try to use the ID "
 "of the location information instead."
 
-#: ../templates/archive-person.php:24
-msgid "Vorherige Kontakte"
-msgstr "preview contacts"
+#: includes/Taxonomy/Kontakt.php:34
+msgctxt "Post Type General Name"
+msgid "Kontakte"
+msgstr "Contacts"
 
-#: ../templates/archive-person.php:25
-msgid "Weitere Kontakte"
-msgstr "further contacts"
-
-#: ../templates/archive-person.php:28
-msgid "Nichts gefunden"
-msgstr "We could not find any information"
-
-#: ../templates/archive-person.php:30
-msgid "Leider sind noch keine Kontakte eingepflegt."
-msgstr "No contacts found"
-
-#: ../widgets/fau-person-widget.php:8
-msgid "Kontakt-Visitenkarte"
-msgstr "Contact information"
-
-#: ../widgets/fau-person-widget.php:8
-msgid "Kontakt-Visitenkarte anzeigen"
-msgstr "Show contact information"
-
-#: ../widgets/fau-person-widget.php:31
-msgid "Titel"
-msgstr "Academical title"
-
-#: ../widgets/fau-person-widget.php:36
+#: includes/Taxonomy/Kontakt.php:35
+msgctxt "Post Type Singular Name"
 msgid "Kontakt"
 msgstr "Contact"
 
-#: ../widgets/fau-person-widget.php:51
-msgid "Kontaktbild anzeigen"
-msgstr "Show contact image"
+#: includes/Taxonomy/Kontakt.php:36
+msgid "Kontakte"
+msgstr "Contacts"
 
-#~ msgid "Bitte keine Umlaute, sondern statt dessen ae, oe, ue, ss verwenden."
-#~ msgstr "Please use ae, oe, ue, ss."
+#: includes/Taxonomy/Kontakt.php:37
+msgid "Übergeordneter Kontakt"
+msgstr "Parent Contact"
 
-#~ msgid "Sprech- bzw. Öffnungszeiten"
-#~ msgstr "Office hours"
+#: includes/Taxonomy/Kontakt.php:38
+msgid "Alle Kontakte"
+msgstr "All contacts"
 
-#~ msgid ""
-#~ "in der Sidebar (Feld Ansprechpartner in den FAU-Themes) und im Widget"
-#~ msgstr "In sidebar (only in FAU-Themes) and in widget"
+#: includes/Taxonomy/Kontakt.php:39
+msgid "Kontakt ansehen"
+msgstr "Show contact"
 
-#~ msgid "keine Angabe"
-#~ msgstr "No Select"
+#: includes/Taxonomy/Kontakt.php:40
+msgid "Kontakt hinzufügen"
+msgstr "Add Contact"
 
-#~ msgid "Titel des Kontakteintrags"
-#~ msgstr "Title of Contact entry"
+#: includes/Taxonomy/Kontakt.php:41
+msgid "Neuer Kontakt"
+msgstr "Add New"
 
-#~ msgid "Institution/Abteilung"
-#~ msgstr "Institution"
+#: includes/Taxonomy/Kontakt.php:42
+msgid "Kontakt bearbeiten"
+msgstr "Edit contact"
 
-#~ msgid "URL"
-#~ msgstr "URL"
+#: includes/Taxonomy/Kontakt.php:43
+msgid "Kontakt aktualisieren"
+msgstr "Update contact"
 
-#~ msgid "Adressangaben"
-#~ msgstr "Contact information"
+#: includes/Taxonomy/Kontakt.php:44
+msgid "Kontakte suchen"
+msgstr "Search contacts"
 
-#~ msgid "Zimmernummer"
-#~ msgstr "Room number"
+#: includes/Taxonomy/Kontakt.php:45
+msgid "Keine Kontakte gefunden"
+msgstr "No contacts found"
 
-#~ msgid "Feld Freitext"
-#~ msgstr "Field more information"
+#: includes/Taxonomy/Kontakt.php:46
+msgid "Keine Kontakte in Papierkorb gefunden"
+msgstr "No contacts found in trash"
 
-#~ msgid "alle vorherigen Angaben"
-#~ msgstr "all previous information"
+#: includes/Taxonomy/Kontakt.php:51, includes/Taxonomy/Kontakt.php:183,
+#: includes/Widgets/kontakt-widget.php:35
+msgid "Kontakt"
+msgstr "Contact"
 
-#~ msgid "Person (geschlechtsneutral)"
-#~ msgstr "Person (no gender)"
+#: includes/Taxonomy/Kontakt.php:163
+msgid "Alle %s anzeigen"
+msgstr "Show all %s"
 
-#~ msgid "Männliche Person"
-#~ msgstr "Male person"
+#: includes/Taxonomy/Kontakt.php:182
+msgid "Angezeigter Name"
+msgstr "Display name"
 
-#~ msgid "Weibliche Person"
-#~ msgstr "Female person"
+#: includes/Taxonomy/Kontakt.php:184
+msgid "Datenquelle"
+msgstr "Data source"
 
-#~ msgid "Nicht-Person"
-#~ msgstr "Non-Person"
+#: includes/Taxonomy/Kontakt.php:185
+msgid "Datum"
+msgstr "Date"
 
-#~ msgid "Person"
-#~ msgstr "Person"
+#: includes/Taxonomy/Kontakt.php:242
+msgid "UnivIS"
+msgstr "UnivIS"
 
-#~ msgid "Titel der Meta-Box"
-#~ msgstr "Meta Box Title"
+#: includes/Taxonomy/Kontakt.php:244
+msgid "Lokal"
+msgstr "Local"
 
-#~ msgctxt "Post Type General Name"
-#~ msgid "Personen"
-#~ msgstr "Persons"
+#: includes/Taxonomy/Standort.php:28
+msgctxt "Post Type General Name"
+msgid "Standorte"
+msgstr "Locations"
 
-#~ msgctxt "Post Type Singular Name"
-#~ msgid "Person"
-#~ msgstr "Person"
+#: includes/Taxonomy/Standort.php:29
+msgctxt "Post Type Singular Name"
+msgid "Standort"
+msgstr "Location"
 
-#~ msgid "Personeninformationen"
-#~ msgstr "Person information"
+#: includes/Taxonomy/Standort.php:30
+msgid "Standort"
+msgstr "Location"
 
-#~ msgid "Straße"
-#~ msgstr "Street address"
+#: includes/Taxonomy/Standort.php:31
+msgid "Übergeordneter Standort"
+msgstr "Parent location"
 
-#~ msgid "Wohnort"
-#~ msgstr "City"
+#: includes/Taxonomy/Standort.php:32
+msgid "Alle Standorte"
+msgstr "All locations"
 
-#, fuzzy
-#~ msgid "showtitle: Titel (Präfix)"
-#~ msgstr "Honorific prefix"
+#: includes/Taxonomy/Standort.php:33
+msgid "Standort ansehen"
+msgstr "Show location"
 
-#, fuzzy
-#~ msgid "showsuffix: Abschluss (Suffix)"
-#~ msgstr "Honorific suffix"
+#: includes/Taxonomy/Standort.php:36
+msgid "Standort bearbeiten"
+msgstr "Edit location"
 
-#, fuzzy
-#~ msgid "showposition: Position/Funktion"
-#~ msgstr "Job title"
+#: includes/Taxonomy/Standort.php:37
+msgid "Standort aktualisieren"
+msgstr "Update location"
 
-#, fuzzy
-#~ msgid "showinstitution: Institution/Abteilung"
-#~ msgstr "Institution"
+#: includes/Taxonomy/Standort.php:38
+msgid "Standorte suchen"
+msgstr "Search locations"
 
-#, fuzzy
-#~ msgid "showpubs: Publikationen"
-#~ msgstr "Publications"
+#: includes/Taxonomy/Standort.php:39
+msgid "Keine Standorte gefunden"
+msgstr "No locations found"
 
-#, fuzzy
-#~ msgid "showoffice: Sprechzeiten"
-#~ msgstr "Office hours"
+#: includes/Taxonomy/Standort.php:40
+msgid "Keine Standorte in Papierkorb gefunden"
+msgstr "No locations found in trash"
+
+#: includes/Taxonomy/Standort.php:49
+msgid "standort"
+msgstr "standort"
+
+#: includes/Templates/archive-person-fau-theme.php:5,
+#: includes/Templates/archive-person.php:4
+msgid "Kontaktliste"
+msgstr "Contact list"
+
+#: includes/Templates/archive-person-fau-theme.php:21,
+#: includes/Templates/archive-person.php:20,
+#: includes/Templates/single-person-fau-theme.php:21
+msgid "Es tut uns leid."
+msgstr "We are sorry."
+
+#: includes/Templates/archive-person-fau-theme.php:22,
+#: includes/Templates/archive-person.php:21,
+#: includes/Templates/single-person-fau-theme.php:22
+msgid ""
+"Für den angegebenen Kontakt können keine Informationen abgerufen werden."
+msgstr "We cannot get any information about this contact."
+
+#: includes/Templates/archive-person-fau-theme.php:27,
+#: includes/Templates/archive-person.php:26,
+#: includes/Templates/archive-standort-fau-theme.php:24,
+#: includes/Templates/archive-standort.php:20
+msgid "<span class=\"meta-nav\">&laquo;</span> Zurück"
+msgstr "<span class=\"meta-nav\">&laquo;</span> Back"
+
+#: includes/Templates/archive-person-fau-theme.php:28,
+#: includes/Templates/archive-person.php:27,
+#: includes/Templates/archive-standort-fau-theme.php:25,
+#: includes/Templates/archive-standort.php:21
+msgid "Weiter <span class=\"meta-nav\">&raquo;</span>"
+msgstr "Next <span class=\"meta-nav\">&raquo;</span>"
+
+#: includes/Templates/archive-standort-fau-theme.php:5
+msgid "Standorte"
+msgstr "Location"
+
+#: includes/Widgets/kontakt-widget.php:11
+msgid "Kontakt-Visitenkarte"
+msgstr "Contact information"
+
+#: includes/Widgets/kontakt-widget.php:12
+msgid "Kontakt-Visitenkarte anzeigen"
+msgstr "Show contact information"
+
+#: vendor/UnivIS/Data.php:262
+msgid ""
+"<p class=\"cmb_metabox_description\">[Aus UnivIS entnommener Wert: %s]</p>"
+msgstr "<p class=\"cmb_metabox_description\">[UnivIS-value: %s]</p>"
+
+#: vendor/UnivIS/Data.php:290
+msgid "Täglich"
+msgstr "Daily"
+
+#: vendor/UnivIS/Data.php:291
+msgid "Jede Woche"
+msgstr "Each weak"
+
+#: vendor/UnivIS/Data.php:292
+msgid "Alle zwei Wochen"
+msgstr "All two weeks"
+
+#: vendor/UnivIS/Data.php:300
+msgid "<abbr title=\"Montag\">Mo</abbr>"
+msgstr "<abbr title=\"Monday\">Mo</abbr>"
+
+#: vendor/UnivIS/Data.php:301
+msgid "<abbr title=\"Dienstag\">Di</abbr>"
+msgstr "<abbr title=\"Tuesday\">Tu</abbr>"
+
+#: vendor/UnivIS/Data.php:302
+msgid "<abbr title=\"Mittwoch\">Mi</abbr>"
+msgstr "<abbr title=\"Wednesday\">We</abbr>"
+
+#: vendor/UnivIS/Data.php:303
+msgid "<abbr title=\"Donnerstag\">Do</abbr>"
+msgstr "<abbr title=\"Thursday\">Th</abbr>"
+
+#: vendor/UnivIS/Data.php:304
+msgid "<abbr title=\"Freitag\">Fr</abbr>"
+msgstr "<abbr title=\"Friday\">Fr</abbr>"
+
+#: vendor/UnivIS/Data.php:305
+msgid "<abbr title=\"Samstag\">Sa</abbr>"
+msgstr "<abbr title=\"Saturday\">Sa</abbr>"
+
+#: vendor/UnivIS/Data.php:306
+msgid "<abbr title=\"Sonntag\">So</abbr>"
+msgstr "<abbr title=\"Sunday\">Su</abbr>"
