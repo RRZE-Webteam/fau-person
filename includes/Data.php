@@ -606,12 +606,10 @@ class Data {
 	$content = '<div class="'.$class.'" itemscope itemtype="http://schema.org/Person">';
 	
 	
-	if ( $is_shortcode) {
+	// if ( $is_shortcode) {
 	    $data['morelink'] = '';
 	    $content .= Schema::create_Name($data,'name','','h'.$hstart,false,$viewopts);
-	    
-	    
-         }
+        // }
 	$content .= '<div class="person-meta">';
 	$content .= Data::create_kontakt_image($id, $use_size, "person-image alignright", false, false,'',$viewcaption);	    
 
@@ -1671,7 +1669,7 @@ class Data {
 		$display = 'titel, familyName, givenName, name, suffix, bild, position, permalink, socialmedia';  
 		break;
 	    default:
-		$display = 'title, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, email, permalink, border, ansprechpartner';  
+		$display = 'titel, familyName, givenName, name, suffix, worksFor, department, jobTitle, telefon, email, permalink, border, ansprechpartner';  
 	}	
 	return $display;
     }
@@ -1748,6 +1746,7 @@ class Data {
 		case 'suffix':
 		   $newlist['honorificSuffix'] = $liste[$key];
 		   break;   
+               case 'title':
 		case 'titel':
    	         case 'prefix':
 		   $newlist['honorificPrefix'] = $liste[$key];
