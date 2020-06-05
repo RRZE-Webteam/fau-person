@@ -171,7 +171,10 @@ class Schema {
 	}
 	
 	$url = '';
-	$thisurl = $data['morelink'];
+	$thisurl = '';
+	if (isset($data['morelink'])) {    
+	   $thisurl  = $data['morelink'];
+	}
 	if (isset($thisurl) && (!empty(esc_url($thisurl)))) {
 	    $url = $thisurl;
 	    $surroundingtag = 'a';

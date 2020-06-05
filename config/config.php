@@ -263,7 +263,7 @@ function getFields() {
 		'label' => __('Bild', 'fau-person'),
 		'type'  => 'checkbox',
 		'checked'   => true,
-		'default' => false,
+		'default' => true,
             ],
 	    [
 		'name'  => 'socialmedia',
@@ -520,12 +520,7 @@ function getShortcodeSettings(){
 				'desc' => __( 'Von Z bis A', 'fau-person' ),
 			],
 		],
-/*		'border' => [
-			'default' => true,
-			'field_type' => 'checkbox',
-			'label' => __( 'Rahmen anzeigen', 'fau-person' ),
-			'type' => 'boolean' 
-		], */
+
 		'hstart' => [
 			'default' => 3,
 			'field_type' => 'number',
@@ -702,82 +697,6 @@ function getShortcodeSettings(){
     ];
     
 
-    /*
-    
-	return [
-		'block' => [
-			'name' => 'FAU_Person/kontakt', // dieser Wert muss angepasst werden
-			'title' => 'Kontakt Shortcode', // Der Titel, der in der Blockauswahl im Gutenberg Editor angezeigt wird
-			'category' => 'widgets', // Die Kategorie, in der der Block im Gutenberg Editor angezeigt wird
-			'icon' => 'admin-users',  // Das Icon des Blocks
-			'message' => __( 'Find the settings on the right side', 'fau-person' ) // erscheint bei Auswahl des Blocks
-		],
-		'Beispiel-Textfeld-Text' => [
-			'default' => 'ein Beispiel-Wert',
-			'field_type' => 'text', // Art des Feldes im Gutenberg Editor
-			'label' => __( 'Beschriftung', 'fau-person' ),
-			'type' => 'text' // Variablentyp der Eingabe
-		],
-		'Beispiel-Textfeld-Number' => [
-			'default' => 0,
-			'field_type' => 'text', // Art des Feldes im Gutenberg Editor
-			'label' => __( 'Beschriftung', 'fau-person' ),
-			'type' => 'number' // Variablentyp der Eingabe
-		],
-		'Beispiel-Textarea-String' => [
-			'default' => 'ein Beispiel-Wert',
-			'field_type' => 'textarea',
-			'label' => __( 'Beschriftung', 'fau-person' ),
-			'type' => 'string',
-			'rows' => 5 // Anzahl der Zeilen 
-		],
-		'Beispiel-Radiobutton' => [
-			'values' => [
-				'wert1' => __( 'Wert 1', 'fau-person' ), // wert1 mit Beschriftung
-				'wert2' => __( 'Wert 2', 'fau-person' )
-			],
-			'wert2' => 'DESC', // vorausgewählter Wert
-			'field_type' => 'radio',
-			'label' => __( 'Order', 'fau-person' ), // Beschriftung der Radiobutton-Gruppe
-			'type' => 'string' // Variablentyp des auswählbaren Werts
-		],
-		'Beispiel-Checkbox' => [
-			'field_type' => 'checkbox',
-			'label' => __( 'Beschriftung', 'fau-person' ),
-			'type' => 'boolean',
-			'checked'   => true // Vorauswahl: Haken gesetzt
-        ],
-        'Beispiel-Toggle' => [
-            'field_type' => 'toggle',
-            'label' => __( 'Beschriftung', 'fau-person' ),
-            'type' => 'boolean',
-            'checked'   => true // Vorauswahl: ausgewählt
-        ],
-        'Beispiel-Select' => [
-			'values' => [
-				'wert1' => __( 'Wert 1', 'fau-person' ),
-				'wert2' => __( 'Wert 2', 'fau-person' )
-			],
-			'default' => 'wert1', // vorausgewählter Wert: Achtung: string, kein array!
-			'field_type' => 'select',
-			'label' => __( 'Beschrifung', 'fau-person' ),
-			'type' => 'string' // Variablentyp des auswählbaren Werts
-		],
-        'Beispiel-Multi-Select' => [
-			'values' => [
-				'wert1' => __( 'Wert 1', 'fau-person' ),
-				'wert2' => __( 'Wert 2', 'fau-person' ),
-				'wert3' => __( 'Wert 2', 'fau-person' )
-			],
-			'default' => ['wert1','wert3'], // vorausgewählte(r) Wert(e): Achtung: array, kein string!
-			'field_type' => 'multi_select',
-			'label' => __( 'Beschrifung', 'fau-person' ),
-			'type' => 'array',
-			'items'   => [
-				'type' => 'string' // Variablentyp der auswählbaren Werte
-			]
-        ]
-    ];*/
 }
 
  function get_fau_person_capabilities() {
