@@ -506,7 +506,7 @@ class Schema {
         if(!empty($hoursAvailable) || !empty($hoursAvailable_group)) {
             
             if(!empty($hoursAvailable_text)) {
-                $res  .= '<'.$titletagopeninghours.' itemprop="name">' . esc_html($hoursAvailable_text) . ':</'.$titletagopeninghours.'>';
+                $res  .= '<'.$titletagopeninghours.' itemprop="name">' . esc_html($hoursAvailable_text) . '</'.$titletagopeninghours.'>';
             } else {
                 $res  .= '<'.$titletagopeninghours.' itemprop="name">' . __('Sprechzeiten', 'fau-person') . '</'.$titletagopeninghours.'>';   
             }
