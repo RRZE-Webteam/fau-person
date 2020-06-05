@@ -731,6 +731,7 @@ class Data {
 	$fields['permalink'] = get_permalink($id);
 	$fields['name'] = get_the_title($id);
 	$fields['description'] = self::get_description($id, $arguments['format'], $fields);
+	$fields['morelink'] = self::get_morelink_url($fields, $viewopts);
 	
 	$data = self::filter_fields($fields, $display);
 	$class = 'card-item';
@@ -749,12 +750,10 @@ class Data {
          $content .= '<div class="'.$class.'" itemscope itemtype="http://schema.org/Person">';
 	 
 	if ((isset($display['bild'])) && (!empty($display['bild'])) ) {
-//	    $content .= Data::create_kontakt_image($id, 'person-thumb-page-v3', "person-thumb", true, false,'',false);
 	     $content .= Data::create_kontakt_image($id, 'medium', "person-thumb", true, false,'',false);
          }   
 	 
          $fullname = Schema::create_Name($data,'name','','a',false,$viewopts);
-	 
 	 
 	if ($arguments['hstart']) {
 	    $hstart = intval($arguments['hstart']);
