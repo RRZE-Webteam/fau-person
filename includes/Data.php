@@ -660,19 +660,33 @@ class Data {
 	}
 
         if ( is_singular( 'person' ) && in_the_loop() ) {
-            $post = get_the_content();
+            $postContent = get_the_content();
         } else {
-            $post = get_post($id)->post_content;
+            $postContent = get_post($id)->post_content;
         }
-        if ($post) {
+        if ($postContent) {
+			$postContent = self::stripShortcode(['kontakt', 'person', 'kontaktliste', 'persons'], $postContent);
             $content .= '<div class="desc" itemprop="description">' . PHP_EOL;
-            $content .= apply_filters( 'the_content', $post );
+            $content .= apply_filters( 'the_content', $postContent );
             $content .= '</div>';
         }
         $content .= '</div>';
 
         return $content;
     }
+
+	protected static function stripShortcode(array $tagAry, string $content) : string 
+	{
+		global $shortcode_tags;
+		
+		foreach($tagAry as $tag) {
+			$stack = $shortcode_tags;
+			$shortcode_tags = [$tag => 1];
+			$content = strip_shortcodes($content);
+			$shortcode_tags = $stack;
+		}
+		return $content;	
+	}
 
     public static function fau_person_tablerow($id = 0, $display = array(), $arguments = array()) {
 	if ($id == 0) {
