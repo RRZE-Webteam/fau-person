@@ -19,7 +19,7 @@ if (!class_exists('FAUPersonWidget')) {
 		'id' => '',
 	    );
 	    $instance = wp_parse_args((array) $instance, $default);   
-	    $persons = new WP_Query(array('post_type' => 'person', 'posts_per_page' => -1));
+	    $persons = new WP_Query(array('post_type' => 'person', 'nopaging' => true));
 
 	    if (!empty($persons->post_title)) {
 		$name = $persons->post_title;
