@@ -210,6 +210,13 @@ function getFields() {
 		'default' => true,
             ],
 	    [
+		'name'  => 'workLocation',
+		'label' => __('Raum', 'fau-person'),
+		'type'  => 'checkbox',
+		'checked'   => true,
+		'default' => true,
+            ],
+	    [
 		'name'  => 'telefon',
 		'label' => __('Telefonnummer', 'fau-person'),
 		'type'  => 'checkbox',
