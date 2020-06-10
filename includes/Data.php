@@ -866,6 +866,20 @@ class Data {
 	$viewopts = self::get_viewsettings();
 	
 
+	$sitebaropts = self::map_old_keys(self::get_viewsettings('sidebar'));
+	
+	foreach ($sitebaropts as $key => $value) {
+	   
+		if (empty($value)) {
+		    $display[$key] = false;
+		} else {
+		    $display[$key] = true;
+		}
+	   
+	}
+
+
+
         $content = ''; 
 	Main::enqueueForeignThemes();
 
@@ -875,14 +889,8 @@ class Data {
 	$fields['description'] = self::get_description($id, 'sidebar', $fields);
 	$fields['morelink'] = self::get_morelink_url($fields, $viewopts);
 	
-	$sitebaropts = self::map_old_keys(self::get_viewsettings('sidebar'));
-	foreach ($sitebaropts as $key => $value) {
-	    if (empty($value)) {
-		$display[$key] = false;
-	    } else {
-		$display[$key] = true;
-	    }
-	}
+	
+	
 	$data = self::filter_fields($fields, $display);
 	
 	
@@ -933,7 +941,6 @@ class Data {
 		
              $content = '<div class="'.$class.'" itemscope itemtype="http://schema.org/Person">' . "\n";
              $content .= '<div class="side">';         
-		   
 	    $content .= '<div class="row">' . "\n";
 	    
 	    if ((isset($display['bild'])) && (!empty($display['bild'])) && (has_post_thumbnail($id) )) {
@@ -1760,6 +1767,11 @@ class Data {
 		case 'rahmen':
 		   $newlist['border'] = $liste[$key];
 		   break;
+		case 'raum':
+		    case 'room':
+		     $newlist['workLocation'] = $liste[$key];
+		   break;
+			
 	       default:
 		   $newlist[$key] = $liste[$key];
 	   }
