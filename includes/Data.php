@@ -276,7 +276,7 @@ class Data {
     }
     
 
-    public static function create_kontakt_image($id = 0, $size = 'person-thumb-page-v3', $class = '', $defaultimage = false, $showlink = false, $linkttitle = '', $showcaption = true) {
+    public static function create_kontakt_image($id = 0, $size = 'person-thumb-page-v3', $class = '', $defaultimage = false, $showlink = false, $linkttitle = '', $showcaption = true, $linktarget = '') {
 	if ($id==0) {
 	    return;
 	}
@@ -288,7 +288,11 @@ class Data {
 
 	$imagedata['alt'] = $alttext;
 	if ($showlink) {
-	    $targetlink = get_permalink($id);
+	    if ((!empty($linktarget)) && (!empty(esc_url($linktarget)))) {
+		$targetlink = $linktarget;
+	    } else {
+		$targetlink = get_permalink($id);
+	    }
 	}
 	
 	
@@ -763,8 +767,18 @@ class Data {
 
          $content .= '<div class="'.$class.'" itemscope itemtype="http://schema.org/Person">';
 	 
-	if ((isset($display['bild'])) && (!empty($display['bild'])) ) {
-	     $content .= Data::create_kontakt_image($id, 'medium', "person-thumb", true, false,'',false);
+	if ((isset($display['bild'])) && (!empty($display['bild'])) ) { 
+	    $thisurl = '';
+	    if (isset($viewopts['view_card_linkimage']) && $viewopts['view_card_linkimage']==true) {
+		if (isset($data['morelink'])) {    
+		    $thisurl  = $data['morelink'];
+		}
+	    }
+	    if ($thisurl) {
+		$content .= Data::create_kontakt_image($id, 'medium', "person-thumb", true, true, '' ,false, $thisurl);
+	    } else {
+		$content .= Data::create_kontakt_image($id, 'medium', "person-thumb", true, false,'',false);
+	    }
          }   
 	 
          $fullname = Schema::create_Name($data,'name','','a',false,$viewopts);
@@ -880,18 +894,7 @@ class Data {
 	$viewopts = self::get_viewsettings();
 	
 
-	$sitebaropts = self::map_old_keys(self::get_viewsettings('sidebar'));
 	
-	foreach ($sitebaropts as $key => $value) {
-	   
-		if (empty($value)) {
-		    $display[$key] = false;
-		} else {
-		    $display[$key] = true;
-		}
-	   
-	}
-
 
 
         $content = ''; 
@@ -1680,7 +1683,21 @@ class Data {
 		$display = 'titel, familyName, givenName, name, suffix, description, permalink, url, link';  
 		break;
 	     case 'sidebar':
-		$display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, jobTitle, telefon, email, socialmedia, fax, url, adresse, bild, permalink, url, sprechzeiten, ansprechpartner, description';  
+		$display = '';		 
+		$sitebaropts = self::map_old_keys(self::get_viewsettings('sidebar'));	
+		if (isset($sitebaropts)) {		   
+		    foreach ($sitebaropts as $key => $value) {	   
+			    if (!empty($value)) {
+				if (!empty($display)) {
+				    $display .= ", ";
+				}
+				$display .= $key;
+			    }	
+		    }
+		}
+		if (empty(trim($display))) {
+		    $display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, jobTitle, telefon, email, socialmedia, fax, url, adresse, bild, permalink, url, sprechzeiten, ansprechpartner, description';  
+		}
 		break;
 	    case 'table': 
 		$display = 'titel, familyName, givenName, name, suffix, telefon, email, permalink, url, link';  
@@ -1697,7 +1714,6 @@ class Data {
     
     public static function get_display_field($format = '', $show = '',  $hide = '') {	
 	$display = self::get_default_display($format);
-
 	$showfields = self::parse_liste($display,true);
 	
 	if ((isset($show)) && (!empty($show))) {

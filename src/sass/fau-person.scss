@@ -406,6 +406,8 @@
 	flex-basis: 80px;
 	img {
 	    width: 80px;
+	    height: 106px;
+	    object-fit: cover;
 	    max-width: inherit;
 	}
     }
@@ -415,6 +417,8 @@
 	flex-basis: 100px;
 	img {
 	    width: 100px;
+	    height: 133px;
+	    object-fit: cover;
 	    max-width: inherit;
 	}
     }
@@ -424,6 +428,8 @@
 	flex-basis: 120px;
 	img {
 	    width: 120px;
+	    height: 160px;
+	    object-fit: cover;
 	    max-width: inherit;
 	}
     }

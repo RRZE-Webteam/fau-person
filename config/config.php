@@ -181,6 +181,42 @@ function getFields() {
     
     return [
 	'sidebar' => [
+    
+	    [
+		'name'  => 'titel',
+		'label' => __('Akademischer Titel', 'fau-person'),
+		'type'  => 'checkbox',
+		'checked'   => true,
+		'default' => true,
+            ],
+	    [
+		'name'  => 'familyName',
+		'label' => __('Nachname', 'fau-person'),
+		'type'  => 'checkbox',
+		'checked'   => true,
+		'default' => true,
+            ],
+	    [
+		'name'  => 'givenName',
+		'label' => __('Vorname', 'fau-person'),
+		'type'  => 'checkbox',
+		'checked'   => true,
+		'default' => true,
+            ],
+	    [
+		'name'  => 'name',
+		'label' => __('Vollständiger Name', 'fau-person'),
+		'type'  => 'checkbox',
+		'checked'   => true,
+		'default' => true,
+            ],
+	    [
+		'name'  => 'suffix',
+		'label' => __('Suffix (nachgestellter Titel)', 'fau-person'),
+		'type'  => 'checkbox',
+		'checked'   => true,
+		'default' => true,
+            ],
 	    [
 		'name'  => 'position',
 		'label' => __('Position', 'fau-person'),
@@ -385,6 +421,13 @@ function getFields() {
 			'large'  => __( 'Groß (300 Pixel)', 'fau-person' ),		    
 		],
 	    ],
+	     [
+		'name'  => 'view_card_linkimage',
+		'label' => __('Personenbild verlinken', 'fau-person'),
+		'desc'  => __('In der Card-Ansicht auch das Personenbild als Link setzen.', 'fau-person'),
+		'type'  => 'checkbox',
+		'default' => false,
+            ],
 	    [
 		'name'  => 'backend_view_metabox_kontaktlist',
 		'label' => __('Metabox Kontakte', 'fau-person'),
