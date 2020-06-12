@@ -880,18 +880,7 @@ class Data {
 	$viewopts = self::get_viewsettings();
 	
 
-	$sitebaropts = self::map_old_keys(self::get_viewsettings('sidebar'));
 	
-	foreach ($sitebaropts as $key => $value) {
-	   
-		if (empty($value)) {
-		    $display[$key] = false;
-		} else {
-		    $display[$key] = true;
-		}
-	   
-	}
-
 
 
         $content = ''; 
@@ -1680,7 +1669,21 @@ class Data {
 		$display = 'titel, familyName, givenName, name, suffix, description, permalink, url, link';  
 		break;
 	     case 'sidebar':
-		$display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, jobTitle, telefon, email, socialmedia, fax, url, adresse, bild, permalink, url, sprechzeiten, ansprechpartner, description';  
+		$display = '';		 
+		$sitebaropts = self::map_old_keys(self::get_viewsettings('sidebar'));	
+		if (isset($sitebaropts)) {		   
+		    foreach ($sitebaropts as $key => $value) {	   
+			    if (!empty($value)) {
+				if (!empty($display)) {
+				    $display .= ", ";
+				}
+				$display .= $key;
+			    }	
+		    }
+		}
+		if (empty(trim($display))) {
+		    $display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, jobTitle, telefon, email, socialmedia, fax, url, adresse, bild, permalink, url, sprechzeiten, ansprechpartner, description';  
+		}
 		break;
 	    case 'table': 
 		$display = 'titel, familyName, givenName, name, suffix, telefon, email, permalink, url, link';  
@@ -1697,7 +1700,6 @@ class Data {
     
     public static function get_display_field($format = '', $show = '',  $hide = '') {	
 	$display = self::get_default_display($format);
-
 	$showfields = self::parse_liste($display,true);
 	
 	if ((isset($show)) && (!empty($show))) {

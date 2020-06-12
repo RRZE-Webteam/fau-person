@@ -181,6 +181,42 @@ function getFields() {
     
     return [
 	'sidebar' => [
+    
+	    [
+		'name'  => 'titel',
+		'label' => __('Akademischer Titel', 'fau-person'),
+		'type'  => 'checkbox',
+		'checked'   => true,
+		'default' => true,
+            ],
+	    [
+		'name'  => 'familyName',
+		'label' => __('Nachname', 'fau-person'),
+		'type'  => 'checkbox',
+		'checked'   => true,
+		'default' => true,
+            ],
+	    [
+		'name'  => 'givenName',
+		'label' => __('Vorname', 'fau-person'),
+		'type'  => 'checkbox',
+		'checked'   => true,
+		'default' => true,
+            ],
+	    [
+		'name'  => 'name',
+		'label' => __('Vollständiger Name', 'fau-person'),
+		'type'  => 'checkbox',
+		'checked'   => true,
+		'default' => true,
+            ],
+	    [
+		'name'  => 'suffix',
+		'label' => __('Suffix (nachgestellter Titel)', 'fau-person'),
+		'type'  => 'checkbox',
+		'checked'   => true,
+		'default' => true,
+            ],
 	    [
 		'name'  => 'position',
 		'label' => __('Position', 'fau-person'),

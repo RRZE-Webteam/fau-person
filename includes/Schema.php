@@ -219,8 +219,8 @@ class Schema {
 	    $familyName  = '<span itemprop="familyName">' . esc_html($data['familyName']) . '</span>';
 	}
 	
-	if ((!empty($givenName)) && (!empty($familyName))) {
-	    $fullname = '<span class="fullname">'. $givenName.' '.$familyName.'</span>';
+	if ((!empty($givenName)) || (!empty($familyName))) {
+	    $fullname = '<span class="fullname">'. $givenName.' '.$familyName.'</span>';   
 	} elseif ((isset($data['name'])) && (!empty($data['name']))) {
 	    $fullname = $data['name'];   
 	} elseif ((isset($data['alternateName'])) && (!empty($data['alternateName']))) {
