@@ -106,6 +106,8 @@ class Kontakt extends Metaboxes {
 			'Dr.' => __('Doktor', 'fau-person'),
 			'Prof.' => __('Professor', 'fau-person'),
 			'Prof. Dr.' => __('Professor Doktor', 'fau-person'),
+			'Prof. em.' => __('Professor (Emeritus)', 'fau-person'),
+			'Prof. Dr. em.' => __('Professor Doktor (Emeritus)', 'fau-person'),
 			'PD' => __('Privatdozent', 'fau-person'),
 			'PD Dr.' => __('Privatdozent Doktor', 'fau-person')
 		    ),
