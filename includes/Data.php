@@ -276,7 +276,7 @@ class Data {
     }
     
 
-    public static function create_kontakt_image($id = 0, $size = 'person-thumb-page-v3', $class = '', $defaultimage = false, $showlink = false, $linkttitle = '', $showcaption = true) {
+    public static function create_kontakt_image($id = 0, $size = 'person-thumb-page-v3', $class = '', $defaultimage = false, $showlink = false, $linkttitle = '', $showcaption = true, $linktarget = '') {
 	if ($id==0) {
 	    return;
 	}
@@ -288,7 +288,11 @@ class Data {
 
 	$imagedata['alt'] = $alttext;
 	if ($showlink) {
-	    $targetlink = get_permalink($id);
+	    if ((!empty($linktarget)) && (!empty(esc_url($linktarget)))) {
+		$targetlink = $linktarget;
+	    } else {
+		$targetlink = get_permalink($id);
+	    }
 	}
 	
 	
@@ -763,8 +767,18 @@ class Data {
 
          $content .= '<div class="'.$class.'" itemscope itemtype="http://schema.org/Person">';
 	 
-	if ((isset($display['bild'])) && (!empty($display['bild'])) ) {
-	     $content .= Data::create_kontakt_image($id, 'medium', "person-thumb", true, false,'',false);
+	if ((isset($display['bild'])) && (!empty($display['bild'])) ) { 
+	    $thisurl = '';
+	    if (isset($viewopts['view_card_linkimage']) && $viewopts['view_card_linkimage']==true) {
+		if (isset($data['morelink'])) {    
+		    $thisurl  = $data['morelink'];
+		}
+	    }
+	    if ($thisurl) {
+		$content .= Data::create_kontakt_image($id, 'medium', "person-thumb", true, true, '' ,false, $thisurl);
+	    } else {
+		$content .= Data::create_kontakt_image($id, 'medium', "person-thumb", true, false,'',false);
+	    }
          }   
 	 
          $fullname = Schema::create_Name($data,'name','','a',false,$viewopts);

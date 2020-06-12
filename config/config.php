@@ -421,6 +421,13 @@ function getFields() {
 			'large'  => __( 'Groß (300 Pixel)', 'fau-person' ),		    
 		],
 	    ],
+	     [
+		'name'  => 'view_card_linkimage',
+		'label' => __('Personenbild verlinken', 'fau-person'),
+		'desc'  => __('In der Card-Ansicht auch das Personenbild als Link setzen.', 'fau-person'),
+		'type'  => 'checkbox',
+		'default' => false,
+            ],
 	    [
 		'name'  => 'backend_view_metabox_kontaktlist',
 		'label' => __('Metabox Kontakte', 'fau-person'),
