@@ -1014,7 +1014,7 @@ class Data {
                 $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', 'fau-person') . ': </span><span itemprop="description">' . $data['description'] . '</span></div>' . "\n";
 	    }
 	    
-	    if ((!empty($data['connection_text']) || !empty($data['connection_options']) || !empty($data['connections'])) && $display['ansprechpartner']==true) {
+	    if ((!empty($data['connection_text']) || !empty($data['connection_options']) || !empty($data['connections'])) && isset($display['ansprechpartner']) && $display['ansprechpartner']==true) {
 		$content .= self::fau_person_connection($data['connection_text'], $data['connection_options'], $data['connections'], $hstart);
 	    }
 
