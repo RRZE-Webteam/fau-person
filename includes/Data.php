@@ -34,9 +34,66 @@ class Data {
 	return $viewopt;
     }
     
+    // Get full list of all contacts as array
+    // $filtertype defaults empty = all contacts
+    // $filtertype values: realperson, realmale, realfemale, einrichtung
     
-   
+   public static function get_contact_list($filtertype = '') {
+       $args = array(
+            'post_type' => 'person',
+            'numberposts' => -1,
+            'meta_key' => 'fau_person_typ',
+        );
+       $personlist = get_posts($args);
 
+        if( $personlist ) {  
+            foreach( $personlist as $key => $value) {
+                $personlist[$key] = (array) $personlist[$key];      
+                $name = $personlist[$key]['post_title'];
+		
+		$thistype = get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true );
+		if (!empty($filtertype)) {
+		    if ($thistype != $filtertype) {
+			continue;
+		    }
+		}
+                switch ( $thistype ) {
+                    case 'realperson':
+                    case 'realmale':
+                    case 'realfemale':
+                        if ( get_post_meta( $personlist[$key]['ID'], 'fau_person_familyName', true ) ) {
+                            $lastname = get_post_meta( $personlist[$key]['ID'], 'fau_person_familyName', true );
+                            if ( get_post_meta( $personlist[$key]['ID'], 'fau_person_givenName', true ) ) {
+                                $name = $lastname . ', ' . get_post_meta( $personlist[$key]['ID'], 'fau_person_givenName', true );
+                            } elseif ( ltrim( strpos( $name, $lastname ) ) ) {
+                                $name = $lastname . ', ' . ltrim( str_replace( $lastname, '', $name ) );
+                            } else {
+                                $name = $lastname;
+                            }
+                        } else {
+                            if( ltrim( strpos( $name, ' ' ) ) ) {
+                                $lastname = ltrim( strrchr( $name, ' ' ) );
+                                $firstname = ltrim( str_replace( $lastname, '', $name ) );
+                                $name = $lastname . ', ' . $firstname;
+                            }                           
+                        } 
+                        break;
+                    default:
+                        break;
+                }   
+                $temp[ $personlist[$key]['ID'] ] = $name; 
+            }
+            natcasesort($temp);     
+
+            foreach( $temp as $key => $value ) {
+                $contactselect[$key] = $value;
+            }
+
+        } 
+        return $contactselect;  
+   }
+
+   
     public static function get_contactdata( $connection=0 ) {            
         $args = array(
             'post_type' => 'person',
@@ -318,11 +375,9 @@ class Data {
 	    
          }  elseif ($defaultimage) {
 	    $type = get_post_meta($id, 'fau_person_typ', true);
-	    if (defined(PLUGIN_FILE)) {
-		     $pluginfile = PLUGIN_FILE;
-	    } else {
-	        $pluginfile = __DIR__;
-	    }
+
+	     $pluginfile = __DIR__;
+
 	    if ($type == 'realmale') {
 		$bild = plugin_dir_url($pluginfile) . 'images/platzhalter-mann.png';
 	    } elseif ($type == 'realfemale') {
