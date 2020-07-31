@@ -224,13 +224,17 @@ class Kontakt extends Taxonomy {
  
 	$post_type = $query->query['post_type'];
          if ($post_type == 'person') {
+	     
+	     /*
 	    $admin_posts_per_page = 25;	
 	    if (isset($this->settings->constants) && isset($this->settings->constants['admin_posts_per_page'])) {
 		$admin_posts_per_page = $this->settings->constants['admin_posts_per_page'];
 	    }
 	    $orderby = $query->get( 'orderby' );
 
-	    $query->set( 'posts_per_page', $admin_posts_per_page );
+	  //  $query->set( 'posts_per_page', $admin_posts_per_page );
+	      */
+
 	    if (!isset($query->query['orderby'])) {
                     $query->set('orderby', 'title');
                     $query->set('order', 'ASC');
