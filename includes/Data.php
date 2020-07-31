@@ -12,7 +12,7 @@ class Data {
     
     
     private static function get_viewsettings($lookup = 'constants') {
-	$settings = new Settings(PLUGIN_FILE);
+	$settings = new Settings(__DIR__);
 	$settings->onLoaded();
 	$options = $settings->options;
 	    
