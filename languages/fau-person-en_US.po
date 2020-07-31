@@ -3,9 +3,9 @@ msgstr ""
 "Project-Id-Version: FAU-Person\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-27 14:09+0000\n"
-"PO-Revision-Date: 2020-04-27 14:21+0000\n"
+"PO-Revision-Date: 2020-07-31 11:02+0000\n"
 "Last-Translator: Wolfgang Wiese <wolfgang.wiese@fau.de>\n"
-"Language-Team: English (US)\n"
+"Language-Team: English (United States)\n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Poedit-SearchPath-0: ..\n"
-"X-Loco-Version: 2.3.3; wp-5.4"
+"X-Loco-Version: 2.4.0; wp-5.4.2"
 
 #: fau-person.php:70
 msgid ""
@@ -1238,7 +1238,7 @@ msgstr "Daily"
 
 #: vendor/UnivIS/Data.php:291
 msgid "Jede Woche"
-msgstr "Each weak"
+msgstr "Each week"
 
 #: vendor/UnivIS/Data.php:292
 msgid "Alle zwei Wochen"
