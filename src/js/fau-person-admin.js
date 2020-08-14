@@ -4,7 +4,7 @@
 jQuery(document).ready(function($){
 
     $('#fau_person_showhint').hide();
-    $('#fau_person_contactselect').live('change', function(){
+    $(document).on('change', '#fau_person_contactselect', function(){
 	 
 	var value = $('#fau_person_contactselect').val();
 	var shortcode = '[kontakt id="' + value + '"]';
