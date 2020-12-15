@@ -465,7 +465,7 @@ class Kontakt extends Shortcodes {
             'editor_script' => $editor_script,
             'editor_style' => $editor_style,
             'style' => $theme_style,
-            'render_callback' => [$this, 'shortcodeOutput'],
+            'render_callback' => [$this, 'shortcode_kontakt'],
             'attributes' => $this->settings,
             ) 
         );

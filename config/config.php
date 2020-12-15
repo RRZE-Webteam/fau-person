@@ -503,7 +503,7 @@ function getShortcodeSettings(){
                 'blockname' => 'kontakt',
                 'title' => 'RRZE Kontakt',
                 'category' => 'widgets',
-                'icon' => 'admin-users',
+                'icon' => 'id',
                 'show_block' => 'content', // 'right' or 'content' 
             ],        
         'id' => [
@@ -609,6 +609,14 @@ function getShortcodeSettings(){
 		],
 	    ],
 	    'kontaktliste' => [
+            'block' => [
+                'blocktype' => 'fau-person/kontaktliste', 
+                'blockname' => 'kontaktliste',
+                'title' => 'RRZE Kontaktliste',
+                'category' => 'widgets',
+                'icon' => 'id-alt',
+                'show_block' => 'content', // 'right' or 'content' 
+            ],        
 	       'category' => [
 			'default' => '',
 			'field_type' => 'text', 
@@ -698,6 +706,15 @@ function getShortcodeSettings(){
 
 	    ],
 	    'standort' => [
+            'block' => [
+                'blocktype' => 'fau-person/standort', 
+                'blockname' => 'standort',
+                'title' => 'RRZE Standort',
+                'category' => 'widgets',
+                'icon' => 'location-alt',
+                'show_block' => 'content', // 'right' or 'content' 
+            ],        
+
 		'id' => [
 		    'default' => 0,
 		    'label' => __( 'Id-Number des Standorteintrags', 'fau-person' ),
