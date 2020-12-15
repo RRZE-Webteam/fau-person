@@ -424,6 +424,59 @@ class Kontakt extends Shortcodes {
     }
 
 
+    public function fillGutenbergOptions() {
+        // 2DO:
+        // fill select Slug
+        // fill select Kategorie
+        // $this->settings['kontakt']
+
+
+        // // fill selects "category" and "tag"
+        // $fields = array( 'category', 'tag' );
+        // foreach ( $fields as $field ) {
+        //     // set new params for gutenberg / the old ones are used for shortcode in classic editor
+        //     $this->settings[$field]['values'] = array();
+        //     $this->settings[$field]['field_type'] = 'multi_select';
+        //     $this->settings[$field]['default'] = array('');
+        //     $this->settings[$field]['type'] = 'array';
+        //     $this->settings[$field]['items'] = array( 'type' => 'string' );
+        //     $this->settings[$field]['values'][0] = __( '-- all --', 'rrze-glossary' );
+
+        //     // get categories and tags from this website
+        //     $terms = get_terms([
+        //         'taxonomy' => 'glossary_' . $field,
+        //         'hide_empty' => TRUE,
+        //         'orderby' => 'name',
+        //         'order' => 'ASC'
+        //         ]);
+
+
+        //     foreach ( $terms as $term ){
+        //         $this->settings[$field]['values'][$term->slug] = $term->name;
+        //     }
+        // }
+
+        // // fill select id ( = glossary )
+        // $registers = get_posts( array(
+        //     'posts_per_page'  => -1,
+        //     'post_type' => 'glossary',
+        //     'orderby' => 'title',
+        //     'order' => 'ASC'
+        // ));
+
+        // $this->settings['id']['field_type'] = 'multi_select';
+        // $this->settings['id']['default'] = array('');
+        // $this->settings['id']['type'] = 'array';
+        // $this->settings['id']['items'] = array( 'type' => 'number' );
+        // $this->settings['id']['values'][0] = __( '-- all --', 'rrze-glossary' );
+        // foreach ( $registers as $register){
+        //     $this->settings['id']['values'][$register->ID] = str_replace( "'", "", str_replace( '"', "", $register->post_title ) );
+        // }
+
+        return $this->settings['kontakt'];
+    }
+
+
     public function initGutenberg() {
         if ( ! function_exists( 'register_block_type' ) ) {
             return;        
@@ -437,6 +490,8 @@ class Kontakt extends Shortcodes {
                 return;
             }
         }
+
+        $this->settings['kontakt'] = $this->fillGutenbergOptions();
 
         $js = '../../js/gutenberg.js';
         $editor_script = $this->settings['kontakt']['block']['blockname'] . '-blockJS';
