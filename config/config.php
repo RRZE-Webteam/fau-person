@@ -498,7 +498,15 @@ function getShortcodeDefaults($field = ''){
 function getShortcodeSettings(){
     return [
 	    'kontakt' => [
-	       'id' => [
+            'block' => [
+                'blocktype' => 'fau-person/kontakt', 
+                'blockname' => 'kontakt',
+                'title' => 'RRZE Kontakt',
+                'category' => 'widgets',
+                'icon' => 'admin-users',
+                'show_block' => 'content', // 'right' or 'content' 
+            ],        
+        'id' => [
 		    'default' => 0,
 		    'label' => __( 'Id-Number des Kontakteintrags', 'fau-person' ),
 		    'message' => __( 'Nummer der Eintrags der Kontaktliste im Backend. Nicht identisch mit einer optionalen UnivIS-Nummer.', 'fau-person' ), 
