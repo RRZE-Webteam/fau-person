@@ -513,7 +513,7 @@ function getShortcodeSettings(){
             'default' => 0,
             'label' => __( 'Id-Number des Kontakteintrags', 'fau-person' ),
             'message' => __( 'Nummer der Eintrags der Kontaktliste im Backend. Nicht identisch mit einer optionalen UnivIS-Nummer.', 'fau-person' ), 
-           'field_type' => 'text',
+            'field_type' => 'text',
             'type' => 'number'
            ],
 		'slug' => [
@@ -722,8 +722,8 @@ function getShortcodeSettings(){
 		    'default' => 0,
 		    'label' => __( 'Id-Number des Standorteintrags', 'fau-person' ),
 		    'message' => __( 'Nummer der Eintrags im Backend.', 'fau-person' ), 
-		   'field_type' => 'number',
-		    'type' => 'key'
+            'field_type' => 'text',
+            'type' => 'number'
 	       ],
 		'slug' => [
 			'default' => '',

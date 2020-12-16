@@ -54,8 +54,6 @@ class Kontakt extends Shortcodes {
     	if (isset($arguments['slug'])) {
     	    $slug =  $arguments['slug'];
     	}
-        
-        // return json_encode($atts);
 
         if (empty($id)) {
     	    if (empty($slug)) {
