@@ -477,15 +477,17 @@ function get_all_image_sizes() {
  */
 function getShortcodeDefaults($field = ''){
     if (empty($field)) {
-	return;
+	    return;
     }
     $settings = getShortcodeSettings();
     if (!isset($settings[$field])) {
-	return;
+	    return;
     }
     $res = array();
     foreach ($settings[$field] as $fieldname => $value ) {
-	$res[$fieldname] = $value['default'];
+       if (isset($value['default'])){
+           $res[$fieldname] = $value['default'];
+       }
     }
     return $res;
 }
@@ -494,6 +496,7 @@ function getShortcodeDefaults($field = ''){
  * Gibt die Einstellungen der Parameter für Shortcode für den klassischen Editor und für Gutenberg zurück.
  * @return array [description]
  */
+
 
 function getShortcodeSettings(){
     return [
@@ -507,12 +510,12 @@ function getShortcodeSettings(){
                 'show_block' => 'content', // 'right' or 'content' 
             ],        
         'id' => [
-		    'default' => 0,
-		    'label' => __( 'Id-Number des Kontakteintrags', 'fau-person' ),
-		    'message' => __( 'Nummer der Eintrags der Kontaktliste im Backend. Nicht identisch mit einer optionalen UnivIS-Nummer.', 'fau-person' ), 
-		   'field_type' => 'number',
-		    'type' => 'key'
-	       ],
+            'default' => 0,
+            'label' => __( 'Id-Number des Kontakteintrags', 'fau-person' ),
+            'message' => __( 'Nummer der Eintrags der Kontaktliste im Backend. Nicht identisch mit einer optionalen UnivIS-Nummer.', 'fau-person' ), 
+           'field_type' => 'text',
+            'type' => 'number'
+           ],
 		'slug' => [
 			'default' => '',
 			'field_type' => 'text', // Art des Feldes im Gutenberg Editor

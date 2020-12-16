@@ -18,7 +18,8 @@ class Kontakt extends Shortcodes {
     
     public function __construct($pluginFile, $settings) {
     	$this->pluginFile = $pluginFile;
-    	$this->settings = getShortcodeSettings();
+        $this->settings = getShortcodeSettings();
+        $this->settings = $this->settings['kontakt'];
         add_action( 'init', [$this, 'initGutenberg'] );
     }
 
@@ -53,8 +54,10 @@ class Kontakt extends Shortcodes {
     	if (isset($arguments['slug'])) {
     	    $slug =  $arguments['slug'];
     	}
-    	
-    	if (empty($id)) {
+        
+        // return json_encode($atts);
+
+        if (empty($id)) {
     	    if (empty($slug)) {
     		return '<div class="alert alert-danger">' . sprintf(__('Bitte geben Sie den Titel oder die ID des Kontakteintrags an.', 'fau-person'), $slug) . '</div>';
     	    } else {
@@ -424,56 +427,36 @@ class Kontakt extends Shortcodes {
     }
 
 
+
     public function fillGutenbergOptions() {
-        // 2DO:
-        // fill select Slug
-        // fill select Kategorie
-        // $this->settings['kontakt']
+        // we don't need slug because we have id
+        unset($this->settings['slug']);
 
+        // fill select "id"
+        $this->settings['id']['field_type'] = 'select';
+        $this->settings['id']['default'] = 0;
+        $this->settings['id']['type'] = 'text';
+        $this->settings['id']['items'] = array( 'type' => 'text' );
+        $this->settings['id']['values'][0] = __( '-- all --', 'fau-person' );
 
-        // // fill selects "category" and "tag"
-        // $fields = array( 'category', 'tag' );
-        // foreach ( $fields as $field ) {
-        //     // set new params for gutenberg / the old ones are used for shortcode in classic editor
-        //     $this->settings[$field]['values'] = array();
-        //     $this->settings[$field]['field_type'] = 'multi_select';
-        //     $this->settings[$field]['default'] = array('');
-        //     $this->settings[$field]['type'] = 'array';
-        //     $this->settings[$field]['items'] = array( 'type' => 'string' );
-        //     $this->settings[$field]['values'][0] = __( '-- all --', 'rrze-glossary' );
+        $aPerson = get_posts( array('posts_per_page'  => -1, 'post_type' => 'person', 'orderby' => 'title', 'order' => 'ASC'));
+        foreach ($aPerson as $person){
+            $this->settings['id']['values'][$person->ID] = str_replace( "'", "", str_replace( '"', "", $person->post_title ) );
+        }
 
-        //     // get categories and tags from this website
-        //     $terms = get_terms([
-        //         'taxonomy' => 'glossary_' . $field,
-        //         'hide_empty' => TRUE,
-        //         'orderby' => 'name',
-        //         'order' => 'ASC'
-        //         ]);
+        // fill select "category"
+        $this->settings['category']['field_type'] = 'select';
+        $this->settings['category']['default'] = 0;
+        $this->settings['category']['type'] = 'text';
+        $this->settings['category']['items'] = array( 'type' => 'text' );
+        $this->settings['category']['values'][0] = __( '-- all --', 'fau-person' );
 
+        $aTerms = get_terms(array('taxonomy' => 'persons_category', 'hide_empty' => false,));
+        foreach ($aTerms as $term){
+            $this->settings['category']['values'][$term->slug] = html_entity_decode($term->name);
+        }
 
-        //     foreach ( $terms as $term ){
-        //         $this->settings[$field]['values'][$term->slug] = $term->name;
-        //     }
-        // }
-
-        // // fill select id ( = glossary )
-        // $registers = get_posts( array(
-        //     'posts_per_page'  => -1,
-        //     'post_type' => 'glossary',
-        //     'orderby' => 'title',
-        //     'order' => 'ASC'
-        // ));
-
-        // $this->settings['id']['field_type'] = 'multi_select';
-        // $this->settings['id']['default'] = array('');
-        // $this->settings['id']['type'] = 'array';
-        // $this->settings['id']['items'] = array( 'type' => 'number' );
-        // $this->settings['id']['values'][0] = __( '-- all --', 'rrze-glossary' );
-        // foreach ( $registers as $register){
-        //     $this->settings['id']['values'][$register->ID] = str_replace( "'", "", str_replace( '"', "", $register->post_title ) );
-        // }
-
-        return $this->settings['kontakt'];
+        return $this->settings;
     }
 
 
@@ -491,10 +474,10 @@ class Kontakt extends Shortcodes {
             }
         }
 
-        $this->settings['kontakt'] = $this->fillGutenbergOptions();
+        $this->settings = $this->fillGutenbergOptions();
 
         $js = '../../js/gutenberg.js';
-        $editor_script = $this->settings['kontakt']['block']['blockname'] . '-blockJS';
+        $editor_script = $this->settings['block']['blockname'] . '-blockJS';
 
         wp_register_script(
             $editor_script,
@@ -508,7 +491,7 @@ class Kontakt extends Shortcodes {
             ),
             filemtime( dirname( __FILE__ ) . '/' . $js )
         );
-        wp_localize_script( $editor_script, 'blockname', $this->settings['kontakt']['block']['blockname'] );
+        wp_localize_script( $editor_script, 'blockname', $this->settings['block']['blockname'] );
 
         $theme_style = 'theme-css';
         wp_register_style($theme_style, get_template_directory_uri() . '/style.css', array('wp-editor'), null);
@@ -516,7 +499,7 @@ class Kontakt extends Shortcodes {
         $editor_style = 'plugin-css';
         wp_register_style($editor_style, plugins_url('../../css/gutenberg.css', __FILE__ ));
 
-        register_block_type( $this->settings['kontakt']['block']['blocktype'], array(
+        register_block_type( $this->settings['block']['blocktype'], array(
             'editor_script' => $editor_script,
             'editor_style' => $editor_style,
             'style' => $theme_style,
@@ -525,7 +508,7 @@ class Kontakt extends Shortcodes {
             ) 
         );
 
-        wp_localize_script( $editor_script, $this->settings['kontakt']['block']['blockname'] . 'Config', $this->settings['kontakt'] );
+        wp_localize_script( $editor_script, $this->settings['block']['blockname'] . 'Config', $this->settings );
     }
 
 
