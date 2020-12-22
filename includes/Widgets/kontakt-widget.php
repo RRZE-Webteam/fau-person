@@ -65,15 +65,23 @@ if (!class_exists('FAUPersonWidget')) {
 	    $id = empty($instance['id']) ? ' ' : $instance['id'];
 	    $title = empty($instance['title']) ? '' : $instance['title'];
 
-	    $hstart = 3;
 	    if (isset($title) && (!empty($title))) {
-		echo '<h' . ($hstart-1) . '>' . $title . '</h' . ($hstart-1) . '>' . "\n";
+		echo $before_title. $title . $after_title . "\n";
 	    }
- 
+	    
 
 	    $displayfield = Data::get_display_field('sidebar');
+	    $args['hstart'] = 2;
+	    if (isset($before_title)) {
+		preg_match("/<h(\d+)>/", $before_title,  $matches);
+		if (isset($matches[1])) {
+		    $starth = intval($matches[1]) + 1;
+		    $args['hstart'] = $starth;
+		} 
+	    }
+	  
 	    
-	    echo FAU_Person\Data::fau_person_sidebar($id, $displayfield);
+	    echo Data::fau_person_sidebar($id, $displayfield, $args);
 	    echo $after_widget;
 	}
 
