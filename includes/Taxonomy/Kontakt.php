@@ -234,11 +234,15 @@ class Kontakt extends Taxonomy {
 
 	  //  $query->set( 'posts_per_page', $admin_posts_per_page );
 	      */
+	  
 
 	    if (!isset($query->query['orderby'])) {
                     $query->set('orderby', 'title');
                     $query->set('order', 'ASC');
-             }
+		$orderby = 'title';
+             } else {
+		$orderby = $query->query['orderby'];
+	     }
 		
 	    if( 'source' == $orderby ) {
 		$query->set('orderby','meta_value'); 

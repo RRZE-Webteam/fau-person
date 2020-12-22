@@ -102,7 +102,7 @@ class Sanitizer {
             if ( $modtime[0] != 12 ) {
                 $modtime[0] = $modtime[0] + 12;
             }                
-            $time = implode( $modtime, ':' );
+            $time = implode( ':', $modtime );
         } elseif ( strpos( $time, 'AM' ) ) {
             $time = str_replace( '12:', '00:', $time);
             $time = rtrim( $time, ' AM');            

@@ -477,15 +477,17 @@ function get_all_image_sizes() {
  */
 function getShortcodeDefaults($field = ''){
     if (empty($field)) {
-	return;
+	    return;
     }
     $settings = getShortcodeSettings();
     if (!isset($settings[$field])) {
-	return;
+	    return;
     }
     $res = array();
     foreach ($settings[$field] as $fieldname => $value ) {
-	$res[$fieldname] = $value['default'];
+       if (isset($value['default'])){
+           $res[$fieldname] = $value['default'];
+       }
     }
     return $res;
 }
@@ -495,16 +497,25 @@ function getShortcodeDefaults($field = ''){
  * @return array [description]
  */
 
+
 function getShortcodeSettings(){
     return [
 	    'kontakt' => [
-	       'id' => [
-		    'default' => 0,
-		    'label' => __( 'Id-Number des Kontakteintrags', 'fau-person' ),
-		    'message' => __( 'Nummer der Eintrags der Kontaktliste im Backend. Nicht identisch mit einer optionalen UnivIS-Nummer.', 'fau-person' ), 
-		   'field_type' => 'number',
-		    'type' => 'key'
-	       ],
+            'block' => [
+                'blocktype' => 'fau-person/kontakt', 
+                'blockname' => 'kontakt',
+                'title' => 'RRZE Kontakt',
+                'category' => 'widgets',
+                'icon' => 'id',
+                'show_block' => 'content', // 'right' or 'content' 
+            ],        
+        'id' => [
+            'default' => 0,
+            'label' => __( 'Id-Number des Kontakteintrags', 'fau-person' ),
+            'message' => __( 'Nummer der Eintrags der Kontaktliste im Backend. Nicht identisch mit einer optionalen UnivIS-Nummer.', 'fau-person' ), 
+            'field_type' => 'text',
+            'type' => 'number'
+           ],
 		'slug' => [
 			'default' => '',
 			'field_type' => 'text', // Art des Feldes im Gutenberg Editor
@@ -601,6 +612,14 @@ function getShortcodeSettings(){
 		],
 	    ],
 	    'kontaktliste' => [
+            'block' => [
+                'blocktype' => 'fau-person/kontaktliste', 
+                'blockname' => 'kontaktliste',
+                'title' => 'RRZE Kontaktliste',
+                'category' => 'widgets',
+                'icon' => 'id-alt',
+                'show_block' => 'content', // 'right' or 'content' 
+            ],        
 	       'category' => [
 			'default' => '',
 			'field_type' => 'text', 
@@ -690,12 +709,21 @@ function getShortcodeSettings(){
 
 	    ],
 	    'standort' => [
+            'block' => [
+                'blocktype' => 'fau-person/standort', 
+                'blockname' => 'standort',
+                'title' => 'RRZE Standort',
+                'category' => 'widgets',
+                'icon' => 'location-alt',
+                'show_block' => 'content', // 'right' or 'content' 
+            ],        
+
 		'id' => [
 		    'default' => 0,
 		    'label' => __( 'Id-Number des Standorteintrags', 'fau-person' ),
 		    'message' => __( 'Nummer der Eintrags im Backend.', 'fau-person' ), 
-		   'field_type' => 'number',
-		    'type' => 'key'
+            'field_type' => 'text',
+            'type' => 'number'
 	       ],
 		'slug' => [
 			'default' => '',

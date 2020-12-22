@@ -15,19 +15,19 @@ defined('ABSPATH') || exit;
 class Kontakt extends Shortcodes {
     public $pluginFile = '';
     private $settings = '';
-    private $shortcodesettings = '';
     
     public function __construct($pluginFile, $settings) {
-	$this->pluginFile = $pluginFile;
-	$this->settings = $settings;	
-	$this->shortcodesettings = getShortcodeSettings();
+    	$this->pluginFile = $pluginFile;
+        $this->settings = getShortcodeSettings();
+        $this->settings = $this->settings['kontakt'];
+        add_action( 'init', [$this, 'initGutenberg'] );
     }
 
     public function onLoaded() {	
-	add_shortcode('kontakt', [$this, 'shortcode_kontakt'], 10, 2);
-	add_shortcode('person', [$this, 'shortcode_kontakt'], 10, 2);
-	add_shortcode('kontaktliste', [$this, 'shortcode_kontaktListe'], 10, 2);
-	add_shortcode('persons', [$this, 'shortcode_kontaktListe'], 10, 2);
+    	add_shortcode('kontakt', [$this, 'shortcode_kontakt'], 10, 2);
+    	add_shortcode('person', [$this, 'shortcode_kontakt'], 10, 2);
+    	add_shortcode('kontaktliste', [$this, 'shortcode_kontaktListe'], 10, 2);
+    	add_shortcode('persons', [$this, 'shortcode_kontaktListe'], 10, 2);
     }
     
     
@@ -35,85 +35,85 @@ class Kontakt extends Shortcodes {
     
     
     public static function shortcode_kontakt($atts, $content = null) {
-	$defaults = getShortcodeDefaults('kontakt');
-	$arguments = shortcode_atts($defaults, $atts);
-	$arguments = self::translate_parameters($arguments);
-	$displayfield = Data::get_display_field($arguments['format'],$arguments['show'],$arguments['hide']);
-	
-	// extract(shortcode_atts($defaults, $atts));
+    	$defaults = getShortcodeDefaults('kontakt');
+    	$arguments = shortcode_atts($defaults, $atts);
+    	$arguments = self::translate_parameters($arguments);
+    	$displayfield = Data::get_display_field($arguments['format'],$arguments['show'],$arguments['hide']);
+    	
+    	// extract(shortcode_atts($defaults, $atts));
 	
          if ((isset($arguments['category'])) && (!empty($arguments['category']))) {
             return self::shortcode_kontaktListe($atts, $content);
          } 
 	 
          $id = 0;
-	if (isset($arguments['id'])) {
-	    $id =  $arguments['id'];
-	}
-	$slug = '';
-	if (isset($arguments['slug'])) {
-	    $slug =  $arguments['slug'];
-	}
-	
-	if (empty($id)) {
-	    if (empty($slug)) {
-		return '<div class="alert alert-danger">' . sprintf(__('Bitte geben Sie den Titel oder die ID des Kontakteintrags an.', 'fau-person'), $slug) . '</div>';
-	    } else {
-		$posts = get_posts(array('name' => $slug, 'post_type' => 'person', 'post_status' => 'publish'));
-		if ($posts) {
-		    $post = $posts[0];
-		    $id = $post->ID;
-		} else {
-		    return '<div class="alert alert-danger">' . sprintf(__('Es konnte kein Kontakteintrag mit dem angegebenen Titel %s gefunden werden. Versuchen Sie statt dessen die Angabe der ID des Kontakteintrags.', 'fau-person'), $slug) . '</div>';
-		}
-	    }
-	}
+    	if (isset($arguments['id'])) {
+    	    $id =  $arguments['id'];
+    	}
+    	$slug = '';
+    	if (isset($arguments['slug'])) {
+    	    $slug =  $arguments['slug'];
+    	}
 
-            if (!empty($id)) {
-		Main::enqueueForeignThemes();
-			
-		$class = 'fau-person';
-		if ($arguments['class']) {
-		    $class .= ' '.esc_attr($arguments['class']);
-		}
-		if (isset($displayfield['border'])) {
-		    if ($displayfield['border']) {
-			$class .= ' border';
-		    } else {
-			$class .= ' noborder';
-		    }
+        if (empty($id)) {
+    	    if (empty($slug)) {
+    		return '<div class="alert alert-danger">' . sprintf(__('Bitte geben Sie den Titel oder die ID des Kontakteintrags an.', 'fau-person'), $slug) . '</div>';
+    	    } else {
+    		$posts = get_posts(array('name' => $slug, 'post_type' => 'person', 'post_status' => 'publish'));
+    		if ($posts) {
+    		    $post = $posts[0];
+    		    $id = $post->ID;
+    		} else {
+    		    return '<div class="alert alert-danger">' . sprintf(__('Es konnte kein Kontakteintrag mit dem angegebenen Titel %s gefunden werden. Versuchen Sie statt dessen die Angabe der ID des Kontakteintrags.', 'fau-person'), $slug) . '</div>';
     		}
-		if (isset($arguments['background']) && (!empty($arguments['background']))) {
-		    $bg_array = array('grau', 'fau', 'phil', 'med', 'nat', 'tf', 'rw');
-		    if (in_array($arguments['background'], $bg_array)) {
-			$class .=' background-' . esc_attr($arguments['background']);
-		    }
-		}
-		$format = '';
-		if (isset($arguments['format'])) {
-		    $format = $arguments['format'];
-		}
-		
-		switch($format) {
-		    case 'table':
-			$content = '<table class="'.$class.'">';
-			break;
-		    case 'name':
-		    case 'shortlist':
-			$class .= ' person liste-person';
-			$content = '<span class="'.$class.'">';
-			break;
-		    case 'liste':
-			$class .= ' person liste-person';
-			$content = '<ul class="'.$class.'">';
-			break;
-		    case 'card':
-			$class .= ' person-card';
-			$content = '<div class="'.$class.'">';
-			break;
-		    default:
-			$content = '';
-		}
+    	    }
+    	}
+
+        if (!empty($id)) {
+    		Main::enqueueForeignThemes();
+    			
+    		$class = 'fau-person';
+    		if ($arguments['class']) {
+    		    $class .= ' '.esc_attr($arguments['class']);
+    		}
+    		if (isset($displayfield['border'])) {
+    		    if ($displayfield['border']) {
+    			$class .= ' border';
+    		    } else {
+    			$class .= ' noborder';
+    		    }
+        		}
+    		if (isset($arguments['background']) && (!empty($arguments['background']))) {
+    		    $bg_array = array('grau', 'fau', 'phil', 'med', 'nat', 'tf', 'rw');
+    		    if (in_array($arguments['background'], $bg_array)) {
+    			$class .=' background-' . esc_attr($arguments['background']);
+    		    }
+    		}
+    		$format = '';
+    		if (isset($arguments['format'])) {
+    		    $format = $arguments['format'];
+    		}
+    		
+    		switch($format) {
+    		    case 'table':
+    			$content = '<table class="'.$class.'">';
+    			break;
+    		    case 'name':
+    		    case 'shortlist':
+    			$class .= ' person liste-person';
+    			$content = '<span class="'.$class.'">';
+    			break;
+    		    case 'liste':
+    			$class .= ' person liste-person';
+    			$content = '<ul class="'.$class.'">';
+    			break;
+    		    case 'card':
+    			$class .= ' person-card';
+    			$content = '<div class="'.$class.'">';
+    			break;
+    		    default:
+    			$content = '';
+    		}
 			
 
                 $list_ids = array_map('trim', explode(',', $id));
@@ -423,6 +423,92 @@ class Kontakt extends Shortcodes {
 
 	return $res;
     }
-        
+
+
+
+    public function fillGutenbergOptions() {
+        // we don't need slug because we have id
+        unset($this->settings['slug']);
+
+        // fill select "id"
+        $this->settings['id']['field_type'] = 'select';
+        $this->settings['id']['default'] = 0;
+        $this->settings['id']['type'] = 'text';
+        $this->settings['id']['items'] = array( 'type' => 'text' );
+        $this->settings['id']['values'][0] = __( '-- all --', 'fau-person' );
+
+        $aPerson = get_posts( array('posts_per_page'  => -1, 'post_type' => 'person', 'orderby' => 'title', 'order' => 'ASC'));
+        foreach ($aPerson as $person){
+            $this->settings['id']['values'][$person->ID] = str_replace( "'", "", str_replace( '"', "", $person->post_title ) );
+        }
+
+        // fill select "category"
+        $this->settings['category']['field_type'] = 'select';
+        $this->settings['category']['default'] = 0;
+        $this->settings['category']['type'] = 'text';
+        $this->settings['category']['items'] = array( 'type' => 'text' );
+        $this->settings['category']['values'][0] = __( '-- all --', 'fau-person' );
+
+        $aTerms = get_terms(array('taxonomy' => 'persons_category', 'hide_empty' => false,));
+        foreach ($aTerms as $term){
+            $this->settings['category']['values'][$term->slug] = html_entity_decode($term->name);
+        }
+
+        return $this->settings;
+    }
+
+
+    public function initGutenberg() {
+        if ( ! function_exists( 'register_block_type' ) ) {
+            return;        
+        }
+
+        // check if RRZE-Settings if classic editor is enabled
+        $rrze_settings = (array) get_option( 'rrze_settings' );
+        if ( isset( $rrze_settings['writing'] ) ) {
+            $rrze_settings = (array) $rrze_settings['writing'];
+            if ( isset( $rrze_settings['enable_classic_editor'] ) && $rrze_settings['enable_classic_editor'] ) {
+                return;
+            }
+        }
+
+        $this->settings = $this->fillGutenbergOptions();
+
+        $js = '../../js/gutenberg.js';
+        $editor_script = $this->settings['block']['blockname'] . '-blockJS';
+
+        wp_register_script(
+            $editor_script,
+            plugins_url( $js, __FILE__ ),
+            array(
+                'wp-blocks',
+                'wp-i18n',
+                'wp-element',
+                'wp-components',
+                'wp-editor'
+            ),
+            filemtime( dirname( __FILE__ ) . '/' . $js )
+        );
+        wp_localize_script( $editor_script, 'blockname', $this->settings['block']['blockname'] );
+
+        $theme_style = 'theme-css';
+        wp_register_style($theme_style, get_template_directory_uri() . '/style.css', array('wp-editor'), null);
+
+        $editor_style = 'plugin-css';
+        wp_register_style($editor_style, plugins_url('../../css/gutenberg.css', __FILE__ ));
+
+        register_block_type( $this->settings['block']['blocktype'], array(
+            'editor_script' => $editor_script,
+            'editor_style' => $editor_style,
+            'style' => $theme_style,
+            'render_callback' => [$this, 'shortcode_kontakt'],
+            'attributes' => $this->settings,
+            ) 
+        );
+
+        wp_localize_script( $editor_script, $this->settings['block']['blockname'] . 'Config', $this->settings );
+    }
+
+
 }
 
