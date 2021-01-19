@@ -732,8 +732,7 @@ class Schema {
 	    return;
 	}
 	$url = filter_var($url, FILTER_SANITIZE_URL);
-	$res = strtolower($url);
 
-	return $res;
+	return $url;
     }
 }
