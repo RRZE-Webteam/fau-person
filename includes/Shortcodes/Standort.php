@@ -175,7 +175,7 @@ class Standort extends Shortcodes {
         // fill select "id"
         $this->settings['id']['field_type'] = 'select';
         $this->settings['id']['default'] = 0;
-        $this->settings['id']['type'] = 'text';
+        $this->settings['id']['type'] = 'string';
         $this->settings['id']['items'] = array( 'type' => 'text' );
         $this->settings['id']['values'] = array();
         $this->settings['id']['values'][] = ['id' => 0, 'val' => __( '-- all --', 'fau-person' )];
@@ -204,20 +204,6 @@ class Standort extends Shortcodes {
                 return;
             }
         }
-
-        // include gutenberg lib
-        wp_enqueue_script(
-            'RRZE-Gutenberg',
-            plugins_url( '../../js/gutenberg.js', __FILE__ ),
-            array(
-                'wp-blocks',
-                'wp-i18n',
-                'wp-element',
-                'wp-components',
-                'wp-editor'
-            ),
-            NULL
-        );
 
         // get prefills for dropdowns
         $this->settings = $this->fillGutenbergOptions();

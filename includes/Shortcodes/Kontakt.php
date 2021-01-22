@@ -434,7 +434,7 @@ class Kontakt extends Shortcodes {
         // fill select "id"
         $this->settings['id']['field_type'] = 'select';
         $this->settings['id']['default'] = '';
-        $this->settings['id']['type'] = 'text';
+        $this->settings['id']['type'] = 'string';
         $this->settings['id']['items'] = array( 'type' => 'text' );
         $this->settings['id']['values'] = array();
         $this->settings['id']['values'][] = ['id' => '', 'val' => __( '-- all --', 'fau-person' )];
@@ -450,7 +450,7 @@ class Kontakt extends Shortcodes {
         // fill select "category"
         $this->settings['category']['field_type'] = 'select';
         $this->settings['category']['default'] = '';
-        $this->settings['category']['type'] = 'text';
+        $this->settings['category']['type'] = 'string';
         $this->settings['category']['items'] = array( 'type' => 'text' );
         $this->settings['category']['values'] = array();
         $this->settings['category']['values'][] = ['id' => '', 'val' => __( '-- all --', 'fau-person' )];
@@ -480,20 +480,6 @@ class Kontakt extends Shortcodes {
                 return;
             }
         }
-
-        // include gutenberg lib
-        wp_enqueue_script(
-            'RRZE-Gutenberg',
-            plugins_url( '../../js/gutenberg.js', __FILE__ ),
-            array(
-                'wp-blocks',
-                'wp-i18n',
-                'wp-element',
-                'wp-components',
-                'wp-editor'
-            ),
-            NULL
-        );
 
         // get prefills for dropdowns
         $this->settings = $this->fillGutenbergOptions();

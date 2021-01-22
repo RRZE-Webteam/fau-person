@@ -532,7 +532,7 @@ function getShortcodeSettings(){
 			'default' => '',
 			'field_type' => 'select',
 			'label' => __( 'Format', 'fau-person' ),
-			'type' => 'text',
+			'type' => 'string',
 			'values' => [
                 [
                     'id' => 'name',
@@ -681,16 +681,16 @@ function getShortcodeSettings(){
             ],        
 	       'category' => [
 			'default' => '',
-			'field_type' => 'text', 
+			'field_type' => 'string', 
 			'label' => __( 'Kategorie', 'fau-person' ),
-			'type' => 'text' // Variablentyp der Eingabe
+			'type' => 'string' // Variablentyp der Eingabe
 		],
 		
 		'format' => [
 			'default' => '',
 			'field_type' => 'select',
 			'label' => __( 'Format', 'fau-person' ),
-			'type' => 'text',
+			'type' => 'string',
 			'values' => [
                 [
                     'id' => 'name',
@@ -845,13 +845,13 @@ function getShortcodeSettings(){
 			'default' => '',
 			'field_type' => 'text', // Art des Feldes im Gutenberg Editor
 			'label' => __( 'Slug (URI) des Kontakteintrags', 'fau-person' ),
-			'type' => 'text' // Variablentyp der Eingabe
+			'type' => 'string' // Variablentyp der Eingabe
 		],
 		'titletag' => [
 			'default' => 'h2',
 			'field_type' => 'text', // Art des Feldes im Gutenberg Editor
 			'label' => __( 'HTML-Element zur Darstellung des Standortnamens', 'fau-person' ),
-			'type' => 'text' // Variablentyp der Eingabe
+			'type' => 'string' // Variablentyp der Eingabe
 		],
 		'adresse' => [
 			'default' => true,
@@ -863,7 +863,7 @@ function getShortcodeSettings(){
 			'default' => '',
 			'field_type' => 'select',
 			'label' => __( 'Format', 'fau-person' ),
-            'type' => 'text',
+            'type' => 'string',
 			'values' => [
                 [
                     'id' => 'name',
