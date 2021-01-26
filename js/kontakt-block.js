@@ -1,1 +1,1 @@
-createBlock(kontaktConfig);
+"use strict";createBlock(kontaktConfig);

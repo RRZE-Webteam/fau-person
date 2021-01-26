@@ -1,1 +1,1 @@
-createBlock(standortConfig);
+"use strict";createBlock(standortConfig);

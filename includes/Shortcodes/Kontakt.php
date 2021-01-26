@@ -437,7 +437,7 @@ class Kontakt extends Shortcodes {
         $this->settings['id']['type'] = 'string';
         $this->settings['id']['items'] = array( 'type' => 'text' );
         $this->settings['id']['values'] = array();
-        $this->settings['id']['values'][] = ['id' => '', 'val' => __( '-- all --', 'fau-person' )];
+        $this->settings['id']['values'][] = ['id' => '', 'val' => __( '-- Alle --', 'fau-person' )];
 
         $aPerson = get_posts( array('posts_per_page'  => -1, 'post_type' => 'person', 'orderby' => 'title', 'order' => 'ASC'));
         foreach ($aPerson as $person){
@@ -453,7 +453,7 @@ class Kontakt extends Shortcodes {
         $this->settings['category']['type'] = 'string';
         $this->settings['category']['items'] = array( 'type' => 'text' );
         $this->settings['category']['values'] = array();
-        $this->settings['category']['values'][] = ['id' => '', 'val' => __( '-- all --', 'fau-person' )];
+        $this->settings['category']['values'][] = ['id' => '', 'val' => __( '-- Alle --', 'fau-person' )];
 
         $aTerms = get_terms(array('taxonomy' => 'persons_category', 'hide_empty' => false,));
         foreach ($aTerms as $term){
