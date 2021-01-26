@@ -201,7 +201,7 @@ class Data {
                     $value = self::sync_standort( $id, $standort_id, $key, $defaults );                     
             } else {
                 if( $defaults ) {
-                    $value = __('<p class="cmb2_metabox_description">[Im Standort ist hierfür kein Wert hinterlegt.]</p>', 'fau-person');     
+                    $value = '<p class="cmb2-metabox-description">'.__('Im Standort ist hierfür kein Wert hinterlegt.', 'fau-person').'</p>';     
                 } elseif ($id) {
                     $value = get_post_meta($id, 'fau_person_'.$key, true);                          
                 }
@@ -259,9 +259,9 @@ class Data {
         //wird benötigt, falls jeder einzelne Wert abgefragt werden soll
         if( $defaults ) {
             if( !empty( $value ) ) {
-                $val = sprintf(__('<p class="cmb2_metabox_description">[Von Standort angezeigter Wert: %s]</p>', 'fau-person'), $value);               
+	        $val = '<p class="cmb2-metabox-description">'.__('Von Standort angezeigter Wert:', 'fau-person').' <code>'.$value.'</code></p>';
             } else {
-                $val = __('<p class="cmb2_metabox_description">[Im Standort ist hierfür kein Wert hinterlegt.]</p>', 'fau-person');
+                $val = '<p class="cmb2-metabox-description">'.__('Im Standort ist hierfür kein Wert hinterlegt.', 'fau-person').'</p>';
             }
         } else {
             if( !empty( $value ) && get_post_meta($id, 'fau_person_standort_sync', true) ) {
@@ -467,8 +467,9 @@ class Data {
 	$data = self::filter_fields($fields, $display);
 
 	
+	
 	$fullname = Schema::create_Name($data,'name','','a',false,$viewopts);
-         $hoursavailable_output  = Schema::create_ContactPoint($data);
+        $hoursavailable_output  = Schema::create_ContactPoint($data);
 
 
 	$class = 'fau-person';
@@ -496,7 +497,7 @@ class Data {
 	}
 	
 	 $content .= '<div class="'.$class.'" itemscope itemtype="http://schema.org/Person">' . "\n";
-
+	
 	     
          if (isset($arguments['format']) && $arguments['format'] =='kompakt') {
     //        $content .= '<div class="compactindex">';
@@ -945,7 +946,7 @@ class Data {
         	if ($id == 0) {
 	    return;
 	}
-         $fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+        $fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
 	$viewopts = self::get_viewsettings();
 	
 
@@ -1011,8 +1012,8 @@ class Data {
 		$data['workLocation'] = $viewopts['view_raum_prefix'].' '.$data['workLocation'];
 	    }
 		
-             $content = '<div class="'.$class.'" itemscope itemtype="http://schema.org/Person">' . "\n";
-             $content .= '<div class="side">';         
+            $content = '<div class="'.$class.'" itemscope itemtype="http://schema.org/Person">' . "\n";
+            $content .= '<div class="side">';         
 	    $content .= '<div class="row">' . "\n";
 	    
 	    if ((isset($display['bild'])) && (!empty($display['bild'])) && (has_post_thumbnail($id) )) {
@@ -1530,7 +1531,7 @@ class Data {
                 $value = UnivIS_Data::sync_univis( $id, $person, $key, $value, $defaults ); 
             } else {
                 if( $defaults ) {
-                    $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', 'fau-person');     
+                    $value = '<p class="cmb2-metabox-description">'. __('In UnivIS ist hierfür kein Wert hinterlegt.', 'fau-person').'</p>';     
                 } else {
                     $value = get_post_meta($id, 'fau_person_'.$key, true);                          
                 }
@@ -1561,7 +1562,7 @@ class Data {
                 }
             } else {
                 if( $defaults ) {
-                    $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', 'fau-person');
+                    $value =  '<p class="cmb2-metabox-description">'. __('In UnivIS ist hierfür kein Wert hinterlegt.', 'fau-person').'</p>';     
                 } else {
                     if($key == 'telephone' || $key == 'faxNumber') {
                         $phone_number = get_post_meta($id, 'fau_person_'.$key, true);
@@ -1604,13 +1605,14 @@ class Data {
                                 array_push($officehours, $officehour);
                             }
                             if ( $defaults ) {
-                                $officehours = implode(',',$officehours);
-                                $officehours = sprintf(__('<p class="cmb_metabox_description">[Aus UnivIS angezeigter Wert: <em>%s</em>]</p>', 'fau-person'), $officehours); 
+                                $value = implode(',',$officehours);
+				$officehours =  '<p class="cmb2-metabox-description">'. __('Aus UnivIS angezeigter Wert:', 'fau-person').' <code>'.$value.'</code></p>';     
                             }
                             break;
                         }  
                     } elseif ( $defaults ) { // in UnivIS stehen keine Sprechzeiten
-                        $officehours = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', 'fau-person');                                                   
+			
+                        $officehours = '<p class="cmb2-metabox-description">'.__('In UnivIS ist hierfür kein Wert hinterlegt.', 'fau-person').'</p>';                                                   
                         break;
                     }                                                              
                 default:  // keine UnivIS-ID da bzw. kein Haken bei Datenanzeige aus UnivIS => die Feldinhalte werden ausgegeben
@@ -1651,7 +1653,7 @@ class Data {
                 $value = UnivIS_Data::sync_univis( $id, $person_orgunits, $key, $i, $defaults );  
             } else {
                 if( $defaults ) {
-                    $value = __('<p class="cmb_metabox_description">[In UnivIS ist hierfür kein Wert hinterlegt.]</p>', 'fau-person');
+                    $value = '<p class="cmb2-metabox-description">'. __('In UnivIS ist hierfür kein Wert hinterlegt.', 'fau-person').'</p>';     
                 } else {
                     $value = get_post_meta($id, 'fau_person_'.$key, true); 
                 }

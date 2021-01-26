@@ -1,0 +1,1 @@
+"use strict";createBlock(standortConfig);

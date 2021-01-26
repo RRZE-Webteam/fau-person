@@ -175,13 +175,17 @@ class Standort extends Shortcodes {
         // fill select "id"
         $this->settings['id']['field_type'] = 'select';
         $this->settings['id']['default'] = 0;
-        $this->settings['id']['type'] = 'text';
+        $this->settings['id']['type'] = 'string';
         $this->settings['id']['items'] = array( 'type' => 'text' );
-        $this->settings['id']['values'][0] = __( '-- all --', 'fau-person' );
+        $this->settings['id']['values'] = array();
+        $this->settings['id']['values'][] = ['id' => 0, 'val' => __( '-- Alle --', 'fau-person' )];
 
         $aPerson = get_posts( array('posts_per_page'  => -1, 'post_type' => 'person', 'orderby' => 'title', 'order' => 'ASC'));
         foreach ($aPerson as $person){
-            $this->settings['id']['values'][$person->ID] = str_replace( "'", "", str_replace( '"', "", $person->post_title ) );
+            $this->settings['id']['values'][] = [
+                'id' => $person->ID,
+                'val' => str_replace( "'", "", str_replace( '"', "", $person->post_title ) )
+            ];
         }
 
         return $this->settings;
@@ -201,42 +205,37 @@ class Standort extends Shortcodes {
             }
         }
 
+        // get prefills for dropdowns
         $this->settings = $this->fillGutenbergOptions();
 
-        $js = '../../js/gutenberg.js';
-        $editor_script = $this->settings['block']['blockname'] . '-blockJS';
+        // register js-script to inject php config to call gutenberg lib
+        $editor_script = $this->settings['block']['blockname'] . '-block';        
+        $js = '../../js/' . $editor_script . '.js';
 
         wp_register_script(
             $editor_script,
             plugins_url( $js, __FILE__ ),
             array(
-                'wp-blocks',
-                'wp-i18n',
-                'wp-element',
-                'wp-components',
-                'wp-editor'
+                'RRZE-Gutenberg',
             ),
-            filemtime( dirname( __FILE__ ) . '/' . $js )
+            NULL
         );
-        wp_localize_script( $editor_script, 'blockname', $this->settings['block']['blockname'] );
+        wp_localize_script( $editor_script, $this->settings['block']['blockname'] . 'Config', $this->settings );
 
+        // register styles
+        $editor_style = 'gutenberg-css';
+        wp_register_style( $editor_style, plugins_url( '../assets/css/gutenberg.css', __FILE__ ) );
         $theme_style = 'theme-css';
         wp_register_style($theme_style, get_template_directory_uri() . '/style.css', array('wp-editor'), null);
 
-        $editor_style = 'plugin-css';
-        wp_register_style($editor_style, plugins_url('../../css/gutenberg.css', __FILE__ ));
-
+        // register block
         register_block_type( $this->settings['block']['blocktype'], array(
             'editor_script' => $editor_script,
             'editor_style' => $editor_style,
             'style' => $theme_style,
             'render_callback' => [$this, 'shortcode_standort'],
-            'attributes' => $this->settings,
+            'attributes' => $this->settings
             ) 
         );
-
-        wp_localize_script( $editor_script, $this->settings['block']['blockname'] . 'Config', $this->settings );
     }
-
 }
-
