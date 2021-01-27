@@ -50,7 +50,7 @@ class Kontakt extends Metaboxes {
 	if($univisdata ) {
 	    $univis_sync = '';
 	} else {
-	    $univis_sync = '<p class="cmb2_metabox_description">' . __('Derzeit sind keine Daten aus UnivIS syncronisiert.', 'fau-person') . '</p>';
+	    $univis_sync = '<p class="cmb2-metabox-description">' . __('Derzeit sind keine Daten aus UnivIS syncronisiert.', 'fau-person') . '</p>';
 	}
 	$standort_default = Data::get_standort_defaults($person_id);  
 	$univis_default = Data::univis_defaults($person_id);  
