@@ -223,16 +223,16 @@ class Standort extends Shortcodes {
         wp_localize_script( $editor_script, $this->settings['block']['blockname'] . 'Config', $this->settings );
 
         // register styles
-        $editor_style = 'gutenberg-css';
-        wp_register_style( $editor_style, plugins_url( '../assets/css/gutenberg.css', __FILE__ ) );
-        $theme_style = 'theme-css';
-        wp_register_style($theme_style, get_template_directory_uri() . '/style.css', array('wp-editor'), null);
+        // $editor_style = 'gutenberg-css';
+        // wp_register_style( $editor_style, plugins_url( '../assets/css/gutenberg.css', __FILE__ ) );
+        // $theme_style = 'theme-css';
+        // wp_register_style($theme_style, get_template_directory_uri() . '/style.css', array('wp-editor'), null);
 
         // register block
         register_block_type( $this->settings['block']['blocktype'], array(
             'editor_script' => $editor_script,
-            'editor_style' => $editor_style,
-            'style' => $theme_style,
+            // 'editor_style' => $editor_style,
+            // 'style' => $theme_style,
             'render_callback' => [$this, 'shortcode_standort'],
             'attributes' => $this->settings
             ) 
