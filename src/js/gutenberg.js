@@ -1,4 +1,4 @@
-edited = false;
+var edited = false;
 
 function createBlock(blockConfig) {
 	const { registerBlockType } = wp.blocks;
