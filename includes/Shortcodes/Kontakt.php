@@ -188,139 +188,148 @@ class Kontakt extends Shortcodes {
     }
 
     public static function shortcode_kontaktListe($atts, $content = null) {
-	$defaults = getShortcodeDefaults('kontaktliste');
-	$arguments = shortcode_atts($defaults, $atts);
-	$arguments = self::translate_parameters($arguments);
-	$displayfield = Data::get_display_field($arguments['format'],$arguments['show'],$arguments['hide']);
-	
-	$id = 0;
-	if (isset($arguments['id'])) {
-	    $id =  $arguments['id'];
-	}
-	$slug = '';
-	if (isset($arguments['slug'])) {
-	    $slug =  $arguments['slug'];
-    }
+
+    	$defaults = getShortcodeDefaults('kontaktliste');
+    	$arguments = shortcode_atts($defaults, $atts);
+    	$arguments = self::translate_parameters($arguments);
+    	$displayfield = Data::get_display_field($arguments['format'],$arguments['show'],$arguments['hide']);
+    	
+    	// $id = 0;
+    	// if (isset($arguments['id'])) {
+    	//     $id =  $arguments['id'];
+    	// }
+    	// $slug = '';
+    	// if (isset($arguments['slug'])) {
+    	//     $slug =  $arguments['slug'];
+        // }
 
 	
-	if (isset($arguments['category'])) {
-	    $category = get_term_by('slug', $arguments['category'], 'persons_category');    
-	    if( is_object( $category ) ) {
-		$posts = get_posts(array('post_type' => 'person', 'post_status' => 'publish', 'numberposts' => 1000, 'orderby' => 'title', 'order' => 'ASC', 'tax_query' => array(
-		    array(
-			'taxonomy' => 'persons_category',
-			'field' => 'id', // can be slug or id - a CPT-onomy term's ID is the same as its post ID
-			'terms' => $category->term_id   // Notice: Trying to get property of non-object bei unbekannter Kategorie
-		    )
-		), 'suppress_filters' => false));
-	    } 
-	}
-        
-    if ( isset( $posts ) ) {
-	    Main::enqueueForeignThemes();
+    	if (isset($arguments['category'])) {
+    	    $category = get_term_by('slug', $arguments['category'], 'persons_category');    
+    	    if( is_object( $category ) ) {
+        		$posts = get_posts(array('post_type' => 'person', 'fields' => 'ids', 'post_status' => 'publish', 'numberposts' => 1000, 'orderby' => 'title', 'order' => 'ASC', 'tax_query' => array(
+        		    array(
+        			'taxonomy' => 'persons_category',
+        			'field' => 'id', // can be slug or id - a CPT-onomy term's ID is the same as its post ID
+        			'terms' => $category->term_id   // Notice: Trying to get property of non-object bei unbekannter Kategorie
+        		    )
+        		), 'suppress_filters' => false));
+    	    } 
+    	}
 
-             $posts = Data::sort_person_posts( $posts, $arguments['sort'], $arguments['order']  );   
-      
-	    $class = 'fau-person';
-	    if ($arguments['class']) {
-		$class .= ' '.esc_attr($arguments['class']);
-	    }
-	    if (isset($displayfield['border'])) {
-		if ($displayfield['border']) {
-		    $class .= ' border';
-		} else {
-		    $class .= ' noborder';
-		}
-	    }
-	    if (isset($arguments['background']) && (!empty($arguments['background']))) {
-		$bg_array = array('grau', 'fau', 'phil', 'med', 'nat', 'tf', 'rw');
-		if (in_array($arguments['background'], $bg_array)) {
-		    $class .=' background-' . esc_attr($arguments['background']);
-		}
-	    }
-	    $format = '';
-	    if (isset($arguments['format'])) {
-	        $format = $arguments['format'];
-	    }
-	    switch($format) {
-		case 'table':
-		       $content = '<table class="'.$class.'">';
-		     break;
-		case 'name':
-		case 'shortlist':
-		    $class .= ' person liste-person';
-		     $content = '<span class="'.$class.'">';
-		     break;
-		case 'liste':
-		    $class .= ' person liste-person';
-		      $content = '<ul class="'.$class.'">';
-		     break;
-		  case 'card':
-		      $class .= ' person-card';
-			$content = '<div class="'.$class.'">';
-			break;
-		 default:
-		     $content = '';
-	    }
-	    $number = count($posts);
-             $i = 1;
 
-            foreach ($posts as $post) {
+        if ( isset( $posts ) ) {
+    	    // Main::enqueueForeignThemes();
+
+            // $posts = Data::sort_person_posts( $posts, $arguments['sort'], $arguments['order']  );   
+
+
+    	    $class = 'fau-person';
+    	    if ($arguments['class']) {
+    		    $class .= ' '.esc_attr($arguments['class']);
+    	    }
+
+    	    if (isset($displayfield['border'])) {
+        		if ($displayfield['border']) {
+        		    $class .= ' border';
+        		} else {
+        		    $class .= ' noborder';
+        		}
+    	    }
+
+    	    if (isset($arguments['background']) && (!empty($arguments['background']))) {
+        		$bg_array = array('grau', 'fau', 'phil', 'med', 'nat', 'tf', 'rw');
+        		if (in_array($arguments['background'], $bg_array)) {
+        		    $class .=' background-' . esc_attr($arguments['background']);
+        		}
+    	    }
+	        $format = '';
+
+    	    if (isset($arguments['format'])) {
+    	        $format = $arguments['format'];
+    	    }
+
+    	    switch($format) {
+        		case 'table':
+        		       $content = '<table class="'.$class.'">';
+        		     break;
+        		case 'name':
+        		case 'shortlist':
+        		    $class .= ' person liste-person';
+        		     $content = '<span class="'.$class.'">';
+        		     break;
+        		case 'liste':
+        		    $class .= ' person liste-person';
+        		      $content = '<ul class="'.$class.'">';
+        		     break;
+        		  case 'card':
+        		      $class .= ' person-card';
+        			$content = '<div class="'.$class.'">';
+        			break;
+        		 default:
+        		     $content = '';
+    	    }
+
+	        $number = count($posts);
+            $i = 1;
+
+            // foreach ($posts as $post) {
+            foreach ($posts as $value) {
                 // Bei Sortierung nach Name ist $posts ein Array
-                 $value = $post['ID'];
-		
-		switch($format) {
-		    case 'liste':
-			$thisentry = Data::fau_person_shortlist($value, $displayfield, $arguments);
-			if (!empty($thisentry)) {
-			    $content .= $thisentry;
-			}
-			break;
-		    case 'name':
-		    case 'shortlist':
-			$thisentry = Data::fau_person_shortlist($value, $displayfield, $arguments);
-			if (!empty($thisentry)) {
-			    $content .= $thisentry;
-			    if ($i < $number) {
-				$content .= ", ";
-			    }
-			}   
-			 break;
-		    
-		    case 'table':
-			$content .= Data::fau_person_tablerow($value, $displayfield, $arguments);
-			break;
-		     case 'page':
-			$content .= Data::fau_person_page($value, $displayfield, $arguments, true);
-			break;
-		    case 'sidebar':
-			$content .= Data::fau_person_sidebar($value, $displayfield,$arguments);
-			break;		    
-		    case 'card':
-			$content .= Data::fau_person_card($value, $displayfield, $arguments);
-			break;
-		    default:
-			$content .= Data::fau_person_markup($value, $displayfield,$arguments);		
-		}
-		$i++;
+                // $value = $post['ID'];
+  		
+        		switch($format) {
+        		    case 'liste':
+            			$thisentry = Data::fau_person_shortlist($value, $displayfield, $arguments);
+            			if (!empty($thisentry)) {
+            			    $content .= $thisentry;
+            			}
+        			    break;
+        		    case 'name':
+        		    case 'shortlist':
+            			$thisentry = Data::fau_person_shortlist($value, $displayfield, $arguments);
+            			if (!empty($thisentry)) {
+            			    $content .= $thisentry;
+            			    if ($i < $number) {
+            				    $content .= ", ";
+            			    }
+            			}   
+        			    break;
+        		    
+        		    case 'table':
+            			$content .= Data::fau_person_tablerow($value, $displayfield, $arguments);
+            			break;
+        		    case 'page':
+            			$content .= Data::fau_person_page($value, $displayfield, $arguments, true);
+            			break;
+        		    case 'sidebar':
+            			$content .= Data::fau_person_sidebar($value, $displayfield,$arguments);
+            			break;		    
+        		    case 'card':
+            			$content .= Data::fau_person_card($value, $displayfield, $arguments);
+            			break;
+        		    default:
+            			$content .= Data::fau_person_markup($value, $displayfield,$arguments);		
+        		}
+        		$i++;
             }
-	    
-	    switch($format) {
-		case 'table':
-		       $content .= '</table>';
-		     break;
-		case 'name':
-		case 'shortlist':
-		     $content .= '</span>';
-		     break;
-		case 'liste':
-		      $content .= '</ul>';
-		     break;
-		case 'card':
-		    $content .= '</div>';
-		    break;
-		default:
-	    } 
+
+    	    switch($format) {
+        		case 'table':
+        		       $content .= '</table>';
+        		     break;
+        		case 'name':
+        		case 'shortlist':
+        		     $content .= '</span>';
+        		     break;
+        		case 'liste':
+        		      $content .= '</ul>';
+        		     break;
+        		case 'card':
+        		    $content .= '</div>';
+        		    break;
+        		default:
+    	    } 
 
         } else {
             if( is_object( $category ) ) {
