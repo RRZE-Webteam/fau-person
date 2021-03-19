@@ -189,9 +189,6 @@ class Kontakt extends Shortcodes {
 
     public static function shortcode_kontaktListe($atts, $content = null) {
 
-        $start = microtime(true); 
-
-
     	$defaults = getShortcodeDefaults('kontaktliste');
     	$arguments = shortcode_atts($defaults, $atts);
     	$arguments = self::translate_parameters($arguments);
@@ -220,14 +217,6 @@ class Kontakt extends Shortcodes {
     	    } 
     	}
 
-        // var_dump($posts);
-        // exit;
-
-
-        $end = microtime(true); 
-        $exec_time = ($end - $start); 
-        $debug = '<br>1: ' . $exec_time;
-        
 
         if ( isset( $posts ) ) {
     	    // Main::enqueueForeignThemes();
@@ -235,10 +224,6 @@ class Kontakt extends Shortcodes {
             // $posts = Data::sort_person_posts( $posts, $arguments['sort'], $arguments['order']  );   
 
 
-            $end = microtime(true); 
-            $exec_time = ($end - $start); 
-            $debug .= '<br>2: ' . $exec_time;
-              
     	    $class = 'fau-person';
     	    if ($arguments['class']) {
     		    $class .= ' '.esc_attr($arguments['class']);
@@ -329,11 +314,6 @@ class Kontakt extends Shortcodes {
         		$i++;
             }
 
-            $end = microtime(true); 
-            $exec_time = ($end - $start); 
-            $debug .= '<br>3: ' . $exec_time;
-    
-	    
     	    switch($format) {
         		case 'table':
         		       $content .= '</table>';
@@ -358,9 +338,6 @@ class Kontakt extends Shortcodes {
                 $content = '<p>' . sprintf(__('Die Kategorie %s konnte leider nicht gefunden werden.', 'fau-person'), $atts['category']) . '</p>';                 
             }
         }
-
-        // echo $debug;
-        // exit;
 
         return $content;
     }
