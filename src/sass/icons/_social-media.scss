@@ -2,6 +2,8 @@
 /* Social Media and Portal Icons 
 /*-----------------------------------------------------------------------------------*/
 
+$socialmedia_icon_size: 1.1rem;
+
 .fau-person {
     .socialmedia {
 	margin: 0;
@@ -25,17 +27,17 @@
 	    }
 	}
 	a {
-	    width: 1.3rem;
-	    height: 1.3rem;
+	    width: $socialmedia_icon_size;
+	    height: $socialmedia_icon_size;
 	    overflow: hidden;
 	    display: inline-block;
 	    
 	    
 	    &:before {
-		width: 1.3rem;
-		height: 1.3rem;
-		line-height: 1.3rem;
-		font-size: 0.9rem;
+		width: $socialmedia_icon_size;
+		height: $socialmedia_icon_size;
+		line-height: $socialmedia_icon_size;
+		font-size: 0.8rem;
 		
 		background-image: svg-bookmark();
 		background-repeat: no-repeat;
