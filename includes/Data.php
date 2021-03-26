@@ -751,7 +751,6 @@ class Data {
             $content .= '</div>';
         }
         $content .= '</div>';
-$content .= Helper::get_html_var_dump($fields);
         return $content;
     }
 
@@ -1415,7 +1414,7 @@ $content .= Helper::get_html_var_dump($fields);
     private static function set_data_cache($id, $data) {
 	if ((isset($id)) && (isset($data))) {	    
 	    $GLOBALS['fau_person_data_cache'][$id] = $data;
-	    error_log( 'Save Data for id '.$id );
+	//    error_log( 'Save Data for id '.$id );
 	    return $GLOBALS['fau_person_data_cache'][$id];
 	}
 	return;

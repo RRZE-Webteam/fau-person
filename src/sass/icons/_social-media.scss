@@ -1,0 +1,165 @@
+/*-----------------------------------------------------------------------------------*/
+/* Social Media and Portal Icons 
+/*-----------------------------------------------------------------------------------*/
+
+.fau-person {
+    .socialmedia {
+	margin: 0;
+	
+	
+	li {
+	    display: inline-block;
+	    list-style: none;
+	    overflow: hidden;
+	    margin: 4px;
+	    
+	    &::before {
+		content: inherit;
+		display: none;
+	    }
+	    
+	}
+	span {
+	    a::before {
+		 margin-top: 5px;
+	    }
+	}
+	a {
+	    width: 1.3rem;
+	    height: 1.3rem;
+	    overflow: hidden;
+	    display: inline-block;
+	    
+	    
+	    &:before {
+		width: 1.3rem;
+		height: 1.3rem;
+		line-height: 1.3rem;
+		font-size: 0.9rem;
+		
+		background-image: svg-bookmark();
+		background-repeat: no-repeat;
+		display: inline-block;
+		content: ' ';
+		background-size: 100%;
+		background-position: center center;
+	    }
+			
+			
+	    &[href*="twitter.com"]:before {
+		background-image: svg-twitter();
+	    }
+	    &[href*="facebook.com"]:before {
+		background-image: svg-facebook();
+	    }
+
+	    &[href*="github.com"]:before {
+		background-image: svg-github();
+	    }
+
+	    &[href*="instagram.com"]:before {
+		background-image: svg-instagram();
+	    }
+	     &[href*="publons.com"]:before {
+		background-image: svg-publons();
+	    }
+
+	    &[href*="linkedin.com"]:before {
+		background-image: svg-linkedin();
+	    }
+	    
+	     &[href*="xing.com"]:before {
+		background-image: svg-xing();
+	    }
+	    
+	     &[href*="tiktok.com"]:before {
+		background-image: svg-tiktok();
+	    }
+	    &[href*="youtube.com"]:before {
+		background-image: svg-youtube();
+	    }
+	     &[href*="scopus.com"]:before {
+		background-image: svg-scopus();
+	    }
+	     &[href*="scholar.google.de"]:before {
+		background-image: svg-googlescholar();
+	    }
+	     &[href*="orcid.org"]:before {
+		background-image: svg-orcid();
+	    }
+	      &[href*="researchgate.net"]:before {
+		background-image: svg-researchgate();
+	    }
+	  
+	
+	}
+	 
+	
+    }
+    &.color-some .socialmedia, 
+    .color-some .socialmedia {
+	a {
+	     &[href*="twitter.com"]:before {
+		background-image: svg-twitter("DeepSkyBlue");
+	    }
+	     &[href*="facebook.com"]:before {
+		background-image: svg-facebook("white");
+		background-color: #3b5999;
+	    }
+
+	 &[href*="github.com"]:before {
+		background-image: svg-github("white");
+		background-color: #000;
+	    }
+
+	   &[href*="instagram.com"]:before {
+		background-image: svg-instagram("white");
+		background-color: #e4405f;
+	    }
+
+	   &[href*="linkedin.com"]:before {
+		background-image: svg-linkedin("white");
+		background-color: #0077B5;
+	    }
+	    
+	   &[href*="xing.com"]:before {
+		background-image: svg-xing("LightSeaGreen");
+	    }
+	    
+	     &[href*="tiktok.com"]:before {
+		background-image: svg-tiktok("Crimson");
+	    }
+	       &[href*="youtube.com"]:before {
+		background-image: svg-youtube("Red");
+	    }
+	    
+	  &[href*="publons.com"]:before {
+		background-image: svg-publons("DarkSlateBlue");
+	    }
+
+	   &[href*="scopus.com"]:before {
+		background-image: svg-scopus("Orange");
+	    }
+	   &[href*="scholar.google.de"]:before {
+		background-image: svg-googlescholar();
+	    }
+	     &[href*="orcid.org"]:before {
+		background-image: svg-orcid();
+	    }
+	   &[href*="researchgate.net"]:before {
+		background-image: svg-researchgate();
+	    }
+	
+	
+	}
+
+	
+	
+    }
+    span.socialmedia  {
+	padding-left: 10px;
+	span {
+	    margin-left: 4px;
+	}
+    }
+}
