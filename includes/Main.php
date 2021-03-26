@@ -22,14 +22,9 @@ use function FAU_Person\Config\getConstants;
 class Main {
     protected $pluginFile;
     private $settings = '';
-      /*    
-    public static $options;
-    
-    protected static $instance = null;
-    */
+
     public function __construct($pluginFile) {
         $this->pluginFile = $pluginFile;
-//	define( 'PLUGIN_FILE', $pluginFile);
     }
 
     /**
