@@ -194,20 +194,11 @@ class Kontakt extends Shortcodes {
     	$arguments = self::translate_parameters($arguments);
     	$displayfield = Data::get_display_field($arguments['format'],$arguments['show'],$arguments['hide']);
     	
-    	// $id = 0;
-    	// if (isset($arguments['id'])) {
-    	//     $id =  $arguments['id'];
-    	// }
-    	// $slug = '';
-    	// if (isset($arguments['slug'])) {
-    	//     $slug =  $arguments['slug'];
-        // }
-
 	
     	if (isset($arguments['category'])) {
     	    $category = get_term_by('slug', $arguments['category'], 'persons_category');    
     	    if( is_object( $category ) ) {
-        		$posts = get_posts(array('post_type' => 'person', 'fields' => 'ids', 'post_status' => 'publish', 'numberposts' => 1000, 'orderby' => 'title', 'order' => 'ASC', 'tax_query' => array(
+        		$posts = get_posts(array('post_type' => 'person', 'fields' => 'ids', 'post_status' => 'publish', 'numberposts' => 100, 'orderby' => 'title', 'order' => 'ASC', 'tax_query' => array(
         		    array(
         			'taxonomy' => 'persons_category',
         			'field' => 'id', // can be slug or id - a CPT-onomy term's ID is the same as its post ID
@@ -219,11 +210,6 @@ class Kontakt extends Shortcodes {
 
 
         if ( isset( $posts ) ) {
-    	    // Main::enqueueForeignThemes();
-
-            // $posts = Data::sort_person_posts( $posts, $arguments['sort'], $arguments['order']  );   
-
-
     	    $class = 'fau-person';
     	    if ($arguments['class']) {
     		    $class .= ' '.esc_attr($arguments['class']);
@@ -270,14 +256,12 @@ class Kontakt extends Shortcodes {
         		     $content = '';
     	    }
 
-	        $number = count($posts);
+	    $number = count($posts);
             $i = 1;
 
-            // foreach ($posts as $post) {
+	    $posts = Data::sort_person_posts( $posts, $arguments['sort'], $arguments['order']  );   
+
             foreach ($posts as $value) {
-                // Bei Sortierung nach Name ist $posts ein Array
-                // $value = $post['ID'];
-  		
         		switch($format) {
         		    case 'liste':
             			$thisentry = Data::fau_person_shortlist($value, $displayfield, $arguments);

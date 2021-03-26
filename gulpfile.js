@@ -36,7 +36,7 @@ function cssdev() {
 }
 
 function js() {
-    return src('./src/js/*.js')
+    return src(['./src/js/fau-person-admin.js'])
 	.pipe(uglify())
 	.pipe(dest('./js'))
 	.pipe(touch());

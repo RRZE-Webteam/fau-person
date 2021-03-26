@@ -2,9 +2,8 @@
  * FAU Person CSS Settings Frontend 
  */
 
-// Framework
-@import "awesome/fontawesome-min";
-
+// icons
+@import "icons/icons";
 
 
 .fau-person {
@@ -33,31 +32,7 @@
 
     }
 	
-    [itemprop="telephone"]:before { 
-	@extend .fa;
-	width: 20px; 
-	@extend .fa-phone; 
-    }
-    [itemprop="telephone"].mobile:before { 
-	@extend .fa;
-	width: 20px; 
-	@extend .fa-mobile; 
-    }
-    [itemprop="faxNumber"]:before { 
-	@extend .fa;
-	width: 20px; 
-	@extend .fa-fax; 
-    }
-    [itemprop="email"]:before { 
-	@extend .fa;
-	width: 20px; 
-	@extend .fa-envelope; 
-    }
-    [itemprop="url"]:before { 
-	@extend .fa;
-	width: 20px; 
-	@extend .fa-home; 
-    }
+
     [itemprop="honorificSuffix"],
     .fullname {
        white-space: nowrap;
@@ -119,142 +94,7 @@
 	    }
     }
 	
-    .socialmedia {
-	margin: 0;
-	
-	
-	li {
-	    display: inline-block;
-	    list-style: none;
-	    overflow: hidden;
-	    width: 25px;
-	    height: 25px;
-	    
-	    
-	    a {	
-		padding: 0;
-	    }
-	    &::before {
-		content: inherit;
-		display: none;
-	    }
-	    
-	}
-	span {
-	    a::before {
-		 margin-top: 5px;
-	    }
-	}
-	a {
-	    width: 25px;
-	    height: 25px;
-	    overflow: hidden;
-	    display: inline-block;
-	    padding: 0;
-	    
-	    
-	    &:before {
-		   @extend .fa; 
-		   @extend .fa-bookmark-o;
-	  
-		   width: 20px;
-		  height: 20px;
-		  line-height: 20px;
-		  text-align: center;
-		  font-size: 14px;
-		   border-radius: 50%;
-		   margin-right: 5px;
-		     margin-bottom: 5px;
-	    }
-			
-			
-	    &[href*="twitter.com"]:before {
-		@extend .fa-twitter;   
-	    }
-	    &[href*="facebook.com"]:before {
-		@extend .fa-facebook; 
-	    }
-
-	    &[href*="github.com"]:before {
-		@extend .fa-github;
-	    }
-
-	    &[href*="instagram.com"]:before {
-		@extend .fa-instagram;
-	    }
-
-	    &[href*="linkedin.com"]:before {
-		@extend .fa-linkedin;
-	    }
-	    
-	     &[href*="xing.com"]:before {
-		@extend .fa-xing;
-	    }
-	    
-	     &[href*="tiktok.com"]:before {
-		@extend .fa-tiktok;
-	    }
-	     &[href*="youtube.com"]:before {
-		@extend .fa-youtube;
-	    }
-	  
-	
-	}
-	 
-	
-    }
-    &.color-some .socialmedia, 
-    .color-some .socialmedia {
-	a:before {
-	    background-color: #aaa;
-	    color: #fff;
-	}
-	a[href*="twitter.com"]:before {
-	    background-color: #55acee;
-	    color: #fff;
-
-	}
-	a[href*="facebook.com"]:before {
-	    background-color: #3b5999;
-	    color: #fff;
-	    border-radius: 50%;
-	}
-
-	a[href*="github.com"]:before {
-	    background-color: #000;
-	    color: #fff;
-	}
-
-	a[href*="instagram.com"]:before {
-	    background-color: #e4405f;
-	    color: #fff;
-	}
-	a[href*="linkedin.com"]:before {
-	    background-color: #0077B5;
-	    color: #fff;
-	}
-
-	a[href*="xing.com"]:before {
-	    background-color: #009090;
-	    color: #fff;
-	}
-	a[href*="tiktok.com"]:before {
-	    background-color: #fe2c55;
-	    color: #fff;
-	}
-	a[href*="youtube.com"]:before {
-	    background-color: #cd201f;
-	    color: #fff;
-	}
-	
-	
-    }
-    span.socialmedia  {
-	padding-left: 10px;
-	span {
-	    margin-left: 4px;
-	}
-    }
+    
     
     
 }

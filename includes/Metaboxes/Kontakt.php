@@ -137,16 +137,7 @@ class Kontakt extends Metaboxes {
 		    ),
 		    'show_on_cb' => 'callback_cmb2_show_on_person'
 		),
-		array(
-		    'name' => __('Bezeichnung (oder Pseudonym)', 'fau-person'),
-		    'desc' => __('Wird für die Kategoriensortierung nach Nachname als Sortierkriterium verwendet.', 'fau-person'),
-		    'type' => 'text',
-		    'id' => $prefix . 'alternateName',
-		     'attributes'  => array(
-			'placeholder' => $univisdata['alternateName'],
-		    ),
-		    'show_on_cb' => 'callback_cmb2_show_on_einrichtung'
-		),
+		
 		array(
 		    'name' => __('Abschluss (Suffix)', 'fau-person'),
 		    'desc' => '',
@@ -241,7 +232,8 @@ class Kontakt extends Metaboxes {
 		    'type' => 'text',
 		    'sanitization_cb' => 'validate_number',
 		    'id' => $prefix . 'mobilePhone',
-		      'attributes'  => array(
+		    'after' => $univis_default['mobilePhone'],
+		    'attributes'  => array(
 			'placeholder' => $univisdata['mobilePhone'],
 		    ),
 		),
@@ -264,6 +256,16 @@ class Kontakt extends Metaboxes {
 		    'attributes'  => array(
 			'placeholder' => $univisdata['url'],
 		    ),
+		),
+		array(
+		    'name' => __('Sortierfeld', 'fau-person'),
+		    'desc' => __('Wird für eine Sortierung verwendet, die sich weder nach Name, Titel der Kontaktseite oder Vorname richten soll. Geben SIe hier Buchstaben oder Zahlen ein, nach denen sortiert werden sollen. Zur Sortierunge der Einträge geben Sie im Shortcode das Attribut <code>sort="sortierfeld"</code> ein.', 'fau-person'),
+		    'type' => 'text_small',
+		    'id' => $prefix . 'alternateName',
+		     'attributes'  => array(
+			'placeholder' => $univisdata['alternateName'],
+		    ),
+		    'show_on_cb' => 'callback_cmb2_show_on_einrichtung'
 		),
 		array(
 		    'name' => __('Name und "Mehr"-Link verlinken auf Seite ...', 'fau-person'),
@@ -468,8 +470,6 @@ class Kontakt extends Metaboxes {
 	    )   
 	);
 	
-	
-//  $meta_boxes['fau_person_gmail_sync'] = apply_filters('fau_person_gmail_metabox', array());
 
 	// Meta-Box Synchronisierung mit externen Daten - fau_person_sync ab hier
 	$meta_boxes['fau_person_sync'] = array(
@@ -512,9 +512,6 @@ class Kontakt extends Metaboxes {
 	);
 
 
-	
-	
-//	$meta_boxes['fau_person_gmail_contacts'] = apply_filters('fau_person_gmail_contacts', array());
 
 	// Meta-Box um eine Kontaktperson oder -Einrichtung zuzuordnen
 	$meta_boxes['fau_person_connection'] = array(
