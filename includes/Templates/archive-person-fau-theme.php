@@ -7,9 +7,9 @@ $screenreadertitle = __('Kontaktliste','fau-person');
     <div id="content">
         <div class="container">
 	    <div class="row">
-		<main class="col-xs-12" id="droppoint">
-		    <h1 class="screen-reader-text"><?php echo $screenreadertitle; ?></h1>   
-
+		<div <?php post_class(); ?>>
+		    <main>
+			<h1 id="droppoint" class="mobiletitle"><?php the_title(); ?></h1>
                     <?php while ( have_posts() ) {
 			the_post();
 			$id = $post->ID;
@@ -27,7 +27,8 @@ $screenreadertitle = __('Kontaktliste','fau-person');
 			<div class="nav-previous"><?php previous_posts_link(__('<span class="meta-nav">&laquo;</span> Zurück', 'fau-person')); ?></div>
 			<div class="nav-next"><?php next_posts_link(__('Weiter <span class="meta-nav">&raquo;</span>', 'fau-person'), '' ); ?></div>
 		    </nav>
-		</main>
+		    </main>
+		</div>    
 	    </div>    
 	</div>
     </div>

@@ -9,8 +9,8 @@ defined('ABSPATH') || exit;
 
 
 class Data {
-    
-    
+   
+ 
     private static function get_viewsettings($lookup = 'constants') {
 	$settings = new Settings(__DIR__);
 	$settings->onLoaded();
@@ -288,47 +288,70 @@ class Data {
     // Sortierung eines Arrays mit Objekten (z.B. bei einer Kategorie) alphabetisch nach Titel oder Nachname, je nach Typ
     public static function sort_person_posts( $personlist, $sorttype = 'name', $order = 'asc' ) {
         if ( is_array( $personlist ) ) {
+	    $temp = array();
             foreach( $personlist as $key => $value) {
-                $personlist[$key] = (array) $personlist[$key];
+		if (is_int($value)) {
+		    // value ist Post-ID
+		    $id = $value;
+		} else {
+		    $id = $personlist[$key]['ID'];
+		}
+		$fields = self::get_kontakt_data($id);
+				
                 // Bei Personen Prüfung, ob Nachname im Feld eingetragen ist (ggf. aus UnivIS), wenn nicht letztes Wort von Titel als Nachname angenommen
-                switch ( get_post_meta( $personlist[$key]['ID'], 'fau_person_typ', true ) ) {
+                switch ( $fields['typ'] ) {
                     case 'realperson':
                     case 'realmale':
-                    case 'realfemale':
-                        $fields = self::get_fields($personlist[$key]['ID'], get_post_meta($personlist[$key]['ID'], 'fau_person_univis_id', true), 0);
-                
-                        if( !empty( $fields['familyName'] ) ) {
-                            $name = $fields['familyName'];
-			    
-                            if ((!empty( $fields['givenName']))  && ($sorttype == 'name')) {
-                                $name = $fields['familyName'] . ', ' . $fields['givenName'];
-                            }
-			    
-                        } else {
-                            $name = $personlist[$key]['post_title'];                   
-                            if( ltrim( strpos( $name, ' ' ) ) ) {
-                                $lastname = ltrim( strrchr( $name, ' ' ) );
-                                $name = $lastname . ', ' . ltrim( str_replace( $lastname, '', $name ) );
-                            } 
-                        }
+                    case 'realfemale':     
+			
+			if (($sorttype == 'givenName') || ($sorttype == 'vorname') || ($sorttype == 'fullname')) {
+			    $sortname = $fields['givenName'] . " - ". $fields['familyName'];
+			} elseif (($sorttype == 'familyName') || ($sorttype == 'nachname') || ($sorttype == 'name')) {
+			    $sortname = $fields['familyName'] . " - ". $fields['givenName'];			
+			} elseif ($sorttype == 'title') {
+			    $sortname =  $fields['kontakt_title'];    
+			} elseif ($sorttype == 'sortierfeld') {
+			    if (!empty($fields['alternateName'])) {
+				$sortname = $fields['alternateName'];
+			    } else {
+				$sortname = "Z ".$fields['kontakt_title'];
+			    }
+			   
+			} else {
+			    $sortname =  $fields['kontakt_title'];
+			}
+			
                         break;
                     default:
-                        if( !empty( get_post_meta( $personlist[$key]['ID'], 'fau_person_alternateName', true ) ) ) {
-                            $name = get_post_meta( $personlist[$key]['ID'], 'fau_person_alternateName', true );
-                        } else {
-                            $name = $personlist[$key]['post_title'];
-                        }
+			if ($sorttype == 'sortierfeld') {
+			    if (!empty($fields['alternateName'])) {
+				$sortname = $fields['alternateName'];
+			    } else {
+				$sortname = "Z ".$fields['kontakt_title'];
+			    }
+			} else {
+			    $sortname =  $fields['kontakt_title'];
+			}
+			
                         break;
                 }
-                $temp[$key] = strtolower($name);
+		if (empty($sortname)) {
+		   $sortname = $fields['kontakt_title'];
+		}
+		    
+                $temp[$id] = strtolower($sortname);
             }
-	    if ($order=='desc') {
-		  array_multisort($temp, SORT_DESC, SORT_STRING, $personlist);
+	    if ($order == 'desc') {
+		arsort($temp);
 	    } else {
-		  array_multisort($temp, SORT_ASC, SORT_STRING, $personlist);
+		asort($temp);
 	    }
-          
-            return $personlist;  
+
+	    $result = array();
+	    foreach ($temp as $key => $string) {
+		$result[] = $key;
+	    }
+            return $result;  
         }
     }
     
@@ -339,8 +362,8 @@ class Data {
 	}
 	$res = '';
 	$imagedata = array();
-	$alttext = get_the_title($id);
-	$alttext = esc_html($alttext);
+	$fields = self::get_kontakt_data($id);	
+	$alttext = esc_attr($fields['kontakt_title']);
 	$targetlink = '';
 
 	$imagedata['alt'] = $alttext;
@@ -374,7 +397,7 @@ class Data {
 	    }
 	    
          }  elseif ($defaultimage) {
-	    $type = get_post_meta($id, 'fau_person_typ', true);
+	    $type = $fields['typ'];
 
 	     $pluginfile = __DIR__;
 
@@ -410,10 +433,12 @@ class Data {
 	if ((isset($fields)) && isset($fields['description']) && (!empty($fields['description']))) {
 	    return $fields['description'];
 	}    
-	$fallbackexcerpt = get_post_field('post_excerpt', $id);
-	if ($fallbackexcerpt) {
-	    return $fallbackexcerpt;
-	}
+	
+	// Fallback
+	if ((isset($fields)) && isset($fields['post_excerpt']) && (!empty($fields['post_excerpt']))) {
+	    return $fields['post_excerpt'];
+	} 
+	
 	return;
     }
     public static function get_morelink_url($data, $args) {
@@ -453,14 +478,13 @@ class Data {
        	if ($id == 0) {
 	    return;
 	}
-	$fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+	
+	$fields = self::get_kontakt_data($id);	
 	$viewopts = self::get_viewsettings();
 	 
 	$content = '';
 	Main::enqueueForeignThemes();
 	
-	$fields['permalink'] = get_permalink($id);
-	$fields['name'] = get_the_title($id);	
 	$fields['description'] = self::get_description($id, $arguments['format'], $fields);
 	$fields['morelink'] = self::get_morelink_url($fields, $viewopts);
 	
@@ -609,7 +633,7 @@ class Data {
     }
 
     public static function fau_person_page($id, $display = array(), $arguments= array(), $is_shortcode = false) {    
-        $fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+        $fields = self::get_kontakt_data($id);	
 	
 	
         Main::enqueueForeignThemes();
@@ -718,48 +742,40 @@ class Data {
         if (!empty($data['connection_text']) || !empty($data['connection_options']) || !empty($data['connections'])) {
             $content .= self::fau_person_connection($data['connection_text'], $data['connection_options'], $data['connections'], $hstart);
 	}
+        $postContent = $data['content'];
 
-        if ( is_singular( 'person' ) && in_the_loop() ) {
-            $postContent = get_the_content();
-        } else {
-            $postContent = get_post($id)->post_content;
-        }
         if ($postContent) {
-			$postContent = self::stripShortcode(['kontakt', 'person', 'kontaktliste', 'persons'], $postContent);
+	    $postContent = self::stripShortcode(['kontakt', 'person', 'kontaktliste', 'persons'], $postContent);
             $content .= '<div class="desc" itemprop="description">' . PHP_EOL;
             $content .= apply_filters( 'the_content', $postContent );
             $content .= '</div>';
         }
         $content .= '</div>';
-
         return $content;
     }
 
-	protected static function stripShortcode(array $tagAry, string $content) : string 
-	{
-		global $shortcode_tags;
-		
-		foreach($tagAry as $tag) {
-			$stack = $shortcode_tags;
-			$shortcode_tags = [$tag => 1];
-			$content = strip_shortcodes($content);
-			$shortcode_tags = $stack;
-		}
-		return $content;	
-	}
+    protected static function stripShortcode(array $tagAry, string $content) : string {
+	    global $shortcode_tags;
+
+	    foreach($tagAry as $tag) {
+		    $stack = $shortcode_tags;
+		    $shortcode_tags = [$tag => 1];
+		    $content = strip_shortcodes($content);
+		    $shortcode_tags = $stack;
+	    }
+	    return $content;	
+    }
 
     public static function fau_person_tablerow($id = 0, $display = array(), $arguments = array()) {
 	if ($id == 0) {
 	    return;
 	}
-	$fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+	$fields = self::get_kontakt_data($id);	
 	$viewopts = self::get_viewsettings();
 	 
 	$content = '';
 	Main::enqueueForeignThemes();
 	
-	$fields['permalink'] = get_permalink($id);
-	$fields['name'] = get_the_title($id);
 	$fields['description'] = self::get_description($id, $arguments['format'], $fields);
 	$fields['morelink'] = self::get_morelink_url($fields, $viewopts);
 	
@@ -796,14 +812,12 @@ class Data {
 	if ($id == 0) {
 	    return;
 	}
-	$fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+	$fields = self::get_kontakt_data($id);	
 	$viewopts = self::get_viewsettings();
 	 
 	$content = '';
 	Main::enqueueForeignThemes();
 	
-	$fields['permalink'] = get_permalink($id);
-	$fields['name'] = get_the_title($id);
 	$fields['description'] = self::get_description($id, $arguments['format'], $fields);
 	$fields['morelink'] = self::get_morelink_url($fields, $viewopts);
 	
@@ -879,16 +893,13 @@ class Data {
 	if ($id == 0) {
 	    return;
 	}
-         $fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+        $fields = self::get_kontakt_data($id);	
 	$viewopts = self::get_viewsettings();
 	
 
         $content = ''; 
 	Main::enqueueForeignThemes();
 
-
-	$fields['permalink'] = get_permalink($id);
-	$fields['name'] = get_the_title($id);
 	$fields['description'] = self::get_description($id, $arguments['format'], $fields);
 	$fields['morelink'] = self::get_morelink_url($fields, $viewopts);
 
@@ -946,24 +957,16 @@ class Data {
         	if ($id == 0) {
 	    return;
 	}
-        $fields = self::get_fields($id, get_post_meta($id, 'fau_person_univis_id', true), 0);
+        $fields = self::get_kontakt_data($id);	
 	$viewopts = self::get_viewsettings();
 	
-
-	
-
 
         $content = ''; 
 	Main::enqueueForeignThemes();
 
-
-	$fields['permalink'] = get_permalink($id);
-	$fields['name'] = get_the_title($id);
 	$fields['description'] = self::get_description($id, 'sidebar', $fields);
 	$fields['morelink'] = self::get_morelink_url($fields, $viewopts);
-	
-	
-	
+
 	$data = self::filter_fields($fields, $display);
 	
 	
@@ -1196,7 +1199,7 @@ class Data {
 	/*
 	 * Felder, die nicht gelöscht werden sollen, wieder einfügen
 	 */
-	$dontfilter = "morelink, permalink, connection_only, hoursAvailable_group";
+	$dontfilter = "content, morelink, permalink, connection_only, hoursAvailable_group";
 	$stay = explode(',', $dontfilter);   
 	foreach ($stay as $value) {
 		$key = esc_attr(trim($value));
@@ -1399,6 +1402,52 @@ class Data {
 	}
     }
     
+    // Get Data Cache
+    private static function get_data_cache() {
+	if (isset($GLOBALS['fau_person_data_cache'])) {
+	    return $GLOBALS['fau_person_data_cache'];
+	}
+	return;
+    }
+    
+    // Set Data Cache 
+    private static function set_data_cache($id, $data) {
+	if ((isset($id)) && (isset($data))) {	    
+	    $GLOBALS['fau_person_data_cache'][$id] = $data;
+	//    error_log( 'Save Data for id '.$id );
+	    return $GLOBALS['fau_person_data_cache'][$id];
+	}
+	return;
+    }
+    // Zentraler Wrapper für self::get_fields(), bei dem das Ergebnis aus den
+    // Datenfelder zwischengespeichert wird, damit weitere Datenbankanfragen unterbleiben
+    // können
+    public static function get_kontakt_data($id) {
+	if (isset($id)) {
+	    $cacheddata = self::get_data_cache();
+	   
+	    if ((isset($cacheddata)) && (isset($cacheddata[$id]))) {
+		return $cacheddata[$id];
+	    }
+	    $univis_id = get_post_meta($id, 'fau_person_univis_id', true);
+	    $data = self::get_fields($id, $univis_id, 0);
+	    $postContent = get_post($id)->post_content;
+	    if (isset($postContent)) {
+		$data['content'] = $postContent;
+	    }
+	    
+	    $post_excerpt = get_post_field('post_excerpt', $id);
+	    if ($post_excerpt) {
+		$data['post_excerpt'] = $post_excerpt;
+	    }
+	    $data['permalink'] = get_permalink($id);
+	    $data['kontakt_title'] = get_the_title($id);	
+	    if ((isset($data)) && (!empty($data))) {
+		return self::set_data_cache($id, $data);
+	    }
+	}
+	return;
+    }
     
      //gibt die Werte der Person an, Inhalte abhängig von UnivIS, 
     //Übergabewerte: ID der Person, UnivIS-ID der Person, 
@@ -1414,21 +1463,23 @@ class Data {
         $fields = array();
         // Ab hier Definition aller Feldzuordnungen, $key ist Name der Metaboxen, $value ist Name in UnivIS
         $fields_univis = array(
-            'department' => 'orgname',
-            'honorificPrefix' => 'title',
-            'honorificSuffix' => 'atitle',
-            'givenName' => 'firstname',
-            'familyName' => 'lastname',
-            'jobTitle' => 'work',            
+            'department'	=> 'orgname',
+            'honorificPrefix'	=> 'title',
+            'honorificSuffix'	=> 'atitle',
+            'givenName'		=> 'firstname',
+            'familyName'	=> 'lastname',
+            'jobTitle'		=> 'work',            
         );
         $fields_univis_location = array(
-            'telephone' => 'tel',
-            'faxNumber' => 'fax',
-            'email' => 'email',
-            'url' => 'url',
+            'telephone'	    => 'tel',
+	    'mobilePhone'   => 'mobile',
+	    'pgp'	    => 'pgp',
+            'faxNumber'	    => 'fax',
+            'email'	    => 'email',
+            'url'	    => 'url',
             'streetAddress' => 'street',
             'addressLocality' => 'ort', 
-            'workLocation' => 'office', 
+            'workLocation'  => 'office', 
         );
         $fields_univis_officehours = array(
             'hoursAvailable_group' => 'officehours',
@@ -1487,8 +1538,7 @@ class Data {
             'hoursAvailable_text' => '',
             'hoursAvailable' => '',
             'description' => '',
-	   'small_description' => '',
-            'mobilePhone' => '',
+	   'small_description' => ''
         );
 	
 		
@@ -1511,6 +1561,7 @@ class Data {
             'connection_addressCountry' => 'addressCountry',  
             'connection_workLocation' => 'workLocation',
             'connection_telephone' => 'telephone',
+	    'connection_mobilePhone' => 'mobilePhone',
             'connection_faxNumber' => 'faxNumber',         
             'connection_email' => 'email',
             'connection_hoursAvailable' => 'hoursAvailable',
@@ -1544,7 +1595,7 @@ class Data {
         foreach( $fields_univis_location as $key => $value ) {
             if( $univis_sync && array_key_exists( 'locations', $person ) && array_key_exists( 'location', $person['locations'][0] ) ) {
                 $person_location = $person['locations'][0]['location'][0];
-                if(($key == 'telephone' || $key == 'faxNumber') && !$defaults) {
+                if(($key == 'telephone' || $key == 'faxNumber'|| $key == 'mobilePhone') && !$defaults) {
                     $phone_number = UnivIS_Data::sync_univis( $id, $person_location, $key, $value, $defaults );
                     switch ( get_post_meta($id, 'fau_person_telephone_select', true) ) {
                         case 'erl':
@@ -1556,7 +1607,7 @@ class Data {
                         default:
                             $value = Sanitizer::correct_phone_number($phone_number, 'standard');                        
                             break;
-                    }                    
+                    }     	        
                 } else {
                     $value = UnivIS_Data::sync_univis( $id, $person_location, $key, $value, $defaults );
                 }
@@ -1564,7 +1615,7 @@ class Data {
                 if( $defaults ) {
                     $value =  '<p class="cmb2-metabox-description">'. __('In UnivIS ist hierfür kein Wert hinterlegt.', 'fau-person').'</p>';     
                 } else {
-                    if($key == 'telephone' || $key == 'faxNumber') {
+                    if($key == 'telephone' || $key == 'faxNumber'|| $key == 'mobilePhone') {
                         $phone_number = get_post_meta($id, 'fau_person_'.$key, true);
                         switch ( get_post_meta($id, 'fau_person_telephone_select', true) ) {
                         case 'erl':
@@ -1730,7 +1781,7 @@ class Data {
     	    case 'full':
 	     case 'compactindex':
 	     case 'kompakt':
-		$display = 'titel, familyName, givenName, name, suffix, position, telefon, email, email,  socialmedia, adresse, bild, permalink, url, border, border, link';		 
+		$display = 'titel, familyName, givenName, name, suffix, position, telefon, mobilePhone, email,  socialmedia, adresse, bild, permalink, url, border, border, link';		 
 		break;
 	    case 'page':
 		$display = '_all';  
@@ -1753,7 +1804,7 @@ class Data {
 		    }
 		}
 		if (empty(trim($display))) {
-		    $display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, jobTitle, telefon, email, socialmedia, fax, url, adresse, bild, permalink, url, sprechzeiten, ansprechpartner, description';  
+		    $display = 'titel, familyName, givenName, name, suffix, workLocation, worksFor, jobTitle, telefon, mobilePhone, email, socialmedia, fax, url, adresse, bild, permalink, url, sprechzeiten, ansprechpartner, description';  
 		}
 		break;
 	    case 'table': 

@@ -12,7 +12,7 @@ class Config {
 	    $options = array(
 		'transient_prefix'		=> 'univis_data_',
 		'api_url'			=> 'http://univis.uni-erlangen.de/prg',
-		'api_transient_expiration'		=> DAY_IN_SECONDS,
+		'api_transient_expiration'	=> DAY_IN_SECONDS,
 		'api_timeout'			=> HOUR_IN_SECONDS,
 		'api_results_limit'		=> 100,
 	    );               
@@ -123,6 +123,16 @@ class Config {
 			    'keyname'   => 'tel',
 			    'default'   => '',
 			    'type'	    => 'telnumber'
+			],
+			'mobilePhone' => [
+			    'keyname'   => 'mobile',
+			    'default'   => '',
+			    'type'	    => 'telnumber'
+			],
+			'pgp' => [
+			    'keyname'   => 'pgp',
+			    'default'   => '',
+			    'type'	    => 'string'
 			],
 			'streetAddress' => [
 			    'keyname'   => 'street',

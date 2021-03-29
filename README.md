@@ -12,7 +12,7 @@ RRZE-Webteam , http://www.rrze.fau.de
 
 ## Copryright
 
-GNU General Public License (GPL) Version 2 
+GNU General Public License (GPL) Version 3
 
 
 ## Zweck 

@@ -10,15 +10,17 @@ get_header();
 	<div id="content">
 		<div class="container">
 			<div class="row">
-				<div class="col-xs-12">
-				    <main id="droppoint">
+				 <div <?php post_class(); ?>>
+				    <main>
 				    <?php 
 				    $id = $post->ID;
-				    if ($id) {
-					echo FAU_Person\Data::fau_person_page($id);
+				    if ($id) { ?>
+					 <h1 id="droppoint" class="mobiletitle"><?php the_title(); ?></h1>
+					<?php echo FAU_Person\Data::fau_person_page($id);
 				    } else { ?>
+					<h1 id="droppoint" class="mobiletitle"><?php _e('Fehler','fau'); ?></h1>
 					<p class="hinweis">
-					    <strong><?php _e('Es tut uns leid.','fau-person'); ?></strong><br>
+					    <strong><?php _e('Es tut uns leid.','fau'); ?></strong><br>
 					    <?php _e('Für den angegebenen Kontakt können keine Informationen abgerufen werden.','fau-person'); ?>
 					</p>
 				    <?php }  ?>

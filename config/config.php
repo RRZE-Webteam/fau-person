@@ -91,10 +91,30 @@ function getSocialMediaList() {
 		'title'  => 'GitHub',
 		'class' => 'github'
 	    ],
-	//    "tiktok"=> [
-	//	'title'  => 'TikTok',
-	//	'class' => 'tiktok'
-	  //  ]
+	      "publons"=> [
+		'title'  => 'Publons',
+		'class' => 'publons'
+	    ],
+	       "scopus"=> [
+		'title'  => 'Scopus',
+		'class' => 'scopus'
+	    ],
+	       "googlescholar"=> [
+		'title'  => 'Google Scholar',
+		'class' => 'google-scholar'
+	    ],
+	         "orcid"=> [
+		'title'  => 'ORCID',
+		'class' => 'orcid'
+	    ],
+	    "researchgate"=> [
+		'title'  => 'Research Gate',
+		'class' => 'researchgate'
+	    ],
+	    "tiktok"=> [
+		'title'  => 'TikTok',
+		'class' => 'tiktok'
+	    ]
 	);
 
            // für ergänzende Optionen aus anderen Plugins

@@ -2,7 +2,8 @@
  * FAU Person CSS Settings Backend (Admin)) 
  */
 
-@import "awesome/fontawesome-min";
+// icons
+@import "icons/icons";
 
 #fau_person_textinfos,
 #fau_person_info,
@@ -32,6 +33,11 @@
     }
 }
 
+#cmb2-metabox-fau_person_info {
+    span.cmb2-metabox-description {
+	display: block;
+    }
+}
 
 #cmb2-metabox-fau_person_social_media {
     display: flex;
@@ -39,13 +45,10 @@
     justify-content: space-between;
     
     .cmb-row {
-	flex: 1 1 50%;
-	border: 0;
-	display: flex;
-	flex-wrap: wrap;
+	flex: 0 0 300px;
+	border: 0;	
 	margin: 0;
 	padding: 10px 0;
-	justify-content: flex-start;
 	
 	.cmb-th, .cmb-td {
 	    float: inherit;
@@ -72,60 +75,77 @@
     
     label {
 	 &:before {
-		@extend .fa; 
-		@extend .fa-bookmark-o;
 		  
-		  width: 1.4em;
-		  height: 1.4em;
-		  line-height: 1.4em;
-		  text-align: center;
-		  font-size: 1.1em;
-		  margin-right: 10px;
-		  border-radius: 50%;
-		  background-color: #aaa;
+		 width: 1.5rem;
+		height: 1.5rem;
+		line-height: 1.5rem;
+		font-size: 1rem;
+		
+		background-image: svg-bookmark();
+		background-repeat: no-repeat;
+		display: inline-block;
+		content: ' ';
+		background-size: 70%;
+		background-position: center center;
+		background-color: inherit;
+		border-radius: 50%;
 		color: #fff;
+		margin-right: 1rem;
 
 	    }
 			
 			
 	   &[for*="twitter"]:before {
-		@extend .fa-twitter;   
-		background-color: #55acee;
+		background-image: svg-twitter("DeepSkyBlue");
 	    }
 	    &[for*="facebook"]:before {
-		@extend .fa-facebook; 
+		background-image: svg-facebook("white");
 		background-color: #3b5999;
 	    }
 
 	    &[for*="github"]:before {
-		@extend .fa-github;
+		background-image: svg-github("white");
 		background-color: #000;
 	    }
 
 	    &[for*="instagram"]:before {
-		@extend .fa-instagram;
+		background-image: svg-instagram("white");
 		background-color: #e4405f;
 	    }
 
 	    &[for*="linkedin"]:before {
-		@extend .fa-linkedin;
+		background-image: svg-linkedin("white");
 		background-color: #0077B5;
 	    }
 	    
 	     &[for*="xing"]:before {
-		@extend .fa-xing;
-		background-color: #009090;
+		background-image: svg-xing("LightSeaGreen");
 	    }
 	    
 	     &[for*="tiktok"]:before {
-		@extend .fa-tiktok;
-		 background-color: #fe2c55;
+		background-image: svg-tiktok("Crimson");
 	    }
 	     &[for*="youtube"]:before {
-		@extend .fa-youtube;
-		background-color: #cd201f;
+		background-image: svg-youtube("Red");
 	    }
-    
+	    
+	    &[for*="publons"]:before {
+		background-image: svg-publons("DarkSlateBlue");
+	    }
+
+	    &[for*="scopus"]:before {
+		background-image: svg-scopus("Orange");
+	    }
+	   &[for*="googlescholar"]:before {
+		background-image: svg-googlescholar();
+	    }
+	   &[for*="orcid"]:before {
+		background-image: svg-orcid();
+	    }
+	    &[for*="researchgate"]:before {
+		background-image: svg-researchgate();
+	    }
+	  
     }
 }
 
@@ -136,29 +156,28 @@
 	    padding: 0;
 	}
     }
- [itemprop="telephone"]:before { 
-	@extend .fa;
-	width: 20px; 
-	@extend .fa-phone; 
+    [itemprop="telephone"]:before { 
+	@extend .defaulticonplaceholder;
+	background-image: svg-icon-phone();
     }
     [itemprop="telephone"].mobile:before { 
-	@extend .fa;
-	width: 20px; 
-	@extend .fa-mobile; 
+	@extend .defaulticonplaceholder;
+	background-image: svg-icon-mobile();
+
     }
     [itemprop="faxNumber"]:before { 
-	@extend .fa;
-	width: 20px; 
-	@extend .fa-fax; 
+	@extend .defaulticonplaceholder;
+	background-image: svg-icon-fax();
+
     }
     [itemprop="email"]:before { 
-	@extend .fa;
-	width: 20px; 
-	@extend .fa-envelope; 
+	@extend .defaulticonplaceholder;
+	background-image: svg-icon-mail();
+
     }
     [itemprop="url"]:before { 
-	@extend .fa;
-	width: 20px; 
-	@extend .fa-home; 
+	@extend .defaulticonplaceholder;
+	background-image: svg-icon-home();
+
     }
 }

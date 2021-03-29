@@ -32,17 +32,9 @@ class Shortcodes {
 
 
     public function isGutenberg(){
-        if ( ! function_exists( 'register_block_type' ) ) {
-            return false;        
-        }
-
-        // check if RRZE-Settings if classic editor is enabled
-        $rrze_settings = (array) get_option( 'rrze_settings' );
-        if ( isset( $rrze_settings['writing'] ) ) {
-            $rrze_settings = (array) $rrze_settings['writing'];
-            if ( isset( $rrze_settings['enable_classic_editor'] ) && $rrze_settings['enable_classic_editor'] ) {
-                return false;        
-            }
+        $postID = get_the_ID();
+        if ($postID && !use_block_editor_for_post($postID)){
+            return false;
         }
 
         return true;        
