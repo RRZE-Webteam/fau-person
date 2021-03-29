@@ -45,7 +45,7 @@ $socialmedia_icon_bgcolor: "white";
 		width: $socialmedia_icon_size;
 		height: $socialmedia_icon_size;
 		line-height: $socialmedia_icon_size;
-		font-size: 0.8rem;
+		font-size: calc(#{$socialmedia_icon_size} / 1.5);
 		background-image: svg-bookmark();
 		background-repeat: no-repeat;
 		display: inline-block;

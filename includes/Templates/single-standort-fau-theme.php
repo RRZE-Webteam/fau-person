@@ -16,7 +16,7 @@ $adisplay = array_map('trim', explode(',', $display));
     <div id="content">
 	<div class="container">
 	    <div class="row">
-		<div class="col-xs-12">
+		 <div <?php post_class(); ?>>
 		    <main id="droppoint">
 			<?php echo FAU_Person\Data::create_fau_standort($post->ID, $showfields, 'h1'); ?>
 		    </main>
