@@ -10,7 +10,7 @@ get_header();
 	<div id="content">
 		<div class="container">
 			<div class="row">
-				 <div <?php post_class(); ?>>
+				 <div <?php post_class("entry-content"); ?>>
 				    <main>
 				    <?php 
 				    $id = $post->ID;

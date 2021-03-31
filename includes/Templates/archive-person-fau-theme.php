@@ -7,7 +7,7 @@ $screenreadertitle = __('Kontaktliste','fau-person');
     <div id="content">
         <div class="container">
 	    <div class="row">
-		<div <?php post_class(); ?>>
+		<div <?php post_class("entry-content"); ?>>
 		    <main>
 			<h1 id="droppoint" class="mobiletitle"><?php the_title(); ?></h1>
                     <?php while ( have_posts() ) {

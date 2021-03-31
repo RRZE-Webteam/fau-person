@@ -247,6 +247,14 @@ class Schema {
 
 	    $res .= '</'.$surroundingtag.'>';
 	    return $res;
+	} else {
+	   $res .= $data['kontakt_title'];
+	   if (($surroundingtag == 'a') && (!empty($itemprop))) {
+		$res .= '</span>';
+	    }
+
+	    $res .= '</'.$surroundingtag.'>';
+	    return $res;
 	}
 
 	return;

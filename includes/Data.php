@@ -1199,7 +1199,7 @@ class Data {
 	/*
 	 * Felder, die nicht gelöscht werden sollen, wieder einfügen
 	 */
-	$dontfilter = "content, morelink, permalink, connection_only, hoursAvailable_group";
+	$dontfilter = "content, morelink, permalink, connection_only, hoursAvailable_group, kontakt_title";
 	$stay = explode(',', $dontfilter);   
 	foreach ($stay as $value) {
 		$key = esc_attr(trim($value));
@@ -1442,6 +1442,7 @@ class Data {
 	    }
 	    $data['permalink'] = get_permalink($id);
 	    $data['kontakt_title'] = get_the_title($id);	
+	    
 	    if ((isset($data)) && (!empty($data))) {
 		return self::set_data_cache($id, $data);
 	    }
