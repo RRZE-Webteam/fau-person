@@ -190,7 +190,6 @@
 	    }
 	    .person-default-more {
 		 float: none;
-		 flex: 1 1 200px;
 		 padding: 5px;
 		 order: 4;
 	    }
@@ -291,15 +290,12 @@
 		    border-radius: 3px;
 		    font-size: 0.9333333333rem;
 		    line-height: 1.3626666667rem;
-	//	    color: #fff;
-	//	    background: #036;
 		    padding: 6px 10px;
 		    margin: 10px 0;
 		    text-decoration: none;
 		}
 		a:hover, 
   	         a:focus {
-//		    background: #24598f;
 		    text-decoration: none;
 		}
 	 }
