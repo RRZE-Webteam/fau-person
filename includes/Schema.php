@@ -259,6 +259,26 @@ class Schema {
 
 	return;
     }
+    public static function create_NameforAttributs($data) {
+	if (!is_array($data)) {
+	    return;
+	}
+	if ((isset($data['givenName'])) && (!empty($data['givenName']))) {
+	    $givenName  = esc_html($data['givenName']);
+	}
+	if ((isset($data['familyName'])) && (!empty($data['familyName']))) {
+	    $familyName  = esc_html($data['familyName']);
+	}
+	
+	if ((!empty($givenName)) || (!empty($familyName))) {
+	    $fullname = $givenName.' '.$familyName;   
+	} elseif ((isset($data['name'])) && (!empty($data['name']))) {
+	    $fullname = esc_html($data['name']);   
+	} elseif ((isset($data['alternateName'])) && (!empty($data['alternateName']))) {
+	    $fullname = esc_html($data['alternateName']);
+	}
+	return esc_attr($fullname);
+    }
     
     public static function create_contactpointlist($data, $blockstart = 'ul', $itemprop = '', $class = 'person-info', $liststart = 'li', $args = array(), $fillempty = false, $addcomma = false) {
 	if (!is_array($data)) {
@@ -419,6 +439,7 @@ class Schema {
 	    }
 	    $res .= '>';
 	}
+	$titlename = self::create_NameforAttributs($data);
 	
 	$SocialMedia = self::get_SocialMediaList();
 	foreach ($SocialMedia as $key => $value) {
@@ -426,7 +447,12 @@ class Schema {
 	    $name = $SocialMedia[$key]['title'];
 	    $iclass = $SocialMedia[$key]['class'];
 	    if (isset($data[$datakey]) && (!empty($data[$datakey]))) {
-		$res .= '<'.$itemel.' class="'.$iclass.'">'.'<a itemprop="'.$itemprop.'" href="'.$data[$datakey].'">'.$name.'</a></'.$itemel.'>';
+		$res .= '<'.$itemel.' class="'.$iclass.'">'.'<a itemprop="'.$itemprop.'" href="'.$data[$datakey].'"';
+		if (!empty($titlename)) {
+		    $titleatr = $name.': '.$titlename;
+		    $res .= ' title="'.$titleatr.'"';
+		}
+		$res .= '>'.$name.'</a></'.$itemel.'>';
 		$filled = true;
 	    }	
 	}
