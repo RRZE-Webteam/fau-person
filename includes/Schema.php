@@ -274,6 +274,10 @@ class Schema {
 	
 	if ((!empty($givenName)) || (!empty($familyName))) {
 	    $fullname = $givenName.' '.$familyName;   
+	} elseif (!empty($familyName)) {    
+	     $fullname = $givenName;
+        } elseif (!empty($givenName)) {
+	    $fullname = $givenName;
 	} elseif ((isset($data['name'])) && (!empty($data['name']))) {
 	    $fullname = esc_html($data['name']);   
 	} elseif ((isset($data['alternateName'])) && (!empty($data['alternateName']))) {
