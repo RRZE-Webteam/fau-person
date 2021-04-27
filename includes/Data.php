@@ -210,7 +210,7 @@ class Data {
         }
         return $fields;
     }
-    public static function get_more_link($targeturl, $linktitle = '', $class = 'person-info-more', $withdiv = true) {
+    public static function get_more_link($targeturl, $screenreadertext = '', $class = 'person-info-more', $withdiv = true, $linktitle = '') {
 	if ((!isset($targeturl)) || empty($targeturl)) {
 	    return;
 	}
@@ -242,6 +242,9 @@ class Data {
 	     $res .= esc_html($viewopts['view_kontakt_linktext']);
 	} else {
 	    $res .= __('Mehr', 'fau-person') . ' ›';
+	}
+	if (!empty($screenreadertext)) {
+	     $res .= '<span class="screen-reader-text">: '.$screenreadertext.'</span>';
 	}
 	$res .= '</a>';
 	if ($withdiv) {
@@ -523,9 +526,7 @@ class Data {
 	 $content .= '<div class="'.$class.'" itemscope itemtype="http://schema.org/Person">' . "\n";
 	
 	     
-         if (isset($arguments['format']) && $arguments['format'] =='kompakt') {
-    //        $content .= '<div class="compactindex">';
-	}
+
         $content .= '<div class="row">';
 
         if (isset($display['bild']) && (!empty($display['bild']))) {
@@ -613,20 +614,17 @@ class Data {
 
          if (isset($display['link']) && (!empty($display['link']))) {
 	    $morelink = self::get_morelink_url($data, $viewopts);
-	    $morecontent .= self::get_more_link($morelink);
+	    $screenreaderlink = __('Details zu','fau-person').' '.Schema::create_NameforAttributs($data);
+	    $morecontent .= self::get_more_link($morelink,$screenreaderlink);
          }
 
 	if (!empty($morecontent)) {
-	//    if (isset($arguments['format']) && $arguments['format'] =='kompakt') {
-		 $content .= '</div><div class="person-default-more">';   // ende div class compactindex
-	 //   }
+	    $content .= '</div><div class="person-default-more">';   // ende div class compactindex
 	    $content .= $morecontent;
 	} 
 	
 	$content .= '</div>';   // row 
-	 if (isset($arguments['format']) && $arguments['format'] =='kompakt') {
-//		 $content .= '</div>';   // ende div class compactindex
-	    }
+
         $content .= '</div>';
 	  $content .= '</div>';
         return $content;
@@ -1431,7 +1429,8 @@ class Data {
 	    }
 	    $univis_id = get_post_meta($id, 'fau_person_univis_id', true);
 	    $data = self::get_fields($id, $univis_id, 0);
-	    $postContent = get_post($id)->post_content;
+	    $thispost = get_post($id);
+	    $postContent = apply_filters('the_content', $thispost->post_content);	
 	    if (isset($postContent)) {
 		$data['content'] = $postContent;
 	    }
