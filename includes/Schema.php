@@ -263,6 +263,8 @@ class Schema {
 	if (!is_array($data)) {
 	    return;
 	}
+	$givenName = $familyName = '';
+	
 	if ((isset($data['givenName'])) && (!empty($data['givenName']))) {
 	    $givenName  = esc_html($data['givenName']);
 	}
@@ -439,7 +441,7 @@ class Schema {
 	    }
 	    $res .= '>';
 	}
-	$titlename = self::create_NameforAttributs($data);
+	$screenreaderadd = self::create_NameforAttributs($data);
 	
 	$SocialMedia = self::get_SocialMediaList();
 	foreach ($SocialMedia as $key => $value) {
@@ -447,12 +449,12 @@ class Schema {
 	    $name = $SocialMedia[$key]['title'];
 	    $iclass = $SocialMedia[$key]['class'];
 	    if (isset($data[$datakey]) && (!empty($data[$datakey]))) {
-		$res .= '<'.$itemel.' class="'.$iclass.'">'.'<a itemprop="'.$itemprop.'" href="'.$data[$datakey].'"';
-		if (!empty($titlename)) {
-		    $titleatr = $name.': '.$titlename;
-		    $res .= ' title="'.$titleatr.'"';
+		$res .= '<'.$itemel.' class="'.$iclass.'">'.'<a itemprop="'.$itemprop.'" href="'.$data[$datakey].'">';
+		$res .= $name;
+		if (!empty($screenreaderadd)) {
+		    $res .= '<span class="screen-reader-text">: '.__('Seite von','fau-person').' '.$screenreaderadd.'</span>';
 		}
-		$res .= '>'.$name.'</a></'.$itemel.'>';
+		$res .= '</a></'.$itemel.'>';
 		$filled = true;
 	    }	
 	}
