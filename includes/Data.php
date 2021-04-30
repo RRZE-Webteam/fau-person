@@ -1430,7 +1430,7 @@ class Data {
 	    $univis_id = get_post_meta($id, 'fau_person_univis_id', true);
 	    $data = self::get_fields($id, $univis_id, 0);
 	    $thispost = get_post($id);
-	    $postContent = apply_filters('the_content', $thispost->post_content);	
+	    $postContent = $thispost->post_content;	
 	    if (isset($postContent)) {
 		$data['content'] = $postContent;
 	    }
