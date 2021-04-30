@@ -59,6 +59,19 @@ class Standort extends Shortcodes {
 	if (isset($titletag)) {
 	    $titletag = sanitize_html_class($titletag);
 	}
+	if (isset($hstart)) { 
+	    // hstart überschreibt titletag, wenn gesetzt
+	    $hstart = intval($hstart);
+	
+	    if (($hstart <1) || ($hstart > 6)) {
+		$hstart = 2;
+	    }
+	    $titletag = 'h'.$hstart;
+	}
+	
+	
+
+
         //Wenn neue Felder dazukommen, hier die Anzeigeoptionen auch mit einstellen
         if (!empty($show)) {
             $show = array_map('trim', explode(',', $show));

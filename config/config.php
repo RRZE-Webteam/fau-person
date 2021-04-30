@@ -691,14 +691,14 @@ function getShortcodeSettings(){
 		],
 	    ],
 	    'kontaktliste' => [
-            'block' => [
-                'blocktype' => 'fau-person/kontaktliste', 
-                'blockname' => 'kontaktliste',
-                'title' => 'RRZE Kontaktliste',
-                'category' => 'widgets',
-                'icon' => 'id-alt',
-                'show_block' => 'content', // 'right' or 'content' 
-            ],        
+		'block' => [
+		    'blocktype' => 'fau-person/kontaktliste', 
+		    'blockname' => 'kontaktliste',
+		    'title' => 'RRZE Kontaktliste',
+		    'category' => 'widgets',
+		    'icon' => 'id-alt',
+		    'show_block' => 'content', // 'right' or 'content' 
+		],        
 	       'category' => [
 			'default' => '',
 			'field_type' => 'string', 
@@ -712,38 +712,38 @@ function getShortcodeSettings(){
 			'label' => __( 'Format', 'fau-person' ),
 			'type' => 'string',
 			'values' => [
-                [
-                    'id' => 'name',
-                    'val' => __( 'Name', 'fau-person' )
-                ],
-                [
-                    'id' => 'shortlist',
-                    'val' => __( 'Kurzliste', 'fau-person' )
-                ],
-                [
-                    'id' => 'full',
-                    'val' => __( 'Komplett', 'fau-person' )
-                ],
-                [
-                    'id' => 'sidebar',
-                    'val' => __( 'Sidebar', 'fau-person' )
-                ],
-                [
-                    'id' => 'liste',
-                    'val' => __( 'Liste', 'fau-person' )
-                ],
-                [
-                    'id' => 'listentry',
-                    'val' => __( 'Listeneintrag', 'fau-person' )
-                ],
-                [
-                    'id' => 'plain',
-                    'val' => __( 'Unformatiert', 'fau-person' )
-                ],
-                [
-                    'id' => 'kompakt',
-                    'val' => __( 'Kompakt', 'fau-person' )
-                ],
+			    [
+				'id' => 'name',
+				'val' => __( 'Name', 'fau-person' )
+			    ],
+			    [
+				'id' => 'shortlist',
+				'val' => __( 'Kurzliste', 'fau-person' )
+			    ],
+			    [
+				'id' => 'full',
+				'val' => __( 'Komplett', 'fau-person' )
+			    ],
+			    [
+				'id' => 'sidebar',
+				'val' => __( 'Sidebar', 'fau-person' )
+			    ],
+			    [
+				'id' => 'liste',
+				'val' => __( 'Liste', 'fau-person' )
+			    ],
+			    [
+				'id' => 'listentry',
+				'val' => __( 'Listeneintrag', 'fau-person' )
+			    ],
+			    [
+				'id' => 'plain',
+				'val' => __( 'Unformatiert', 'fau-person' )
+			    ],
+			    [
+				'id' => 'kompakt',
+				'val' => __( 'Kompakt', 'fau-person' )
+			    ],
 			],
 		],
 		'show' => [
@@ -784,14 +784,14 @@ function getShortcodeSettings(){
 			'label' => __( 'Bei der Ausgabe mehrerer Kontakten kann nach diesem Feld sortiert werden.', 'fau-person' ),
 			'type' => 'array',
 			'values' => [
-                [
-                    'id' => 'asc',
-                    'val' => __( 'Von A bis Z', 'fau-person' )
-                ],
-                [
-                    'id' => 'desc',
-                    'val' => __( 'Von Z bis A', 'fau-person' )
-                ],
+			    [
+				'id' => 'asc',
+				'val' => __( 'Von A bis Z', 'fau-person' )
+			    ],
+			    [
+				'id' => 'desc',
+				'val' => __( 'Von Z bis A', 'fau-person' )
+			    ],
 			],
 		],
 		'hstart' => [
@@ -812,54 +812,54 @@ function getShortcodeSettings(){
 			'label' => __( 'Farbcode für den Hintergrund.', 'fau-person' ),
 			'type' => 'array',
 			'values' => [
-                [
-                    'id' => '',
-                    'val' => __( 'Kein', 'fau-person' )
-                ],
-                [
-                    'id' => 'med',
-                    'val' => __( 'Med: Blau', 'fau-person' )
-                ],
-                [
-                    'id' => 'phil',
-                    'val' => __( 'Phil: Ocker', 'fau-person' )
-                ],
-                [
-                    'id' => 'tf',
-                    'val' => __( 'TF: Silbern', 'fau-person' )
-                ],
-                [
-                    'id' => 'nat',
-                    'val' => __( 'Nat: Meeresgrün', 'fau-person' )
-                ],
-                [
-                    'id' => 'rw',
-                    'val' => __( 'RW: Bordeaurot', 'fau-person' )
-                ],
-                [
-                    'id' => 'fau',
-                    'val' => __( 'FAU: Dunkelblau', 'fau-person' )
-                ],
+			    [
+				'id' => '',
+				'val' => __( 'Kein', 'fau-person' )
+			    ],
+			    [
+				'id' => 'med',
+				'val' => __( 'Med: Blau', 'fau-person' )
+			    ],
+			    [
+				'id' => 'phil',
+				'val' => __( 'Phil: Ocker', 'fau-person' )
+			    ],
+			    [
+				'id' => 'tf',
+				'val' => __( 'TF: Silbern', 'fau-person' )
+			    ],
+			    [
+				'id' => 'nat',
+				'val' => __( 'Nat: Meeresgrün', 'fau-person' )
+			    ],
+			    [
+				'id' => 'rw',
+				'val' => __( 'RW: Bordeaurot', 'fau-person' )
+			    ],
+			    [
+				'id' => 'fau',
+				'val' => __( 'FAU: Dunkelblau', 'fau-person' )
+			    ],
 			],
 		],
 
 	    ],
 	    'standort' => [
-            'block' => [
-                'blocktype' => 'fau-person/standort', 
-                'blockname' => 'standort',
-                'title' => 'RRZE Standort',
-                'category' => 'widgets',
-                'icon' => 'location-alt',
-                'show_block' => 'content', // 'right' or 'content' 
-            ],        
+		'block' => [
+		    'blocktype' => 'fau-person/standort', 
+		    'blockname' => 'standort',
+		    'title' => 'RRZE Standort',
+		    'category' => 'widgets',
+		    'icon' => 'location-alt',
+		    'show_block' => 'content', // 'right' or 'content' 
+		],        
 
 		'id' => [
 		    'default' => 0,
 		    'label' => __( 'Id-Number des Standorteintrags', 'fau-person' ),
 		    'message' => __( 'Nummer der Eintrags im Backend.', 'fau-person' ), 
-            'field_type' => 'text',
-            'type' => 'number'
+		    'field_type' => 'text',
+		    'type' => 'number'
 	       ],
 		'slug' => [
 			'default' => '',
@@ -873,6 +873,12 @@ function getShortcodeSettings(){
 			'label' => __( 'HTML-Element zur Darstellung des Standortnamens', 'fau-person' ),
 			'type' => 'string' // Variablentyp der Eingabe
 		],
+		'hstart' => [
+			'default' => 3,
+			'field_type' => 'number',
+			'label' => __( 'Überschriftenebene der ersten Überschrift', 'fau-person' ),
+			'type' => 'integer' 
+		],
 		'adresse' => [
 			'default' => true,
 			'field_type' => 'checkbox',
@@ -883,28 +889,28 @@ function getShortcodeSettings(){
 			'default' => '',
 			'field_type' => 'select',
 			'label' => __( 'Format', 'fau-person' ),
-            'type' => 'string',
-			'values' => [
-                [
-                    'id' => 'name',
-                    'val' => __( 'Name', 'fau-person' )
-                ],
-                [
-                    'id' => 'shortlist',
-                    'val' => __( 'Kurzliste', 'fau-person' )
-                ],
-                [
-                    'id' => 'full',
-                    'val' => __( 'Komplett', 'fau-person' )
-                ],
-                [
-                    'id' => 'sidebar',
-                    'val' => __( 'Sidebar', 'fau-person' )
-                ],
-                [
-                    'id' => 'liste',
-                    'val' => __( 'Liste', 'fau-person' )
-                ],
+			'type' => 'string',
+				    'values' => [
+			    [
+				'id' => 'name',
+				'val' => __( 'Name', 'fau-person' )
+			    ],
+			    [
+				'id' => 'shortlist',
+				'val' => __( 'Kurzliste', 'fau-person' )
+			    ],
+			    [
+				'id' => 'full',
+				'val' => __( 'Komplett', 'fau-person' )
+			    ],
+			    [
+				'id' => 'sidebar',
+				'val' => __( 'Sidebar', 'fau-person' )
+			    ],
+			    [
+				'id' => 'liste',
+				'val' => __( 'Liste', 'fau-person' )
+			    ],
 			],
 		],
 		'show' => [
