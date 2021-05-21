@@ -241,10 +241,10 @@ class Data {
 	if ((isset($viewopts['view_kontakt_linktext'])) && (!empty($viewopts['view_kontakt_linktext']))) {
 	     $res .= esc_html($viewopts['view_kontakt_linktext']);
 	} else {
-	    $res .= __('Mehr', 'fau-person') . ' ›';
+	    $res .= __('Profil aufrufen', 'fau-person');
 	}
 	if (!empty($screenreadertext)) {
-	     $res .= '<span class="screen-reader-text">: '.$screenreadertext.'</span>';
+	     $res .= ' <span class="screen-reader-text">'.$screenreadertext.'</span>';
 	}
 	$res .= '</a>';
 	if ($withdiv) {
