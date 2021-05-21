@@ -47,7 +47,7 @@ class BackendMenu {
 	    __('Suche nach UnivIS-ID', 'fau-person'), 
 	    'edit_persons', 'search-univis-id',
 	    array( $this, 'search_univis_id' ));
-        add_action('load-' . $this->search_univis_id_page, array($this, 'help_menu_search_univis_id'));
+    //    add_action('load-' . $this->search_univis_id_page, array($this, 'help_menu_search_univis_id'));
         
     
     }
