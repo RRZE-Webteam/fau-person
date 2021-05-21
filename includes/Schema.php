@@ -264,7 +264,7 @@ class Schema {
 	    return;
 	}
 	$givenName = $familyName = '';
-	$fullname = __('Kontakt','fau-person');
+	
 	if ((isset($data['givenName'])) && (!empty($data['givenName']))) {
 	    $givenName  = esc_html($data['givenName']);
 	}
@@ -283,6 +283,13 @@ class Schema {
 	} elseif ((isset($data['alternateName'])) && (!empty($data['alternateName']))) {
 	    $fullname = esc_html($data['alternateName']);
 	}
+	
+	if (empty($fullname)) {
+	   $fullname = $data['kontakt_title'];
+	} else {
+	   $fullname = __('Kontakt','fau-person');
+	}
+	
 	
 	return esc_attr($fullname);
     }
