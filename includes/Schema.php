@@ -286,8 +286,6 @@ class Schema {
 	
 	if (empty($fullname)) {
 	   $fullname = $data['kontakt_title'];
-	} else {
-	   $fullname = __('Kontakt','fau-person');
 	}
 	
 	
