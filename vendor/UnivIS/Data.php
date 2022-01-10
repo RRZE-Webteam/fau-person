@@ -339,8 +339,10 @@ class Data {
                     7 => __('Sonntag', 'fau-person')
                 );
                 foreach( $repeat_submode as $value ) {
-                        $days_short[$value] = $days_short[$value] . ',';
-                        array_push($date, $days_short[$value]);
+			if (isset($days_short[$value])) {
+			    $days_short[$value] = $days_short[$value] . ',';
+			    array_push($date, $days_short[$value]);
+			}
                 }
             }
         }
