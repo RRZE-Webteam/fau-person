@@ -32,12 +32,11 @@
 
     }
 	
-//
-// auskommentiert, da dies ein A11Y-Issue WCAG AAA verursacht (https://github.com/RRZE-Webteam/FAU-Einrichtungen/issues/947)
-//    [itemprop="honorificSuffix"],
-//    .fullname {
-//       white-space: nowrap;
-//    }
+
+  //  [itemprop="honorificSuffix"],
+  //  .fullname {
+  //     white-space: nowrap;
+  //  }
     [itemprop="hoursAvaible"] {
 	margin-bottom: 10px;
     }
@@ -456,4 +455,5 @@
 	    }
 	}
     }
+
 }
