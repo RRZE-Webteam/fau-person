@@ -411,7 +411,7 @@ function getFields() {
 		'name'  => 'view_kontakt_page_imagesize',
 		'label' => __('Bildformat Kontaktseite', 'fau-person'),	
 		'desc'  => __('Setzt auf der Kontaktseite oder bei Nutzung des Shortcodes mit dem Attribut <code>format="page"</code> das zu verwendete Bildformat.', 'fau-person'),
-		'default' => 'person-thumb-page',
+		'default' => 'person-thumb-page-v3',
 		'type' => 'Selectimagesizes', 
 		'options' => $imagesizes,
 	    ],
@@ -475,13 +475,13 @@ function get_all_image_sizes() {
    
     $ownsizes = getConstants();
     if (isset($ownsizes['images']['default_person_thumb_width' ])) {
-	$image_sizes['person-thumb']['width'] = $ownsizes['images']['default_person_thumb_width' ];
-	$image_sizes['person-thumb']['height'] = $ownsizes['images']['default_person_thumb_height'];
+	$image_sizes['person-thumb-v3']['width'] = $ownsizes['images']['default_person_thumb_width' ];
+	$image_sizes['person-thumb-v3']['height'] = $ownsizes['images']['default_person_thumb_height'];
 
     }
     if (isset($ownsizes['images']['default_person_thumb_page_width' ])) {
-	$image_sizes['person-thumb-page']['width'] = $ownsizes['images']['default_person_thumb_page_width' ];
-	$image_sizes['person-thumb-page']['height'] = $ownsizes['images']['default_person_thumb_page_height'];
+	$image_sizes['person-thumb-page-v3']['width'] = $ownsizes['images']['default_person_thumb_page_width' ];
+	$image_sizes['person-thumb-page-v3']['height'] = $ownsizes['images']['default_person_thumb_page_height'];
     }
     
    
