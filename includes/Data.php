@@ -383,6 +383,7 @@ class Data {
 	    $image_id = get_post_thumbnail_id( $id ); 		
 	    $imga = wp_get_attachment_image_src($image_id, $size);
 	    if (is_array($imga)) {
+	        var_dump($size);
 		$imgsrcset =  wp_get_attachment_image_srcset($image_id, $size);
 		$imgsrcsizes = wp_get_attachment_image_sizes($image_id, $size);
 		$imagedata['src'] = $imga[0];
@@ -675,7 +676,7 @@ class Data {
 	if (isset($viewopts['view_kontakt_page_imagecaption'])) {
 	    $viewcaption = $viewopts['view_kontakt_page_imagecaption'];
 	}
-	$use_size = 'person-thumb-page';
+	$use_size = 'person-thumb-page-v3';
 	if (isset($viewopts['view_kontakt_page_imagesize'])) {
 	    $use_size = $viewopts['view_kontakt_page_imagesize'];
 	}
