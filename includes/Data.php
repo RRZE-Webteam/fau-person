@@ -383,7 +383,6 @@ class Data {
 	    $image_id = get_post_thumbnail_id( $id ); 		
 	    $imga = wp_get_attachment_image_src($image_id, $size);
 	    if (is_array($imga)) {
-	        var_dump($size);
 		$imgsrcset =  wp_get_attachment_image_srcset($image_id, $size);
 		$imgsrcsizes = wp_get_attachment_image_sizes($image_id, $size);
 		$imagedata['src'] = $imga[0];
