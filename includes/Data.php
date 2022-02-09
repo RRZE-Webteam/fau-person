@@ -693,7 +693,7 @@ class Data {
 	    $content .= Schema::create_Name($data,'name','','h'.$hstart,false,$viewopts);
         // }
 	$content .= '<div class="person-meta">';
-	$content .= Data::create_kontakt_image($id, $use_size, "person-image alignright", false, false,'',$viewcaption);	    
+	$content .= Data::create_kontakt_image($id, $use_size, "person-image alignright $use_size", false, false,'',$viewcaption);
 
          $content .= '<div class="person-info">';
 	 
