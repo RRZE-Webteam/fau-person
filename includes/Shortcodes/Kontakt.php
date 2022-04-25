@@ -193,13 +193,13 @@ class Kontakt extends Shortcodes {
     	$arguments = shortcode_atts($defaults, $atts);
     	$arguments = self::translate_parameters($arguments);
     	$displayfield = Data::get_display_field($arguments['format'],$arguments['show'],$arguments['hide']);
-    	
+		$limit = (!empty($atts['unlimited']) ? -1 : 100);
 	
     	if (isset($arguments['category'])) {
     	    $category = get_term_by('slug', $arguments['category'], 'persons_category');    
     	    if( is_object( $category ) ) {
-        		$posts = get_posts(array('post_type' => 'person', 'fields' => 'ids', 'post_status' => 'publish', 'numberposts' => 100, 'orderby' => 'title', 'order' => 'ASC', 'tax_query' => array(
-        		    array(
+				$posts = get_posts(array('post_type' => 'person', 'fields' => 'ids', 'post_status' => 'publish', 'numberposts' => $limit, 'orderby' => 'title', 'order' => 'ASC', 'tax_query' => array(
+					array(
         			'taxonomy' => 'persons_category',
         			'field' => 'id', // can be slug or id - a CPT-onomy term's ID is the same as its post ID
         			'terms' => $category->term_id   // Notice: Trying to get property of non-object bei unbekannter Kategorie
