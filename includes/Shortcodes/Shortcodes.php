@@ -28,6 +28,9 @@ class Shortcodes {
 
     	$standort_shortcode = new Standort($this->pluginFile,  $this->settings);
     	$standort_shortcode->onLoaded();
+
+        $buchung_shortcode = new Buchung($this->pluginFile,  $this->settings);
+        $buchung_shortcode->onLoaded();
     }
 
 

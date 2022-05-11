@@ -1537,6 +1537,9 @@ class Data {
             'link' => '',
             'hoursAvailable_text' => '',
             'hoursAvailable' => '',
+            'bookingAvailable' => '',
+            'bookingIntervals' => '',
+            'bookingIntervals' => '',
             'description' => '',
 	   'small_description' => ''
         );

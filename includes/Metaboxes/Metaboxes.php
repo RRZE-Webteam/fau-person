@@ -29,6 +29,8 @@ class Metaboxes  {
    
 
 	add_action( 'cmb2_render_text_number', array( $this, 'sm_cmb_render_text_number' ) );
+    add_action( 'cmb2_render_select_multiple', array( $this, 'cmb2_render_select_multiple_field_type'), 10, 5 );
+    add_filter( 'cmb2_sanitize_select_multiple', array( $this, 'cmb2_sanitize_select_multiple_callback'), 10, 2 );
 
 	
 //	add_filter( 'cmb2_show_on', array( $this, 'mb_show_on_person' ) );
@@ -75,6 +77,49 @@ class Metaboxes  {
 	}
     }
 
+    /**
+     * Adds a custom field type for select multiples.
+     * @param  object $field             The CMB2_Field type object.
+     * @param  string $value             The saved (and escaped) value.
+     * @param  int    $object_id         The current post ID.
+     * @param  string $object_type       The current object type.
+     * @param  object $field_type_object The CMB2_Types object.
+     * @return void
+     */
+    function cmb2_render_select_multiple_field_type( $field, $escaped_value, $object_id, $object_type, $field_type_object ) {
+
+        $select_multiple = '<select multiple name="' . $field->args['_name'] . '[]" id="' . $field->args['_id'] . '"';
+        foreach ( $field->args['attributes'] as $attribute => $value ) {
+            $select_multiple .= " $attribute=\"$value\"";
+        }
+        $select_multiple .= ' />';
+
+        foreach ( $field->options() as $value => $name ) {
+            $selected = ( $escaped_value && in_array( $value, $escaped_value ) ) ? 'selected="selected"' : '';
+            $select_multiple .= '<option class="cmb2-option" value="' . esc_attr( $value ) . '" ' . $selected . '>' . esc_html( $name ) . '</option>';
+        }
+
+        $select_multiple .= '</select>';
+        $select_multiple .= $field_type_object->_desc( true );
+
+        echo $select_multiple; // WPCS: XSS ok.
+    }
+
+
+    /**
+     * Sanitize the selected value.
+     */
+    function cmb2_sanitize_select_multiple_callback( $override_value, $value ) {
+        if ( is_array( $value ) ) {
+            foreach ( $value as $key => $saved_value ) {
+                $value[$key] = sanitize_text_field( $saved_value );
+            }
+
+            return $value;
+        }
+
+        return;
+    }
 
 
 }

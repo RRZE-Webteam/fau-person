@@ -382,6 +382,13 @@ class Kontakt extends Metaboxes {
 	    'fields' => $somefields,
 
 	);
+    // Select-Options für User-Auswahl für Online-Buchungen
+    // options_cb funktioniert aus irgendeinem Grund nicht
+    $userArray = [];
+    $users = get_users();
+    foreach ($users as $user) {
+        $userArray['id_'.$user->ID] = $user->data->display_name;
+    }
 
 	// Meta-Box Weitere Informationen - fau_person_adds
 	$meta_boxes['fau_person_adds'] = array(
@@ -404,7 +411,36 @@ class Kontakt extends Metaboxes {
 		    'type' => 'textarea_small',
 		    'id' => $prefix . 'hoursAvailable'
 		),
-		array(
+        array(
+            'name' => __('Online-Buchung', 'fau-person'),
+            'desc' => __('Sollen Sprechzeiten online gebucht werden?', 'fau-person'),
+            'type' => 'checkbox',
+            'id' => $prefix . 'bookingAvailable'
+        ),
+        array(
+            'name' => __('Online-Buchungsintervalle', 'fau-person'),
+            //'desc' => __('', 'fau-person'),
+            'type' => 'select',
+            'id' => $prefix . 'bookingIntervals',
+            'options' => array(
+                '15' => __('15 Minuten', 'fau-person'),
+                '30' => __('30 Minuten', 'fau-person'),
+                '60' => __('1 Stunde', 'fau-person'),
+            ),
+            'default' => '30',
+        ),
+        array(
+            'name' => __('Bearbeitungsrechte', 'fau-person'),
+            'desc' => __('Wählen Sie aus, wer die Buchungen einsehen und bearbeiten darf.', 'fau-person'),
+            'type'       => 'select_multiple',
+            'id' => $prefix . 'bookingUsers',
+            'options' => $userArray,
+            'attributes' => [
+                'size' => '5',
+            ]
+        ),
+
+        array(
 		    'id' => $prefix . 'hoursAvailable_group',
 		    'type' => 'group',
 		    'desc' => $univis_default['hoursAvailable_group'],
@@ -589,6 +625,15 @@ class Kontakt extends Metaboxes {
 	return $einrichtung;
     }
 
+    // Liste von Usern dieser Website
+    function callback_cmb2_booking_users($field) {
+        $options = [];
+        $users = get_users();
+        foreach ($users as $user) {
+            $options['id_'.$user->ID] = $user->data->display_name;
+        }
+        return $options;
+    }
 
 
 

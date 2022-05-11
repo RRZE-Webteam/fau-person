@@ -926,8 +926,31 @@ function getShortcodeSettings(){
 			'type' => 'string' 
 		],
 
-	    ]
+	    ],
+        'buchung' => [
+            'block' => [
+                'blocktype' => 'fau-person/buchung',
+                'blockname' => 'buchung',
+                'title' => 'RRZE Terminbuchung',
+                'category' => 'widgets',
+                'icon' => 'id',
+                'show_block' => 'content', // 'right' or 'content'
+            ],
+            'id' => [
+                'default' => 0,
+                'label' => __( 'Id-Number des Kontakteintrags', 'fau-person' ),
+                'message' => __( 'Nummer der Eintrags der Kontaktliste im Backend. Nicht identisch mit einer optionalen UnivIS-Nummer.', 'fau-person' ),
+                'field_type' => 'text',
+                'type' => 'number'
+            ],
+            'slug' => [
+                'default' => '',
+                'field_type' => 'text', // Art des Feldes im Gutenberg Editor
+                'label' => __( 'Slug (URI) des Kontakteintrags', 'fau-person' ),
+                'type' => 'text' // Variablentyp der Eingabe
+            ],
 
+        ],
     ];
     
 
