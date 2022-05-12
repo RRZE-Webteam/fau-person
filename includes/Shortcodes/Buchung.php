@@ -63,21 +63,21 @@ class Buchung extends Shortcodes
         if ($officeHoursRaw == '') {
             return '<div class="alert alert-warning">' . __('Keine Sprechstunden verfügbar.', 'fau-person') . '</div>';
         }
-        $officeHoursRaw = get_post_meta($id, 'fau_person_hoursAvailable_group', true);
 
         //print "<pre>"; var_dump($officeHoursRaw); print "</pre>";
         //print "<pre>"; var_dump(Data::get_kontakt_data($id)); print "</pre>";
         $currentMonth = date('m', current_time('timestamp'));
         $currentYear = date('Y', current_time('timestamp'));
-        return self::buildCalendar($currentMonth, $currentYear);
+        return self::buildCalendar($currentMonth, $currentYear, $id);
     }
 
-    private static function buildCalendar($month, $year, $bookingdate_selected = '') {
+    private static function buildCalendar($month, $year, $id, $bookingdate_selected = '') {
         // Create array containing abbreviations of days of week.
         $daysOfWeek = self::daysOfWeekAry(0, 1, 2);
         // What is the first day of the month in question?
         $firstDayOfMonth = mktime(0,0,0,$month,1,$year);
         $firstDayOfMonthDate = date('Y-m-d', $firstDayOfMonth);
+        $bookingDaysStart = date('Y-m-d', current_time('timestamp'));
         // How many days does this month contain?
         $numberDays = date('t', $firstDayOfMonth);
         $lastDayOfMonth = mktime(0,0,0, $month, $numberDays, $year);
@@ -89,17 +89,17 @@ class Buchung extends Shortcodes
         $link_next = '<a href="#" class="cal-skip cal-next" data-direction="next">&gt;&gt;</a>';
         $link_prev = '<a href="#" class="cal-skip cal-prev" data-direction="prev">&lt;&lt;</a>';
         //$availability = Functions::getRoomAvailability($roomID, $bookingDaysStart, $bookingDaysEnd, false);
-        $availability = [];
+        $availability = self::getAvailability($id, $firstDayOfMonth, $lastDayOfMonth);
         // Create the table tag opener and day headers
-        $calendar = '<table class="rsvp_calendar" data-period="'.date_i18n('Y-m', $firstDayOfMonth).'" data-end="'.$bookingDaysEnd.'">';
+        $calendar = '<table class="rsvp_calendar" data-period="'.date_i18n('Y-m', $firstDayOfMonth).'">';
         $calendar .= "<caption>";
-        //if ($bookingDaysStart <= $firstDayOfMonthDate) {
+        if ($bookingDaysStart <= $firstDayOfMonthDate) {
             $calendar .= $link_prev;
-        //}
-        $calendar .= date_i18n('F Y', $firstDayOfMonth);
-        if ($bookingDaysEnd >= $lastDayOfMonthDate) {
-            $calendar .= $link_next;
         }
+        $calendar .= date_i18n('F Y', $firstDayOfMonth);
+        //if ($bookingDaysEnd >= $lastDayOfMonthDate) {
+            $calendar .= $link_next;
+        //}
         $calendar .= "</caption>";
         // Create the calendar headers
         $calendar .= "<tr>";
@@ -124,11 +124,11 @@ class Buchung extends Shortcodes
                 $calendar .= "</tr><tr>";
             }
             $currentDayRel = str_pad($currentDay, 2, "0", STR_PAD_LEFT);
-            $date = "$year-$month-$currentDayRel";
+            $date = strtotime("$year-$month-$currentDayRel");
             $active = false;
             $class = 'soldout';
             $title = __('Not bookable (soldout or room blocked)','fau-person');
-            if (isset($availability[$date])) {
+            if (isset($availability[$date]) && !empty($availability[$date])) {
                 foreach ( $availability[ $date ] as $timeslot ) {
                     if ( !empty( $timeslot ) ) {
                         $active = true;
@@ -179,4 +179,70 @@ class Buchung extends Shortcodes
         return $weekDays;
     }
 
+    private static function getAvailability(int $id, string $start, string $end) {
+        $availability = [];
+        $officeHours = get_post_meta($id, 'fau_person_hoursAvailable_group', true);
+        if ($officeHours == '') {
+            return [];
+        }
+        $counter = $start;
+        // Loop through days
+        while ($counter <= $end) {
+            $availability[$counter] = [];
+            $day = date('Y-m-d', $counter);
+            $i = 0;
+            // Loop through timeslots
+            foreach ($officeHours as $officeHour) {
+                switch ($officeHour['repeat']) {
+                    case 'd1':
+                        if (!isset($officeHour['starttime']) || !isset($officeHour['endtime'])) {
+                            continue 2;
+                        }
+                        $availability[$counter][$i]['start'] = strtotime($day . ' ' . $officeHour['starttime']);
+                        $availability[$counter][$i]['end'] = strtotime($day . ' ' . $officeHour['endtime']);
+                        break;
+                    case 'w1':
+                    case 'w2':
+                        $weekDaysAvailable = $officeHour['repeat_submode'];
+                        $weekDayCurrent = date('N', $counter);
+                        if (!in_array($weekDayCurrent, $weekDaysAvailable)) {
+                            // Skip if it is a wrong day of the week
+                            continue 2;
+                        } if (!isset($officeHour['starttime']) || !isset($officeHour['endtime'])) {
+                            // Skip if start/end times are not complete
+                            continue 2;
+                        }
+                        if ($officeHour['repeat'] == 'w1') {
+                            // Weekly timeslots
+                            $availability[$counter][$i]['start'] = strtotime($day . ' ' . $officeHour['starttime']);
+                            $availability[$counter][$i]['end'] = strtotime($day . ' ' . $officeHour['endtime']);
+                        } else {
+                            // 2-weekly timeslots
+                            if (!isset($officeHour['bookingWeeks'])) {
+                                continue 2;
+                            }
+                            $bookingWeeks = $officeHour['bookingWeeks'];
+                            $weekNumber = date('W', $counter);
+                            if ($weekNumber % 2 == 0){
+                                $weekType = 'even';
+                            } else {
+                                $weekType = 'odd';
+                            }
+                            if ($bookingWeeks == $weekType) {
+                                $availability[$counter][$i]['start'] = strtotime($day . ' ' . $officeHour['starttime']);
+                                $availability[$counter][$i]['end'] = strtotime($day . ' ' . $officeHour['endtime']);
+                            }
+                        }
+                        break;
+                    case '-':
+                    default:
+                        break;
+                }
+                $i++;
+            }
+            $counter += (60 * 60 * 24); // increment timestamp by 1 day
+        }
+        print "<pre>";var_dump($availability);print "</pre>";
+        return $availability;
+    }
 }

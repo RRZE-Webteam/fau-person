@@ -415,7 +415,7 @@ class Kontakt extends Metaboxes {
             'name' => __('Online-Buchung', 'fau-person'),
             'desc' => __('Sollen Sprechzeiten online gebucht werden?', 'fau-person'),
             'type' => 'checkbox',
-            'id' => $prefix . 'bookingAvailable'
+            'id' => $prefix . 'bookingAvailable',
         ),
         array(
             'name' => __('Online-Buchungsintervalle', 'fau-person'),
@@ -428,16 +428,18 @@ class Kontakt extends Metaboxes {
                 '60' => __('1 Stunde', 'fau-person'),
             ),
             'default' => '30',
+            'classes' =>['online-only'],
         ),
         array(
-            'name' => __('Bearbeitungsrechte', 'fau-person'),
+            'name' => __('Bearbeitungsrechte für Buchungen', 'fau-person'),
             'desc' => __('Wählen Sie aus, wer die Buchungen einsehen und bearbeiten darf.', 'fau-person'),
             'type'       => 'select_multiple',
             'id' => $prefix . 'bookingUsers',
             'options' => $userArray,
             'attributes' => [
                 'size' => '5',
-            ]
+            ],
+            'classes' =>['online-only'],
         ),
 
         array(
@@ -463,7 +465,19 @@ class Kontakt extends Metaboxes {
 				'w2' => __('alle 2 Wochen', 'fau-person'),
 			    )
 			),
-			array(
+            array(
+                'name' => __('Wochenrhythmus', 'fau-person'),
+                'desc' => __('Nur, wenn "alle 2 Wochen" ausgewählt wurde', 'fau-person'),
+                'type' => 'select',
+                'id' => 'bookingWeeks',
+                'options' => array(
+                    'even' => __('gerade Kalenderwochen', 'fau-person'),
+                    'odd' => __('ungerade Kalenderwochen', 'fau-person'),
+                ),
+                'default' => '30',
+                'classes' =>['online-only', '2weeks-only'],
+            ),
+            array(
 			    'name' =>  __('am', 'fau-person'),
 			    'id' => 'repeat_submode',
 			    'type' => 'multicheck',
@@ -499,7 +513,14 @@ class Kontakt extends Metaboxes {
 			    'id' => 'comment',
 			    'type' => 'text',
 			),
-		    ),
+            array(
+                'name' => __('Ausnahmen', 'fau-person'),
+                'desc' => __('Geben Sie hier Tage ein, an denen keine Sprechstunden gebucht werden können. Format JJJJ-MM-TT, ein Datum pro Zeile. Dies überschreibt die allgemeinen Termine (z.B. Sprechstunde ist buchbar Montags, 9-12 Uhr, außer am 21.09.2020).', 'fau-person'),
+                'type' => 'textarea_small',
+                'id' => $prefix . 'hoursAvailable',
+                'classes' =>['online-only'],
+            ),
+            ),
 
 		), 
 
