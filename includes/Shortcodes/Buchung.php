@@ -25,12 +25,14 @@ class Buchung extends Shortcodes
     }
 
     public function onLoaded() {
-        add_shortcode('terminbuchung', [$this, 'shortcode_buchung'], 10, 2);
+        add_shortcode('terminbuchung', [$this, 'shortcodeBooking'], 10, 2);
         add_action( 'wp_ajax_UpdateForm', [$this, 'ajaxUpdateForm'] );
+        add_action( 'wp_ajax_UpdateCalendar', [$this, 'ajaxUpdateCalendar'] );
         add_action( 'wp_ajax_nopriv_UpdateForm', [$this, 'ajaxUpdateForm'] );
+        add_action( 'wp_enqueue_scripts', [$this, 'enqueueScripts'] );
     }
 
-    public static function shortcode_buchung($atts, $content = null) {
+    public static function shortcodeBooking($atts, $content = null) {
         $defaults = getShortcodeDefaults('buchung');
         $arguments = shortcode_atts($defaults, $atts);
 
@@ -78,6 +80,12 @@ class Buchung extends Shortcodes
         $output .=self::buildCalendar($currentMonth, $currentYear, $id);
         $output .= '</form></div>';
 
+        wp_enqueue_style('fau-person');
+        wp_enqueue_script('fau-person-booking');
+        wp_localize_script('fau-person-booking', 'fau-person_ajax', [
+            'ajax_url' => admin_url('admin-ajax.php'),
+            'nonce' => wp_create_nonce( 'fau-person-ajax-nonce' ),
+        ]);
         return $output;
     }
 
@@ -203,6 +211,12 @@ class Buchung extends Shortcodes
             $i = 0;
             // Loop through timeslots
             foreach ($officeHours as $officeHour) {
+                if (isset($officeHour['exceptions']) && $officeHour['exceptions'] != '') {
+                    $exceptions = explode("\n", str_replace("\r", '', $officeHour['exceptions']));
+                    if (in_array($day, $exceptions)) {
+                        continue;
+                    }
+                }
                 switch ($officeHour['repeat']) {
                     case 'd1':
                         if (!isset($officeHour['starttime']) || !isset($officeHour['endtime'])) {
@@ -256,6 +270,35 @@ class Buchung extends Shortcodes
         return $availability;
     }
 
+    public function ajaxUpdateCalendar() {
+        check_ajax_referer( 'fau-person-ajax-nonce', 'nonce' );
+        $period = explode('-', $_POST['month']);
+        $month = $period[1];
+        $year = $period[0];
+        switch ($month) {
+            case '1':
+                $modMonth = $_POST['direction'] == 'next' ? 1 : 11;
+                $modYear = $_POST['direction'] == 'next' ? 0 : -1;
+                break;
+            case '12':
+                $modMonth = $_POST['direction'] == 'next' ? -11 : -1;
+                $modYear = $_POST['direction'] == 'next' ? 1 : 0;
+                break;
+            default:
+                $modMonth = $_POST['direction'] == 'next' ? 1 : -1;
+                $modYear = 0;
+                break;
+        }
+
+        $start = date_i18n('Y-m-d', current_time('timestamp'));
+        $end = sanitize_text_field($_POST['end']);
+        $roomID = (int)$_POST['room'];
+        $output = '';
+        $output .= $this->buildCalendar($month + $modMonth, $year + $modYear, $start, $end, $roomID);
+        echo $output;
+        wp_die();
+    }
+
     public function ajaxUpdateForm() {
         /*check_ajax_referer( 'rsvp-ajax-nonce', 'nonce'  );
         $roomID = ((isset($_POST['room']) && $_POST['room'] > 0) ? (int)$_POST['room'] : '');
@@ -280,6 +323,16 @@ class Buchung extends Shortcodes
             }
         }
         wp_send_json($response);*/
+    }
+
+    public static function enqueueScripts() {
+        wp_register_script(
+            'fau-person-booking',
+            //plugins_url('js/fau-person-booking.js', plugin_basename(__FILE__)),
+            WP_PLUGIN_URL . '/fau-person/src/js/fau-person-booking.js',
+            ['jquery'],
+            '1.0.0'
+        );
     }
 
 

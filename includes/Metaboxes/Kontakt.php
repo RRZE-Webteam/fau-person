@@ -517,7 +517,7 @@ class Kontakt extends Metaboxes {
                 'name' => __('Ausnahmen', 'fau-person'),
                 'desc' => __('Geben Sie hier Tage ein, an denen keine Sprechstunden gebucht werden können. Format JJJJ-MM-TT, ein Datum pro Zeile. Dies überschreibt die allgemeinen Termine (z.B. Sprechstunde ist buchbar Montags, 9-12 Uhr, außer am 21.09.2020).', 'fau-person'),
                 'type' => 'textarea_small',
-                'id' => $prefix . 'hoursAvailable',
+                'id' => 'exceptions',
                 'classes' =>['online-only'],
             ),
             ),
