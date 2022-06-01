@@ -26,6 +26,8 @@ class Buchung extends Shortcodes
 
     public function onLoaded() {
         add_shortcode('terminbuchung', [$this, 'shortcode_buchung'], 10, 2);
+        add_action( 'wp_ajax_UpdateForm', [$this, 'ajaxUpdateForm'] );
+        add_action( 'wp_ajax_nopriv_UpdateForm', [$this, 'ajaxUpdateForm'] );
     }
 
     public static function shortcode_buchung($atts, $content = null) {
@@ -66,9 +68,17 @@ class Buchung extends Shortcodes
 
         //print "<pre>"; var_dump($officeHoursRaw); print "</pre>";
         //print "<pre>"; var_dump(Data::get_kontakt_data($id)); print "</pre>";
+
+        $output = '';
+        $output .= '<div class="fau-person-booking">';
+        $output .= '<form action="' . get_permalink() . '" method="post" id="" class="">'
+            . '<div id="loading"><i class="fa fa-refresh fa-spin fa-4x"></i></div>';
         $currentMonth = date('m', current_time('timestamp'));
         $currentYear = date('Y', current_time('timestamp'));
-        return self::buildCalendar($currentMonth, $currentYear, $id);
+        $output .=self::buildCalendar($currentMonth, $currentYear, $id);
+        $output .= '</form></div>';
+
+        return $output;
     }
 
     private static function buildCalendar($month, $year, $id, $bookingdate_selected = '') {
@@ -91,7 +101,7 @@ class Buchung extends Shortcodes
         //$availability = Functions::getRoomAvailability($roomID, $bookingDaysStart, $bookingDaysEnd, false);
         $availability = self::getAvailability($id, $firstDayOfMonth, $lastDayOfMonth);
         // Create the table tag opener and day headers
-        $calendar = '<table class="rsvp_calendar" data-period="'.date_i18n('Y-m', $firstDayOfMonth).'">';
+        $calendar = '<table class="booking_calendar" data-period="'.date_i18n('Y-m', $firstDayOfMonth).'">';
         $calendar .= "<caption>";
         if ($bookingDaysStart <= $firstDayOfMonthDate) {
             $calendar .= $link_prev;
@@ -242,7 +252,35 @@ class Buchung extends Shortcodes
             }
             $counter += (60 * 60 * 24); // increment timestamp by 1 day
         }
-        print "<pre>";var_dump($availability);print "</pre>";
+        //print "<pre>";var_dump($availability);print "</pre>";
         return $availability;
     }
+
+    public function ajaxUpdateForm() {
+        /*check_ajax_referer( 'rsvp-ajax-nonce', 'nonce'  );
+        $roomID = ((isset($_POST['room']) && $_POST['room'] > 0) ? (int)$_POST['room'] : '');
+        $date = (isset($_POST['date']) ? sanitize_text_field($_POST['date']) : false);
+        $time = (isset($_POST['time']) ? sanitize_text_field($_POST['time']) : false);
+        $seat = (isset($_POST['seat']) ? sanitize_text_field($_POST['seat']) : false);
+        $response = [];
+        if ($date !== false) {
+            $response['time'] = '<div class="rsvp-time-select error">'.__('Please select a date.', 'rrze-rsvp').'</div>';
+        }
+        if (!$date || !$time) {
+            $response['seat'] = '<div class="rsvp-seat-select error">'.__('Please select a date and a time slot.', 'rrze-rsvp').'</div>';
+        }
+        $availability = getAvailability($roomID, $date, $date, false);
+        $bookingMode = get_post_meta($roomID, 'rrze-rsvp-room-bookingmode', true);
+        if ($date) {
+            $response['time'] = $this->buildTimeslotSelect($roomID, $date, $time, $availability);
+            if ($time && ($bookingMode != 'consultation')) {
+                $seatSelect = $this->buildSeatSelect($roomID, $date, $time, $seat, $availability);
+                $seatInfo = ($seat) ? $this->buildSeatInfo($seat) : '';
+                $response['seat'] = $seatSelect . $seatInfo;
+            }
+        }
+        wp_send_json($response);*/
+    }
+
+
 }

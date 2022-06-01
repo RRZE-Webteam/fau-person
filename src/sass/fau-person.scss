@@ -465,3 +465,160 @@
     }
 
 }
+
+/*
+ * Buchungsformular
+ */
+.fau-person-booking {
+
+	#loading {
+		display: none;
+		position: fixed;
+		top: 0;
+		right: 0;
+		left: 0;
+		bottom: 0;
+		z-index: 1000;
+		background: rgba(255, 255, 255, .7);
+
+		.fa-spin {
+			color: #036;
+			position: relative;
+			top: 50%;
+			left: 50%;
+		}
+	}
+
+	.datetime-container {
+		margin-bottom: 1em;
+		@media (min-width: 480px) {
+			display:flex;
+			flex-wrap: wrap;
+			justify-content: flex-start;
+		}
+		h3 {
+			flex-basis: 100%;
+			flex-shrink: 0;
+		}
+	}
+	.date-container {
+		@media (min-width: 480px) {
+			margin-right: 30px;
+		}
+		.table-wrapper {
+			border-right-color: transparent;
+		}
+	}
+	.time-container {
+	}
+	.datebox {
+		min-width: 100px;
+		float: left;
+		background: #e9edf2;
+		font-size: .9em;
+		margin: 5px;
+		padding: 5px 7px;
+		label {
+			min-width: 0;
+			font-size: inherit;
+			padding: 0;
+			margin: 0;
+			&.disabled {
+				opacity: 0.6;
+				cursor: not-allowed;
+			}
+		}
+
+	}
+	table.booking_calendar {
+		border: 2px solid #dfe6ec;
+		width: 100%;
+		float: none;
+		margin: 0 auto;
+
+		@media (min-width: 480px) {
+			float: left;
+			margin: 0;
+			width: auto;
+		}
+
+
+		&:focus-within {
+			border: 2px solid #31708f;
+		}
+		caption {
+			text-align: left;
+			padding-bottom: 3px;
+		}
+		.cal-next {
+			display: inline-block;
+			float: right;
+			margin-left: 10px;
+		}
+		.cal-prev {
+			display: inline-block;
+			float: left;
+			margin-right: 10px;
+		}
+		th {
+			padding: 5px 10px;
+
+			&.header {
+				text-align: center;
+			}
+		}
+		tr:nth-child(2n+1) td {
+			background: inherit;
+		}
+		td {
+			padding: 0;
+			text-align: center;
+			input {
+				position: absolute;
+				left: -100vw;
+			}
+			input:checked ~ label {
+				background: #036;
+				color: #fff;
+			}
+			label {
+				display: block;
+				min-width: 0;
+				margin: 0;
+				padding: 5px 10px;
+				font-size: inherit;
+				line-height: inherit;
+				&:hover, &:focus, &:active {
+					background: #dfe6ec;
+					color: #000;
+				}
+			}
+
+			&.day.current label {
+				/*background: #dfe6ec;*/
+				font-weight: bold;
+				border: 1px solid #666;
+			}
+			&.available label {
+				background: #dff0d8;
+				color: #3c763d;
+				font-weight: bold;
+			}
+			&.soldout span {
+				background: #f2dede;
+				color: #a94442;
+			}
+		}
+		span.inactive {
+			display: block;
+			padding: 5px 10px;
+			opacity: 0.4;
+			cursor: not-allowed;
+		}
+	}
+
+	.alert {
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+}
