@@ -29,6 +29,7 @@ class Buchung extends Shortcodes
         add_action( 'wp_ajax_UpdateForm', [$this, 'ajaxUpdateForm'] );
         add_action( 'wp_ajax_UpdateCalendar', [$this, 'ajaxUpdateCalendar'] );
         add_action( 'wp_ajax_nopriv_UpdateForm', [$this, 'ajaxUpdateForm'] );
+        add_action( 'wp_ajax_nopriv_UpdateCalendar', [$this, 'ajaxUpdateCalendar'] );
         add_action( 'wp_enqueue_scripts', [$this, 'enqueueScripts'] );
     }
 
@@ -74,15 +75,16 @@ class Buchung extends Shortcodes
         $output = '';
         $output .= '<div class="fau-person-booking">';
         $output .= '<form action="' . get_permalink() . '" method="post" id="" class="">'
-            . '<div id="loading"><i class="fa fa-refresh fa-spin fa-4x"></i></div>';
+            . '<div id="loading"><i class="fa fa-refresh fa-spin fa-4x"></i></div>'
+            . '<div class="fau-person-date-container">';
         $currentMonth = date('m', current_time('timestamp'));
         $currentYear = date('Y', current_time('timestamp'));
         $output .=self::buildCalendar($currentMonth, $currentYear, $id);
-        $output .= '</form></div>';
+        $output .= '</div></form></div>';
 
         wp_enqueue_style('fau-person');
         wp_enqueue_script('fau-person-booking');
-        wp_localize_script('fau-person-booking', 'fau-person_ajax', [
+        wp_localize_script('fau-person-booking', 'fau_person_ajax', [
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce( 'fau-person-ajax-nonce' ),
         ]);
@@ -109,7 +111,7 @@ class Buchung extends Shortcodes
         //$availability = Functions::getRoomAvailability($roomID, $bookingDaysStart, $bookingDaysEnd, false);
         $availability = self::getAvailability($id, $firstDayOfMonth, $lastDayOfMonth);
         // Create the table tag opener and day headers
-        $calendar = '<table class="booking_calendar" data-period="'.date_i18n('Y-m', $firstDayOfMonth).'">';
+        $calendar = '<table class="booking_calendar" data-period="'.date_i18n('Y-m', $firstDayOfMonth).'" data-id="'.$id.'">';
         $calendar .= "<caption>";
         if ($bookingDaysStart <= $firstDayOfMonthDate) {
             $calendar .= $link_prev;
@@ -164,7 +166,7 @@ class Buchung extends Shortcodes
                 } else {
                     $checked = '';
                 }
-                $input_open = "<input type=\"radio\" id=\"rsvp_date_$date\" value=\"$date\" name=\"rsvp_date\" $checked required><label for=\"rsvp_date_$date\">";
+                $input_open = "<input type=\"radio\" id=\"person_booking_date_$date\" value=\"$date\" name=\"person_booking_date\" $checked required><label for=\"person_booking_date_$date\">";
                 $input_close = '</label>';
             }
             $calendar .= "<td class='day $class' rel='$date' title='$title'>" . $input_open.$currentDay.$input_close . "</td>";
@@ -275,6 +277,7 @@ class Buchung extends Shortcodes
         $period = explode('-', $_POST['month']);
         $month = $period[1];
         $year = $period[0];
+        $personID = sanitize_text_field($_POST['id']);
         switch ($month) {
             case '1':
                 $modMonth = $_POST['direction'] == 'next' ? 1 : 11;
@@ -289,12 +292,7 @@ class Buchung extends Shortcodes
                 $modYear = 0;
                 break;
         }
-
-        $start = date_i18n('Y-m-d', current_time('timestamp'));
-        $end = sanitize_text_field($_POST['end']);
-        $roomID = (int)$_POST['room'];
-        $output = '';
-        $output .= $this->buildCalendar($month + $modMonth, $year + $modYear, $start, $end, $roomID);
+        $output = $this->buildCalendar($month + $modMonth, $year + $modYear, $personID);
         echo $output;
         wp_die();
     }

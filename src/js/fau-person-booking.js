@@ -14,20 +14,19 @@ jQuery(document).ready(function($){
 
     $('div.fau-person-booking').on('click', 'a.cal-skip', function(e) {
         e.preventDefault();
-        var monthCurrent = $('table.booking_calendar').data('period');
-        //var endDate = $('table.fau-person_calendar').data('end');
+        var calendar = $('table.booking_calendar');
+        var monthCurrent = calendar.data('period');
         var direction = $(this).data('direction');
-        //var room = $('#fau-person_room').val();
-        $('table.booking_calendar').remove();
+        var id = calendar.data('id');
+        calendar.remove();
         $('div.fau-person-time-select').remove();
         $('div.fau-person-seat-select').remove();
-        $.post(fau-person_ajax.ajax_url, {         //POST request
-            _ajax_nonce: fau-person_ajax.nonce,     //nonce
+        $.post(fau_person_ajax.ajax_url, {         //POST request
+            _ajax_nonce: fau_person_ajax.nonce,     //nonce
             action: "UpdateCalendar",            //action
             month: monthCurrent ,                  //data
-            end: endDate,
             direction: direction,
-            person: person,
+            id: id,
         }, function(result) {                 //callback
             $('div.fau-person-date-container').html(result);
         });
@@ -44,8 +43,8 @@ jQuery(document).ready(function($){
         // console.log(time);
         $('div.fau-person-time-select').remove();
         $('div.fau-person-seat-select').remove();
-        $.post(fau-person_ajax.ajax_url, {         //POST request
-            _ajax_nonce: fau-person_ajax.nonce,     //nonce
+        $.post(fau_person_ajax.ajax_url, {         //POST request
+            _ajax_nonce: fau_person_ajax.nonce,     //nonce
             action: "UpdateForm",            //action
             room: room,                  //data
             date: date,          //data
