@@ -1,5 +1,5 @@
 /*
- * JS for shortcode [terminbuchung]
+ * JS for Shortcode [terminbuchung]
  */
 
 jQuery(document).ready(function($){
@@ -18,9 +18,8 @@ jQuery(document).ready(function($){
         var monthCurrent = calendar.data('period');
         var direction = $(this).data('direction');
         var id = calendar.data('id');
-        calendar.remove();
-        $('div.fau-person-time-select').remove();
-        $('div.fau-person-seat-select').remove();
+        //calendar.remove();
+        $('div.fau_person_time_select').remove();
         $.post(fau_person_ajax.ajax_url, {         //POST request
             _ajax_nonce: fau_person_ajax.nonce,     //nonce
             action: "UpdateCalendar",            //action
@@ -32,28 +31,21 @@ jQuery(document).ready(function($){
         });
     });
 
-
-    function updateForm() {
-        var room = $('#fau-person_room').val();
-        var date = $('table.fau-person_calendar input[name="fau-person_date"]:checked').val();
-        var time = $('div.fau-person-time-container input[name="fau-person_time"]:checked').val();
-        var seat = $('div.fau-person-seat-container input[name="fau-person_seat"]:checked').val();
-        // console.log(room);
-        // console.log(date);
-        // console.log(time);
-        $('div.fau-person-time-select').remove();
-        $('div.fau-person-seat-select').remove();
-        $.post(fau_person_ajax.ajax_url, {         //POST request
+    //$('.fau-person-date-container .booking_calendar').on('click', '.day-select', function() {
+    $('.fau-person-date-container').on('click', ' .booking_calendar .day-select', function() {
+        var calendar = $(this).closest('table.booking_calendar');
+        var id = calendar.data('id');
+        var date = $(this).val();
+        console.log(date);
+        $('div.fau_person_time_select').remove();
+        $.post(fau_person_ajax.ajax_url, {          //POST request
             _ajax_nonce: fau_person_ajax.nonce,     //nonce
-            action: "UpdateForm",            //action
-            room: room,                  //data
-            date: date,          //data
-            time: time,          //data
-            seat: seat,          //data
+            action: "UpdateTimeSelect",             //action
+            date: date,                             //data
+            id: id,
         }, function(result) {                 //callback
-            //console.log(result);
-            $('div.fau-person-time-container').append(result['time']);
-            $('div.fau-person-seat-container').html(result['seat']);
+            $('div.fau-person-time-container').append(result);
         });
-    }
+    });
+
 });

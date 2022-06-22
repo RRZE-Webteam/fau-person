@@ -26,10 +26,10 @@ class Buchung extends Shortcodes
 
     public function onLoaded() {
         add_shortcode('terminbuchung', [$this, 'shortcodeBooking'], 10, 2);
-        add_action( 'wp_ajax_UpdateForm', [$this, 'ajaxUpdateForm'] );
         add_action( 'wp_ajax_UpdateCalendar', [$this, 'ajaxUpdateCalendar'] );
-        add_action( 'wp_ajax_nopriv_UpdateForm', [$this, 'ajaxUpdateForm'] );
         add_action( 'wp_ajax_nopriv_UpdateCalendar', [$this, 'ajaxUpdateCalendar'] );
+        add_action( 'wp_ajax_UpdateTimeSelect', [$this, 'ajaxUpdateTimeSelect'] );
+        add_action( 'wp_ajax_nopriv_UpdateTimeSelect', [$this, 'ajaxUpdateTimeSelect'] );
         add_action( 'wp_enqueue_scripts', [$this, 'enqueueScripts'] );
     }
 
@@ -68,19 +68,78 @@ class Buchung extends Shortcodes
         if ($officeHoursRaw == '') {
             return '<div class="alert alert-warning">' . __('Keine Sprechstunden verfügbar.', 'fau-person') . '</div>';
         }
+        $now = current_time('timestamp');
+        $bookingTime = false;
+        if (isset($_GET['date'])) {
+            $bookingDate = sanitize_text_field($_GET['date']);
+            $BookingDateTS = strtotime($bookingDate);
+            $currentMonth = date('m', $BookingDateTS);
+            $currentYear = date('Y', $BookingDateTS);
+            if (isset($_GET['time'])) {
+                $bookingTime = sanitize_text_field($_GET[ 'time' ]);
+                if (strtotime($bookingDate . ' ' . $bookingTime) < current_time('timestamp')) {
+                    $bookingTime = false;
+                }
+            }
+        } else {
+            $bookingDate= date('Y-m-d', $now);
+            $currentMonth = date('m', $now);
+            $currentYear = date('Y', $now);
+        }
 
         //print "<pre>"; var_dump($officeHoursRaw); print "</pre>";
         //print "<pre>"; var_dump(Data::get_kontakt_data($id)); print "</pre>";
-
         $output = '';
         $output .= '<div class="fau-person-booking">';
         $output .= '<form action="' . get_permalink() . '" method="post" id="" class="">'
             . '<div id="loading"><i class="fa fa-refresh fa-spin fa-4x"></i></div>'
+            . '<fieldset><legend>' . __( 'Select date and time','fau-person') . '</legend>'
+                   . '<div class="fau-person-date-time-container">'
             . '<div class="fau-person-date-container">';
-        $currentMonth = date('m', current_time('timestamp'));
-        $currentYear = date('Y', current_time('timestamp'));
-        $output .=self::buildCalendar($currentMonth, $currentYear, $id);
-        $output .= '</div></form></div>';
+        $output .= self::buildCalendar($currentMonth, $currentYear, $id, $bookingDate);
+        $output .= '</div>';
+
+        $output .= '<div class="fau-person-time-container">'
+                   . '<p><strong>' . __('Available time slots:', 'fau-person') . '</strong></p>';
+        if ($bookingDate) {
+            $output .= self::buildTimeslotSelect($id, $bookingDate, $bookingTime);
+        } else {
+            $output .= '<div class="fau-person-time-select error">' . __('Please select a date.', 'fau-person') . '</div>';
+        }
+        $output .= '</div>'; //.fau-person-time-container
+        $output .= '</div></fieldset>'; //.fau-person-date-time-container
+
+        $output .= '<fieldset><legend>' . __('Your data', 'fau-person') . '</legend>';
+        $output .= '<div class="form-group">
+                <label for="fau_person_booking_lastname">' . __('Last name', 'fau-person') . '</label>
+                <input type="text" name="fau_person_booking_lastname" value="" id="fau_person_booking_lastname" required="">
+                <div class="error-message"></div>
+            </div>';
+        $output .= '<div class="form-group">
+                <label for="fau_person_booking_firstname">' . __('First name', 'fau-person') . '</label>
+                <input type="text" name="fau_person_booking_firstname" value="" id="fau_person_booking_firstname" required="">
+                <div class="error-message"></div>
+            </div>';
+        $output .= '<div class="form-group">
+                <label for="fau_person_booking_email">' . __('Email', 'fau-person') . '</label>
+                <input type="email" name="fau_person_booking_email" value="" id="fau_person_booking_email" required="" pattern="^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*(\.\w{2,})+$">
+                <div class="error-message"></div>
+            </div>';
+        $output .= '<div class="form-group">
+                <label for="fau_person_booking_phone">' . __('Phone Number', 'fau-person') . '</label>
+                <input type="text" name="fau_person_booking_lastname" value="" id="fau_person_booking_lastname" required="" pattern="^([+])?(\d{1,3})?\s?(\(\d{3,5}\)|\d{3,5})?\s?(\d{1,3}\s?|\d{1,3}[-])?(\d{3,8})$">
+                <div class="error-message"></div>
+            </div>';
+        $output .= '</fieldset>';
+
+        $output .= '<div class="form-group">'
+                   . '<label for="fau_person_comment">' . __('Additional information', 'fau-person') . '</label>'
+                   . '<textarea name="fau_person_comment" id="fau_person_comment"></textarea>'
+                   . '</div>';
+
+        $output .= '<button type="submit" class="btn btn-primary">' . __('Submit booking', 'fau-person') . '</button>';
+
+        $output .= '</form></div>';
 
         wp_enqueue_style('fau-person');
         wp_enqueue_script('fau-person-booking');
@@ -97,7 +156,8 @@ class Buchung extends Shortcodes
         // What is the first day of the month in question?
         $firstDayOfMonth = mktime(0,0,0,$month,1,$year);
         $firstDayOfMonthDate = date('Y-m-d', $firstDayOfMonth);
-        $bookingDaysStart = date('Y-m-d', current_time('timestamp'));
+        $now = current_time('timestamp');
+        $bookingDaysStart = date('Y-m-d', $now);
         // How many days does this month contain?
         $numberDays = date('t', $firstDayOfMonth);
         $lastDayOfMonth = mktime(0,0,0, $month, $numberDays, $year);
@@ -137,6 +197,7 @@ class Buchung extends Shortcodes
             $calendar .= "<td colspan='$colspan'>&nbsp;</td>";
         }
         $month = str_pad($month, 2, "0", STR_PAD_LEFT);
+        $bookingdate_selected = strtotime($bookingdate_selected);
         while ($currentDay <= $numberDays) {
             // Seventh column (Saturday) reached. Start a new row.
             if ($dayOfWeek > 7) {
@@ -150,10 +211,10 @@ class Buchung extends Shortcodes
             $title = __('Not bookable (soldout or room blocked)','fau-person');
             if (isset($availability[$date]) && !empty($availability[$date])) {
                 foreach ( $availability[ $date ] as $timeslot ) {
-                    if ( !empty( $timeslot ) ) {
+                    if ( !empty( $timeslot) && isset($timeslot['start']) && $timeslot['start'] >= $now ) {
                         $active = true;
                         $class = 'available';
-                        $title = __( 'Seats available', 'fau-person' );
+                        $title = __( 'Booking available', 'fau-person' );
                     }
                 }
             }
@@ -166,7 +227,7 @@ class Buchung extends Shortcodes
                 } else {
                     $checked = '';
                 }
-                $input_open = "<input type=\"radio\" id=\"person_booking_date_$date\" value=\"$date\" name=\"person_booking_date\" $checked required><label for=\"person_booking_date_$date\">";
+                $input_open = "<input type=\"radio\" id=\"person_booking_date_$date\" class=\"day-select\" value=\"$year-$month-$currentDayRel\" name=\"person_booking_date\" $checked required><label for=\"person_booking_date_$date\">";
                 $input_close = '</label>';
             }
             $calendar .= "<td class='day $class' rel='$date' title='$title'>" . $input_open.$currentDay.$input_close . "</td>";
@@ -183,6 +244,33 @@ class Buchung extends Shortcodes
         $calendar .= "</table>";
         return $calendar;
     }
+
+    private static function buildTimeslotSelect($id, $date, $time = false) {
+        $timeSelects = '';
+        $startDate = strtotime($date);
+        $endDate = strtotime($date) + (60 * 60 * 24) - 1;
+        $availability = self::getAvailability($id, $startDate, $endDate);
+        if (!empty($availability) && isset($availability[$startDate])) {
+            $slots = ($availability[$startDate]);
+            $start = array_column($slots, 'start');
+            array_multisort($start, SORT_ASC, $slots);
+            foreach ($slots as $slot) {
+                $slotValue = $slot['start'];
+                $id = 'fau_person_time_' . sanitize_title($slotValue);
+                $startTime = date(get_option('time_format'), $slot['start']);
+                $endTime = date(get_option('time_format'), $slot['end']);
+                $label = $startTime . ' - ' . $endTime;
+                $checked = checked($time !== false && $time == $startTime, true, false);
+                $timeSelects .= "<div class='form-group'><input type='radio' id='$id' value='$slotValue' name='fau_person_time' " . $checked . " required><label for='$id'>$label</label></div>";
+            }
+        }
+        if ($timeSelects == '') {
+            $timeSelects .= __('No time slots available.', 'fau-person');
+        }
+        return '<div class="fau_person_time_select">' . $timeSelects . '</div>';
+    }
+
+
 
     private static function daysOfWeekAry(int $startKey = 0, int $startWd = 1, int $abbr = 0): array {
         global $wp_locale;
@@ -297,30 +385,13 @@ class Buchung extends Shortcodes
         wp_die();
     }
 
-    public function ajaxUpdateForm() {
-        /*check_ajax_referer( 'rsvp-ajax-nonce', 'nonce'  );
-        $roomID = ((isset($_POST['room']) && $_POST['room'] > 0) ? (int)$_POST['room'] : '');
-        $date = (isset($_POST['date']) ? sanitize_text_field($_POST['date']) : false);
-        $time = (isset($_POST['time']) ? sanitize_text_field($_POST['time']) : false);
-        $seat = (isset($_POST['seat']) ? sanitize_text_field($_POST['seat']) : false);
-        $response = [];
-        if ($date !== false) {
-            $response['time'] = '<div class="rsvp-time-select error">'.__('Please select a date.', 'rrze-rsvp').'</div>';
-        }
-        if (!$date || !$time) {
-            $response['seat'] = '<div class="rsvp-seat-select error">'.__('Please select a date and a time slot.', 'rrze-rsvp').'</div>';
-        }
-        $availability = getAvailability($roomID, $date, $date, false);
-        $bookingMode = get_post_meta($roomID, 'rrze-rsvp-room-bookingmode', true);
-        if ($date) {
-            $response['time'] = $this->buildTimeslotSelect($roomID, $date, $time, $availability);
-            if ($time && ($bookingMode != 'consultation')) {
-                $seatSelect = $this->buildSeatSelect($roomID, $date, $time, $seat, $availability);
-                $seatInfo = ($seat) ? $this->buildSeatInfo($seat) : '';
-                $response['seat'] = $seatSelect . $seatInfo;
-            }
-        }
-        wp_send_json($response);*/
+    public function ajaxUpdateTimeSelect() {
+        check_ajax_referer( 'fau-person-ajax-nonce', 'nonce' );
+        $personID = sanitize_text_field($_POST['id']);
+        $date = sanitize_text_field($_POST['date']);
+        $output = $this->buildTimeslotSelect($personID, $date);
+        echo $output;
+        wp_die();
     }
 
     public static function enqueueScripts() {

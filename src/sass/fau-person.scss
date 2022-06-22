@@ -489,7 +489,11 @@
 		}
 	}
 
-	.datetime-container {
+	form, fieldset {
+		margin-top: 0;
+	}
+
+	.fau-person-date-time-container {
 		margin-bottom: 1em;
 		@media (min-width: 480px) {
 			display:flex;
@@ -501,7 +505,7 @@
 			flex-shrink: 0;
 		}
 	}
-	.date-container {
+	.fau-person-date-container {
 		@media (min-width: 480px) {
 			margin-right: 30px;
 		}
@@ -509,7 +513,7 @@
 			border-right-color: transparent;
 		}
 	}
-	.time-container {
+	.fau-person-time-container {
 	}
 	.datebox {
 		min-width: 100px;

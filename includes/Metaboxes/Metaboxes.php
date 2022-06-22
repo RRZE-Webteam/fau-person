@@ -39,6 +39,8 @@ class Metaboxes  {
 	$kontaktmetabox->onLoaded();
 	$standortmetabox = new Standort($this->pluginFile,  $this->settings);
 	$standortmetabox->onLoaded();
+	$buchungmetabox = new Buchung($this->pluginFile,  $this->settings);
+	$buchungmetabox->onLoaded();
 	$pagesmb = new Pages($this->pluginFile,  $this->settings);
 	$pagesmb->onLoaded();
 	$postsmb = new Posts($this->pluginFile,  $this->settings);

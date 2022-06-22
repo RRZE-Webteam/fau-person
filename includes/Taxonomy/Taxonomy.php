@@ -26,6 +26,9 @@ class Taxonomy extends Main {
 
         $standort_posttype = new Standort( $this->pluginFile,  $this->settings);
         $standort_posttype->onLoaded();
+
+        $buchung_posttype = new Buchung( $this->pluginFile,  $this->settings);
+        $buchung_posttype->onLoaded();
 	
 	
 	if( get_transient('fau-person-options') ) {
