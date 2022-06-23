@@ -1539,8 +1539,7 @@ class Data {
             'hoursAvailable' => '',
             'bookingAvailable' => '',
             'bookingIntervals' => '',
-            'bookingIntervals' => '',
-            'description' => '',
+           'description' => '',
 	   'small_description' => ''
         );
 	

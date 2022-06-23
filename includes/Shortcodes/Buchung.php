@@ -34,113 +34,143 @@ class Buchung extends Shortcodes
     }
 
     public static function shortcodeBooking($atts, $content = null) {
-        $defaults = getShortcodeDefaults('buchung');
-        $arguments = shortcode_atts($defaults, $atts);
-
-        $id = 0;
-        if (isset($arguments['id'])) {
-            $id =  $arguments['id'];
-        }
-        $slug = '';
-        if (isset($arguments['slug'])) {
-            $slug =  $arguments['slug'];
-        }
-
-        if (empty($id)) {
-            if (empty($slug)) {
-                return '<div class="alert alert-danger">' . sprintf(__('Bitte geben Sie den Titel oder die ID des Kontakteintrags an.', 'fau-person'), $slug) . '</div>';
-            } else {
-                $posts = get_posts(array('name' => $slug, 'post_type' => 'person', 'post_status' => 'publish'));
-                if ($posts) {
-                    $post = $posts[0];
-                    $id = $post->ID;
-                } else {
-                    return '<div class="alert alert-danger">' . sprintf(__('Es konnte kein Kontakteintrag mit dem angegebenen Titel %s gefunden werden. Versuchen Sie statt dessen die Angabe der ID des Kontakteintrags.', 'fau-person'), $slug) . '</div>';
-                }
-            }
-        }
-
-        $bookingAvailable = get_post_meta($id, 'fau_person_bookingAvailable', true);
-        if ($bookingAvailable == '') {
-            return '<div class="alert alert-warning">' . __('Dieser Kontakt hat seine Sprechstunde nicht für die Online-Buchung freigegeben.', 'fau-person') . '</div>';
-        }
-        $officeHoursRaw = get_post_meta($id, 'fau_person_hoursAvailable_group', true);
-        if ($officeHoursRaw == '') {
-            return '<div class="alert alert-warning">' . __('Keine Sprechstunden verfügbar.', 'fau-person') . '</div>';
-        }
-        $now = current_time('timestamp');
-        $bookingTime = false;
-        if (isset($_GET['date'])) {
-            $bookingDate = sanitize_text_field($_GET['date']);
-            $BookingDateTS = strtotime($bookingDate);
-            $currentMonth = date('m', $BookingDateTS);
-            $currentYear = date('Y', $BookingDateTS);
-            if (isset($_GET['time'])) {
-                $bookingTime = sanitize_text_field($_GET[ 'time' ]);
-                if (strtotime($bookingDate . ' ' . $bookingTime) < current_time('timestamp')) {
-                    $bookingTime = false;
-                }
-            }
-        } else {
-            $bookingDate= date('Y-m-d', $now);
-            $currentMonth = date('m', $now);
-            $currentYear = date('Y', $now);
-        }
-
-        //print "<pre>"; var_dump($officeHoursRaw); print "</pre>";
-        //print "<pre>"; var_dump(Data::get_kontakt_data($id)); print "</pre>";
         $output = '';
-        $output .= '<div class="fau-person-booking">';
-        $output .= '<form action="' . get_permalink() . '" method="post" id="" class="">'
-            . '<div id="loading"><i class="fa fa-refresh fa-spin fa-4x"></i></div>'
-            . '<fieldset><legend>' . __( 'Select date and time','fau-person') . '</legend>'
-                   . '<div class="fau-person-date-time-container">'
-            . '<div class="fau-person-date-container">';
-        $output .= self::buildCalendar($currentMonth, $currentYear, $id, $bookingDate);
-        $output .= '</div>';
-
-        $output .= '<div class="fau-person-time-container">'
-                   . '<p><strong>' . __('Available time slots:', 'fau-person') . '</strong></p>';
-        if ($bookingDate) {
-            $output .= self::buildTimeslotSelect($id, $bookingDate, $bookingTime);
+        if (!empty($_POST)) {
+            self::saveFormData($_POST);
+            $output = '<b>Thanks!</b>';
         } else {
-            $output .= '<div class="fau-person-time-select error">' . __('Please select a date.', 'fau-person') . '</div>';
-        }
-        $output .= '</div>'; //.fau-person-time-container
-        $output .= '</div></fieldset>'; //.fau-person-date-time-container
+            /* TODO:
+            - SSO-Anmeldung
+            */
+            $defaults  = getShortcodeDefaults('buchung');
+            $arguments = shortcode_atts($defaults, $atts);
 
-        $output .= '<fieldset><legend>' . __('Your data', 'fau-person') . '</legend>';
-        $output .= '<div class="form-group">
+            $id = 0;
+            if (isset($arguments[ 'id' ])) {
+                $id = $arguments[ 'id' ];
+            }
+            $slug = '';
+            if (isset($arguments[ 'slug' ])) {
+                $slug = $arguments[ 'slug' ];
+            }
+
+            if (empty($id)) {
+                if (empty($slug)) {
+                    return '<div class="alert alert-danger">' . sprintf(
+                            __('Bitte geben Sie den Titel oder die ID des Kontakteintrags an.', 'fau-person'),
+                            $slug
+                        ) . '</div>';
+                } else {
+                    $posts = get_posts(array('name' => $slug, 'post_type' => 'person', 'post_status' => 'publish'));
+                    if ($posts) {
+                        $post = $posts[ 0 ];
+                        $id   = $post->ID;
+                    } else {
+                        return '<div class="alert alert-danger">' . sprintf(
+                                __(
+                                    'Es konnte kein Kontakteintrag mit dem angegebenen Titel %s gefunden werden. Versuchen Sie statt dessen die Angabe der ID des Kontakteintrags.',
+                                    'fau-person'
+                                ),
+                                $slug
+                            ) . '</div>';
+                    }
+                }
+            }
+
+            $bookingAvailable = get_post_meta($id, 'fau_person_bookingAvailable', true);
+            if ($bookingAvailable == '') {
+                return '<div class="alert alert-warning">' . __(
+                        'Dieser Kontakt hat seine Sprechstunde nicht für die Online-Buchung freigegeben.',
+                        'fau-person'
+                    ) . '</div>';
+            }
+            $officeHoursRaw = get_post_meta($id, 'fau_person_hoursAvailable_group', true);
+            if ($officeHoursRaw == '') {
+                return '<div class="alert alert-warning">' . __(
+                        'Keine Sprechstunden verfügbar.',
+                        'fau-person'
+                    ) . '</div>';
+            }
+            $now         = current_time('timestamp');
+            $bookingTime = false;
+            if (isset($_GET[ 'date' ])) {
+                $bookingDate   = sanitize_text_field($_GET[ 'date' ]);
+                $BookingDateTS = strtotime($bookingDate);
+                $currentMonth  = date('m', $BookingDateTS);
+                $currentYear   = date('Y', $BookingDateTS);
+                if (isset($_GET[ 'time' ])) {
+                    $bookingTime = sanitize_text_field($_GET[ 'time' ]);
+                    if (strtotime($bookingDate . ' ' . $bookingTime) < current_time('timestamp')) {
+                        $bookingTime = false;
+                    }
+                }
+            } else {
+                $bookingDate  = date('Y-m-d', $now);
+                $currentMonth = date('m', $now);
+                $currentYear  = date('Y', $now);
+            }
+
+            //print "<pre>"; var_dump($officeHoursRaw); print "</pre>";
+            //print "<pre>"; var_dump(Data::get_kontakt_data($id)); print "</pre>";
+            $output = '';
+            $output .= '<div class="fau-person-booking">';
+            $output .= '<form action="' . get_permalink() . '" method="post" id="" class="">'
+                       . '<div id="loading"><i class="fa fa-refresh fa-spin fa-4x"></i></div>'
+                       . '<fieldset><legend>' . __('Select date and time', 'fau-person') . '</legend>'
+                       . '<div class="fau-person-date-time-container">'
+                       . '<div class="fau-person-date-container">';
+            $output .= self::buildCalendar($currentMonth, $currentYear, $id, $bookingDate);
+            $output .= '</div>';
+
+            $output .= '<div class="fau-person-time-container">'
+                       . '<p><strong>' . __('Available time slots:', 'fau-person') . '</strong></p>';
+            if ($bookingDate) {
+                $output .= self::buildTimeslotSelect($id, $bookingDate, $bookingTime);
+            } else {
+                $output .= '<div class="fau-person-time-select error">' . __(
+                        'Please select a date.',
+                        'fau-person'
+                    ) . '</div>';
+            }
+            $output .= '</div>'; //.fau-person-time-container
+            $output .= '</div></fieldset>'; //.fau-person-date-time-container
+
+            $output .= '<fieldset><legend>' . __('Your data', 'fau-person') . '</legend>';
+            $output .= '<div class="form-group">
                 <label for="fau_person_booking_lastname">' . __('Last name', 'fau-person') . '</label>
                 <input type="text" name="fau_person_booking_lastname" value="" id="fau_person_booking_lastname" required="">
                 <div class="error-message"></div>
             </div>';
-        $output .= '<div class="form-group">
+            $output .= '<div class="form-group">
                 <label for="fau_person_booking_firstname">' . __('First name', 'fau-person') . '</label>
                 <input type="text" name="fau_person_booking_firstname" value="" id="fau_person_booking_firstname" required="">
                 <div class="error-message"></div>
             </div>';
-        $output .= '<div class="form-group">
+            $output .= '<div class="form-group">
                 <label for="fau_person_booking_email">' . __('Email', 'fau-person') . '</label>
                 <input type="email" name="fau_person_booking_email" value="" id="fau_person_booking_email" required="" pattern="^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*(\.\w{2,})+$">
                 <div class="error-message"></div>
             </div>';
-        $output .= '<div class="form-group">
+            $output .= '<div class="form-group">
                 <label for="fau_person_booking_phone">' . __('Phone Number', 'fau-person') . '</label>
-                <input type="text" name="fau_person_booking_lastname" value="" id="fau_person_booking_lastname" required="" pattern="^([+])?(\d{1,3})?\s?(\(\d{3,5}\)|\d{3,5})?\s?(\d{1,3}\s?|\d{1,3}[-])?(\d{3,8})$">
+                <input type="text" name="fau_person_booking_phone" value="" id="fau_person_booking_lastname" required="" pattern="^([+])?(\d{1,3})?\s?(\(\d{3,5}\)|\d{3,5})?\s?(\d{1,3}\s?|\d{1,3}[-])?(\d{3,8})$">
                 <div class="error-message"></div>
             </div>';
-        $output .= '</fieldset>';
+            $output .= '</fieldset>';
 
-        $output .= '<div class="form-group">'
-                   . '<label for="fau_person_comment">' . __('Additional information', 'fau-person') . '</label>'
-                   . '<textarea name="fau_person_comment" id="fau_person_comment"></textarea>'
-                   . '</div>';
+            $output .= '<div class="form-group">'
+                       . '<label for="fau_person_comment">' . __('Additional information', 'fau-person') . '</label>'
+                       . '<textarea name="fau_person_comment" id="fau_person_comment"></textarea>'
+                       . '</div>';
 
-        $output .= '<button type="submit" class="btn btn-primary">' . __('Submit booking', 'fau-person') . '</button>';
+            $output .= '<input type="hidden" name="fau_person_booking_id" value="' . $id . '">';
+            $output .= '<button type="submit" class="btn btn-primary">' . __(
+                    'Submit booking',
+                    'fau-person'
+                ) . '</button>';
 
-        $output .= '</form></div>';
-
+            $output .= '</form></div>';
+        }
         wp_enqueue_style('fau-person');
         wp_enqueue_script('fau-person-booking');
         wp_localize_script('fau-person-booking', 'fau_person_ajax', [
@@ -227,7 +257,7 @@ class Buchung extends Shortcodes
                 } else {
                     $checked = '';
                 }
-                $input_open = "<input type=\"radio\" id=\"person_booking_date_$date\" class=\"day-select\" value=\"$year-$month-$currentDayRel\" name=\"person_booking_date\" $checked required><label for=\"person_booking_date_$date\">";
+                $input_open = "<input type=\"radio\" id=\"fau_person_booking_date_$date\" class=\"day-select\" value=\"$year-$month-$currentDayRel\" name=\"fau_person_booking_date\" $checked required><label for=\"fau_person_booking_date_$date\">";
                 $input_close = '</label>';
             }
             $calendar .= "<td class='day $class' rel='$date' title='$title'>" . $input_open.$currentDay.$input_close . "</td>";
@@ -255,13 +285,13 @@ class Buchung extends Shortcodes
             $start = array_column($slots, 'start');
             array_multisort($start, SORT_ASC, $slots);
             foreach ($slots as $slot) {
-                $slotValue = $slot['start'];
+                $slotValue = $slot['start'].'-'.$slot['end'];
                 $id = 'fau_person_time_' . sanitize_title($slotValue);
                 $startTime = date(get_option('time_format'), $slot['start']);
                 $endTime = date(get_option('time_format'), $slot['end']);
                 $label = $startTime . ' - ' . $endTime;
                 $checked = checked($time !== false && $time == $startTime, true, false);
-                $timeSelects .= "<div class='form-group'><input type='radio' id='$id' value='$slotValue' name='fau_person_time' " . $checked . " required><label for='$id'>$label</label></div>";
+                $timeSelects .= "<div class='form-group'><input type='radio' id='$id' value='$slotValue' name='fau_person_booking_time' " . $checked . " required><label for='$id'>$label</label></div>";
             }
         }
         if ($timeSelects == '') {
@@ -392,6 +422,36 @@ class Buchung extends Shortcodes
         $output = $this->buildTimeslotSelect($personID, $date);
         echo $output;
         wp_die();
+    }
+
+    public static function saveFormData($data) {
+        $dates = explode('-', $data['fau_person_booking_time']);
+        $start = isset($dates[0]) ? (int)$dates['0'] : '';
+        $end = isset($dates[1]) ? (int)$dates['1'] : '';
+        $contactID = (int)$data['fau_person_booking_id'];
+        $lastname = sanitize_text_field($data['fau_person_booking_lastname']);
+        $firstname = sanitize_text_field($data['fau_person_booking_firstname']);
+        $email = sanitize_email($data['fau_person_booking_email']);
+        $phone = sanitize_text_field($data['fau_person_booking_phone']);
+        $comment = sanitize_textarea_field($data['fau_person_comment']);
+        $SSO = get_post_meta($contactID, 'fau_person_bookingSSO', true);
+        $status = $SSO == true ? 'confirmed' : 'unconfirmed';
+        $insert = wp_insert_post([
+            'post_type' => 'buchung',
+            'post_status' => 'publish',
+            'meta_input' => [
+                'fau_person_booking_start' => $start,
+                'fau_person_booking_end' => $end,
+                'fau_person_booking_contact_id' => $contactID,
+                'fau_person_booking_lastname' => $lastname,
+                'fau_person_booking_firstname' => $firstname,
+                'fau_person_booking_email' => $email,
+                'fau_person_booking_phone' => $phone,
+                'fau_person_booking_comment' => $comment,
+                'fau_person_booking_status' => $status,
+            ],
+        ]);
+        return $insert;
     }
 
     public static function enqueueScripts() {

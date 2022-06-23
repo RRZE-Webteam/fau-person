@@ -4,6 +4,9 @@ namespace FAU_Person\Taxonomy;
 use FAU_Person\Data;
 use FAU_Person\Schema;
 use RRZE\Lib\UnivIS\Config;
+use RRZE\Lib\UnivIS\Data as UnivIS_Data;
+use function FAU_Person\Config\getConstants;
+
 use function FAU_Person\Config\get_fau_person_capabilities;
 
 defined('ABSPATH') || exit;
@@ -86,8 +89,8 @@ class Buchung extends Taxonomy {
         add_filter('parse_query', [$this, 'taxonomy_filter_post_type_request']);
 
         // Kontakttyp als zusätzliche Spalte in Übersicht
-        //add_filter( 'manage_buchung_posts_columns', array( $this, 'change_columns' ));
-        //add_action( 'manage_buchung_posts_custom_column', array( $this, 'custom_columns'), 10, 2 );
+        add_filter( 'manage_buchung_posts_columns', array( $this, 'change_columns' ));
+        add_action( 'manage_buchung_posts_custom_column', array( $this, 'custom_columns'), 10, 2 );
 
         // Sortierung der zusätzlichen Spalte
         //add_filter( 'manage_edit-buchung_sortable_columns', array( $this, 'sortable_columns' ));
@@ -137,51 +140,45 @@ class Buchung extends Taxonomy {
     public function change_columns( $cols ) {
         $cols = array(
             'cb' => '<input type="checkbox" />',
-            'title' => __( 'Titel', 'fau-person' ),
-            'thumb' => __( 'Bild', 'fau-person' ),
-            'fullname'  => __( 'Angezeigter Name', 'fau-person' ),
-            'contact' => __( 'Buchung', 'fau-person' ),
-            'source'	=> __( 'Datenquelle', 'fau-person' ),
-            'author'	=> __( 'Bearbeiter', 'fau-person' ),
-            'date' => __( 'Datum', 'fau-person' ),
+            'name' => __( 'Name', 'fau-person' ),
+            'date_booked' => __( 'Datum', 'fau-person' ),
+            'time_booked'  => __( 'Uhrzeit', 'fau-person' ),
+            'person' => __( 'Buchung bei', 'fau-person' ),
+            'status' => __('Status', 'fau-person'),
+            'date' => __( 'Gebucht am', 'fau-person' ),
         );
 
         return $cols;
     }
 
     public function custom_columns( $column, $post_id ) {
-        $univisid = get_post_meta($post_id, 'fau_person_univis_id', true);
-        $data = Data::get_fields($post_id, $univisid, 0);
-        $univisconfig = Config::get_Config();
-        $api_url = $univisconfig['api_url'];
+        $meta = get_post_meta($post_id);
 
         switch ( $column ) {
-            case 'thumb':
-                $thumb = Data::create_kontakt_image($post_id, 'person-thumb-v3', '', true, false,'',false);
-                echo $thumb;
+            case 'name':
+                $name = (isset($meta['fau_person_booking_lastname'][0]) ? $meta['fau_person_booking_lastname'][0] . ', ' : '') . ($meta['fau_person_booking_firstname'][0] ?? '');
+                echo $name;
                 break;
-
-            case 'fullname':
-
-                $fullname = Schema::create_Name( $data, '', '', 'span', false );
-                if (empty(trim($fullname))) {
-                    $fullname = get_the_title($post_id);
-                }
-                echo $fullname;
+            case 'date_booked':
+                $date = isset($meta['fau_person_booking_start'][0]) ? wp_date(get_option('date_format'), $meta['fau_person_booking_start'][0]) : '';
+                echo $date;
                 break;
-            case 'contact':
-                // echo $data['email'];
-                echo Schema::create_contactpointlist($data,  'ul', '',  '', 'li');
-
+            case 'time_booked':
+                $start = isset($meta['fau_person_booking_start'][0]) ? wp_date(get_option('time_format'), $meta['fau_person_booking_start'][0]) : '';
+                $end = isset($meta['fau_person_booking_end'][0]) ? wp_date(get_option('time_format'), $meta['fau_person_booking_end'][0]) : '';
+                echo $start . ' - ' . $end;
                 break;
-            case 'source':
-                if ($univisid) {
-                    echo __('UnivIS', 'fau-person').' (Id: <a target="univis" href="'.$api_url.'?search=persons&id='.$univisid.'&show=info">'.$univisid.'</a>)';
-                } else {
-                    echo __('Lokal', 'fau-person');
-                }
+            case 'person':
+                $contactID = (int)$meta['fau_person_booking_contact_id'][0];
+                $univis_id = get_post_meta($contactID, 'fau_person_univis_id', true);
+                $univisdata = Data::get_fields($contactID, $univis_id, 0, false, true);
+                echo $univisdata['familyName'] . ', ' . $univisdata['givenName'];
                 break;
-
+            case 'status':
+                $constants  = getConstants();
+                $status = $meta['fau_person_booking_status'][0] ?? '';
+                echo (isset($constants['booking-status'][$status]) ? $constants['booking-status'][$status] : __('Unbekannt', 'fau-person'));
+                break;
         }
     }
 

@@ -441,8 +441,14 @@ class Kontakt extends Metaboxes {
             ],
             'classes' =>['online-only'],
         ),
-
         array(
+            'name' => __('SSO-Anmeldung', 'fau-person'),
+            'desc' => __('Buchung nur mit SSO-Anmeldung möglich', 'fau-person'),
+            'type' => 'checkbox',
+            'id' => $prefix . 'bookingSSO',
+        ),
+
+            array(
 		    'id' => $prefix . 'hoursAvailable_group',
 		    'type' => 'group',
 		    'desc' => $univis_default['hoursAvailable_group'],

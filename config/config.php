@@ -41,8 +41,12 @@ function getConstants() {
 		'FAU-Jobs'
 		],
 	    'admin_posts_per_page'  => 25,
-
-        );               
+        'booking-status' => [
+            'unconfirmed' => __('Unbestätigt', 'fau-person'),
+            'confirmed' => __('Bestätigt', 'fau-person'),
+            'cancelled' => __('Storniert', 'fau-person'),
+        ],
+        );
         // für ergänzende Optionen aus anderen Plugins
         $options = apply_filters('fau_person_constants', $options);
         return $options; // Standard-Array für zukünftige Optionen
