@@ -44,5 +44,26 @@ jQuery(document).ready(function($){
 	    $(".cmb2-id-fau-person-addressCountry").show(200);
 	}
     });
-    
+
+	var onlineCheck = $("input[name='fau_person_bookingAvailable']");
+	var onlineAvailable = onlineCheck.is(':checked');
+	if (onlineAvailable === false) {
+		$("div.online-only").hide();
+	}
+	onlineCheck.change(function(){
+		if ($(this).is(':checked') === true) {
+			$("div.online-only").slideDown();
+		} else {
+			$("div.online-only").slideUp();
+		}
+	});
+    var repeat = $("input[name*='[repeat]']");
+	repeat.change(function(){
+		if ($(this).val() === 'w2') {
+			$(this).parents("div[id^='cmb-group-fau_person_hoursAvailable']").find("div.w2-only").slideDown();
+		} else {
+			$(this).parents("div[id^='cmb-group-fau_person_hoursAvailable']").find("div.w2-only").slideUp();
+		}
+	});
+
 });

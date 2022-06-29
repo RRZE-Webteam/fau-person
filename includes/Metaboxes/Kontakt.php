@@ -446,6 +446,7 @@ class Kontakt extends Metaboxes {
             'desc' => __('Buchung nur mit SSO-Anmeldung möglich', 'fau-person'),
             'type' => 'checkbox',
             'id' => $prefix . 'bookingSSO',
+            'classes' =>['online-only'],
         ),
 
             array(
@@ -481,7 +482,7 @@ class Kontakt extends Metaboxes {
                     'odd' => __('ungerade Kalenderwochen', 'fau-person'),
                 ),
                 'default' => '30',
-                'classes' =>['online-only', '2weeks-only'],
+                'classes' =>['online-only', 'w2-only'],
             ),
             array(
 			    'name' =>  __('am', 'fau-person'),
