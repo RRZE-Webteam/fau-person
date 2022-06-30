@@ -24,7 +24,7 @@ class Standort extends Shortcodes {
 
 
     public function onLoaded() {	
-    	add_shortcode('standort', [$this, 'shortcode_standort'], 10, 2);
+    	add_shortcode('standort', [$this, 'shortcode_standort']);
     }
    
 
