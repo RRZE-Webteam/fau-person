@@ -47,8 +47,8 @@ class Kontakt extends Taxonomy {
 	    'not_found_in_trash'    => __('Keine Kontakte in Papierkorb gefunden', 'fau-person'),
         ];
 	$has_archive_page  = true;
-	if (isset($this->settings->options) && isset($this->settings->options['has_archive_page'])) {
-	    $has_archive_page = $this->settings->options['has_archive_page'];
+	if (isset($this->settings->options) && isset($this->settings->options['constants_has_archive_page'])) {
+	    $has_archive_page = $this->settings->options['constants_has_archive_page'];
 	}
 	$caps = get_fau_person_capabilities();
 	$person_args = array(

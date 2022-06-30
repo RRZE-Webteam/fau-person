@@ -24,10 +24,10 @@ class Kontakt extends Shortcodes {
     }
 
     public function onLoaded() {	
-    	add_shortcode('kontakt', [$this, 'shortcode_kontakt'], 10, 2);
-    	add_shortcode('person', [$this, 'shortcode_kontakt'], 10, 2);
-    	add_shortcode('kontaktliste', [$this, 'shortcode_kontaktListe'], 10, 2);
-    	add_shortcode('persons', [$this, 'shortcode_kontaktListe'], 10, 2);
+    	add_shortcode('kontakt', [$this, 'shortcode_kontakt']);
+    	add_shortcode('person', [$this, 'shortcode_kontakt']);
+    	add_shortcode('kontaktliste', [$this, 'shortcode_kontaktListe']);
+    	add_shortcode('persons', [$this, 'shortcode_kontaktListe']);
     }
     
     
