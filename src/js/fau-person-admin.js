@@ -45,6 +45,7 @@ jQuery(document).ready(function($){
 	}
     });
 
+	// Toggle online-only fields
 	var onlineCheck = $("input[name='fau_person_bookingAvailable']");
 	var onlineAvailable = onlineCheck.is(':checked');
 	if (onlineAvailable === false) {
@@ -57,8 +58,18 @@ jQuery(document).ready(function($){
 			$("div.online-only").slideUp();
 		}
 	});
-    var repeat = $("input[name*='[repeat]']");
-	repeat.change(function(){
+
+	// Toggle 2-weekly fields
+    var repeatCheck = $("input[name*='[repeat]']");
+    var repeat = $("input[name*='[repeat]']:checked");
+	repeat.each(function(){
+		if ($(this).val() === 'w2') {
+			$(this).parents("div[id^='cmb-group-fau_person_hoursAvailable']").find("div.w2-only").slideDown();
+		} else {
+			$(this).parents("div[id^='cmb-group-fau_person_hoursAvailable']").find("div.w2-only").slideUp();
+		}
+	});
+	repeatCheck.change(function(){
 		if ($(this).val() === 'w2') {
 			$(this).parents("div[id^='cmb-group-fau_person_hoursAvailable']").find("div.w2-only").slideDown();
 		} else {

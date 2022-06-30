@@ -36,8 +36,13 @@ class Buchung extends Shortcodes
     public static function shortcodeBooking($atts, $content = null) {
         $output = '';
         if (!empty($_POST)) {
-            self::saveFormData($_POST);
-            $output = '<b>Thanks!</b>';
+            $data = self::processFormData($_POST);
+            if (!is_wp_error($data)) {
+                $output = '<div class="alert alert-success" role="alert"><p><strong>Vielen Dank für Ihre Buchung.</strong></p><p>Eine E-Mail mit Ihren Buchungsdaten wurde an die von Ihnen angegebene E-Mail-Adresse gesendet.</p></div>';
+            } else {
+                $output = '<div class="alert alert-danger" role="alert">Es gab einen Fehler bei der Verarbeitung Ihrer Daten. Bitte versuchen Sie es erneut.</div>';
+            }
+
         } else {
             /* TODO:
             - SSO-Anmeldung
@@ -424,7 +429,7 @@ class Buchung extends Shortcodes
         wp_die();
     }
 
-    public static function saveFormData($data) {
+    public static function processFormData($data) {
         $dates = explode('-', $data['fau_person_booking_time']);
         $start = isset($dates[0]) ? (int)$dates['0'] : '';
         $end = isset($dates[1]) ? (int)$dates['1'] : '';
@@ -451,7 +456,14 @@ class Buchung extends Shortcodes
                 'fau_person_booking_status' => $status,
             ],
         ]);
-        return $insert;
+        if ($insert) {
+            $to = $email;
+            $from = get_post_meta($contactID, 'fau_person_email', true);
+
+            //wp_mail();
+            return $insert;
+        }
+        return false;
     }
 
     public static function enqueueScripts() {
