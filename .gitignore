@@ -9,3 +9,4 @@ node_modules
 tmp
 .vscode/sftp.json
 .vscode/sftp.json
+vendor/DIP/.DS_Store
