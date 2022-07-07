@@ -18,7 +18,6 @@ class DIPAPI
     protected $atts;
     protected $dipParam;
 
-    // public function __construct($api, $orgID, $atts)
     public function __construct($atts)
     {
         $this->setAPI();
@@ -27,11 +26,10 @@ class DIPAPI
 
 
     private function getKey(){
-        $dipOptions = get_option('rrze-dip');
+        $dipOptions = get_option('_fau_person');
 
-        // 2DO: basic_ApiKey
-        if (!empty($dipOptions['basic_ApiKey'])){
-            return $dipOptions['basic_ApiKey'];
+        if (!empty($dipOptions['constants_ApiKey'])){
+            return $dipOptions['constants_ApiKey'];
         }elseif(is_multisite()){
             $settingsOptions = get_site_option('rrze_settings');
             if (!empty($settingsOptions->plugins->dip_apiKey)){
