@@ -35,6 +35,12 @@ class Kontakt extends Shortcodes
 
     public static function shortcode_kontakt($atts, $content = null)
     {
+
+
+        echo '<pre>';
+        var_dump((Data::getDIPDataTest()));
+        exit;
+
         $defaults = getShortcodeDefaults('kontakt');
         $arguments = shortcode_atts($defaults, $atts);
         $arguments = self::translate_parameters($arguments);
@@ -154,13 +160,12 @@ class Kontakt extends Shortcodes
                             break;
 
                         default:
-                            $content .= Data::fau_person_markup($value, $displayfield, $arguments);}
+                            $content .= Data::fau_person_markup($value, $displayfield, $arguments);
+                    }
                     $i++;
-
                 } else {
                     $content .= sprintf(__('Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden.', 'fau-person'), $value);
                 }
-
             }
 
             switch ($format) {
@@ -182,7 +187,6 @@ class Kontakt extends Shortcodes
 
             return $content;
         }
-
     }
 
     public static function shortcode_kontaktListe($atts, $content = null)
@@ -312,7 +316,6 @@ class Kontakt extends Shortcodes
                     break;
                 default:
             }
-
         } else {
             if (is_object($category)) {
                 $content = '<p>' . sprintf(__('Es konnten keine Kontakte in der Kategorie %s gefunden werden.', 'fau-person'), $category->slug) . '</p>';
@@ -360,20 +363,21 @@ class Kontakt extends Shortcodes
                     || ($arguments[$key] == "ja")
                     || ($arguments[$key] == "true")
                     || ($arguments[$key] == "+")
-                    || ($arguments[$key] == "x")) {
+                    || ($arguments[$key] == "x")
+                ) {
 
                     if (!empty($show)) {
                         $show .= ', ' . $key;
                     } else {
                         $show = $key;
                     }
-
                 } elseif (($arguments[$key] == 0)
                     || empty($arguments[$key])
                     || ($arguments[$key] == "-")
                     || ($arguments[$key] == "nein")
                     || ($arguments[$key] == "false")
-                    || ($arguments[$key] == "no")) {
+                    || ($arguments[$key] == "no")
+                ) {
 
                     if (!empty($hide)) {
                         $hide .= ', ' . $key;
@@ -481,12 +485,13 @@ class Kontakt extends Shortcodes
         wp_localize_script($editor_script, $this->settings['block']['blockname'] . 'Config', $this->settings);
 
         // register block
-        register_block_type($this->settings['block']['blocktype'], array(
-            'editor_script' => $editor_script,
-            'render_callback' => [$this, 'shortcode_kontakt'],
-            'attributes' => $this->settings,
-        )
+        register_block_type(
+            $this->settings['block']['blocktype'],
+            array(
+                'editor_script' => $editor_script,
+                'render_callback' => [$this, 'shortcode_kontakt'],
+                'attributes' => $this->settings,
+            )
         );
     }
-
 }

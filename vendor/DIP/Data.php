@@ -11,7 +11,7 @@ if (!function_exists('__')) {
     }
 }
 
-class DIPAPI
+class Data
 {
 
     protected $api;
@@ -55,6 +55,10 @@ class DIPAPI
 
         $apiResponse = wp_remote_get($this->api . $sParam, $aGetArgs);
 
+        echo '<pre>';
+        var_dump($apiResponse);
+        exit;
+
         if ($apiResponse['response']['code'] != 200){
             $aRet = [
                 'valid' => FALSE, 
@@ -64,7 +68,7 @@ class DIPAPI
             $content = json_decode($apiResponse['body'], true);
             $aRet = [
                 'valid' => TRUE, 
-                'content' => $content['data']
+                'content' => $content
             ];
         }
 
@@ -74,7 +78,7 @@ class DIPAPI
 
     private function setAPI()
     {
-        $this->api = 'https://api.fau.de/ui/dir/';
+        $this->api = 'https://api.fau.de/ui/dir/pers?q=klein';
     }
 
     private static function log(string $method, string $logType = 'error', string $msg = '')
