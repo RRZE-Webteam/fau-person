@@ -55,10 +55,6 @@ class Data
 
         $apiResponse = wp_remote_get($this->api . $sParam, $aGetArgs);
 
-        echo '<pre>';
-        var_dump($apiResponse);
-        exit;
-
         if ($apiResponse['response']['code'] != 200){
             $aRet = [
                 'valid' => FALSE, 
@@ -78,7 +74,7 @@ class Data
 
     private function setAPI()
     {
-        $this->api = 'https://api.fau.de/ui/dir/pers?q=klein';
+        $this->api = 'https://api.fau.de/pub/v1/vz/persons';
     }
 
     private static function log(string $method, string $logType = 'error', string $msg = '')
