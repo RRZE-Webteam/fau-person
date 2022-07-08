@@ -15,9 +15,10 @@ class Data
 {
 
 
-	public static function getDIPDataTest(){
+	public static function getDIPDataTest($id = null)
+	{
 		$myData = new DIP_Data(null);
-		return $myData->getResponse();
+		return $myData->getResponse($id);
 	}
 
 	private static function get_viewsettings($lookup = 'constants')

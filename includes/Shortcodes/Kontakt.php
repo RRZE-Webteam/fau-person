@@ -37,9 +37,6 @@ class Kontakt extends Shortcodes
     {
 
 
-        echo '<pre>';
-        var_dump((Data::getDIPDataTest()));
-        exit;
 
         $defaults = getShortcodeDefaults('kontakt');
         $arguments = shortcode_atts($defaults, $atts);
@@ -76,6 +73,11 @@ class Kontakt extends Shortcodes
         }
 
         if (!empty($id)) {
+
+            echo '<pre>';
+            var_dump((Data::getDIPDataTest($id)));
+            exit;
+    
             Main::enqueueForeignThemes();
 
             $class = 'fau-person';

@@ -74,7 +74,7 @@ class Data
 
     private function setAPI()
     {
-        $this->api = 'https://api.fau.de/pub/v1/vz/persons';
+        $this->api = 'https://api.fau.de/pub/v1/vz/persons/';
     }
 
     private static function log(string $method, string $logType = 'error', string $msg = '')
