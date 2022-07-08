@@ -25,24 +25,26 @@ class Data
     }
 
 
-    private function getKey(){
+    private function getKey()
+    {
         $dipOptions = get_option('_fau_person');
 
-        if (!empty($dipOptions['constants_ApiKey'])){
+        if (!empty($dipOptions['constants_ApiKey'])) {
             return $dipOptions['constants_ApiKey'];
-        }elseif(is_multisite()){
+        } elseif (is_multisite()) {
             $settingsOptions = get_site_option('rrze_settings');
-            if (!empty($settingsOptions->plugins->dip_apiKey)){
+            if (!empty($settingsOptions->plugins->dip_apiKey)) {
                 return $settingsOptions->plugins->dip_apiKey;
             }
-        }else{
+        } else {
             return '';
         }
     }
 
-    public function getResponse($sParam = NULL){
+    public function getResponse($sParam = NULL)
+    {
         $aRet = [
-            'valid' => FALSE, 
+            'valid' => FALSE,
             'content' => ''
         ];
 
@@ -50,20 +52,20 @@ class Data
             'headers' => [
                 'Content-Type' => 'application/json',
                 'X-Api-Key' => $this->getKey(),
-                ]
-            ];
+            ]
+        ];
 
         $apiResponse = wp_remote_get($this->api . $sParam, $aGetArgs);
 
-        if ($apiResponse['response']['code'] != 200){
+        if ($apiResponse['response']['code'] != 200) {
             $aRet = [
-                'valid' => FALSE, 
+                'valid' => FALSE,
                 'content' => $apiResponse['response']['code'] . ': ' . $apiResponse['response']['message']
-            ];    
-        }else{
+            ];
+        } else {
             $content = json_decode($apiResponse['body'], true);
             $aRet = [
-                'valid' => TRUE, 
+                'valid' => TRUE,
                 'content' => $content
             ];
         }
@@ -142,7 +144,7 @@ class Data
                             break;
                         }
 
-                    // no break
+                        // no break
                     default:
                         if (strpos($phone_data, '9115302') !== false) {
                             $durchwahl = explode('9115302', $phone_data);
@@ -300,7 +302,7 @@ class Data
                 "monogr" => __('Monograph', 'rrze-univis'),
                 "tagband" => __('Conference volume (not published by the publisher)', 'rrze-univis'),
                 "schutzr" => __('IPR', 'rrze-univis'),
-                ],
+            ],
             'hstype' => [
                 "diss" => __('Dissertation', 'rrze-univis'),
                 "dipl" => __('Diploma', 'rrze-univis'),
@@ -318,12 +320,12 @@ class Data
                 "offenleg" => __('Disclosure document', 'rrze-univis'),
                 "patanmel" => __('Patent application', 'rrze-univis'),
                 "gebrmust" => __('Utility model', 'rrze-univis'),
-                ],
+            ],
             'leclanguage' => [
                 0 => __('Lecture\'s language German', 'rrze-univis'),
                 "D" => __('Lecture\'s language German', 'rrze-univis'),
                 "E" => __('Lecture\'s language English', 'rrze-univis'),
-                ],
+            ],
             'sws' => __(' SWS', 'rrze-univis'),
             'schein' => __('Certificate', 'rrze-univis'),
             'ects' => __('ECTS studies', 'rrze-univis'),
@@ -334,7 +336,7 @@ class Data
             'evaluation' => __('Evaluation', 'rrze-univis'),
             'locations' => '',
             'organizational' => '',
-            ];
+        ];
 
         foreach ($data as $nr => $row) {
             foreach ($fields as $field => $values) {
@@ -399,5 +401,4 @@ class Data
         }
         return $data;
     }
-
 }

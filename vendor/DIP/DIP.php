@@ -39,51 +39,51 @@ class DIP
 {
 
 
-	const VERSION = '1.0.0';
+    const VERSION = '1.0.0';
 
-	public static $single_instance = null;
-
-
-	public static function initiate()
-	{
-		if (null === self::$single_instance) {
-			self::$single_instance = new self();
-		}
-		return self::$single_instance;
-	}
+    public static $single_instance = null;
 
 
-	public function __construct()
-	{
-		if (!function_exists('add_action')) {
-			// We are running outside of the context of WordPress.
-			return;
-		}
-
-		add_action('init', array($this, 'include_dip'));
-	}
+    public static function initiate()
+    {
+        if (null === self::$single_instance) {
+            self::$single_instance = new self();
+        }
+        return self::$single_instance;
+    }
 
 
-	public function include_dip()
-	{
-		if (class_exists('DIP', false)) {
-			return;
-		}
+    public function __construct()
+    {
+        if (!function_exists('add_action')) {
+            // We are running outside of the context of WordPress.
+            return;
+        }
 
-		if (!defined('DIP_VERSION')) {
-			define('DIP_VERSION', self::VERSION);
-		}
+        add_action('init', array($this, 'include_dip'));
+    }
 
-		if (!defined('DIP_DIR')) {
-			define('DIP_DIR', trailingslashit(dirname(__FILE__)));
-		}
 
-		// Include helper functions.
-		//require_once DIP_DIR . 'includes/Config.php';
+    public function include_dip()
+    {
+        if (class_exists('DIP', false)) {
+            return;
+        }
 
-		// Now kick off the class autoloader.
-		spl_autoload_register('RRZE\Lib\dip_autoload_classes');
-	}
+        if (!defined('DIP_VERSION')) {
+            define('DIP_VERSION', self::VERSION);
+        }
+
+        if (!defined('DIP_DIR')) {
+            define('DIP_DIR', trailingslashit(dirname(__FILE__)));
+        }
+
+        // Include helper functions.
+        //require_once DIP_DIR . 'includes/Config.php';
+
+        // Now kick off the class autoloader.
+        spl_autoload_register('RRZE\Lib\dip_autoload_classes');
+    }
 }
 
 // Make it so...
@@ -91,18 +91,18 @@ DIP::initiate();
 
 function dip_autoload_classes($class_name)
 {
-	$prefix = 'RRZE\Lib\DIP';
-	$base_dir = DIP_DIR; //  . '/includes/';
-	$len = strlen($prefix);
+    $prefix = 'RRZE\Lib\DIP';
+    $base_dir = DIP_DIR; //  . '/includes/';
+    $len = strlen($prefix);
 
-	if (strncmp($prefix, $class_name, $len) !== 0) {
-		return;
-	}
+    if (strncmp($prefix, $class_name, $len) !== 0) {
+        return;
+    }
 
-	$relativeClass = substr($class_name, $len);
-	$file = $base_dir . str_replace('\\', '/', $relativeClass) . '.php';
+    $relativeClass = substr($class_name, $len);
+    $file = $base_dir . str_replace('\\', '/', $relativeClass) . '.php';
 
-	if (file_exists($file)) {
-		require_once $file;
-	}
+    if (file_exists($file)) {
+        require_once $file;
+    }
 }
