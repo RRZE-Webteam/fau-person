@@ -4,12 +4,15 @@ namespace RRZE\Lib\DIP;
 
 defined('ABSPATH') || exit;
 
-if (!function_exists('__')) {
-    function __($txt, $domain)
-    {
-        return $txt;
-    }
-}
+use RRZE\Lib\DIP\Config;
+
+
+// if (!function_exists('__')) {
+//     function __($txt, $domain)
+//     {
+//         return $txt;
+//     }
+// }
 
 class Data
 {
@@ -20,29 +23,15 @@ class Data
 
     public function __construct($atts)
     {
-        $this->setAPI();
         $this->atts = $atts;
     }
 
 
-    private function getKey()
-    {
-        $dipOptions = get_option('_fau_person');
-
-        if (!empty($dipOptions['constants_ApiKey'])) {
-            return $dipOptions['constants_ApiKey'];
-        } elseif (is_multisite()) {
-            $settingsOptions = get_site_option('rrze_settings');
-            if (!empty($settingsOptions->plugins->dip_apiKey)) {
-                return $settingsOptions->plugins->dip_apiKey;
-            }
-        } else {
-            return '';
-        }
-    }
 
     public function getResponse($sParam = NULL)
     {
+        $config = Config::get_Config();
+
         $aRet = [
             'valid' => FALSE,
             'content' => ''
@@ -51,11 +40,11 @@ class Data
         $aGetArgs = [
             'headers' => [
                 'Content-Type' => 'application/json',
-                'X-Api-Key' => $this->getKey(),
+                'X-Api-Key' => $config['api_key'],
             ]
         ];
 
-        $apiResponse = wp_remote_get($this->api . $sParam, $aGetArgs);
+        $apiResponse = wp_remote_get($config['api_url'] . $sParam, $aGetArgs);
 
         if ($apiResponse['response']['code'] != 200) {
             $aRet = [
@@ -66,18 +55,13 @@ class Data
             $content = json_decode($apiResponse['body'], true);
             $aRet = [
                 'valid' => TRUE,
-                'content' => $content
+                'content' => Config::fillMap($content, 'persons')
             ];
         }
 
         return $aRet;
     }
 
-
-    private function setAPI()
-    {
-        $this->api = 'https://api.fau.de/pub/v1/vz/persons/';
-    }
 
     private static function log(string $method, string $logType = 'error', string $msg = '')
     {
@@ -90,26 +74,6 @@ class Data
             do_action('rrze.log.' . $logType, __NAMESPACE__ . ' ' . $method . '() : ' . $msg);
         }
     }
-
-    public function getData($dataType, $dipParam = null)
-    {
-        $this->dipParam = urlencode($dipParam);
-
-        if (!$url) {
-            return 'Set Campo Org ID in settings.';
-        }
-        $data = file_get_contents($url);
-        if (!$data) {
-            CampoAPI::log('getData', 'error', "no data returned using $url");
-            return false;
-        }
-        // $data = json_decode($data, true);
-        // $data = $this->mapIt($dataType, $data);
-        // $data = $this->dict($data);
-        // $data = $this->sortGroup($dataType, $data);
-        return $data;
-    }
-
 
 
     public static function correctPhone($phone)
