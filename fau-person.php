@@ -1,16 +1,17 @@
 <?php
+
 /**
  Plugin Name: FAU Person
  Plugin URI: https://github.com/RRZE-Webteam/fau-person
  GitHub Plugin URI: https://github.com/RRZE-Webteam/fau-person
  Description: Visitenkarten-Plugin für FAU Webauftritte
- Version: 3.5.12
+ Version: 3.6.7
  Author: RRZE-Webteam
  Author URI: http://blogs.fau.de/webworking/
  License: GPLv3 or later
  */
 
-	
+
 
 namespace FAU_Person;
 
@@ -20,6 +21,7 @@ use FAU_Person\Main;
 
 // Laden der Konfigurationsdatei
 require_once __DIR__ . '/vendor/UnivIS/UnivIS.php';
+// require_once __DIR__ . '/vendor/DIP/DIP.php';
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/compatibility.php';
 
@@ -56,14 +58,16 @@ add_action('plugins_loaded', __NAMESPACE__ . '\loaded');
 /**
  * Einbindung der Sprachdateien.
  */
-function loadTextDomain() {
+function loadTextDomain()
+{
     load_plugin_textdomain('fau-person', false, sprintf('%s/languages/', dirname(plugin_basename(__FILE__))));
 }
 
 /**
  * Überprüft die Systemvoraussetzungen.
  */
-function systemRequirements() {
+function systemRequirements()
+{
     $error = '';
     if (version_compare(PHP_VERSION, RRZE_PHP_VERSION, '<')) {
         /* Übersetzer: 1: aktuelle PHP-Version, 2: erforderliche PHP-Version */
@@ -78,7 +82,8 @@ function systemRequirements() {
 /**
  * Wird nach der Aktivierung des Plugins ausgeführt.
  */
-function activation() {
+function activation()
+{
     // Sprachdateien werden eingebunden.
     loadTextDomain();
 
@@ -88,29 +93,29 @@ function activation() {
         deactivate_plugins(plugin_basename(__FILE__));
         wp_die($error);
     }
-    
-    
-   // CPT-Capabilities für die Administrator-Rolle zuweisen
-    fau_person_add_kontakteditor_role();
-    fau_person_set_caps_to_roles();		    
-	
 
+
+    // CPT-Capabilities für die Administrator-Rolle zuweisen
+    fau_person_add_kontakteditor_role();
+    fau_person_set_caps_to_roles();
 }
 
 /**
  * Wird durchgeführt, nachdem das Plugin deaktiviert wurde.
  */
-function deactivation() {  
+function deactivation()
+{
     fau_person_remove_caps();
     remove_role('person_editor_role');
-    flush_rewrite_rules();    
+    flush_rewrite_rules();
 }
 
 /**
  * Wird durchgeführt, nachdem das WP-Grundsystem hochgefahren
  * und alle Plugins eingebunden wurden.
  */
-function loaded() {
+function loaded()
+{
     // Sprachdateien werden eingebunden.
     loadTextDomain();
 
@@ -135,74 +140,75 @@ function loaded() {
     // Hauptklasse (Main) wird instanziiert.	
     $main = new Main(__FILE__);
     $main->onLoaded();
-    
+
     // Check if Editor role was already defined or if this is an updated plugin, where 
     // the old activation did not had this 
-    
+
     $role = get_role('person_editor_role');
     if (!isset($role)) {
-	fau_person_add_kontakteditor_role();
-	fau_person_set_caps_to_roles();	
+        fau_person_add_kontakteditor_role();
+        fau_person_set_caps_to_roles();
     }
-    
 }
 
- function fau_person_remove_caps() {    
-	$roles = array('person_editor_role', 'editor','administrator');   
-	$caps_person = Config\get_fau_person_capabilities();
-	foreach($roles as $the_role) {
-	    $role = get_role($the_role);
-	    if (isset($role)) {
-		foreach($caps_person as $cap => $value) {
-		    $role->remove_cap($value);
-		}  
-	    }
-	}    
+function fau_person_remove_caps()
+{
+    $roles = array('person_editor_role', 'editor', 'administrator');
+    $caps_person = Config\get_fau_person_capabilities();
+    foreach ($roles as $the_role) {
+        $role = get_role($the_role);
+        if (isset($role)) {
+            foreach ($caps_person as $cap => $value) {
+                $role->remove_cap($value);
+            }
+        }
     }
+}
 
-    
-    function fau_person_set_caps_to_roles() {    
-	$roles = array('person_editor_role', 'editor','administrator');   
-	$caps_person = Config\get_fau_person_capabilities();
 
-	foreach($roles as $the_role) {
-	    $role = get_role($the_role);
-	    if (isset($role)) {
-		foreach($caps_person as $cap => $value) {
-		    if ($the_role == 'person_editor_role') {
-			switch ($value) {
-			    case 'delete_persons':
-			    case 'delete_private_persons':
-			    case 'delete_published_persons':
-			    case 'delete_others_persons':
-			    case 'publish_persons':	
-			       break;
+function fau_person_set_caps_to_roles()
+{
+    $roles = array('person_editor_role', 'editor', 'administrator');
+    $caps_person = Config\get_fau_person_capabilities();
 
-			    default:
-			       $role->add_cap($value);
-		       }
+    foreach ($roles as $the_role) {
+        $role = get_role($the_role);
+        if (isset($role)) {
+            foreach ($caps_person as $cap => $value) {
+                if ($the_role == 'person_editor_role') {
+                    switch ($value) {
+                        case 'delete_persons':
+                        case 'delete_private_persons':
+                        case 'delete_published_persons':
+                        case 'delete_others_persons':
+                        case 'publish_persons':
+                            break;
 
-		    } else {
-			$role->add_cap($value);
-		    }
-		}  
-	   }
-	}    
-	return;
+                        default:
+                            $role->add_cap($value);
+                    }
+                } else {
+                    $role->add_cap($value);
+                }
+            }
+        }
     }
+    return;
+}
 
 
 
-    function fau_person_add_kontakteditor_role() {
-	add_role('person_editor_role',
-            __( 'Kontakt-Bearbeiter', 'fau-person' ),
-            array(
-                'read' => true,
-                'edit_posts' => true,
-                'delete_posts' => false,
-                'publish_posts' => false,
-                'upload_files' => true,
-            )
-        );
-    }
-    
+function fau_person_add_kontakteditor_role()
+{
+    add_role(
+        'person_editor_role',
+        __('Kontakt-Bearbeiter', 'fau-person'),
+        array(
+            'read' => true,
+            'edit_posts' => true,
+            'delete_posts' => false,
+            'publish_posts' => false,
+            'upload_files' => true,
+        )
+    );
+}
