@@ -27,10 +27,5 @@ class Taxonomy extends Main {
         $standort_posttype = new Standort( $this->pluginFile,  $this->settings);
         $standort_posttype->onLoaded();
 	
-	
-	if( get_transient('fau-person-options') ) {
-            flush_rewrite_rules();
-            delete_transient('fau-person-options');
-	}
     }
 }
