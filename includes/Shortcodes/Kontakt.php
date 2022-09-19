@@ -74,9 +74,9 @@ class Kontakt extends Shortcodes
 
         if (!empty($id)) {
 
-            echo '<pre>';
-            var_dump((Data::getDIPDataTest($id)));
-            exit;
+            // echo '<pre>';
+            // var_dump((Data::getDIPDataTest($id)));
+            // exit;
     
             Main::enqueueForeignThemes();
 
