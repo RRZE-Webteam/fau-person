@@ -206,6 +206,16 @@ function getFields()
         }
     }
 
+	$archive_options =	[
+		'person' => __('Automatisch generieren', 'fau-person') . ' ('  . site_url( '/person/') . ')',
+		'0' => __('Keine Übersichtsseite anzeigen', 'fau-person'),
+	];
+
+	$pages = get_pages(); 
+	foreach($pages  as $page){
+		$archive_options[$page->post_name] = ($page->post_parent != 0 ? '- ' : '') . $page->post_title;
+	}
+
     return [
         'sidebar' => [
 
@@ -465,19 +475,20 @@ function getFields()
             [
                 'name' => 'has_archive_page',
                 'label' => __('Kontakt-Übersichtsseite', 'fau-person'),
-                'desc' => __('Zeige die Standard-Übersichtsseite aller Kontakte an. Bevor diese Option deaktiviert wird, muss eine eigene Seite mit der Titelform (slug) "person" direkt unterhalb der Hauptebene angelegt werden.', 'fau-person'),
-                'type' => 'checkbox',
-                'default' => true,
+                'desc' => __('Die automatisch generierte Übersichtsseite zeigt alle Kontakte an und ist stets aktuell.', 'fau-person'),
+                'default' => 'person',
+                'type' => 'Select',
+                'options' => $archive_options,
             ],
-            [
-                'name' => 'ApiKey',
-                'label' => __('DIP ApiKey', 'rrze-campo'),
-                'desc' => __('If you are not using a multisite installation of Wordpress, contact rrze-integration@fau.de to receive this key.', 'rrze-settings'),
-                'placeholder' => '',
-                'type' => 'text',
-                'default' => '',
-                'sanitize_callback' => 'sanitize_text_field',
-            ],
+            // [
+            //     'name' => 'ApiKey',
+            //     'label' => __('DIP ApiKey', 'rrze-campo'),
+            //     'desc' => __('If you are not using a multisite installation of Wordpress, contact rrze-integration@fau.de to receive this key.', 'rrze-settings'),
+            //     'placeholder' => '',
+            //     'type' => 'text',
+            //     'default' => '',
+            //     'sanitize_callback' => 'sanitize_text_field',
+            // ],
 
         ],
 

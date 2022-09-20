@@ -52,7 +52,8 @@ class Kontakt extends Taxonomy
 			'not_found_in_trash' => __('Keine Kontakte in Papierkorb gefunden', 'fau-person'),
 		];
 
-		$has_archive_page = (isset($this->settings->options['constants_has_archive_page']) ? ($this->settings->options['constants_has_archive_page'] == '0' ? false : true) : null);
+		$archive_slug = (!empty($this->settings->options['constants_has_archive_page']) ? $this->settings->options['constants_has_archive_page'] : $this->postType);
+		$has_archive_page = (!empty($this->settings->options['constants_has_archive_page']) && ($this->settings->options['constants_has_archive_page'] == $this->postType) ? true : false);
 
 		$caps = get_fau_person_capabilities();
 		$person_args = array(
@@ -75,7 +76,7 @@ class Kontakt extends Taxonomy
 			'publicly_queryable' => true,
 			'query_var' => 'person',
 			'rewrite' => [
-				'slug' => $this->postType,
+				'slug' => $archive_slug,
 				'with_front' => true,
 				'pages' => true,
 				'feeds' => true,
