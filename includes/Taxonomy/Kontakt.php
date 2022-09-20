@@ -36,8 +36,13 @@ class Kontakt extends Taxonomy
 	public function set()
 	{
 
+		$archive_slug = (!empty($this->settings->options['constants_has_archive_page']) ? $this->settings->options['constants_has_archive_page'] : $this->postType);
+		$has_archive_page = (!empty($this->settings->options['constants_has_archive_page']) && ($this->settings->options['constants_has_archive_page'] == $this->postType) ? true : false);
+		$archive_page = get_page_by_path($archive_slug, OBJECT, 'page');
+		$archive_title = (!empty($archive_page) ? $archive_page->post_title : 'Kontakte');
+
 		$labels = [
-			'name' => _x('Kontakte', 'Post Type General Name', 'fau-person'),
+			'name' => _x($archive_title, 'Post Type General Name', 'fau-person'),
 			'singular_name' => _x('Kontakt', 'Post Type Singular Name', 'fau-person'),
 			'menu_name' => __('Kontakte', 'fau-person'),
 			'parent_item_colon' => __('Übergeordneter Kontakt', 'fau-person'),
@@ -52,8 +57,6 @@ class Kontakt extends Taxonomy
 			'not_found_in_trash' => __('Keine Kontakte in Papierkorb gefunden', 'fau-person'),
 		];
 
-		$archive_slug = (!empty($this->settings->options['constants_has_archive_page']) ? $this->settings->options['constants_has_archive_page'] : $this->postType);
-		$has_archive_page = (!empty($this->settings->options['constants_has_archive_page']) && ($this->settings->options['constants_has_archive_page'] == $this->postType) ? true : false);
 
 		$caps = get_fau_person_capabilities();
 		$person_args = array(
