@@ -211,11 +211,7 @@ function getFields()
 		'0' => __('Keine Übersichtsseite anzeigen', 'fau-person'),
 	];
 
-	$pages = get_pages([
-		'hierarchicalbool' => false,
-		'post_status' => 'publish',
-		'sort_column' => 'post_title', 
-		]); 
+	$pages = get_pages(); 
 	foreach($pages  as $page){
 		$archive_options[$page->post_name] = ($page->post_parent != 0 ? '- ' : '') . $page->post_title;
 	}
@@ -479,8 +475,8 @@ function getFields()
             [
                 'name' => 'has_archive_page',
                 'label' => __('Kontakt-Übersichtsseite', 'fau-person'),
-                'desc' => __('Zeige die Standard-Übersichtsseite aller Kontakte an. Bevor diese Option deaktiviert wird, muss eine eigene Seite mit der Titelform (slug) "person" direkt unterhalb der Hauptebene angelegt werden.', 'fau-person'),
-                'default' => 'small',
+                'desc' => __('Die automatisch generierte Übersichtsseite zeigt alle Kontakte an und ist stets aktuell.', 'fau-person'),
+                'default' => 'person',
                 'type' => 'Select',
                 'options' => $archive_options,
             ],

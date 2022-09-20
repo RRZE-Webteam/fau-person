@@ -52,8 +52,8 @@ class Kontakt extends Taxonomy
 			'not_found_in_trash' => __('Keine Kontakte in Papierkorb gefunden', 'fau-person'),
 		];
 
-		$has_archive_page = (isset($this->settings->options['constants_has_archive_page']) ? ($this->settings->options['constants_has_archive_page'] == '0' ? false : true) : true);
 		$archive_slug = (!empty($this->settings->options['constants_has_archive_page']) ? $this->settings->options['constants_has_archive_page'] : $this->postType);
+		$has_archive_page = (!empty($this->settings->options['constants_has_archive_page']) && ($this->settings->options['constants_has_archive_page'] == $this->postType) ? true : false);
 
 		$caps = get_fau_person_capabilities();
 		$person_args = array(
