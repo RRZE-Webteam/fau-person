@@ -1,4 +1,4 @@
-# ACHTUNG! Entwicklungsstopp. Dieses Plugin wird nicht mehr weiter entwickelt. Bitte https://github.com/RRZE-Webteam/rrze-contact beachten! #
+# ACHTUNG! #
 # Bestehende Issues von FAU-Person werden zu RRZE-Contact übertragen #
 # Bugs, Änderungswünsche, ... aka Issues zu FAU-Person bitte hier eintragen: https://github.com/RRZE-Webteam/rrze-contact/issues # 
 
