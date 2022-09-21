@@ -39,7 +39,7 @@ class BackendMenu
         set_transient($this->settings->search_univis_id_transient, $input, 30);
 
         set_site_transient('fau-person-options-changed', 1, 0);
-        // echo '<script>console.log("options changed");</script>';
+        set_transient('fau-person-options', 1, 0);
 
         // $options['has_archive_page'] = $input;
         $options = apply_filters('gmail_apikey_options', $options);
