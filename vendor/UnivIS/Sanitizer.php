@@ -96,10 +96,6 @@ class Sanitizer {
                 }        
             }
         }
-
-        echo $phone_number;
-        exit;
-
         return $phone_number;
     }
     
