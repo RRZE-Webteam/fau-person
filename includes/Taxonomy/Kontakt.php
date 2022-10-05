@@ -206,6 +206,7 @@ class Kontakt extends Taxonomy
 			case 'fullname':
 
 				$fullname = Schema::create_Name($data, '', '', 'span', false);
+
 				if (empty(trim($fullname))) {
 					$fullname = get_the_title($post_id);
 				}
