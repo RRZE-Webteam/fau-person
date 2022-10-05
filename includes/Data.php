@@ -3,7 +3,7 @@
 namespace FAU_Person;
 
 use RRZE\Lib\UnivIS\Data as UnivIS_Data;
-use RRZE\Lib\DIP\Data as DIP_Data;
+// use RRZE\Lib\DIP\Data as DIP_Data;
 use RRZE\Lib\UnivIS\Config;
 use RRZE\Lib\UnivIS\Sanitizer;
 use function FAU_Person\Config\getSocialMediaList;
@@ -15,11 +15,11 @@ class Data
 {
 
 
-    public static function getDIPDataTest($id = null)
-    {
-        $myData = new DIP_Data(null);
-        return $myData->getResponse($id);
-    }
+    // public static function getDIPDataTest($id = null)
+    // {
+    //     $myData = new DIP_Data(null);
+    //     return $myData->getResponse($id);
+    // }
 
     private static function get_viewsettings($lookup = 'constants')
     {
