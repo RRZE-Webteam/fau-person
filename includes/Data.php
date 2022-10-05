@@ -1515,9 +1515,9 @@ class Data
     // Get Data Cache
     private static function get_data_cache()
     {
-        if (isset($GLOBALS['fau_person_data_cache'])) {
-            return $GLOBALS['fau_person_data_cache'];
-        }
+        // if (isset($GLOBALS['fau_person_data_cache'])) {
+        //     return $GLOBALS['fau_person_data_cache'];
+        // }
         return;
     }
 
