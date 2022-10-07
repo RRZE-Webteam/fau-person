@@ -72,6 +72,11 @@ class Templates
     public function include_archive_template($template_path)
     {
         global $post;
+
+        if (empty($post)){
+            return $template_path;
+        }
+
         if ($post->post_type == 'person') {
             //if (is_single()) {
             // checks if the file exists in the theme first,
