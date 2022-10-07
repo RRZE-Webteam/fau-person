@@ -37,6 +37,7 @@ class Kontakt extends Taxonomy
 	{
 
 		$archive_slug = (!empty($this->settings->options['constants_has_archive_page']) ? $this->settings->options['constants_has_archive_page'] : $this->postType);
+		$archive_slug = ($archive_slug == 1 ? $this->postType : $archive_slug);
 		$has_archive_page = (!empty($this->settings->options['constants_has_archive_page']) && ($this->settings->options['constants_has_archive_page'] == $this->postType) ? true : false);
 		$archive_page = get_page_by_path($archive_slug, OBJECT, 'page');
 		$archive_title = (!empty($archive_page) ? $archive_page->post_title : 'Kontakte');
