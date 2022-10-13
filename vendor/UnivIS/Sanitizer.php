@@ -12,6 +12,8 @@ class Sanitizer {
      * Normalize Phone Numbers 
      */
     public static function correct_phone_number( $phone_number, $location ) {
+        $phone_number = filter_var($phone_number, FILTER_SANITIZE_NUMBER_INT);
+
         if( ( strpos( $phone_number, '+49 9131 85-' ) !== 0 ) && ( strpos( $phone_number, '+49 911 5302-' ) !== 0 ) ) {
             if( !preg_match( '/\+49 [1-9][0-9]{1,4} [1-9][0-9]+/', $phone_number ) ) {
                 $phone_data = preg_replace( '/\D/', '', $phone_number );
