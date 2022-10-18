@@ -16,6 +16,8 @@ class Kontakt extends Shortcodes
 {
     public $pluginFile = '';
     private $settings = '';
+    const TRANSIENT_PREFIX = 'fau_person_cache_';
+    const TRANSIENT_EXPIRATION = DAY_IN_SECONDS;
 
     public function __construct($pluginFile, $settings)
     {
@@ -43,10 +45,16 @@ class Kontakt extends Shortcodes
         $arguments = self::translate_parameters($arguments);
         $displayfield = Data::get_display_field($arguments['format'], $arguments['show'], $arguments['hide']);
 
-        // extract(shortcode_atts($defaults, $atts));
-
         if ((isset($arguments['category'])) && (!empty($arguments['category']))) {
             return self::shortcode_kontaktListe($atts, $content);
+        }
+
+        // Cache
+        $content = get_transient(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield));
+        if (!empty($content)){
+            return $content;
+        }else{
+            $content = '';
         }
 
         $id = 0;
@@ -183,6 +191,9 @@ class Kontakt extends Shortcodes
                 default:
             }
 
+            // Cache
+            set_transient(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield), $content, self::TRANSIENT_EXPIRATION);
+
             return $content;
         }
     }
@@ -195,6 +206,14 @@ class Kontakt extends Shortcodes
         $arguments = self::translate_parameters($arguments);
         $displayfield = Data::get_display_field($arguments['format'], $arguments['show'], $arguments['hide']);
         $limit = (!empty($atts['unlimited']) ? -1 : 100);
+
+        // Cache
+        $content = get_transient(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield) . $limit);
+        if (!empty($content)){
+            return $content;
+        }else{
+            $content = '';
+        }        
 
         if (isset($arguments['category'])) {
             $category = get_term_by('slug', $arguments['category'], 'persons_category');
@@ -314,6 +333,9 @@ class Kontakt extends Shortcodes
                     break;
                 default:
             }
+
+            // Cache
+            set_transient(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield) . $limit, $content, self::TRANSIENT_EXPIRATION);
         } else {
             if (is_object($category)) {
                 $content = '<p>' . sprintf(__('Es konnten keine Kontakte in der Kategorie %s gefunden werden.', 'fau-person'), $category->slug) . '</p>';
