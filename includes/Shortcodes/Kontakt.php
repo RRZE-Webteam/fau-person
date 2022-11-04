@@ -53,6 +53,7 @@ class Kontakt extends Shortcodes
         $transient = sha1(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield));
         $content = get_transient($transient);
         if (!empty($content)){
+            Main::enqueueForeignThemes();
             return $content;
         }else{
             $content = '';
@@ -213,6 +214,7 @@ class Kontakt extends Shortcodes
         $transient = sha1(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield) . $limit);
         $content = get_transient($transient);
         if (!empty($content)){
+            Main::enqueueForeignThemes();
             return $content;
         }else{
             $content = '';
