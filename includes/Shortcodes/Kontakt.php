@@ -50,7 +50,8 @@ class Kontakt extends Shortcodes
         }
 
         // Cache
-        $content = get_transient(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield));
+        $transient = sha1(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield));
+        $content = get_transient($transient);
         if (!empty($content)){
             Main::enqueueForeignThemes();
             return $content;
@@ -193,7 +194,8 @@ class Kontakt extends Shortcodes
             }
 
             // Cache
-            set_transient(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield), $content, self::TRANSIENT_EXPIRATION);
+            $transient = sha1(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield));
+            set_transient($transient, $content, self::TRANSIENT_EXPIRATION);
 
             return $content;
         }
@@ -209,7 +211,8 @@ class Kontakt extends Shortcodes
         $limit = (!empty($atts['unlimited']) ? -1 : 100);
 
         // Cache
-        $content = get_transient(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield) . $limit);
+        $transient = sha1(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield) . $limit);
+        $content = get_transient($transient);
         if (!empty($content)){
             Main::enqueueForeignThemes();
             return $content;
@@ -337,7 +340,8 @@ class Kontakt extends Shortcodes
             }
 
             // Cache
-            set_transient(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield) . $limit, $content, self::TRANSIENT_EXPIRATION);
+            $transient = sha1(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield) . $limit);
+            set_transient($transient, $content, self::TRANSIENT_EXPIRATION);
         } else {
             if (is_object($category)) {
                 $content = '<p>' . sprintf(__('Es konnten keine Kontakte in der Kategorie %s gefunden werden.', 'fau-person'), $category->slug) . '</p>';

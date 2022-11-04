@@ -10,3 +10,4 @@ tmp
 .vscode/sftp.json
 .vscode/sftp.json
 vendor/DIP/.DS_Store
+src/js/.DS_Store
