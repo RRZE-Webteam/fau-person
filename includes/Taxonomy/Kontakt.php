@@ -182,7 +182,7 @@ class Kontakt extends Taxonomy
 			'title' => __('Titel', 'fau-person'),
 			'thumb' => __('Bild', 'fau-person'),
 			'fullname' => __('Angezeigter Name', 'fau-person'),
-			'contact' => __('Kontakt', 'fau-person'),
+			// 'contact' => __('Kontakt', 'fau-person'),
 			'source' => __('Datenquelle', 'fau-person'),
 			'author' => __('Bearbeiter', 'fau-person'),
 			'date' => __('Datum', 'fau-person'),
@@ -213,11 +213,11 @@ class Kontakt extends Taxonomy
 				}
 				echo $fullname;
 				break;
-			case 'contact':
-				// echo $data['email'];
-				echo Schema::create_contactpointlist($data, 'ul', '', '', 'li');
+			// case 'contact':
+			// 	// echo $data['email'];
+			// 	echo Schema::create_contactpointlist($data, 'ul', '', '', 'li');
 
-				break;
+			// 	break;
 			case 'source':
 				if ($univisid) {
 					echo __('UnivIS', 'fau-person') . ' (Id: <a target="univis" href="' . $api_url . '?search=persons&id=' . $univisid . '&show=info">' . $univisid . '</a>)';
