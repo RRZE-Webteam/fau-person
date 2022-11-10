@@ -15,7 +15,9 @@ class Sanitizer {
         $phone_number = filter_var($phone_number, FILTER_SANITIZE_NUMBER_INT);
 
         if( ( strpos( $phone_number, '+49 9131 85-' ) !== 0 ) && ( strpos( $phone_number, '+49 911 5302-' ) !== 0 ) ) {
+
             if( !preg_match( '/\+49 [1-9][0-9]{1,4} [1-9][0-9]+/', $phone_number ) ) {
+
                 $phone_data = preg_replace( '/\D/', '', $phone_number );
                 $vorwahl_erl = '+49 9131 85-';
                 $vorwahl_erl_p1_p6 = '+49 9131 81146-'; // see: https://github.com/RRZE-Webteam/fau-person/issues/353
@@ -37,7 +39,9 @@ class Sanitizer {
                             $phone_number = $vorwahl_nbg . substr( $phone_data, -3);
                         } elseif ( strlen( $phone_data ) == 11 && strpos( $phone_data, '9115302') !== FALSE ) {
                             $phone_number = $vorwahl_nbg . substr( $phone_data, -3);
-                        } 
+                        } elseif ( strlen( $phone_data ) == 15 && strpos( $phone_data, '4909115302') !== FALSE ) {
+                            $phone_number = $vorwahl_nbg . substr( $phone_data, 10);
+                        }
                         break;
                     case 'standard':
                         switch( strlen( $phone_data ) ) {
@@ -98,6 +102,7 @@ class Sanitizer {
                 }        
             }
         }
+
         return $phone_number;
     }
     
