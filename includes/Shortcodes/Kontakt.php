@@ -213,15 +213,17 @@ class Kontakt extends Shortcodes
         $limit = (!empty($atts['unlimited']) ? -1 : 100);
 
         // Cache
-        $transient = sha1(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield) . $limit);
-        $content = get_transient($transient);
-        if (!empty($content)){
-            Main::enqueueForeignThemes();
-            return $content;
-        }else{
-            $content = '';
-        }        
-
+        if (empty($atts['nocache'])){
+            $transient = sha1(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield) . $limit);
+            $content = get_transient($transient);
+            if (!empty($content)){
+                Main::enqueueForeignThemes();
+                return $content;
+            }else{
+                $content = '';
+            }        
+        }
+        
         if (isset($arguments['category'])) {
             $category = get_term_by('slug', $arguments['category'], 'persons_category');
             if (is_object($category)) {
