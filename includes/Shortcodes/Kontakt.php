@@ -38,8 +38,6 @@ class Kontakt extends Shortcodes
     public static function shortcode_kontakt($atts, $content = null)
     {
 
-
-
         $defaults = getShortcodeDefaults('kontakt');
         $arguments = shortcode_atts($defaults, $atts);
         $arguments = self::translate_parameters($arguments);
@@ -50,13 +48,13 @@ class Kontakt extends Shortcodes
         }
 
         // Cache
-        if (empty($atts['nocache'])){
+        if (empty($atts['nocache'])) {
             $transient = sha1(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield));
             $content = get_transient($transient);
-            if (!empty($content)){
+            if (!empty($content)) {
                 Main::enqueueForeignThemes();
                 return $content;
-            }else{
+            } else {
                 $content = '';
             }
         }
@@ -85,7 +83,7 @@ class Kontakt extends Shortcodes
         }
 
         if (!empty($id)) {
-    
+
             Main::enqueueForeignThemes();
 
             $class = 'fau-person';
@@ -187,7 +185,7 @@ class Kontakt extends Shortcodes
                     $content .= '</span>';
                     break;
                 case 'liste':
-                    $content .= '</ul>';
+                    $content .= '</ul>';    
                     break;
                 case 'card':
                     $content .= '</div>';
@@ -198,6 +196,17 @@ class Kontakt extends Shortcodes
             // Cache
             $transient = sha1(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield));
             set_transient($transient, $content, self::TRANSIENT_EXPIRATION);
+
+            // lets store $transient in an option to delete them on save using Data::deleteTransients()
+            $aOptions = get_option('fau-persion-shortcode-transients');
+
+            if (!empty($aOptions)) {
+                $aOptions[] = $transient;
+            } else {
+                $aOptions = [$transient];
+            }
+
+            update_option('fau-persion-shortcode-transients', $aOptions);
 
             return $content;
         }
@@ -213,17 +222,17 @@ class Kontakt extends Shortcodes
         $limit = (!empty($atts['unlimited']) ? -1 : 100);
 
         // Cache
-        if (empty($atts['nocache'])){
+        if (empty($atts['nocache'])) {
             $transient = sha1(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield) . $limit);
             $content = get_transient($transient);
-            if (!empty($content)){
+            if (!empty($content)) {
                 Main::enqueueForeignThemes();
                 return $content;
-            }else{
+            } else {
                 $content = '';
-            }        
+            }
         }
-        
+
         if (isset($arguments['category'])) {
             $category = get_term_by('slug', $arguments['category'], 'persons_category');
             if (is_object($category)) {
