@@ -2,18 +2,16 @@
 
 namespace FAU_Person;
 
-use RRZE\Lib\UnivIS\Data as UnivIS_Data;
+use function FAU_Person\Config\getSocialMediaList;
 // use RRZE\Lib\DIP\Data as DIP_Data;
 use RRZE\Lib\UnivIS\Config;
+use RRZE\Lib\UnivIS\Data as UnivIS_Data;
 use RRZE\Lib\UnivIS\Sanitizer;
-use function FAU_Person\Config\getSocialMediaList;
 
 defined('ABSPATH') || exit;
 
-
 class Data
 {
-
 
     // public static function getDIPDataTest($id = null)
     // {
@@ -35,8 +33,7 @@ class Data
                     $keyname = preg_replace('/sidebar_/i', '', $section);
                     $viewopt[$keyname] = $options[$section];
                 }
-            }
-            else {
+            } else {
                 if (substr($section, 0, 9) === 'constants') {
                     $keyname = preg_replace('/constants_/i', '', $section);
                     $viewopt[$keyname] = $options[$section];
@@ -61,7 +58,7 @@ class Data
 
         if ($personlist) {
             foreach ($personlist as $key => $value) {
-                $personlist[$key] = (array)$personlist[$key];
+                $personlist[$key] = (array) $personlist[$key];
                 $name = $personlist[$key]['post_title'];
 
                 $thistype = get_post_meta($personlist[$key]['ID'], 'fau_person_typ', true);
@@ -78,15 +75,12 @@ class Data
                             $lastname = get_post_meta($personlist[$key]['ID'], 'fau_person_familyName', true);
                             if (get_post_meta($personlist[$key]['ID'], 'fau_person_givenName', true)) {
                                 $name = $lastname . ', ' . get_post_meta($personlist[$key]['ID'], 'fau_person_givenName', true);
-                            }
-                            elseif (ltrim(strpos($name, $lastname))) {
+                            } elseif (ltrim(strpos($name, $lastname))) {
                                 $name = $lastname . ', ' . ltrim(str_replace($lastname, '', $name));
-                            }
-                            else {
+                            } else {
                                 $name = $lastname;
                             }
-                        }
-                        else {
+                        } else {
                             if (ltrim(strpos($name, ' '))) {
                                 $lastname = ltrim(strrchr($name, ' '));
                                 $firstname = ltrim(str_replace($lastname, '', $name));
@@ -108,20 +102,19 @@ class Data
         return $contactselect;
     }
 
-
     public static function get_contactdata($connection = 0)
     {
         $args = array(
             'post_type' => 'person',
             'numberposts' => -1,
-            'meta_key' => 'fau_person_typ'
+            'meta_key' => 'fau_person_typ',
         );
 
         $personlist = get_posts($args);
 
         if ($personlist) {
             foreach ($personlist as $key => $value) {
-                $personlist[$key] = (array)$personlist[$key];
+                $personlist[$key] = (array) $personlist[$key];
                 $name = $personlist[$key]['post_title'];
                 switch (get_post_meta($personlist[$key]['ID'], 'fau_person_typ', true)) {
                     case 'realperson':
@@ -131,15 +124,12 @@ class Data
                             $lastname = get_post_meta($personlist[$key]['ID'], 'fau_person_familyName', true);
                             if (get_post_meta($personlist[$key]['ID'], 'fau_person_givenName', true)) {
                                 $name = $lastname . ', ' . get_post_meta($personlist[$key]['ID'], 'fau_person_givenName', true);
-                            }
-                            elseif (ltrim(strpos($name, $lastname))) {
+                            } elseif (ltrim(strpos($name, $lastname))) {
                                 $name = $lastname . ', ' . ltrim(str_replace($lastname, '', $name));
-                            }
-                            else {
+                            } else {
                                 $name = $lastname;
                             }
-                        }
-                        else {
+                        } else {
                             if (ltrim(strpos($name, ' '))) {
                                 $lastname = ltrim(strrchr($name, ' '));
                                 $firstname = ltrim(str_replace($lastname, '', $name));
@@ -161,32 +151,29 @@ class Data
             if ($connection) {
                 $contactselect = array('0' => __('Kein Kontakt ausgewählt.', 'fau-person')) + $contactselect;
             }
-        }
-        else {
+        } else {
             // falls noch keine Kontakte vorhanden sind
             $contactselect[0] = __('Noch keine Kontakte eingepflegt.', 'fau-person');
         }
         return $contactselect;
     }
 
-
     public static function get_standortdata()
     {
         $args = array(
             'post_type' => 'standort',
-            'numberposts' => -1
+            'numberposts' => -1,
         );
 
         $standortlist = get_posts($args);
         if ($standortlist) {
             foreach ($standortlist as $key => $value) {
-                $standortlist[$key] = (array)$standortlist[$key];
+                $standortlist[$key] = (array) $standortlist[$key];
                 $standortselect[$standortlist[$key]['ID']] = $standortlist[$key]['post_title'];
             }
             asort($standortselect);
             $standortselect = array('0' => __('Kein Standort ausgewählt.', 'fau-person')) + $standortselect;
-        }
-        else {
+        } else {
             $standortselect[0] = __('Noch kein Standort eingepflegt.', 'fau-person');
         }
         return $standortselect;
@@ -196,13 +183,11 @@ class Data
     {
         if (isset($_GET["fau_person_typ"]) && $_GET["fau_person_typ"] == 'einrichtung') {
             $default_fau_person_typ = 'einrichtung';
-        }
-        else {
+        } else {
             $default_fau_person_typ = 'realperson';
         }
         return $default_fau_person_typ;
     }
-
 
     //gibt die Werte des Standorts an, für Standort-Synchronisation $edfaults=1
     public static function get_fields_standort($id, $standort_id, $defaults)
@@ -222,12 +207,10 @@ class Data
         foreach ($fields_standort as $key => $value) {
             if ($standort_sync) {
                 $value = self::sync_standort($id, $standort_id, $key, $defaults);
-            }
-            else {
+            } else {
                 if ($defaults) {
                     $value = '<p class="cmb2-metabox-description">' . __('Im Standort ist hierfür kein Wert hinterlegt.', 'fau-person') . '</p>';
-                }
-                elseif ($id) {
+                } elseif ($id) {
                     $value = get_post_meta($id, 'fau_person_' . $key, true);
                 }
             }
@@ -256,8 +239,7 @@ class Data
             if (!empty($class)) {
                 $res .= ' class="' . esc_attr($class) . '"';
             }
-        }
-        else {
+        } else {
             $res .= ' class="standard-btn primary-btn"';
         }
         if (!empty($linktitle)) {
@@ -266,8 +248,7 @@ class Data
         $res .= '>';
         if ((isset($viewopts['view_kontakt_linktext'])) && (!empty($viewopts['view_kontakt_linktext']))) {
             $res .= esc_html($viewopts['view_kontakt_linktext']);
-        }
-        else {
+        } else {
             $res .= __('Profil aufrufen', 'fau-person');
         }
         if (!empty($screenreadertext)) {
@@ -280,10 +261,10 @@ class Data
         return $res;
     }
 
-    // $id = ID des Personeneintrags, 
-    // $standort_id = ID des Standorteintrags, 
-    // $fau_person_var = Bezeichnung des Feldes im Personenplugin, 
-    // $defaults = Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular    
+    // $id = ID des Personeneintrags,
+    // $standort_id = ID des Standorteintrags,
+    // $fau_person_var = Bezeichnung des Feldes im Personenplugin,
+    // $defaults = Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular
     public static function sync_standort($id, $standort_id, $fau_person_var, $defaults)
     {
         $value = get_post_meta($standort_id, 'fau_person_' . $fau_person_var, true);
@@ -291,22 +272,18 @@ class Data
         if ($defaults) {
             if (!empty($value)) {
                 $val = '<p class="cmb2-metabox-description">' . __('Von Standort angezeigter Wert:', 'fau-person') . ' <code>' . $value . '</code></p>';
-            }
-            else {
+            } else {
                 $val = '<p class="cmb2-metabox-description">' . __('Im Standort ist hierfür kein Wert hinterlegt.', 'fau-person') . '</p>';
             }
-        }
-        else {
+        } else {
             if (!empty($value) && get_post_meta($id, 'fau_person_standort_sync', true)) {
                 $val = $value;
-            }
-            else {
+            } else {
                 $val = get_post_meta($id, 'fau_person_' . $fau_person_var, true);
             }
         }
         return $val;
     }
-
 
     public static function get_standort_defaults($id = 0)
     {
@@ -315,8 +292,7 @@ class Data
             $standort_id = get_post_meta($id, 'fau_person_standort_id', true);
             $standort_default = self::get_fields_standort($id, $standort_id, 1);
             return $standort_default;
-        }
-        else {
+        } else {
             return self::get_fields_standort(0, 0, 0);
         }
     }
@@ -330,8 +306,7 @@ class Data
                 if (is_int($value)) {
                     // value ist Post-ID
                     $id = $value;
-                }
-                else {
+                } else {
                     $id = $personlist[$key]['ID'];
                 }
                 $fields = self::get_kontakt_data($id);
@@ -344,22 +319,17 @@ class Data
 
                         if (($sorttype == 'givenName') || ($sorttype == 'vorname') || ($sorttype == 'fullname')) {
                             $sortname = $fields['givenName'] . " - " . $fields['familyName'];
-                        }
-                        elseif (($sorttype == 'familyName') || ($sorttype == 'nachname') || ($sorttype == 'name')) {
+                        } elseif (($sorttype == 'familyName') || ($sorttype == 'nachname') || ($sorttype == 'name')) {
                             $sortname = $fields['familyName'] . " - " . $fields['givenName'];
-                        }
-                        elseif ($sorttype == 'title') {
+                        } elseif ($sorttype == 'title') {
                             $sortname = $fields['kontakt_title'];
-                        }
-                        elseif ($sorttype == 'sortierfeld') {
+                        } elseif ($sorttype == 'sortierfeld') {
                             if (!empty($fields['alternateName'])) {
                                 $sortname = $fields['alternateName'];
-                            }
-                            else {
+                            } else {
                                 $sortname = "Z " . $fields['kontakt_title'];
                             }
-                        }
-                        else {
+                        } else {
                             $sortname = $fields['kontakt_title'];
                         }
 
@@ -368,12 +338,10 @@ class Data
                         if ($sorttype == 'sortierfeld') {
                             if (!empty($fields['alternateName'])) {
                                 $sortname = $fields['alternateName'];
-                            }
-                            else {
+                            } else {
                                 $sortname = "Z " . $fields['kontakt_title'];
                             }
-                        }
-                        else {
+                        } else {
                             $sortname = $fields['kontakt_title'];
                         }
 
@@ -387,8 +355,7 @@ class Data
             }
             if ($order == 'desc') {
                 arsort($temp);
-            }
-            else {
+            } else {
                 asort($temp);
             }
 
@@ -399,7 +366,6 @@ class Data
             return $result;
         }
     }
-
 
     public static function create_kontakt_image($id = 0, $size = 'person-thumb-page-v3', $class = '', $defaultimage = false, $showlink = false, $linkttitle = '', $showcaption = true, $linktarget = '')
     {
@@ -416,12 +382,10 @@ class Data
         if ($showlink) {
             if ((!empty($linktarget)) && (!empty(esc_url($linktarget)))) {
                 $targetlink = $linktarget;
-            }
-            else {
+            } else {
                 $targetlink = get_permalink($id);
             }
         }
-
 
         if (has_post_thumbnail($id)) {
             $image_id = get_post_thumbnail_id($id);
@@ -441,22 +405,18 @@ class Data
                     $imagedata['caption'] = trim(strip_tags($attachment->post_excerpt));
                 }
             }
-        }
-        elseif ($defaultimage) {
+        } elseif ($defaultimage) {
             $type = $fields['typ'];
 
             $pluginfile = __DIR__;
 
             if ($type == 'realmale') {
                 $bild = plugin_dir_url($pluginfile) . 'images/platzhalter-mann.png';
-            }
-            elseif ($type == 'realfemale') {
+            } elseif ($type == 'realfemale') {
                 $bild = plugin_dir_url($pluginfile) . 'images/platzhalter-frau.png';
-            }
-            elseif ($type == 'einrichtung') {
+            } elseif ($type == 'einrichtung') {
                 $bild = plugin_dir_url($pluginfile) . 'images/platzhalter-organisation.png';
-            }
-            else {
+            } else {
                 $bild = plugin_dir_url($pluginfile) . 'images/platzhalter-unisex.png';
             }
             if ($bild) {
@@ -495,11 +455,9 @@ class Data
         $url = '';
         if ((isset($data['link'])) && (!empty(esc_url($data['link'])))) {
             $url = $data['link'];
-        }
-        elseif ((isset($data['permalink'])) && (!empty(esc_url($data['permalink'])))) {
+        } elseif ((isset($data['permalink'])) && (!empty(esc_url($data['permalink'])))) {
             $url = $data['permalink'];
-        }
-        elseif ((isset($data['url'])) && (!empty(esc_url($data['url'])))) {
+        } elseif ((isset($data['url'])) && (!empty(esc_url($data['url'])))) {
             $url = $data['url'];
         }
         if (isset($args['view_kontakt_linkname'])) {
@@ -507,18 +465,15 @@ class Data
 
                 if ($args['view_kontakt_linkname'] == 'force-nolink') {
                     $url = '';
-                }
-                elseif ($args['view_kontakt_linkname'] == 'url') {
+                } elseif ($args['view_kontakt_linkname'] == 'url') {
                     if ((isset($data['url'])) && (!empty(esc_url($data['url'])))) {
                         $url = $data['url'];
                     }
-                }
-                elseif ($args['view_kontakt_linkname'] == 'permalink') {
+                } elseif ($args['view_kontakt_linkname'] == 'permalink') {
                     if ((isset($data['permalink'])) && (!empty(esc_url($data['permalink'])))) {
                         $url = $data['permalink'];
                     }
-                }
-                elseif ($args['view_kontakt_linkname'] == 'use-link') {
+                } elseif ($args['view_kontakt_linkname'] == 'use-link') {
                     if ((isset($data['link'])) && (!empty(esc_url($data['link'])))) {
                         $url = $data['link'];
                     }
@@ -545,19 +500,15 @@ class Data
 
         $data = self::filter_fields($fields, $display);
 
-
-
         $fullname = Schema::create_Name($data, 'name', '', 'a', false, $viewopts);
         $hoursavailable_output = Schema::create_ContactPoint($data);
-
 
         $class = 'fau-person';
         if (isset($viewopts['view_thumb_size'])) {
             if ((isset($arguments['class'])) && (!empty($arguments['class'])) && (preg_match("/thumb\-size\-/i", $arguments['class']))) {
-            // thumb-size ist in der Class bereits enthalten, daher ignoriere ich die globale Setting einstweile
-            // und lass es über die Class individuell durch den Redakteuer steuern, der es als class eingibt
-            }
-            else {
+                // thumb-size ist in der Class bereits enthalten, daher ignoriere ich die globale Setting einstweile
+                // und lass es über die Class individuell durch den Redakteuer steuern, der es als class eingibt
+            } else {
                 $class .= ' thumb-size-' . esc_attr($viewopts['view_thumb_size']);
             }
         }
@@ -578,34 +529,26 @@ class Data
 
         $content .= '<div class="' . $class . '" itemscope itemtype="http://schema.org/Person">' . "\n";
 
-
-
         $content .= '<div class="row">';
 
         if (isset($display['bild']) && (!empty($display['bild']))) {
             $content .= Data::create_kontakt_image($id, 'person-thumb-v3', "person-thumb", true, true, '', false);
             $content .= '<div class="person-default-thumb">';
-        }
-        else {
+        } else {
             $content .= '<div class="person-default">';
         }
         if ($arguments['hstart']) {
             $hstart = intval($arguments['hstart']);
-        }
-        else {
+        } else {
             $hstart = 2;
         }
         if (($hstart < 1) || ($hstart > 6)) {
             $hstart = 2;
         }
 
-
         $content .= '<h' . $hstart . '>';
         $content .= $fullname;
         $content .= '</h' . $hstart . '>';
-
-
-
 
         $datacontent = '';
         if (isset($viewopts['view_some_position']) && $viewopts['view_some_position'] == 'nach-name') {
@@ -613,7 +556,7 @@ class Data
         }
 
         if ((isset($viewopts['view_raum_prefix'])) && (!empty(trim($viewopts['view_raum_prefix'])))
-        && (isset($data['workLocation']) && (!empty($data['workLocation'])))
+            && (isset($data['workLocation']) && (!empty($data['workLocation'])))
         ) {
             $data['workLocation'] = $viewopts['view_raum_prefix'] . ' ' . $data['workLocation'];
         }
@@ -630,9 +573,8 @@ class Data
         }
         $datacontent .= Schema::create_Organization($orgadata, 'p', 'worksFor', '', false, false, false);
 
-
         if ((!isset($data['connection_only']))
-        || ((isset($data['connection_only']) && $data['connection_only'] == false))
+            || ((isset($data['connection_only']) && $data['connection_only'] == false))
         ) {
             $adresse = Schema::create_PostalAdress($data, 'address', '', 'address', true);
             if (isset($adresse)) {
@@ -645,7 +587,6 @@ class Data
             $datacontent .= Schema::create_SocialMedialist($data);
         }
 
-
         if ((!empty($data['connection_text']) || !empty($data['connection_options']) || !empty($data['connections'])) && isset($display['ansprechpartner']) && $display['ansprechpartner'] == true) {
             $datacontent .= self::fau_person_connection($data['connection_text'], $data['connection_options'], $data['connections'], $hstart);
         }
@@ -655,12 +596,10 @@ class Data
             $content .= '</div>';
         }
 
-
-
         $morecontent = '';
         if (isset($display['sprechzeiten']) && $display['sprechzeiten'] == true) {
             if ((!isset($data['connection_only']))
-            || ((isset($data['connection_only']) && $data['connection_only'] == false))
+                || ((isset($data['connection_only']) && $data['connection_only'] == false))
             ) {
                 $morecontent .= Schema::create_ContactPoint($data);
             }
@@ -681,7 +620,7 @@ class Data
             $content .= $morecontent;
         }
 
-        $content .= '</div>'; // row 
+        $content .= '</div>'; // row
 
         $content .= '</div>';
         $content .= '</div>';
@@ -692,7 +631,6 @@ class Data
     {
         $fields = self::get_kontakt_data($id);
 
-
         Main::enqueueForeignThemes();
         $viewopts = self::get_viewsettings();
         if (empty($display)) {
@@ -701,17 +639,14 @@ class Data
         $fields['morelink'] = self::get_morelink_url($fields, $viewopts);
         $data = self::filter_fields($fields, $display);
 
-
         if ((isset($arguments['hstart'])) && (!empty($arguments['hstart']))) {
             $hstart = intval($arguments['hstart']);
-        }
-        else {
+        } else {
             $hstart = 2;
         }
         if (($hstart < 1) || ($hstart > 6)) {
             $hstart = 2;
         }
-
 
         $class = 'fau-person page';
         if ((isset($arguments['class'])) && (!empty($arguments['class']))) {
@@ -720,8 +655,7 @@ class Data
         if (isset($display['border'])) {
             if ($display['border']) {
                 $class .= ' border';
-            }
-            else {
+            } else {
                 $class .= ' noborder';
             }
         }
@@ -741,14 +675,12 @@ class Data
             $use_size = $viewopts['view_kontakt_page_imagesize'];
         }
         if ((isset($viewopts['view_raum_prefix'])) && (!empty(trim($viewopts['view_raum_prefix'])))
-        && (isset($data['workLocation']) && (!empty($data['workLocation'])))
+            && (isset($data['workLocation']) && (!empty($data['workLocation'])))
         ) {
             $data['workLocation'] = $viewopts['view_raum_prefix'] . ' ' . $data['workLocation'];
         }
 
-
         $content = '<div class="' . $class . '" itemscope itemtype="http://schema.org/Person">';
-
 
         // if ( $is_shortcode) {
         $data['morelink'] = '';
@@ -775,9 +707,8 @@ class Data
         }
         $content .= Schema::create_Organization($orgadata, 'p', 'worksFor', '', false, false, false);
 
-
         if ((!isset($data['connection_only'])) ||
-        ((isset($data['connection_only']) && $data['connection_only'] == false))
+            ((isset($data['connection_only']) && $data['connection_only'] == false))
         ) {
             $adresse = Schema::create_PostalAdress($data, 'address', '', 'address', true);
             if (isset($adresse)) {
@@ -791,11 +722,10 @@ class Data
         }
 
         if ((!isset($data['connection_only'])) ||
-        ((isset($data['connection_only']) && $data['connection_only'] == false))
+            ((isset($data['connection_only']) && $data['connection_only'] == false))
         ) {
             $content .= Schema::create_ContactPoint($data, 'div', 'contactPoint', '', 'h3');
         }
-
 
         $content .= '</div>';
         $content .= '</div>';
@@ -844,7 +774,7 @@ class Data
 
         $data = self::filter_fields($fields, $display);
         if ((isset($viewopts['view_raum_prefix'])) && (!empty(trim($viewopts['view_raum_prefix'])))
-        && (isset($data['workLocation']) && (!empty($data['workLocation'])))
+            && (isset($data['workLocation']) && (!empty($data['workLocation'])))
         ) {
             $data['workLocation'] = $viewopts['view_raum_prefix'] . ' ' . $data['workLocation'];
         }
@@ -866,11 +796,11 @@ class Data
                 $orgadata['department'] = $data['department'];
             }
         }
-        if ($showorg){
+        if ($showorg) {
             $org = Schema::create_Organization($orgadata, 'td', 'worksFor', '', false, false, false);
-            if (!empty($org)){
+            if (!empty($org)) {
                 $content .= $org;
-            }else{
+            } else {
                 $content .= "<td>&nbsp;</td>";
             }
         }
@@ -880,7 +810,7 @@ class Data
         }
         if (isset($display['sprechzeiten']) && (!empty($display['sprechzeiten']))) {
             if ((!isset($data['connection_only'])) ||
-            ((isset($data['connection_only']) && $data['connection_only'] == false))
+                ((isset($data['connection_only']) && $data['connection_only'] == false))
             ) {
                 $content .= '<td>' . Schema::create_ContactPoint($data) . '</td>';
             }
@@ -888,7 +818,6 @@ class Data
         if (isset($display['socialmedia']) && $display['socialmedia']) {
             $content .= "<td>" . Schema::create_SocialMedialist($data) . '</td>';
         }
-
 
         $content .= '</tr>';
 
@@ -916,12 +845,10 @@ class Data
                 // thumb-size ist in der Class bereits enthalten, daher ignoriere ich die globale Setting einstweile
                 // und lass es über die Class individuell durch den Redakteuer steuern, der es als class eingibt
                 $class .= ' ' . esc_attr($arguments['class']);
-            }
-            else {
+            } else {
                 $class .= ' card-' . esc_attr($viewopts['view_card_size']);
             }
         }
-
 
         $content .= '<div class="' . $class . '" itemscope itemtype="http://schema.org/Person">';
 
@@ -934,8 +861,7 @@ class Data
             }
             if ($thisurl) {
                 $content .= Data::create_kontakt_image($id, 'medium', "person-thumb", true, true, '', false, $thisurl);
-            }
-            else {
+            } else {
                 $content .= Data::create_kontakt_image($id, 'medium', "person-thumb", true, false, '', false);
             }
         }
@@ -944,8 +870,7 @@ class Data
 
         if ($arguments['hstart']) {
             $hstart = intval($arguments['hstart']);
-        }
-        else {
+        } else {
             $hstart = 3;
         }
         if (($hstart < 1) || ($hstart > 6)) {
@@ -955,8 +880,6 @@ class Data
         $content .= '<h' . $hstart . '>';
         $content .= $fullname;
         $content .= '</h' . $hstart . '>';
-
-
 
         if (isset($data['jobTitle']) && (!empty($data['jobTitle']))) {
             $content .= '<span class="person-info-position" itemprop="jobTitle">' . $data['jobTitle'] . '</span><br>';
@@ -972,7 +895,6 @@ class Data
             $content .= Schema::create_SocialMedialist($data);
         }
 
-
         $content .= '</div>';
 
         return $content;
@@ -986,7 +908,6 @@ class Data
         $fields = self::get_kontakt_data($id);
         $viewopts = self::get_viewsettings();
 
-
         $content = '';
         Main::enqueueForeignThemes();
 
@@ -995,27 +916,23 @@ class Data
 
         $data = self::filter_fields($fields, $display);
 
-
         if ((isset($viewopts['view_raum_prefix'])) && (!empty(trim($viewopts['view_raum_prefix'])))
-        && (isset($data['workLocation']) && (!empty($data['workLocation'])))
+            && (isset($data['workLocation']) && (!empty($data['workLocation'])))
         ) {
             $data['workLocation'] = $viewopts['view_raum_prefix'] . ' ' . $data['workLocation'];
         }
 
-
         if ($display['format'] == 'liste') {
             $content .= '<li itemscope itemtype="http://schema.org/Person">';
             $content .= Schema::create_Name($data, 'name', '', 'a', false, $viewopts);
-        }
-        else {
+        } else {
             $content .= '<span itemscope itemtype="http://schema.org/Person">';
             $content .= Schema::create_Name($data, 'name', '', 'a', true, $viewopts);
         }
 
-
         $cp = '';
         if ((!isset($data['connection_only'])) ||
-        ((isset($data['connection_only']) && $data['connection_only'] == false))
+            ((isset($data['connection_only']) && $data['connection_only'] == false))
         ) {
             if ($display['format'] == 'liste') {
 
@@ -1038,14 +955,11 @@ class Data
 
         if ($display['format'] == 'liste') {
             $content .= '</li>';
-        }
-        else {
+        } else {
             $content .= '</span>';
         }
         return $content;
     }
-
-
 
     public static function fau_person_sidebar($id, $display = array(), $arguments = array())
     {
@@ -1055,7 +969,6 @@ class Data
         $fields = self::get_kontakt_data($id);
         $viewopts = self::get_viewsettings();
 
-
         $content = '';
         Main::enqueueForeignThemes();
 
@@ -1064,12 +977,9 @@ class Data
 
         $data = self::filter_fields($fields, $display);
 
-
-
         if (isset($arguments['hstart'])) {
             $hstart = intval($arguments['hstart']);
-        }
-        else {
+        } else {
             $hstart = 2;
         }
         if (($hstart < 1) || ($hstart > 6)) {
@@ -1078,15 +988,12 @@ class Data
 
         $fullname = Schema::create_Name($data, 'name', '', 'a', false, $viewopts);
 
-
-
         $class = 'fau-person person sidebar';
         if (isset($viewopts['view_thumb_size'])) {
             if ((isset($arguments['class'])) && (!empty($arguments['class'])) && (preg_match("/thumb\-size\-/i", $arguments['class']))) {
-            // thumb-size ist in der Class bereits enthalten, daher ignoriere ich die globale Setting einstweile
-            // und lass es über die Class individuell durch den Redakteuer steuern, der es als class eingibt
-            }
-            else {
+                // thumb-size ist in der Class bereits enthalten, daher ignoriere ich die globale Setting einstweile
+                // und lass es über die Class individuell durch den Redakteuer steuern, der es als class eingibt
+            } else {
                 $class .= ' thumb-size-' . esc_attr($viewopts['view_thumb_size']);
             }
         }
@@ -1096,8 +1003,7 @@ class Data
         if (isset($display['border'])) {
             if ($display['border']) {
                 $class .= ' border';
-            }
-            else {
+            } else {
                 $class .= ' noborder';
             }
         }
@@ -1109,7 +1015,7 @@ class Data
         }
 
         if ((isset($viewopts['view_raum_prefix'])) && (!empty(trim($viewopts['view_raum_prefix'])))
-        && (isset($data['workLocation']) && (!empty($data['workLocation'])))
+            && (isset($data['workLocation']) && (!empty($data['workLocation'])))
         ) {
             $data['workLocation'] = $viewopts['view_raum_prefix'] . ' ' . $data['workLocation'];
         }
@@ -1132,7 +1038,6 @@ class Data
             $content .= Schema::create_SocialMedialist($data);
         }
 
-
         if (isset($data['jobTitle']) && (!empty($data['jobTitle']))) {
             $content .= '<span class="person-info-position" itemprop="jobTitle">' . $data['jobTitle'] . '</span><br>';
         }
@@ -1145,9 +1050,8 @@ class Data
         }
         $content .= Schema::create_Organization($orgadata, 'p', 'worksFor', '', false, false, false);
 
-
         if ((!isset($data['connection_only'])) ||
-        ((isset($data['connection_only']) && $data['connection_only'] == false))
+            ((isset($data['connection_only']) && $data['connection_only'] == false))
         ) {
             $adresse = Schema::create_PostalAdress($data, 'address', '', 'address', true);
             if (isset($adresse)) {
@@ -1160,14 +1064,13 @@ class Data
         }
         if (isset($display['sprechzeiten']) && (!empty($display['sprechzeiten']))) {
             if ((!isset($data['connection_only'])) ||
-            ((isset($data['connection_only']) && $data['connection_only'] == false))
+                ((isset($data['connection_only']) && $data['connection_only'] == false))
             ) {
                 $sprechzeitentitletag = 'h' . ($hstart + 1);
                 $content .= Schema::create_ContactPoint($data, 'div', 'contactPoint', '', $sprechzeitentitletag);
             }
         }
         $content .= '</div>';
-
 
         if (!empty($data['description']) && isset($display['description'])) {
             $content .= '<div class="person-info-description"><span class="screen-reader-text">' . __('Beschreibung', 'fau-person') . ': </span><span itemprop="description">' . $data['description'] . '</span></div>' . "\n";
@@ -1176,8 +1079,6 @@ class Data
         if ((!empty($data['connection_text']) || !empty($data['connection_options']) || !empty($data['connections'])) && isset($display['ansprechpartner']) && $display['ansprechpartner'] == true) {
             $content .= self::fau_person_connection($data['connection_text'], $data['connection_options'], $data['connections'], $hstart);
         }
-
-
 
         $content .= '</div><!-- /sidebar -->';
         $content .= '</div><!-- /row -->';
@@ -1192,8 +1093,6 @@ class Data
         $content = '';
         $contactlist = '';
         $viewopts = self::get_viewsettings();
-
-
 
         foreach ($connections as $key => $value) {
             extract($connections[$key]);
@@ -1236,7 +1135,7 @@ class Data
                 $data['url'] = $data['link'];
             }
             if ((isset($viewopts['view_raum_prefix'])) && (!empty(trim($viewopts['view_raum_prefix'])))
-            && (isset($data['workLocation']) && (!empty($data['workLocation'])))
+                && (isset($data['workLocation']) && (!empty($data['workLocation'])))
             ) {
                 $data['workLocation'] = $viewopts['view_raum_prefix'] . ' ' . $data['workLocation'];
             }
@@ -1288,13 +1187,11 @@ class Data
             return $input;
         }
 
-
         foreach ($input as $key => $value) {
             if (isset($filter[$key])) {
                 if ($filter[$key] == true) {
                     $res[$key] = $input[$key];
-                }
-                else {
+                } else {
                     unset($res[$key]);
                 }
             }
@@ -1347,8 +1244,6 @@ class Data
             }
         }
 
-
-
         if (((isset($filter['ansprechpartner'])) && ($filter['ansprechpartner'])) || ((isset($input['connection_only']) && $input['connection_only'] == false))) {
             $adressfields = "connections, connection_text, connection_options";
 
@@ -1363,8 +1258,6 @@ class Data
 
         return $res;
     }
-
-
 
     public static function create_fau_standort($id, $showfields, $titletag = 'h2')
     {
@@ -1384,8 +1277,7 @@ class Data
         }
         if (isset($showfields['adresse']) && ($showfields['adresse'])) {
             $schemaadr = true;
-        }
-        else {
+        } else {
             $schemaadr = false;
         }
         $schema = Schema::create_Place($fields, 'location', '', 'div', true, $schemaadr);
@@ -1413,7 +1305,6 @@ class Data
         if (!empty($schema)) {
             $content .= $schema;
         }
-
 
         if (isset($showfields['bild']) && ($showfields['bild']) && has_post_thumbnail($id)) {
             $content .= Data::create_kontakt_image($id, 'full', "standort-image", false, false, '');
@@ -1447,8 +1338,7 @@ class Data
         }
         if (isset($showfields['adresse']) && ($showfields['adresse'])) {
             $schemaadr = true;
-        }
-        else {
+        } else {
             $schemaadr = false;
         }
         $schema = Schema::create_Place($fields, '', '', 'span', false, $schemaadr);
@@ -1481,7 +1371,6 @@ class Data
             $content .= $schema;
         }
 
-
         if (isset($showfields['bild']) && ($showfields['bild']) && has_post_thumbnail($id)) {
             $content .= Data::create_kontakt_image($id, 'full', "standort-image", false, false, '');
         }
@@ -1495,8 +1384,6 @@ class Data
         return $content;
     }
 
-
-
     //Legt die in UnivIS hinterlegten Werte in einem Array ab, Feldbezeichnungen
     public static function univis_defaults($id)
     {
@@ -1505,8 +1392,7 @@ class Data
             $univis_id = get_post_meta($id, 'fau_person_univis_id', true);
             $univis_default = self::get_fields($id, $univis_id, 1);
             return $univis_default;
-        }
-        else {
+        } else {
             $univis_default = Config::get_keys_fields('persons');
             return $univis_default;
         }
@@ -1521,7 +1407,7 @@ class Data
         return;
     }
 
-    // Set Data Cache 
+    // Set Data Cache
     private static function set_data_cache($id, $data)
     {
         if ((isset($id)) && (isset($data))) {
@@ -1564,9 +1450,9 @@ class Data
         return;
     }
 
-    //gibt die Werte der Person an, Inhalte abhängig von UnivIS, 
-    //Übergabewerte: ID der Person, UnivIS-ID der Person, 
-    //Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular, 
+    //gibt die Werte der Person an, Inhalte abhängig von UnivIS,
+    //Übergabewerte: ID der Person, UnivIS-ID der Person,
+    //Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular,
     //$ignore_connection=1 wenn die verknüpften Kontakte einer Person ignoriert werden sollen (z.B. wenn die Person selbst schon eine verknüpfte Kontaktperson ist)
     public static function get_fields($id, $univis_id, $defaults, $ignore_connection = 0, $setfields = false)
     {
@@ -1603,33 +1489,33 @@ class Data
         // Die Detailfelder zu den Sprechzeiten
         $subfields_univis_officehours = array(
             /* von der UnivIS-Doku:
-     * repeat mode is encoded in a string
-     * syntax: <modechar><numbers><space><args>                  
-     * mode  description                  
-     * d     daily                  
-     * w     weekly
-     * m     monthly                  
-     * y     yearly                 
-     * b     block
-     * numbers: number of skips between repeats
-     * example:  "d2":      every second day
-     * weekly and monthly have additional arguments:  
-     * weekly: argument is comma-separated list of weekdays where event is repeated                  
-     * example:  "w3 1,2":  every third week on Monday and Tuesday                  
-     * also possible: „we“ and „wo"
-     * e = even calender week                  
-     * o = odd calender week                  
-     * monthly: argument has syntax "<submodechar><numbers>"                 
-     * submode description                  
-     * d       monthly by date                  
-     * w       monthly by week                  
-     * numbers: monthly by date: number of day (1-31)                  
-     * monthly by week: number of week (1-5,e,o))                  
-     * special case: 5 = last week of month                
-     * examples:  "m1 d23": on the 23rd day of every month
-     * "m2 w5":  in the last week of every second month
-     * Laut UnivIS-Live-Daten werden für die Sprechzeiten aber nur wöchentlich an verschiedenen Tagen, 2-wöchentlich und täglich verwendet. Sollte noch was anderes benötigt werden, muss nachprogrammiert werden.
-     */
+             * repeat mode is encoded in a string
+             * syntax: <modechar><numbers><space><args>
+             * mode  description
+             * d     daily
+             * w     weekly
+             * m     monthly
+             * y     yearly
+             * b     block
+             * numbers: number of skips between repeats
+             * example:  "d2":      every second day
+             * weekly and monthly have additional arguments:
+             * weekly: argument is comma-separated list of weekdays where event is repeated
+             * example:  "w3 1,2":  every third week on Monday and Tuesday
+             * also possible: „we“ and „wo"
+             * e = even calender week
+             * o = odd calender week
+             * monthly: argument has syntax "<submodechar><numbers>"
+             * submode description
+             * d       monthly by date
+             * w       monthly by week
+             * numbers: monthly by date: number of day (1-31)
+             * monthly by week: number of week (1-5,e,o))
+             * special case: 5 = last week of month
+             * examples:  "m1 d23": on the 23rd day of every month
+             * "m2 w5":  in the last week of every second month
+             * Laut UnivIS-Live-Daten werden für die Sprechzeiten aber nur wöchentlich an verschiedenen Tagen, 2-wöchentlich und täglich verwendet. Sollte noch was anderes benötigt werden, muss nachprogrammiert werden.
+             */
             'comment' => 'comment',
             'endtime' => 'endtime',
             'repeat' => 'repeat',
@@ -1654,10 +1540,8 @@ class Data
             'hoursAvailable_text' => '',
             'hoursAvailable' => '',
             'description' => '',
-            'small_description' => ''
+            'small_description' => '',
         );
-
-
 
         $fields_exception = array(
             'postalCode' => '',
@@ -1691,18 +1575,15 @@ class Data
                     $language = get_locale();
                     if (strpos($language, 'en_') === 0 && array_key_exists('orgname_en', $person)) {
                         $value = 'orgname_en';
-                    }
-                    else {
+                    } else {
                         $value = 'orgname';
                     }
                 }
                 $value = UnivIS_Data::sync_univis($id, $person, $key, $value, $defaults);
-            }
-            else {
+            } else {
                 if ($defaults) {
                     $value = '<p class="cmb2-metabox-description">' . __('In UnivIS ist hierfür kein Wert hinterlegt.', 'fau-person') . '</p>';
-                }
-                else {
+                } else {
                     $value = get_post_meta($id, 'fau_person_' . $key, true);
                 }
             }
@@ -1727,16 +1608,13 @@ class Data
                             $value = Sanitizer::correct_phone_number($phone_number, 'standard');
                             break;
                     }
-                }
-                else {
+                } else {
                     $value = UnivIS_Data::sync_univis($id, $person_location, $key, $value, $defaults);
                 }
-            }
-            else {
+            } else {
                 if ($defaults) {
                     $value = '<p class="cmb2-metabox-description">' . __('In UnivIS ist hierfür kein Wert hinterlegt.', 'fau-person') . '</p>';
-                }
-                else {
+                } else {
                     if ($key == 'telephone' || $key == 'faxNumber' || $key == 'mobilePhone') {
                         $phone_number = get_post_meta($id, 'fau_person_' . $key, true);
                         switch (get_post_meta($id, 'fau_person_telephone_select', true)) {
@@ -1750,8 +1628,7 @@ class Data
                                 $value = Sanitizer::correct_phone_number($phone_number, 'standard');
                                 break;
                         }
-                    }
-                    else {
+                    } else {
                         $value = get_post_meta($id, 'fau_person_' . $key, true);
                     }
                 }
@@ -1761,7 +1638,7 @@ class Data
         }
 
         foreach ($fields_univis_officehours as $key => $value) {
-            // ist eine UnivIS-ID vorhanden?      
+            // ist eine UnivIS-ID vorhanden?
             switch ($univis_sync) {
                 case true:
                     if (array_key_exists('officehours', $person) && array_key_exists('officehour', $person['officehours'][0])) { // sind in UnivIS überhaupt Sprechzeiten hinterlegt?
@@ -1784,8 +1661,7 @@ class Data
                             }
                             break;
                         }
-                    }
-                    elseif ($defaults) { // in UnivIS stehen keine Sprechzeiten
+                    } elseif ($defaults) { // in UnivIS stehen keine Sprechzeiten
 
                         $officehours = '<p class="cmb2-metabox-description">' . __('In UnivIS ist hierfür kein Wert hinterlegt.', 'fau-person') . '</p>';
                         break;
@@ -1814,8 +1690,7 @@ class Data
             if (strpos($language, 'en_') === 0 && array_key_exists('orgunit_ens', $person)) {
                 $orgunit = 'orgunit_en';
                 $orgunits = 'orgunit_ens';
-            }
-            else {
+            } else {
                 $orgunit = 'orgunit';
                 $orgunits = 'orgunits';
             }
@@ -1826,12 +1701,10 @@ class Data
                     $i = count($person_orgunits) - 2;
                 }
                 $value = UnivIS_Data::sync_univis($id, $person_orgunits, $key, $i, $defaults);
-            }
-            else {
+            } else {
                 if ($defaults) {
                     $value = '<p class="cmb2-metabox-description">' . __('In UnivIS ist hierfür kein Wert hinterlegt.', 'fau-person') . '</p>';
-                }
-                else {
+                } else {
                     $value = get_post_meta($id, 'fau_person_' . $key, true);
                 }
             }
@@ -1849,21 +1722,20 @@ class Data
             $fields[$datakey] = $value;
         }
 
-
-
         foreach ($fields_exception as $key => $value) {
             if ($key == 'postalCode') {
                 if (get_post_meta($id, 'fau_person_univis_sync', true) && array_key_exists('locations', $person) && array_key_exists('location', $person['locations'][0]) && array_key_exists('ort', $person['locations'][0]['location'][0])) {
                     $value = '';
-                }
-                else {
+                } else {
                     $value = get_post_meta($id, 'fau_person_' . $key, true);
                 }
             }
             $fields[$key] = $value;
         }
-        if (!$ignore_connection)
+        if (!$ignore_connection) {
             $connections = get_post_meta($id, 'fau_person_connection_id', true);
+        }
+
         if (!empty($connections)) {
             $connection = array();
             foreach ($connections as $ckey => $cvalue) {
@@ -1875,8 +1747,7 @@ class Data
                     if ($fckey == 'connection_text' || $fckey == 'connection_only' || $fckey == 'connection_options') {
                         $value = get_post_meta($id, 'fau_person_' . $fckey, true);
                         $fields[$fckey] = $value;
-                    }
-                    else {
+                    } else {
                         $value = $connection_fields[$key][$fcvalue];
                         $connection[$key][$fcvalue] = $value;
                     }
@@ -1891,8 +1762,6 @@ class Data
         }
         return $fields;
     }
-
-
 
     public static function get_default_display($format = '')
     {
@@ -1948,7 +1817,6 @@ class Data
         return $display;
     }
 
-
     public static function get_display_field($format = '', $show = '', $hide = '')
     {
         $display = self::get_default_display($format);
@@ -1967,8 +1835,6 @@ class Data
         }
         return $showfields;
     }
-
-
 
     public static function map_old_keys($liste)
     {

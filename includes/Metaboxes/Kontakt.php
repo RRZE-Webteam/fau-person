@@ -28,6 +28,18 @@ class Kontakt extends Metaboxes
         require_once(plugin_dir_path($this->pluginFile) . 'vendor/UnivIS/UnivIS.php');
         // require_once(plugin_dir_path($this->pluginFile) . 'vendor/DIP/DIP.php');
         add_filter('cmb2_meta_boxes', array($this, 'cmb2_kontakt_metaboxes'));
+
+        add_action('save_post_person', [$this, 'deleteTransients'], 10, 3);
+    }
+
+
+    public function deleteTransients()
+    {
+        $aTransients = get_option('fau-persion-shortcode-transients');
+        foreach ($aTransients as $transient) {
+            delete_transient($transient);
+        }
+        update_option('fau-persion-shortcode-transients', '');
     }
 
 
