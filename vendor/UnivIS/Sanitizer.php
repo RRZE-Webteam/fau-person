@@ -39,6 +39,8 @@ class Sanitizer {
                             $phone_number = $vorwahl_nbg . substr( $phone_data, -3);
                         } elseif ( strlen( $phone_data ) == 11 && strpos( $phone_data, '9115302') !== FALSE ) {
                             $phone_number = $vorwahl_nbg . substr( $phone_data, -3);
+                        } elseif ( strlen( $phone_data ) == 12 && strpos( $phone_data, '9115302') !== FALSE ) {
+                            $phone_number = $vorwahl_nbg . substr( $phone_data, -4);
                         } elseif ( strlen( $phone_data ) == 15 && strpos( $phone_data, '4909115302') !== FALSE ) {
                             $phone_number = $vorwahl_nbg . substr( $phone_data, 10);
                         }
@@ -65,7 +67,7 @@ class Sanitizer {
                                     break;
                                 } 
                             default:
-                            if( strpos( $phone_data, '9115302' ) !== FALSE ) {
+                                if( strpos( $phone_data, '9115302' ) !== FALSE ) {
                                     $durchwahl = explode( '9115302', $phone_data );
                                     if( strlen( $durchwahl[1] ) ===  3 ) {
                                         $phone_number = $vorwahl_nbg . substr( $phone_data, -3 );
