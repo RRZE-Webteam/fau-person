@@ -205,7 +205,7 @@ class Data
 
     private static function xml2array($url)
     {
-        $sxi = new \SimpleXMLIterator($url, null, true);
+        $sxi = new \SimpleXMLIterator($url, 0, true);
         return self::sxi2array($sxi);
     }
 
