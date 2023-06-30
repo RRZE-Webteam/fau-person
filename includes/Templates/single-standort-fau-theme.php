@@ -23,7 +23,7 @@ $adisplay = array_map('trim', explode(',', $display));
 			    <main<?php echo fau_get_page_langcode($post->ID);?>>
                     <?php echo FAU_Person\Data::create_fau_standort($post->ID, $showfields, 'h1'); ?>
                 </main>
-            <</div>
+            </div>
 		</div>
 	</div>
 <?php endwhile;  
