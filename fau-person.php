@@ -1,15 +1,15 @@
 <?php
 
-/**
- Plugin Name: FAU Person
- Plugin URI: https://github.com/RRZE-Webteam/fau-person
- GitHub Plugin URI: https://github.com/RRZE-Webteam/fau-person
- Description: Visitenkarten-Plugin für FAU Webauftritte
- Version: 3.9.5
- Author: RRZE-Webteam
- Author URI: http://blogs.fau.de/webworking/
- License: GPLv3 or later
- */
+/*
+Plugin Name: FAU Person
+Plugin URI: https://github.com/RRZE-Webteam/fau-person
+GitHub Plugin URI: https://github.com/RRZE-Webteam/fau-person
+Description: Visitenkarten-Plugin für FAU Webauftritte
+Version: 3.9.6
+Author: RRZE-Webteam
+Author URI: http://blogs.fau.de/webworking/
+License: GPLv3 or later
+*/
 
 
 
