@@ -93,10 +93,15 @@ class Kontakt extends Taxonomy
 		register_post_type($this->postType, $person_args);
 
 		// BK 2022-09-19: we must flush the rewrite rules because has_archive might have changed - but to prevent flush on every page load let's check if options have changed
-		if (get_site_transient('fau-person-options-changed')) {
+		// if (get_site_transient('fau-person-options-changed')) {
+		// 	flush_rewrite_rules();
+		// 	delete_site_transient('fau-person-options-changed');
+		// }
+
+		if (get_transient('fau-person-options')) {
 			flush_rewrite_rules();
-			delete_site_transient('fau-person-options-changed');
-		}
+			delete_transient('fau-person-options');
+		}        
 
 		register_taxonomy(
 			$this->taxonomy,
