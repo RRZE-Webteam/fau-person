@@ -199,6 +199,8 @@ class Settings
             }
         }
 
+        set_transient('fau-person-options', 1, 0);
+
         return $this->options;
     }
 
