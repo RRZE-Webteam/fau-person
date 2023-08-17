@@ -38,8 +38,8 @@ class BackendMenu
         $input = isset($_POST[$optionname]) ? $_POST[$optionname] : null;
         set_transient($this->settings->search_univis_id_transient, $input, 30);
 
-        set_site_transient('fau-person-options-changed', 1, 0);
-        set_transient('fau-person-options', 1, 0);
+        // set_site_transient('fau-person-options-changed', 1, 0);
+        // set_transient('fau-person-options', 1, 0);
 
         // $options['has_archive_page'] = $input;
         $options = apply_filters('gmail_apikey_options', $options);
