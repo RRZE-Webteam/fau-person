@@ -19,7 +19,8 @@ class Data
 {
 
     const transient_prefix = 'univis_data_';
-    protected static $transient_expiration = DAY_IN_SECONDS;
+    // protected static $transient_expiration = DAY_IN_SECONDS;
+    protected static $transient_expiration = HOUR_IN_SECONDS;
     protected static $timeout = HOUR_IN_SECONDS;
     protected static $results_limit = 100;
 

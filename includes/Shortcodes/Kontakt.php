@@ -17,7 +17,8 @@ class Kontakt extends Shortcodes
     public $pluginFile = '';
     private $settings = '';
     const TRANSIENT_PREFIX = 'fau_person_cache_';
-    const TRANSIENT_EXPIRATION = DAY_IN_SECONDS;
+    // const TRANSIENT_EXPIRATION = DAY_IN_SECONDS;
+    const TRANSIENT_EXPIRATION = HOUR_IN_SECONDS;
 
     public function __construct($pluginFile, $settings)
     {
