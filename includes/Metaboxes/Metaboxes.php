@@ -25,7 +25,7 @@ class Metaboxes  {
     public function onLoaded()     {
 	
 
-	require_once(plugin_dir_path($this->pluginFile) . 'vendor/cmb2/init.php');
+	// require_once(plugin_dir_path($this->pluginFile) . 'vendor/cmb2/init.php');
    
 
 	add_action( 'cmb2_render_text_number', array( $this, 'sm_cmb_render_text_number' ) );
