@@ -1,12 +1,17 @@
 {
-	"name": "FAU_Person",
-	"description": "Kontakt-Plugin für FAU Webauftritte.",
-	"type": "WordPress Plugin",
-	"license": "GNU General Public License v3",
-	"require": {},
-	"autoload": {
-		"psr-4": {
-			"FAU_Person\\": "includes/"
-		}
-	}
+    "name": "rrze/fau-person",
+    "description": "Kontakt-Plugin für FAU Webauftritte.",
+    "type": "wordpress-plugin",
+    "license": "GPL-3.0-or-later",
+    "require": {
+        "cmb2/cmb2": "^2.10.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "FAU_Person\\": "includes/"
+        },
+        "files": [
+            "vendor/cmb2/cmb2/init.php"
+        ]
+    }
 }
