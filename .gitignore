@@ -1,14 +1,21 @@
-nbproject/project.properties
-/nbproject/private/
-nbproject/project.xml
-img/logos/Browse.plb
-node_modules
-.idea*
-.sass-cache*
-/package-lock.json
+### vscode ###
+.vscode/
+### NetBeans ###
+**/nbproject/
+### PhpStorm ###
+.idea/
+### macOS ###
+.DS_Store
+### Node ###
+node_modules/
+package-lock.json
+### Composer ###
+composer.lock
+### WordPress ###
+*.pot
+*.po~
+*.pot~
+### Misc ###
 tmp
-.vscode/sftp.json
-.vscode/sftp.json
-vendor/DIP/.DS_Store
-src/js/.DS_Store
-.vscode/.DS_Store
+.sass-cache*
+img/logos/Browse.plb

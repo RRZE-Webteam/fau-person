@@ -1,14 +1,17 @@
 <?php
 
 /*
-Plugin Name: FAU Person
-Plugin URI: https://github.com/RRZE-Webteam/fau-person
-GitHub Plugin URI: https://github.com/RRZE-Webteam/fau-person
-Description: Visitenkarten-Plugin für FAU Webauftritte
-Version: 3.9.7
-Author: RRZE-Webteam
-Author URI: http://blogs.fau.de/webworking/
-License: GPLv3 or later
+Plugin Name:        FAU Person
+Plugin URI:         https://github.com/RRZE-Webteam/fau-person
+GitHub Plugin URI:  https://github.com/RRZE-Webteam/fau-person
+Description:        Visitenkarten-Plugin für FAU Webauftritte
+Version:            3.9.8
+Author:             RRZE-Webteam
+Author URI:         http://blogs.fau.de/webworking/
+License:            GPLv3 or later
+Text Domain:        fau-person
+Domain Path:        /languages
+Update URI:         https://github.com/RRZE-Webteam/fau-person
 */
 
 
@@ -26,23 +29,8 @@ require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/compatibility.php';
 
 
-// Automatische Laden von Klassen.
-spl_autoload_register(function ($class) {
-    $prefix = __NAMESPACE__;
-    $base_dir = __DIR__ . '/includes/';
-
-    $len = strlen($prefix);
-    if (strncmp($prefix, $class, $len) !== 0) {
-        return;
-    }
-
-    $relativeClass = substr($class, $len);
-    $file = $base_dir . str_replace('\\', '/', $relativeClass) . '.php';
-
-    if (file_exists($file)) {
-        require_once $file;
-    }
-});
+// Composer autoload.
+require_once 'vendor/autoload.php';
 
 const RRZE_PHP_VERSION = '7.2';
 const RRZE_WP_VERSION = '6.0';
