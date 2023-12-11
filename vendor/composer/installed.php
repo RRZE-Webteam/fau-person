@@ -3,7 +3,7 @@
         'name' => 'rrze/fau-person',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '0f7e29411038ad8a444ddac644427e28e9ae4adb',
+        'reference' => 'c632e32d167bc2df9b03d3d0b4a6011fa5d3c4de',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'rrze/fau-person' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '0f7e29411038ad8a444ddac644427e28e9ae4adb',
+            'reference' => 'c632e32d167bc2df9b03d3d0b4a6011fa5d3c4de',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
