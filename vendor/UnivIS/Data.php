@@ -8,6 +8,7 @@ namespace RRZE\Lib\UnivIS;
 
 use RRZE\Lib\UnivIS\Config;
 use RRZE\Lib\UnivIS\Sanitizer;
+use SimpleXMLIterator;
 
 add_action('univis_data_async_task', array('RRZE\Lib\UnivIS\Data', 'async_task'));
 
@@ -206,8 +207,16 @@ class Data
 
     private static function xml2array($url)
     {
-        $sxi = new \SimpleXMLIterator($url, 0, true);
-        return self::sxi2array($sxi);
+        libxml_use_internal_errors(true);
+    
+        // Try to load the XML from the URL
+        $xml = simplexml_load_file($url, 'SimpleXMLIterator');
+    
+        // Check for errors while loading the XML
+        $errors = libxml_get_errors();
+        libxml_clear_errors();
+
+        return empty($errors) && $xml instanceof SimpleXMLIterator ? self::sxi2array($xml) : [];
     }
 
     private static function sxi2array($sxi)
@@ -242,7 +251,6 @@ class Data
         }
         return $a;
     }
-
 
 
     public static function get_univisdata($id = 0, $firstname = '', $lastname = '')
