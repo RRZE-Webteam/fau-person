@@ -25,7 +25,7 @@ class Kontakt extends Metaboxes
 
     public function onLoaded()
     {
-        require_once(plugin_dir_path($this->pluginFile) . 'vendor/UnivIS/UnivIS.php');
+        // require_once(plugin_dir_path($this->pluginFile) . 'vendor/UnivIS/UnivIS.php');
         // require_once(plugin_dir_path($this->pluginFile) . 'vendor/DIP/DIP.php');
         add_filter('cmb2_meta_boxes', array($this, 'cmb2_kontakt_metaboxes'));
 
