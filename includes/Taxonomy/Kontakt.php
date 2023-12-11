@@ -199,7 +199,7 @@ class Kontakt extends Taxonomy
 	public function custom_columns($column, $post_id)
 	{
 		$univisid = get_post_meta($post_id, 'fau_person_univis_id', true);
-		$data = Data::get_fields($post_id, $univisid, 0);
+		//$data = Data::get_fields($post_id, $univisid, 0);
 		$univisconfig = Config::get_Config();
 		$api_url = $univisconfig['api_url'];
 
@@ -210,12 +210,11 @@ class Kontakt extends Taxonomy
 				break;
 
 			case 'fullname':
+				// $fullname = Schema::create_Name($data, '', '', 'span', false);
 
-				$fullname = Schema::create_Name($data, '', '', 'span', false);
-
-				if (empty(trim($fullname))) {
+				//if (empty(trim($fullname))) {
 					$fullname = get_the_title($post_id);
-				}
+				//}
 				echo $fullname;
 				break;
 			// case 'contact':
