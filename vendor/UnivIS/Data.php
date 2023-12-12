@@ -8,24 +8,14 @@ namespace RRZE\Lib\UnivIS;
 
 use RRZE\Lib\UnivIS\Config;
 use RRZE\Lib\UnivIS\Sanitizer;
-use SimpleXMLIterator;
-
-add_action('univis_data_async_task', array('RRZE\Lib\UnivIS\Data', 'async_task'));
-
-add_action('save_post', function () {
-    wp_schedule_single_event(time(), 'univis_data_async_task');
-});
 
 class Data
 {
-
     const transient_prefix = 'univis_data_';
     // protected static $transient_expiration = DAY_IN_SECONDS;
     protected static $transient_expiration = HOUR_IN_SECONDS;
     protected static $timeout = HOUR_IN_SECONDS;
     protected static $results_limit = 100;
-
-
 
     public static function get_person($id)
     {
@@ -34,68 +24,18 @@ class Data
             return false;
         }
 
-        // if (($data = self::get_data_cache($id)) !== false) {
-        //     return $data;
-        // }
-
         if (($data = self::get_remote_data_by('id', $id)) === false) {
             return false;
         }
 
-        self::set_data_cache($data[0]);
+        // self::set_data_cache($data[0]);
 
         return $data[0];
     }
 
-    private static function get_data_cache($id)
+    public static function async_task($univisId)
     {
-        if (!Sanitizer::is_valid_id($id)) {
-            return false;
-        }
-
-        return get_transient(self::transient_prefix . $id);
-    }
-
-    private static function set_data_cache($data)
-    {
-        if (!isset($data['id'])) {
-            return false;
-        }
-
-        $id = $data['id'];
-        if (!Sanitizer::is_valid_id($id)) {
-            return false;
-        }
-
-        return set_transient(self::transient_prefix . $id, $data, self::$transient_expiration);
-    }
-
-    public static function async_task()
-    {
-        $timestamp = time() + self::$transient_expiration - self::$timeout;
-
-        if ($results = self::get_results_by_timeout($timestamp, self::$results_limit)) {
-
-            foreach ($results as $row) {
-
-                $id = ltrim($row->option_name, '_transient_timeout_' . self::transient_prefix);
-
-                if (($data = self::get_remote_data_by('id', $id)) !== false) {
-                    self::set_data_cache($data[0]);
-                } else {
-                    self::delete_data_cache($id);
-                }
-            }
-        }
-    }
-
-    private static function get_results_by_timeout($timestamp, $limit)
-    {
-        global $wpdb;
-
-        $sql = "SELECT * FROM $wpdb->options WHERE option_name LIKE %s AND option_value < %d ORDER BY option_value ASC LIMIT %d";
-
-        return $wpdb->get_results($wpdb->prepare($sql, $wpdb->esc_like('_transient_timeout_' . self::transient_prefix) . '%', $timestamp, $limit));
+        self::get_remote_data_by('id', $univisId, true);
     }
 
     public static function delete_data_cache($id)
@@ -146,7 +86,7 @@ class Data
         return $data;
     }
 
-    private static function get_remote_data_by($field, $value)
+    private static function get_remote_data_by($field, $value, $delete = false)
     {
         $config = Config::get_Config();
         $apiurl = $config['api_url'];
@@ -169,7 +109,8 @@ class Data
             return false;
         }
 
-        if (!$persArray = self::xml2array($url)) {
+        $persArray = self::xml2array($url, $delete);
+        if (empty($persArray) || is_wp_error($persArray)) {
             return false;
         }
 
@@ -182,7 +123,7 @@ class Data
         return $data;
     }
 
-    private static function get_remote_data_by_fullname($firstname, $lastname)
+    private static function get_remote_data_by_fullname($firstname, $lastname, $delete = false)
     {
         $config = Config::get_Config();
         $apiurl = $config['api_url'];
@@ -192,8 +133,9 @@ class Data
             return false;
         }
 
-        if (!$persArray = self::xml2array($url)) {
-            return null;
+        $persArray = self::xml2array($url, $delete);
+        if (empty($persArray) || is_wp_error($persArray)) {
+            return false;
         }
 
         $data = $persArray['Person'];
@@ -205,28 +147,31 @@ class Data
         return $data;
     }
 
-    private static function xml2array($url)
+    private static function xml2array($url, $delete = false)
     {
-        libxml_use_internal_errors(true);
-    
-        // Try to load the XML from the URL
-        $xml = simplexml_load_file($url, 'SimpleXMLIterator');
-    
-        // Check for errors while loading the XML
-        $errors = libxml_get_errors();
-        libxml_clear_errors();
+        // Delete existing cache?
+        if ($delete) {
+            Cache::delete($url);
+        }
 
-        return empty($errors) && $xml instanceof SimpleXMLIterator ? self::sxi2array($xml) : [];
+        // Try to load the XML content from the URL
+        if (!$content = RemoteGet::retrieveContent($url)) {
+            return null;
+        }
+
+        $sxi = new \SimpleXMLIterator($content);
+
+        return $sxi instanceof \SimpleXMLIterator ? self::sxi2array($sxi) : null;
     }
 
     private static function sxi2array($sxi)
     {
-        $a = array();
+        $a = [];
 
         for ($sxi->rewind(); $sxi->valid(); $sxi->next()) {
 
             if (!array_key_exists($sxi->key(), $a)) {
-                $a[$sxi->key()] = array();
+                $a[$sxi->key()] = [];
             }
 
             if ($sxi->hasChildren()) {
@@ -249,6 +194,7 @@ class Data
                 $a["@attributes"] = $attributes["@attributes"];
             }
         }
+
         return $a;
     }
 
@@ -315,8 +261,6 @@ class Data
 
         return $val;
     }
-
-
 
     //public static function officehours_repeat( $officehours ) {
     public static function officehours_repeat($repeat, $repeat_submode, $starttime, $endtime, $office, $comment)
