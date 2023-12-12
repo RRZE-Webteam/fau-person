@@ -8,10 +8,19 @@
     },
     "autoload": {
         "psr-4": {
-            "FAU_Person\\": "includes/"
+            "FAU_Person\\": "includes/",
+            "RRZE\\Lib\\UnivIS\\": "vendor/UnivIS",
+            "RRZE\\Lib\\DIP\\": "vendor/DIP"
         },
         "files": [
             "vendor/cmb2/cmb2/init.php"
         ]
-    }
+    },
+    "extra": {
+        "installer-paths": {
+            "vendor/cmb2/cmb2": [
+                "cmb2/cmb2"
+            ]
+        }
+    }    
 }

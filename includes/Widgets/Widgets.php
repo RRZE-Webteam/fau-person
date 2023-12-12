@@ -5,7 +5,7 @@ namespace FAU_Person\Widgets;
 defined('ABSPATH') || exit;
 
 use FAU_Person\Main;
-use FAU_Person\Widgets\FAUPersonWidget;
+use FAU_Person\Widgets\KontaktWidget;
 
 /**
  * Laden und definieren der Posttypes

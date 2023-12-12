@@ -6,5 +6,7 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'RRZE\\Lib\\UnivIS\\' => array($vendorDir . '/UnivIS'),
+    'RRZE\\Lib\\DIP\\' => array($vendorDir . '/DIP'),
     'FAU_Person\\' => array($baseDir . '/includes'),
 );
