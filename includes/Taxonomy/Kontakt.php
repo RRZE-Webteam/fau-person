@@ -129,10 +129,8 @@ class Kontakt extends Taxonomy
 
         add_filter('manage_person_posts_columns', array($this, 'change_columns'));
         add_action('manage_person_posts_custom_column', array($this, 'custom_columns'), 10, 2);
+        
         // Sortierung der zusätzlichen Spalte
-
-
-
         add_filter('manage_edit-person_sortable_columns', array($this, 'sortable_columns'));
         add_action('pre_get_posts', array($this, 'posttype_person_custom_columns_orderby'));
     }
