@@ -405,7 +405,9 @@ class Data
                     $imagedata['caption'] = trim(strip_tags($attachment->post_excerpt));
                 }
             }
-        } elseif ($defaultimage) {
+        }
+        
+        if (!isset($imagedata['src']) && $defaultimage) {
             $type = $fields['typ'];
 
             $pluginfile = __DIR__;
@@ -425,6 +427,7 @@ class Data
                 $imagedata['height'] = 160;
             }
         }
+
         $res = Schema::create_Image($imagedata, 'figure', 'image', $class, true, $targetlink, $linkttitle);
         return $res;
     }
@@ -1917,7 +1920,6 @@ class Data
     public static function parse_liste($liste = '', $resbool = true, $showarray = array())
     {
         if (!empty($liste)) {
-
             $showvals = explode(',', $liste);
             foreach ($showvals as $value) {
                 $key = esc_attr(trim($value));
