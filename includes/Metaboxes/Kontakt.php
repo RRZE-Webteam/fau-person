@@ -3,7 +3,6 @@
 namespace FAU_Person\Metaboxes;
 
 use FAU_Person\Data;
-use RRZE\Lib\UnivIS\Data as UnivIS_Data;
 use function FAU_Person\Config\getSocialMediaList;
 
 defined('ABSPATH') || exit;
@@ -25,22 +24,18 @@ class Kontakt extends Metaboxes
 
     public function onLoaded()
     {
-        // require_once(plugin_dir_path($this->pluginFile) . 'vendor/UnivIS/UnivIS.php');
-        // require_once(plugin_dir_path($this->pluginFile) . 'vendor/DIP/DIP.php');
         add_filter('cmb2_meta_boxes', array($this, 'cmb2_kontakt_metaboxes'));
-
-        add_action('save_post_person', [$this, 'deleteTransients'], 10, 3);
     }
 
 
-    public function deleteTransients()
-    {
-        $aTransients = get_option('fau-persion-shortcode-transients');
-        foreach ($aTransients as $transient) {
-            delete_transient($transient);
-        }
-        update_option('fau-persion-shortcode-transients', '');
-    }
+    // public function deleteTransients()
+    // {
+    //     $aTransients = get_option('fau-persion-shortcode-transients');
+    //     foreach ($aTransients as $transient) {
+    //         delete_transient($transient);
+    //     }
+    //     update_option('fau-persion-shortcode-transients', '');
+    // }
 
 
     public function cmb2_kontakt_metaboxes($meta_boxes)
@@ -584,7 +579,7 @@ class Kontakt extends Metaboxes
     //Anzeigen des Feldes nur bei Personen
     function callback_cmb2_show_on_person($field)
     {
-        $default_fau_person_typ = Data::default_fau_person_typ();
+        $default_fau_person_typ = Data::get_default_fau_person_typ();
         $typ = get_post_meta($field->object_id, 'fau_person_typ', true);
         if ($typ == 'pseudo' || $typ == 'einrichtung' || $default_fau_person_typ == 'einrichtung') {
             $person = false;
@@ -597,7 +592,7 @@ class Kontakt extends Metaboxes
     //Anzeigen des Feldes nur bei Einrichtungen
     function callback_cmb2_show_on_einrichtung($field)
     {
-        $default_fau_person_typ = Data::default_fau_person_typ();
+        $default_fau_person_typ = Data::get_default_fau_person_typ();
         $typ = get_post_meta($field->object_id, 'fau_person_typ', true);
         if ($typ == 'pseudo' || $typ == 'einrichtung' || $default_fau_person_typ == 'einrichtung') {
             $einrichtung = true;
