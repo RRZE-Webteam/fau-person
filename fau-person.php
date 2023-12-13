@@ -23,8 +23,6 @@ defined('ABSPATH') || exit;
 use FAU_Person\Main;
 
 // Laden der Konfigurationsdatei
-// require_once __DIR__ . '/vendor/UnivIS/UnivIS.php';
-// require_once __DIR__ . '/vendor/DIP/DIP.php';
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/compatibility.php';
 
