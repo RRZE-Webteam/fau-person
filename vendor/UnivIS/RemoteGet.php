@@ -40,7 +40,12 @@ class RemoteGet
             $content = $response['body'] ?? '';
             switch ($args['validate']) {
                 case 'xml':
-                    if ($content && is_wp_error(XML::isXML($content))) {
+                    if ($content && is_wp_error(self::isXML($content))) {
+                        $content = '';
+                    }
+                    break;
+                case 'json':
+                    if ($content && is_wp_error(self::isJson($content))) {
                         $content = '';
                     }
                     break;
@@ -62,5 +67,40 @@ class RemoteGet
         } else {
             return wp_remote_get($url, $args);
         }
+    }
+
+    private static function isXML(string $string)
+    {
+        $string = $string ?: '<>';
+
+        libxml_use_internal_errors(true);
+
+        $doc = new \DOMDocument('1.0', 'utf-8');
+        $doc->loadXML($string);
+
+        // Check for errors while loading the XML
+        $errors = libxml_get_errors();
+        libxml_clear_errors();
+
+        if (empty($errors)) {
+            return true;
+        }
+
+        $error = $errors[0];
+        if ($error->level < 3) {
+            return true;
+        }
+
+        $explodedxml = explode('r', $string);
+        $badxml = $explodedxml[($error->line) - 1];
+        $message = $error->message . ' at line ' . $error->line . '. Invalid XML: ' . htmlentities($badxml);
+
+        return new \WP_Error('fau-person-xml-error', $message);
+    }
+
+    private static function isJson(string $string)
+    {
+        json_decode($string);
+        return json_last_error() === JSON_ERROR_NONE;
     }
 }
