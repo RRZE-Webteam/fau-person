@@ -40,18 +40,19 @@ class RemoteGet
             $content = $response['body'] ?? '';
             switch ($args['validate']) {
                 case 'xml':
-                    if ($content && self::isXML($content) === false) {
+                    if ($content && !self::isXML($content)) {
                         $content = '';
                     }
                     break;
                 case 'json':
-                    if ($content && self::isJson($content) === false) {
+                    if ($content && !self::isJson($content)) {
                         $content = '';
                     }
                     break;
                 default:
                     break;
             }
+
             if ($content) {
                 Cache::set($content, $url);
             }
@@ -72,7 +73,6 @@ class RemoteGet
     private static function isXML(string $string): bool
     {
         $string = $string ?: '<>';
-
         libxml_use_internal_errors(true);
 
         $doc = new \DOMDocument('1.0', 'utf-8');
@@ -86,9 +86,7 @@ class RemoteGet
             return true;
         }
 
-        $error = $errors[0];
-
-        return $error->level < 3;
+        return $errors[0]->level < LIBXML_ERR_FATAL;
     }
 
     private static function isJson(string $string): bool
