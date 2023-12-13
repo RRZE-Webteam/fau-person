@@ -65,7 +65,6 @@ class BackendMenu
 
 ?>
         <div class="wrap">
-            <?php screen_icon(); ?>
             <h2><?php echo esc_html(__('Suche nach UnivIS-ID', 'fau-person')); ?></h2>
 
             <form method="post">
