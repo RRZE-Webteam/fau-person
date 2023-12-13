@@ -160,7 +160,6 @@ class Data
         }
 
         $sxi = new \SimpleXMLIterator($content);
-
         return $sxi instanceof \SimpleXMLIterator ? self::sxi2array($sxi) : null;
     }
 
