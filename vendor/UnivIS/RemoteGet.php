@@ -40,12 +40,12 @@ class RemoteGet
             $content = $response['body'] ?? '';
             switch ($args['validate']) {
                 case 'xml':
-                    if ($content && is_wp_error(self::isXML($content))) {
+                    if ($content && self::isXML($content) === false) {
                         $content = '';
                     }
                     break;
                 case 'json':
-                    if ($content && is_wp_error(self::isJson($content))) {
+                    if ($content && self::isJson($content) === false) {
                         $content = '';
                     }
                     break;
@@ -69,7 +69,7 @@ class RemoteGet
         }
     }
 
-    private static function isXML(string $string)
+    private static function isXML(string $string): bool
     {
         $string = $string ?: '<>';
 
@@ -87,18 +87,11 @@ class RemoteGet
         }
 
         $error = $errors[0];
-        if ($error->level < 3) {
-            return true;
-        }
 
-        $explodedxml = explode('r', $string);
-        $badxml = $explodedxml[($error->line) - 1];
-        $message = $error->message . ' at line ' . $error->line . '. Invalid XML: ' . htmlentities($badxml);
-
-        return new \WP_Error('fau-person-xml-error', $message);
+        return $error->level < 3;
     }
 
-    private static function isJson(string $string)
+    private static function isJson(string $string): bool
     {
         json_decode($string);
         return json_last_error() === JSON_ERROR_NONE;
