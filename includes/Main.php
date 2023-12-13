@@ -9,12 +9,9 @@ use FAU_Person\Taxonomy\Taxonomy;
 use FAU_Person\Plugins\Plugins;
 use FAU_Person\Templates\Templates;
 use FAU_Person\Shortcodes\Shortcodes;
+use FAU_Person\Shortcodes\Cache;
 use FAU_Person\Widgets\Widgets;
 use FAU_Person\Metaboxes\Metaboxes;
-use function FAU_Person\Config\getConstants;
-
-
-
 
 /**
  * Hauptklasse (Main)
@@ -38,6 +35,23 @@ class Main
         add_action('wp_enqueue_scripts', [$this, 'registerPluginStyles']);
         // Settings-Klasse wird instanziiert.
         add_action('admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
+
+        // Run Async Task
+        add_action('fau_person_data_async_task', ['\RRZE\Lib\UnivIS\Data', 'async_task']);
+        add_action('save_post_person', function ($postId) {
+            $univisId = get_post_meta($postId, 'fau_person_univis_id', true);
+            if (!empty($univisId) && !wp_next_scheduled('fau_person_data_async_task', [$univisId])) {
+                wp_schedule_single_event(time(), 'fau_person_data_async_task', [$univisId]);
+            }
+        });
+
+        // Flush Shortcodes Cache
+        add_action('fau_person_shortcodes_flush_cache', ['\FAU_Person\Shortcodes\Cache', 'flush']);
+        add_action('save_post_person', function () {
+            if (!wp_next_scheduled('fau_person_shortcodes_flush_cache')) {
+                wp_schedule_single_event(time(), 'fau_person_shortcodes_flush_cache');
+            }
+        });
 
         $settings = new Settings($this->pluginFile);
         $settings->onLoaded();
@@ -80,9 +94,6 @@ class Main
         // Add Widget
         $widget = new Widgets($this->pluginFile, $settings);
         $widget->onLoaded();
-
-
-        return;
     }
 
 
@@ -100,7 +111,6 @@ class Main
         wp_register_script('fau-person-adminscripts', plugins_url('js/fau-person-admin.js', plugin_basename($this->pluginFile)));
         wp_enqueue_script('fau-person-adminscripts');
         wp_enqueue_script('jquery');
-
     }
 
 
@@ -121,6 +131,4 @@ class Main
         add_image_size('person-thumb-page-v3', $this->settings->constants['images']['default_person_thumb_page_width'], $this->settings->constants['images']['default_person_thumb_page_height'], $this->settings->constants['images']['default_person_thumb_page_crop']); // 200,300,true
 
     }
-
-
 }

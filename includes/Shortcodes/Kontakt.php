@@ -16,9 +16,6 @@ class Kontakt extends Shortcodes
 {
     public $pluginFile = '';
     private $settings = '';
-    const TRANSIENT_PREFIX = 'fau_person_cache_';
-    // const TRANSIENT_EXPIRATION = DAY_IN_SECONDS;
-    const TRANSIENT_EXPIRATION = HOUR_IN_SECONDS;
 
     public function __construct($pluginFile, $settings)
     {
@@ -50,8 +47,7 @@ class Kontakt extends Shortcodes
 
         // Cache
         if (empty($atts['nocache'])) {
-            $transient = sha1(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield));
-            $content = get_transient($transient);
+            $content = Cache::get($arguments, $displayfield);
             if (!empty($content)) {
                 Main::enqueueForeignThemes();
                 return $content;
@@ -186,7 +182,7 @@ class Kontakt extends Shortcodes
                     $content .= '</span>';
                     break;
                 case 'liste':
-                    $content .= '</ul>';    
+                    $content .= '</ul>';
                     break;
                 case 'card':
                     $content .= '</div>';
@@ -195,19 +191,7 @@ class Kontakt extends Shortcodes
             }
 
             // Cache
-            $transient = sha1(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield));
-            set_transient($transient, $content, self::TRANSIENT_EXPIRATION);
-
-            // lets store $transient in an option to delete them on save using Data::deleteTransients()
-            $aOptions = get_option('fau-persion-shortcode-transients');
-
-            if (!empty($aOptions)) {
-                $aOptions[] = $transient;
-            } else {
-                $aOptions = [$transient];
-            }
-
-            update_option('fau-persion-shortcode-transients', $aOptions);
+            Cache::update($content, $arguments, $displayfield);
 
             return $content;
         }
@@ -224,8 +208,7 @@ class Kontakt extends Shortcodes
 
         // Cache
         if (empty($atts['nocache'])) {
-            $transient = sha1(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield) . $limit);
-            $content = get_transient($transient);
+            $content = Cache::get($arguments, $displayfield, $limit);
             if (!empty($content)) {
                 Main::enqueueForeignThemes();
                 return $content;
@@ -354,8 +337,7 @@ class Kontakt extends Shortcodes
             }
 
             // Cache
-            $transient = sha1(self::TRANSIENT_PREFIX . json_encode($arguments) . json_encode($displayfield) . $limit);
-            set_transient($transient, $content, self::TRANSIENT_EXPIRATION);
+            Cache::update($content, $arguments, $displayfield, $limit);
         } else {
             if (is_object($category)) {
                 $content = '<p>' . sprintf(__('Es konnten keine Kontakte in der Kategorie %s gefunden werden.', 'fau-person'), $category->slug) . '</p>';

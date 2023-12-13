@@ -1,7 +1,6 @@
 <?php
 
 namespace FAU_Person;
-use FAU_Person\Data;
 use RRZE\Lib\UnivIS\Data as UnivIS_Data;
 defined('ABSPATH') || exit;
 
@@ -66,7 +65,6 @@ class BackendMenu
 
 ?>
         <div class="wrap">
-            <?php screen_icon(); ?>
             <h2><?php echo esc_html(__('Suche nach UnivIS-ID', 'fau-person')); ?></h2>
 
             <form method="post">
