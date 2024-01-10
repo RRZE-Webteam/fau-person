@@ -21,6 +21,7 @@ class Settings
     protected $pluginFile;
     public $optionName;
     public $options;
+    public $optionsPage;
     protected $defaults;
     protected $settingsMenu;
     protected $settingsSections;

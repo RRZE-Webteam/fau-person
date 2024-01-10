@@ -7,14 +7,13 @@ defined('ABSPATH') || exit;
 /**
  * Define Image Sizes
  */
-class BackendMenu
-{
+class BackendMenu {
 
     protected $pluginFile;
     private $settings = '';
-
-    public function __construct($pluginFile, $settings)
-    {
+    public $search_univis_id_page;
+    
+    public function __construct($pluginFile, $settings) {
         $this->pluginFile = $pluginFile;
         $this->settings = $settings;
     }
@@ -28,8 +27,7 @@ class BackendMenu
 
     }
 
-    public function add_options_pages()
-    {
+    public function add_options_pages() {
         //Umgehen von register_setting für die Suche-Seite, da register_setting nur für Standard-Settings-Seiten funktioniert!!!        
         $options = $this->settings->options;
         $optionname = $this->settings->optionName;
