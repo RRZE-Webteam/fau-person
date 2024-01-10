@@ -105,10 +105,6 @@ class Data
                 return false;
         }
 
-        if (!fopen($url, "r")) {
-            return false;
-        }
-
         $persArray = self::xml2array($url, $delete);
         if (empty($persArray) || is_wp_error($persArray)) {
             return false;
@@ -128,10 +124,6 @@ class Data
         $config = Config::get_Config();
         $apiurl = $config['api_url'];
         $url = sprintf('%1$s?search=persons&firstname=%2$s&name=%3$s&show=xml', $apiurl, urlencode($firstname), urlencode($lastname));
-
-        if (!fopen($url, "r")) {
-            return false;
-        }
 
         $persArray = self::xml2array($url, $delete);
         if (empty($persArray) || is_wp_error($persArray)) {
