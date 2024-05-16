@@ -1,8 +1,8 @@
 # ACHTUNG! #
-# Bestehende Issues von FAU-Person werden zu RRZE-Contact übertragen #
-# Bugs, Änderungswünsche, ... aka Issues zu FAU-Person bitte hier eintragen: https://github.com/RRZE-Webteam/rrze-contact/issues # 
 
+Dieses Plugin wird nicht mehr weiterentwickelt. Stattdessen wird eine Neuentwicklung auf Basis des neuen Personen- und Einrichtungsverzeichnis der FAU (FAUdir) vorgenommen.
 
+Es wird versucht, vorhandene Konfigurationen und Funktionen weitestgehend zu übernehmen um eine Abwärtskompatibiltät zu erreichen. Eine Zusicherung hierzu kann jedoch nicht gegeben werden. 
 
 
 # FAU-Person
