@@ -1,6 +1,6 @@
 {
   "name": "fau-person",
-  "version": "3.9.8",
+  "version": "3.10.2",
   "description": "Kontakt-Plugin für FAU Webauftritte.",
   "main": "fau-person.php",
   "textdomain": "fau-person",
@@ -14,8 +14,7 @@
     "clone": "git+https://github.com/RRZE-Webteam/fau-person.git"
   },
   "browserslist": [
-    "last 3 years",
-    "ie 11"
+    "last 3 years"
   ],
   "supports": {
     "email": "webmaster@fau.de",

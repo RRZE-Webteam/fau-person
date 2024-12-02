@@ -5,7 +5,7 @@ Plugin Name:        FAU Person
 Plugin URI:         https://github.com/RRZE-Webteam/fau-person
 GitHub Plugin URI:  https://github.com/RRZE-Webteam/fau-person
 Description:        Visitenkarten-Plugin für FAU Webauftritte
-Version:            3.10.1
+Version:            3.10.2
 Author:             RRZE-Webteam
 Author URI:         http://blogs.fau.de/webworking/
 License:            GPLv3 or later
@@ -33,21 +33,15 @@ require_once 'vendor/autoload.php';
 const RRZE_PHP_VERSION = '7.2';
 const RRZE_WP_VERSION = '6.0';
 
+// Load the plugin's text domain for localization.
+add_action('init', fn() => load_plugin_textdomain('fau-person', false, dirname(plugin_basename(__FILE__)) . '/languages'));
 // Registriert die Plugin-Funktion, die bei Aktivierung des Plugins ausgeführt werden soll.
 register_activation_hook(__FILE__, __NAMESPACE__ . '\activation');
 // Registriert die Plugin-Funktion, die ausgeführt werden soll, wenn das Plugin deaktiviert wird.
 register_deactivation_hook(__FILE__, __NAMESPACE__ . '\deactivation');
 // Wird aufgerufen, sobald alle aktivierten Plugins geladen wurden.
-add_action('plugins_loaded', __NAMESPACE__ . '\loaded');
+add_action('init', __NAMESPACE__ . '\loaded');
 
-
-/**
- * Einbindung der Sprachdateien.
- */
-function loadTextDomain()
-{
-    load_plugin_textdomain('fau-person', false, sprintf('%s/languages/', dirname(plugin_basename(__FILE__))));
-}
 
 /**
  * Überprüft die Systemvoraussetzungen.
@@ -68,10 +62,7 @@ function systemRequirements()
 /**
  * Wird nach der Aktivierung des Plugins ausgeführt.
  */
-function activation()
-{
-    // Sprachdateien werden eingebunden.
-    loadTextDomain();
+function activation() {
 
     // Überprüft die minimal erforderliche PHP- u. WP-Version.
     // Wenn die Überprüfung fehlschlägt, dann wird das Plugin automatisch deaktiviert.
@@ -100,10 +91,7 @@ function deactivation()
  * Wird durchgeführt, nachdem das WP-Grundsystem hochgefahren
  * und alle Plugins eingebunden wurden.
  */
-function loaded()
-{
-    // Sprachdateien werden eingebunden.
-    loadTextDomain();
+function loaded() {
 
     // Überprüft die Systemvoraussetzungen.
     if ($error = systemRequirements()) {
