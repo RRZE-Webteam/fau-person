@@ -1,10 +1,3 @@
-# ACHTUNG! #
-
-Dieses Plugin wird nicht mehr weiterentwickelt. Stattdessen wird eine Neuentwicklung auf Basis des neuen Personen- und Einrichtungsverzeichnis der FAU (FAUdir) vorgenommen.
-
-Es wird versucht, vorhandene Konfigurationen und Funktionen weitestgehend zu übernehmen um eine Abwärtskompatibiltät zu erreichen. Eine Zusicherung hierzu kann jedoch nicht gegeben werden. 
-
-
 # FAU-Person
 
 [![Aktuelle Version](https://img.shields.io/github/package-json/v/rrze-webteam/fau-person/master?label=Version)](https://github.com/RRZE-Webteam/fau-person)
