@@ -40,14 +40,13 @@ register_activation_hook(__FILE__, __NAMESPACE__ . '\activation');
 // Registriert die Plugin-Funktion, die ausgeführt werden soll, wenn das Plugin deaktiviert wird.
 register_deactivation_hook(__FILE__, __NAMESPACE__ . '\deactivation');
 // Wird aufgerufen, sobald alle aktivierten Plugins geladen wurden.
-add_action('init', __NAMESPACE__ . '\loaded');
+add_action('plugins_loaded', __NAMESPACE__ . '\loaded');
 
 
 /**
  * Überprüft die Systemvoraussetzungen.
  */
-function systemRequirements()
-{
+function systemRequirements() {
     $error = '';
     if (version_compare(PHP_VERSION, RRZE_PHP_VERSION, '<')) {
         /* Übersetzer: 1: aktuelle PHP-Version, 2: erforderliche PHP-Version */
