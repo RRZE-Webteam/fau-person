@@ -50,6 +50,19 @@ class Kontakt extends Shortcodes
             $content = Cache::get($arguments, $displayfield);
             if (!empty($content)) {
                 Main::enqueueForeignThemes();
+                if (strpos($content, 'rrze-elements')) {
+                    wp_enqueue_style('rrze-elements');
+                    if (strpos($content, 'rrze-elements accordion', )) {
+                        wp_enqueue_script('rrze-accordions');
+                    }
+                    if (strpos($content, 'rrze-elements content-slider', )) {
+                        wp_enqueue_script('jquery-flexslider');
+                        wp_enqueue_script('rrze-flexslider');
+                    }
+                    if (strpos($content, 'rrze-elements-tabs', )) {
+                        wp_enqueue_script('rrze-tabs');
+                    }
+                }
                 return $content;
             } else {
                 $content = '';
