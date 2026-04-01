@@ -3,7 +3,10 @@
  */
 
 // icons
-@import "icons/icons";
+@use "icons/functions";
+@use 'icons/iconlib';
+@use 'icons/social-media';
+@use 'icons/default';
 
 #fau_person_textinfos,
 #fau_person_info,
@@ -81,7 +84,7 @@
 		line-height: 1.5rem;
 		font-size: 1rem;
 		
-		background-image: svg-bookmark();
+		background-image: iconlib.svg-bookmark();
 		background-repeat: no-repeat;
 		display: inline-block;
 		content: ' ';
@@ -96,54 +99,54 @@
 			
 			
 	   &[for*="twitter"]:before {
-		background-image: svg-twitter("DeepSkyBlue");
+		background-image: iconlib.svg-twitter("DeepSkyBlue");
 	    }
 	    &[for*="facebook"]:before {
-		background-image: svg-facebook("white");
+		background-image: iconlib.svg-facebook("white");
 		background-color: #3b5999;
 	    }
 
 	    &[for*="github"]:before {
-		background-image: svg-github("white");
+		background-image: iconlib.svg-github("white");
 		background-color: #000;
 	    }
 
 	    &[for*="instagram"]:before {
-		background-image: svg-instagram("white");
+		background-image: iconlib.svg-instagram("white");
 		background-color: #e4405f;
 	    }
 
 	    &[for*="linkedin"]:before {
-		background-image: svg-linkedin("white");
+		background-image: iconlib.svg-linkedin("white");
 		background-color: #0077B5;
 	    }
 	    
 	     &[for*="xing"]:before {
-		background-image: svg-xing("LightSeaGreen");
+		background-image: iconlib.svg-xing("LightSeaGreen");
 	    }
 	    
 	     &[for*="tiktok"]:before {
-		background-image: svg-tiktok("Crimson");
+		background-image: iconlib.svg-tiktok("Crimson");
 	    }
 	     &[for*="youtube"]:before {
-		background-image: svg-youtube("Red");
+		background-image: iconlib.svg-youtube("Red");
 	    }
 	    
 	    &[for*="publons"]:before {
-		background-image: svg-publons("DarkSlateBlue");
+		background-image: iconlib.svg-publons("DarkSlateBlue");
 	    }
 
 	    &[for*="scopus"]:before {
-		background-image: svg-scopus("Orange");
+		background-image: iconlib.svg-scopus("Orange");
 	    }
 	   &[for*="googlescholar"]:before {
-		background-image: svg-googlescholar();
+		background-image: iconlib.svg-googlescholar();
 	    }
 	   &[for*="orcid"]:before {
-		background-image: svg-orcid();
+		background-image: iconlib.svg-orcid();
 	    }
 	    &[for*="researchgate"]:before {
-		background-image: svg-researchgate();
+		background-image: iconlib.svg-researchgate();
 	    }
 	  
     }
@@ -158,26 +161,26 @@
     }
     [itemprop="telephone"]:before { 
 	@extend .defaulticonplaceholder;
-	background-image: svg-icon-phone();
+	background-image: iconlib.svg-icon-phone();
     }
     [itemprop="telephone"].mobile:before { 
 	@extend .defaulticonplaceholder;
-	background-image: svg-icon-mobile();
+	background-image: iconlib.svg-icon-mobile();
 
     }
     [itemprop="faxNumber"]:before { 
 	@extend .defaulticonplaceholder;
-	background-image: svg-icon-fax();
+	background-image: iconlib.svg-icon-fax();
 
     }
     [itemprop="email"]:before { 
 	@extend .defaulticonplaceholder;
-	background-image: svg-icon-mail();
+	background-image: iconlib.svg-icon-mail();
 
     }
     [itemprop="url"]:before { 
 	@extend .defaulticonplaceholder;
-	background-image: svg-icon-home();
+	background-image: iconlib.svg-icon-home();
 
     }
 }

@@ -82,3 +82,5 @@ function createBlock(blockConfig) {
 		}
 	} );
 }
+
+export { createBlock };

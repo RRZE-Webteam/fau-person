@@ -2,10 +2,8 @@
 /* Icons
 /*-----------------------------------------------------------------------------------*/
 
-@import "functions";
-@import "iconlib";
-@import "default";
-@import "social-media";
+@use 'functions';
+@use "iconlib";
+@use "default";
+@use "social-media";
 
-
-// @import "oldportalicons";

@@ -2,31 +2,32 @@
 /* Default SVG Icons
 /*-----------------------------------------------------------------------------------*/
 
+@use 'iconlib';
 
 .fau-person {
 
     [itemprop="telephone"]:before { 
 	@extend .defaulticonplaceholder;
-	background-image: svg-icon-phone();
+	background-image: iconlib.svg-icon-phone();
     }
     [itemprop="telephone"].mobile:before { 
 	@extend .defaulticonplaceholder;
-	background-image: svg-icon-mobile();
+	background-image: iconlib.svg-icon-mobile();
 
     }
     [itemprop="faxNumber"]:before { 
 	@extend .defaulticonplaceholder;
-	background-image: svg-icon-fax();
+	background-image: iconlib.svg-icon-fax();
 
     }
     [itemprop="email"]:before { 
 	@extend .defaulticonplaceholder;
-	background-image: svg-icon-mail();
+	background-image: iconlib.svg-icon-mail();
 
     }
     [itemprop="url"]:before { 
 	@extend .defaulticonplaceholder;
-	background-image: svg-icon-home();
+	background-image: iconlib.svg-icon-home();
 
     }
 

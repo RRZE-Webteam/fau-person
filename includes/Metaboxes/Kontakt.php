@@ -16,30 +16,18 @@ class Kontakt extends Metaboxes
     protected $pluginFile;
     private $settings = '';
 
-    public function __construct($pluginFile, $settings)
-    {
+    public function __construct($pluginFile, $settings)  {
         $this->pluginFile = $pluginFile;
         $this->settings = $settings;
     }
 
-    public function onLoaded()
-    {
+    public function onLoaded() {
         add_filter('cmb2_meta_boxes', array($this, 'cmb2_kontakt_metaboxes'));
     }
 
 
-    // public function deleteTransients()
-    // {
-    //     $aTransients = get_option('fau-persion-shortcode-transients');
-    //     foreach ($aTransients as $transient) {
-    //         delete_transient($transient);
-    //     }
-    //     update_option('fau-persion-shortcode-transients', '');
-    // }
 
-
-    public function cmb2_kontakt_metaboxes($meta_boxes)
-    {
+    public function cmb2_kontakt_metaboxes($meta_boxes)  {
         $prefix = $this->prefix;
 
         $contactselect_connection = Data::get_contactdata(1);

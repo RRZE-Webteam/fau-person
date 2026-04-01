@@ -1,11 +1,19 @@
 {
   "name": "fau-person",
-  "version": "3.10.4",
+  "version": "3.10.5",
   "description": "Kontakt-Plugin für FAU Webauftritte.",
   "main": "fau-person.php",
   "textdomain": "fau-person",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "readme": "node scripts/build-readme.js",
+    "version:dev": "node scripts/build-version.js dev",
+    "version:prod": "node scripts/build-version.js prod",
+    "version:release": "node scripts/build-version.js release",
+    "dev": "node scripts/build-assets.js dev && npm run version:dev && npm run readme",
+    "build": "node scripts/build-assets.js prod && npm run version:prod && npm run readme",
+    "prod": "npm run build",
+    "release": "node scripts/build-assets.js prod && npm run version:release && npm run readme"
   },
   "repository": {
     "type": "git",
@@ -13,32 +21,36 @@
     "issues": "https://github.com/RRZE-Webteam/fau-person/issues",
     "clone": "git+https://github.com/RRZE-Webteam/fau-person.git"
   },
-  "browserslist": [
-    "last 3 years"
-  ],
-  "supports": {
-    "email": "webmaster@fau.de",
-    "docs": "https://www.wordpress.rrze.fau.de/plugins/fau-und-rrze-plugins/fau-person/"
+  "compatibility": {
+    "wprequires": "6.7",
+    "wptestedup": "6.9.5",
+    "phprequires": "8.2"
   },
   "author": {
-    "name": "RRZE-Webteam <webmaster@fau.de>",
-    "url": "https://www.wordpress.rrze.fau.de/person/webmaster"
+    "name": "RRZE-Webteam <webmaster@fau.de> (https://www.rrze.fau.de)",
+    "url": "https://www.wordpress.rrze.fau.de"
   },
-  "license": "GNU General Public License v3",
+  "source": {
+    "js": "./src/js/",
+    "css": "./src/sass/"
+  },
+  "target": {
+    "js": "./js/",
+    "css": "./css/"
+  },
+  "license": "GNU General Public License v3 or later",
+  "licenseurl": "http://www.gnu.org/licenses/gpl-3.0.html",
+  "tags": "Plugin, WordPress, FAU-Person, FAU, RRZE",
   "devDependencies": {
-    "@babel/core": "^7.10.5",
-    "@babel/preset-env": "^7.10.4",
-    "autoprefixer": "^9.8.5",
-    "gulp": "^4.0.2",
-    "gulp-babel": "^8.0.0",
-    "gulp-bump": "^3.2.0",
-    "gulp-clean-css": "^4.3.0",
-    "gulp-csso": "^3.0.1",
-    "gulp-postcss": "^8.0.0",
-    "gulp-sass": "^4.1.0",
-    "gulp-touch-cmd": "0.0.1",
-    "gulp-uglify": "^3.0.2",
-    "gulp-wp-pot": "^2.4.3",
-    "semver": "^6.3.0"
+    "@types/node": "^24.10.1",
+    "@typescript-eslint/eslint-plugin": "^8.48.1",
+    "@typescript-eslint/parser": "^8.48.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-tsdoc": "^0.5.0",
+    "sass": "^1.94.2"
+  },
+  "dependencies": {
+    "esbuild": "^0.27.3"
   }
 }
