@@ -1,13 +1,12 @@
 # Copyright (C) 2021 fau-person
 # This file is distributed under the same license as the fau-person package.
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: fau-person\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language-Team: RRZE-Webteam <webmaster@fau.de>\n"
+"Language-Team: Deutsch\n"
 "Report-Msgid-Bugs-To: https://github.com/RRZE-Webteam/fau-person/issues\n"
 "X-Poedit-Basepath: ..\n"
 "X-Poedit-KeywordsList: __;_e;_ex:1,2c;_n:1,2;_n_noop:1,2;_nx:1,2,4c;_nx_noop:"
@@ -16,11 +15,13 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.js\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"Language: \n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Language: de_DE\n"
+"PO-Revision-Date: 2026-04-08 13:54+0000\n"
 "POT-Creation-Date: 2026-04-08 13:47+0000\n"
-"X-Generator: Loco https://localise.biz/"
+"X-Generator: Loco https://localise.biz/\n"
+"Last-Translator: Wolfgang Wiese <wolfgang.wiese@fau.de>\n"
+"X-Loco-Version: 2.8.3; wp-6.9.4; php-8.4.15"
 
 #: includes/Shortcodes/Standort.php:196 includes/Shortcodes/Kontakt.php:470
 #: includes/Shortcodes/Kontakt.php:486

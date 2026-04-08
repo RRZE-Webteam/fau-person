@@ -40,19 +40,3 @@
     @return url('data:image/svg+xml;charset=UTF-8,' + $svg + '</svg>');
 }
 
-// Default icon width for use in :before
-.defaulticonplaceholder {
-    width: 1rem;
-    height: 1rem;
-    line-height: 1rem;
-    font-size: 0.6rem;
-
-    background-image: svg-bookmark();
-    background-repeat: no-repeat;
-    display: inline-block;
-    content: ' ';
-    background-size: 100%;
-    background-position: center center;
-    
-    margin-right: 0.5rem;
-}

@@ -19,9 +19,7 @@ class Standort {
     }
     
     public function onLoaded() {
-        add_action('init', [$this, 'set']);
-        // add_action('admin_init', [$this, 'register']);
-	
+        add_action('init', [$this, 'set']);	
     }
 
     public function set() {

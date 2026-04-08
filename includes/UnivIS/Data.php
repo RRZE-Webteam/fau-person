@@ -1,22 +1,15 @@
 <?php
 
-namespace RRZE\Lib\UnivIS;
+namespace FAU_Person\UnivIS;
 
 /*
  * UnivIS-Data API- und Cache-Funktionen
  */
 
-use RRZE\Lib\UnivIS\Config;
-use RRZE\Lib\UnivIS\Sanitizer;
+use function FAU_Person\Config\getUnivISConfig;
 
 class Data
 {
-    const transient_prefix = 'univis_data_';
-    // protected static $transient_expiration = DAY_IN_SECONDS;
-    protected static $transient_expiration = HOUR_IN_SECONDS;
-    protected static $timeout = HOUR_IN_SECONDS;
-    protected static $results_limit = 100;
-
     public static function get_person($id)
     {
 
@@ -44,7 +37,11 @@ class Data
             return false;
         }
 
-        return delete_transient(self::transient_prefix . $id);
+        $config = getUnivISConfig();
+        $apiurl = $config['api_url'];
+        $url = sprintf('%1$s?search=persons&id=%2$d&show=xml', $apiurl, $id);
+
+        return Cache::delete($url);
     }
 
     public static function search_by($field = '', $value = '')
@@ -88,7 +85,7 @@ class Data
 
     private static function get_remote_data_by($field, $value, $delete = false)
     {
-        $config = Config::get_Config();
+        $config = getUnivISConfig();
         $apiurl = $config['api_url'];
 
         switch ($field) {
@@ -121,7 +118,7 @@ class Data
 
     private static function get_remote_data_by_fullname($firstname, $lastname, $delete = false)
     {
-        $config = Config::get_Config();
+        $config = getUnivISConfig();
         $apiurl = $config['api_url'];
         $url = sprintf('%1$s?search=persons&firstname=%2$s&name=%3$s&show=xml', $apiurl, urlencode($firstname), urlencode($lastname));
 

@@ -76,7 +76,7 @@ class Settings
         $this->optionName = getOptionName();
         $this->options = $this->getOptions();
         $this->constants = getConstants();
-        $this->search_univis_id_transient = $this->constants['UnivIS_Transient'];
+        $this->search_univis_id_transient = $this->constants['UnivIS_Search_Transient'];
 
         add_action('admin_init', [$this, 'adminInit']);
         add_action('admin_menu', [$this, 'adminMenu']);

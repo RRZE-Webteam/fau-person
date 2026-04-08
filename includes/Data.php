@@ -3,20 +3,13 @@
 namespace FAU_Person;
 
 use function FAU_Person\Config\getSocialMediaList;
-// use RRZE\Lib\DIP\Data as DIP_Data;
-use RRZE\Lib\UnivIS\Config;
-use RRZE\Lib\UnivIS\Data as UnivIS_Data;
-use RRZE\Lib\UnivIS\Sanitizer;
+use function FAU_Person\Config\getUnivISKeyFields;
+use FAU_Person\UnivIS\Data as UnivIS_Data;
+use FAU_Person\UnivIS\Sanitizer;
 
 defined('ABSPATH') || exit;
 
 class Data {
-
-    // public static function getDIPDataTest($id = null)
-    // {
-    //     $myData = new DIP_Data(null);
-    //     return $myData->getResponse($id);
-    // }
 
     private static function get_viewsettings($lookup = 'constants') {
         $settings = new Settings(__DIR__);
@@ -1397,7 +1390,7 @@ class Data {
             $univis_default = self::get_fields($id, $univis_id, 1);
             return $univis_default;
         } else {
-            $univis_default = Config::get_keys_fields('persons');
+            $univis_default = getUnivISKeyFields('persons');
             return $univis_default;
         }
     }

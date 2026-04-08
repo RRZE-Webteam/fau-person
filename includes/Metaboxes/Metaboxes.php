@@ -7,7 +7,7 @@ defined('ABSPATH') || exit;
 use FAU_Person\Metaboxes\Kontakt;
 use FAU_Person\Metaboxes\Standort;
 use FAU_Person\Metaboxes\Posts;
-use RRZE\Lib\UnivIS\Data as UnivIS_Data;
+use FAU_Person\UnivIS\Data as UnivIS_Data;
 
 
 class Metaboxes

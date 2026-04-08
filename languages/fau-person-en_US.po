@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: FAU-Person\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-27 14:09+0000\n"
-"PO-Revision-Date: 2021-05-21 13:34+0000\n"
+"PO-Revision-Date: 2026-04-08 13:54+0000\n"
 "Last-Translator: Wolfgang Wiese <wolfgang.wiese@fau.de>\n"
 "Language-Team: English (United States)\n"
 "Language: en_US\n"
@@ -19,40 +19,40 @@ msgstr ""
 "X-Poedit-SearchPath-0: ..\n"
 "X-Loco-Version: 2.4.0; wp-5.4.2"
 
-#: includes/Shortcodes/Kontakt.php:433, includes/Shortcodes/Kontakt.php:449,
-#: includes/Shortcodes/Standort.php:193
+#: includes/Shortcodes/Standort.php:196 includes/Shortcodes/Kontakt.php:470
+#: includes/Shortcodes/Kontakt.php:486
 msgid "-- Alle --"
 msgstr "-- All --"
 
-#: vendor/UnivIS/Data.php:324
+#: includes/UnivIS/Data.php:277
 msgid "<abbr title=\"Dienstag\">Di</abbr>"
 msgstr "<abbr title=\"Tuesday\">Tu</abbr>"
 
-#: vendor/UnivIS/Data.php:326
+#: includes/UnivIS/Data.php:279
 msgid "<abbr title=\"Donnerstag\">Do</abbr>"
 msgstr "<abbr title=\"Thursday\">Th</abbr>"
 
-#: vendor/UnivIS/Data.php:327
+#: includes/UnivIS/Data.php:280
 msgid "<abbr title=\"Freitag\">Fr</abbr>"
 msgstr "<abbr title=\"Friday\">Fr</abbr>"
 
-#: vendor/UnivIS/Data.php:325
+#: includes/UnivIS/Data.php:278
 msgid "<abbr title=\"Mittwoch\">Mi</abbr>"
 msgstr "<abbr title=\"Wednesday\">We</abbr>"
 
-#: vendor/UnivIS/Data.php:323
+#: includes/UnivIS/Data.php:276
 msgid "<abbr title=\"Montag\">Mo</abbr>"
 msgstr "<abbr title=\"Monday\">Mo</abbr>"
 
-#: vendor/UnivIS/Data.php:328
+#: includes/UnivIS/Data.php:281
 msgid "<abbr title=\"Samstag\">Sa</abbr>"
 msgstr "<abbr title=\"Saturday\">Sa</abbr>"
 
-#: vendor/UnivIS/Data.php:329
+#: includes/UnivIS/Data.php:282
 msgid "<abbr title=\"Sonntag\">So</abbr>"
 msgstr "<abbr title=\"Sunday\">Su</abbr>"
 
-#: includes/BackendMenu.php:83
+#: includes/BackendMenu.php:68
 msgid ""
 "<div class=\"alert alert-warning\">Es konnten keine Daten zur Person "
 "gefunden werden. Bitte verändern Sie Ihre Suchwerte.</div>"
@@ -60,141 +60,140 @@ msgstr ""
 "<div class=\"alert alert-warning\">No data found for this contact entry."
 "</div>"
 
-#: includes/Templates/archive-person-fau-theme.php:27,
-#: includes/Templates/archive-person.php:26,
-#: includes/Templates/archive-standort-fau-theme.php:25,
 #: includes/Templates/archive-standort.php:20
+#: includes/Templates/archive-person.php:26
 msgid "<span class=\"meta-nav\">&laquo;</span> Zurück"
 msgstr "<span class=\"meta-nav\">&laquo;</span> Back"
 
-#: includes/Metaboxes/Kontakt.php:142
+#: includes/Metaboxes/Kontakt.php:140
 msgid "Abschluss (Suffix)"
 msgstr "Honorific suffix"
 
-#: config/config.php:256, includes/Metaboxes/Kontakt.php:173
+#: config/config.php:279 includes/Metaboxes/Kontakt.php:171
 msgid "Abteilung"
 msgstr "Working group"
 
-#: config/config.php:263, includes/Metaboxes/Kontakt.php:544
+#: config/config.php:286 includes/Metaboxes/Kontakt.php:543
 msgid "Adresse"
 msgstr "Address"
 
-#: config/config.php:207
+#: config/config.php:230
 msgid "Akademischer Titel"
 msgstr "Academic Title"
 
-#: includes/Taxonomy/Kontakt.php:146
+#: includes/Taxonomy/Kontakt.php:166
+#, php-format
 msgid "Alle %s anzeigen"
 msgstr "Show all %s"
 
-#: includes/Metaboxes/Kontakt.php:427
+#: includes/Metaboxes/Kontakt.php:425
 msgid "alle 2 Wochen"
 msgstr "every 2 weeks"
 
-#: includes/Taxonomy/Kontakt.php:39
+#: includes/Taxonomy/Kontakt.php:50
 msgid "Alle Kontakte"
 msgstr "All contacts"
 
-#: includes/Taxonomy/Standort.php:32
+#: includes/Taxonomy/Standort.php:31
 msgid "Alle Standorte"
 msgstr "All locations"
 
-#: vendor/UnivIS/Data.php:315
+#: includes/UnivIS/Data.php:268
 msgid "Alle zwei Wochen"
 msgstr "Every second week"
 
-#: includes/Metaboxes/Kontakt.php:203
+#: includes/Metaboxes/Kontakt.php:201
 msgid "Allgemeine Rufnummer"
 msgstr "General telephone number"
 
-#: includes/Metaboxes/Kontakt.php:431
+#: includes/Metaboxes/Kontakt.php:429
 msgid "am"
 msgstr "date"
 
-#: includes/Metaboxes/Kontakt.php:539
+#: includes/Metaboxes/Kontakt.php:538
 msgid "Angezeigte Daten der verknüpften Kontakte"
 msgstr "Shown data of related contacts"
 
-#: includes/Taxonomy/Kontakt.php:165
-msgid "Angezeigter Name"
-msgstr "Display name"
-
-#: config/config.php:340
+#: config/config.php:363
 msgid "Ansprechpartner"
 msgstr "Contact"
 
-#: includes/Metaboxes/Kontakt.php:519
+#: includes/Metaboxes/Kontakt.php:518
 msgid "Ansprechpartner / verknüpfte Kontakte"
 msgstr "Contact person / related contacts"
 
-#: config/config.php:152
+#: config/config.php:165
 msgid "Anzeigeoptionen"
 msgstr "Output options"
 
-#: config/config.php:598, config/config.php:752, config/config.php:919
+#: config/config.php:626 config/config.php:780 config/config.php:947
 msgid "Anzuzeigende Felder, obige Checkboxen überschreibend"
 msgstr "Felds to display, ignoring default settings."
 
-#: config/config.php:378
+#: config/config.php:401
 msgid "Anzuzeigender Text vor der Raumangabe"
 msgstr "Suffix text prior to room number"
 
-#: includes/Metaboxes/Kontakt.php:525
+#: includes/Metaboxes/Kontakt.php:524
 msgid "Art der Verknüpfung"
 msgstr "Typ of relationship"
 
-#: includes/Data.php:1660
+#: includes/Data.php:1655
 msgid "Aus UnivIS angezeigter Wert:"
 msgstr "Value from UnivIS:"
 
-#: includes/Metaboxes/Kontakt.php:553
+#: includes/Metaboxes/Kontakt.php:552
 msgid ""
 "Ausschließlich die verknüpften Kontakte werden in der Ausgabe angezeigt."
 msgstr "Only informations of related contacts will be shown in output."
 
-#: includes/Taxonomy/Kontakt.php:168
+#: config/config.php:216
+msgid "Automatisch generieren"
+msgstr "Generate automatically"
+
+#: includes/Taxonomy/Kontakt.php:189
 msgid "Bearbeiter"
 msgstr "Autor"
 
-#: config/config.php:610, config/config.php:630, config/config.php:764,
-#: config/config.php:784
+#: config/config.php:638 config/config.php:658 config/config.php:792
+#: config/config.php:812
 msgid ""
 "Bei der Ausgabe mehrerer Kontakten kann nach diesem Feld sortiert werden."
 msgstr "For displaying a contact list, this field can be used for sort ing."
 
-#: includes/Metaboxes/Kontakt.php:462
+#: includes/Metaboxes/Kontakt.php:460
 msgid "Bemerkung"
 msgstr "Comment"
 
-#: includes/Data.php:1071
+#: includes/Data.php:1077
 msgid "Beschreibung"
 msgstr "Short description"
 
-#: config/config.php:326, includes/Taxonomy/Kontakt.php:164
+#: config/config.php:349 includes/Taxonomy/Kontakt.php:185
 msgid "Bild"
 msgstr "Thumbnail"
 
-#: config/config.php:404
+#: config/config.php:427
 msgid "Bildbeschriftung Kontaktseite"
 msgstr "Image description for the contact page"
 
-#: config/config.php:412
+#: config/config.php:435
 msgid "Bildformat Kontaktseite"
 msgstr "Format contact image on page view"
 
-#: includes/Metaboxes/Kontakt.php:451
+#: includes/Metaboxes/Kontakt.php:449
 msgid "bis"
 msgstr "to"
 
-#: includes/Shortcodes/Kontakt.php:60
+#: includes/Shortcodes/Kontakt.php:83
 msgid "Bitte geben Sie den Titel oder die ID des Kontakteintrags an."
 msgstr "Please enter the title oder ID of the Contact entry."
 
-#: includes/Shortcodes/Standort.php:105
+#: includes/Shortcodes/Standort.php:106
 msgid "Bitte geben Sie den Titel oder die ID des Standorteintrags an."
 msgstr "Please enter the title oder ID of the Location entry."
 
-#: includes/BackendMenu.php:139
+#: includes/BackendMenu.php:126
 msgid ""
 "Bitte geben Sie den Vor- und/oder Nachnamen der Person ein, von der Sie die "
 "UnivIS-ID benötigen."
@@ -202,12 +201,12 @@ msgstr ""
 "Please enter given and/or family name of the person from whom you need the "
 "UnivIS-ID."
 
-#: includes/Metaboxes/Kontakt.php:231
+#: includes/Metaboxes/Kontakt.php:229
 msgid ""
 "Bitte geben Sie die Nummer in der internationalen Form +49 176 1111111 an."
 msgstr "Please use the international format +49 176 1111111."
 
-#: includes/Metaboxes/Kontakt.php:220
+#: includes/Metaboxes/Kontakt.php:218
 msgid ""
 "Bitte geben Sie uni-interne Nummern für Erlangen in der internationalen Form "
 "+49 9131 85-22222 und für Nürnberg in der internationalen Form +49 911 5302-"
@@ -217,7 +216,7 @@ msgstr ""
 "22222 for Erlangen and +49 911 5302-555 for Nuremberg, for numbers outside "
 "the university use the international format +49 9131 1111111."
 
-#: includes/Metaboxes/Kontakt.php:209
+#: includes/Metaboxes/Kontakt.php:207
 msgid ""
 "Bitte geben Sie uni-interne Nummern für Erlangen in der internationalen Form "
 "+49 9131 85-22222 und für Nürnberg in der internationalen Form +49 911 5302-"
@@ -232,23 +231,23 @@ msgid ""
 "ist nicht einheitlich!"
 msgstr "Please correct the format of the phone- or fax number!"
 
-#: config/config.php:653, config/config.php:806
+#: config/config.php:681 config/config.php:834
 msgid "CSS Klassen, die der Shordcode erhalten soll."
 msgstr "CSS Classes, displayed by the shortcode"
 
-#: includes/Metaboxes/Kontakt.php:504
+#: includes/Metaboxes/Kontakt.php:503
 msgid "Daten aus UnivIS überschreiben die Kontaktdaten."
 msgstr "Use UnivIS-Data for display instead of local data."
 
-#: includes/Taxonomy/Kontakt.php:167
+#: includes/Taxonomy/Kontakt.php:188
 msgid "Datenquelle"
 msgstr "Data source"
 
-#: includes/Taxonomy/Kontakt.php:169
+#: includes/Taxonomy/Kontakt.php:190
 msgid "Datum"
 msgstr "Date"
 
-#: includes/Metaboxes/Kontakt.php:526
+#: includes/Metaboxes/Kontakt.php:525
 msgid ""
 "Der hier eingegebene Text wird vor der Ausgabe des verknüpften Kontaktes "
 "angezeigt (z.B. Vorzimmer, Kontakt über)."
@@ -256,15 +255,15 @@ msgstr ""
 "This text will be shown in front of the related contacts (e.g. Secretary, "
 "Contact via)."
 
-#: includes/Metaboxes/Kontakt.php:53
+#: includes/Metaboxes/Kontakt.php:51
 msgid "Derzeit sind keine Daten aus UnivIS syncronisiert."
 msgstr "Currently no data are syncronized from UnivIS."
 
-#: includes/Data.php:617
+#: includes/Data.php:618
 msgid "Details zu"
 msgstr "Details for"
 
-#: includes/Metaboxes/Kontakt.php:299
+#: includes/Metaboxes/Kontakt.php:297
 msgid ""
 "Die Adressdaten werden aus dem Standort bezogen; die folgenden optionalen "
 "Felder und Adressdaten aus UnivIS werden überschrieben."
@@ -272,19 +271,28 @@ msgstr ""
 "Location data will be used for the address data. Local entrys and data from "
 "UnivIS will be ignored."
 
-#: includes/Shortcodes/Kontakt.php:322
+#: config/config.php:484
+msgid ""
+"Die automatisch generierte Übersichtsseite zeigt alle Kontakte an und ist "
+"stets aktuell."
+msgstr ""
+"The automatically generated overview page displays all contacts and is "
+"always up to date."
+
+#: includes/Shortcodes/Kontakt.php:358
+#, php-format
 msgid "Die Kategorie %s konnte leider nicht gefunden werden."
 msgstr "Category %s could not be found."
 
-#: config/config.php:359
+#: config/config.php:382
 msgid "Die Telefonnnummer wird in dem internationalen Format angezeigt."
 msgstr "This will display the phone numbers in international format."
 
-#: includes/Metaboxes/Kontakt.php:436, vendor/UnivIS/Data.php:334
+#: includes/UnivIS/Data.php:287 includes/Metaboxes/Kontakt.php:434
 msgid "Dienstag"
 msgstr "Tuesday"
 
-#: includes/Metaboxes/Kontakt.php:80
+#: includes/Metaboxes/Kontakt.php:78
 msgid ""
 "Diese Kurzbeschreibung wird bei der Anzeige von <code>"
 "show=\"description\"</code> in einer Sidebar (<code>format=\"sidebar\"</code>"
@@ -294,48 +302,49 @@ msgstr ""
 "show=\"description\"</code> within a sidebar  (<code>"
 "format=\"sidebar\"</code>)  or a list  (<code>format=\"kompakt\"</code>)."
 
-#: vendor/UnivIS/Data.php:270
+#: includes/UnivIS/Data.php:226
 msgid "Dieser Inhalt überschreibt den manuellen Eintrag in der Ausgabe."
-msgstr ""
+msgstr "This content overrides the manual entry in the output."
 
-#: config/config.php:370
+#: config/config.php:393
 msgid "Direkt nach dem Namen"
 msgstr "After the name"
 
-#: includes/Metaboxes/Kontakt.php:106
+#: includes/Metaboxes/Kontakt.php:104
 msgid "Doktor"
 msgstr "Doctor"
 
-#: includes/Metaboxes/Kontakt.php:438, vendor/UnivIS/Data.php:336
+#: includes/UnivIS/Data.php:289 includes/Metaboxes/Kontakt.php:436
 msgid "Donnerstag"
 msgstr "Thursday"
 
-#: includes/Schema.php:402, includes/Metaboxes/Kontakt.php:241,
-#: includes/Metaboxes/Kontakt.php:547
+#: includes/Schema.php:423 includes/BackendMenu.php:77
+#: includes/Metaboxes/Kontakt.php:239 includes/Metaboxes/Kontakt.php:546
 msgid "E-Mail"
 msgstr "Email"
 
-#: config/config.php:298
+#: config/config.php:321
 msgid "E-Mail-Adresse"
 msgstr "EMail address"
 
-#: includes/Metaboxes/Kontakt.php:552
+#: includes/Metaboxes/Kontakt.php:551
 msgid "Eigene Daten ausblenden"
 msgstr "Hide own data"
 
-#: includes/Metaboxes/Kontakt.php:488
+#: includes/Metaboxes/Kontakt.php:487
 msgid "Einrichtung"
 msgstr "Institiution"
 
-#: config/config.php:61
+#: config/config.php:72
 msgid "Einstellungen"
 msgstr "Settings"
 
-#: config/config.php:180
+#: config/config.php:194
 msgid "Erweiterte Einstellungen"
 msgstr "Advanced settings"
 
-#: includes/Shortcodes/Kontakt.php:67
+#: includes/Shortcodes/Kontakt.php:90
+#, php-format
 msgid ""
 "Es konnte kein Kontakteintrag mit dem angegebenen Titel %s gefunden werden. "
 "Versuchen Sie statt dessen die Angabe der ID des Kontakteintrags."
@@ -343,12 +352,14 @@ msgstr ""
 "We could not find any entry with the given search term %s. Try to use the ID "
 "of the contact information instead."
 
-#: includes/Shortcodes/Kontakt.php:163
+#: includes/Shortcodes/Kontakt.php:185
+#, php-format
 msgid ""
 "Es konnte kein Kontakteintrag mit der angegebenen ID %s gefunden werden."
 msgstr "We could not find any entry with the given search term %s."
 
-#: includes/Shortcodes/Standort.php:112
+#: includes/Shortcodes/Standort.php:113
+#, php-format
 msgid ""
 "Es konnte kein Standorteintrag mit dem angegebenen Titel %s gefunden werden. "
 "Versuchen Sie statt dessen die Angabe der ID des Standorteintrags."
@@ -356,55 +367,57 @@ msgstr ""
 "We could not find any entry with the given search term %s. Try to use the ID "
 "of the location information instead."
 
-#: includes/Shortcodes/Kontakt.php:320
+#: includes/Shortcodes/Kontakt.php:356
+#, php-format
 msgid "Es konnten keine Kontakte in der Kategorie %s gefunden werden."
 msgstr "We could not find any entry in the category %s."
 
-#: includes/BackendMenu.php:149, includes/BackendMenu.php:157
+#: includes/BackendMenu.php:136 includes/BackendMenu.php:144
 msgid "Es können auch nur Teile des Namens eingegeben werden."
 msgstr "Also parts of the name are possible."
 
-#: includes/Templates/archive-person-fau-theme.php:21,
 #: includes/Templates/archive-person.php:20
+#: includes/Templates/archive-person-fau-theme.php:26
 msgid "Es tut uns leid."
 msgstr "We are sorry."
 
-#: config/config.php:659, config/config.php:812
+#: config/config.php:687 config/config.php:840
 msgid "Farbcode für den Hintergrund."
 msgstr "Color code for the background."
 
-#: config/config.php:57, config/config.php:58, config/config.php:61
+#. Name of the plugin
+#: config/config.php:68 config/config.php:69 config/config.php:72
 msgid "FAU Person"
 msgstr "FAU Person"
 
-#: config/config.php:688, config/config.php:841
+#: config/config.php:716 config/config.php:869
 msgid "FAU: Dunkelblau"
 msgstr "FAU: Dark blue"
 
-#: config/config.php:291, includes/Schema.php:377
+#: config/config.php:314 includes/Schema.php:396
 msgid "Faxnummer"
 msgstr "Fax number"
 
-#: includes/BackendMenu.php:142
+#: includes/BackendMenu.php:129
 msgid "Folgende Daten wurden in UnivIS gefunden:"
 msgstr "Results in UnivIS"
 
-#: config/config.php:554, config/config.php:712, config/config.php:891
+#: config/config.php:582 config/config.php:740 config/config.php:919
 msgid "Format"
 msgstr "Format"
 
-#: includes/Metaboxes/Kontakt.php:439, vendor/UnivIS/Data.php:337
+#: includes/UnivIS/Data.php:290 includes/Metaboxes/Kontakt.php:437
 msgid "Freitag"
 msgstr "Friday"
 
-#: includes/Templates/archive-person-fau-theme.php:22,
-#: includes/Templates/archive-person.php:21,
-#: includes/Templates/single-person-fau-theme.php:24
+#: includes/Templates/archive-person.php:21
+#: includes/Templates/archive-person-fau-theme.php:27
+#: includes/Templates/single-person-fau-theme.php:30
 msgid ""
 "Für den angegebenen Kontakt können keine Informationen abgerufen werden."
 msgstr "We cannot get any information about this contact."
 
-#: config/config.php:139
+#: config/config.php:152
 msgid ""
 "Geben Sie auf dieser Seite alle gewünschten Daten zu einem Kontakt ein. Die "
 "Einbindung der Kontaktdaten erfolgt dann in den Beiträgen oder Seiten über "
@@ -413,7 +426,7 @@ msgstr ""
 "Please enter all required data to a person on this page. To embed the "
 "contact informations in posts or pages use a short code or a widget."
 
-#: config/config.php:146
+#: config/config.php:159
 msgid ""
 "Geben Sie hier den Vor- oder den Nachnamen der Person ein. Es kann auch "
 "beides oder nur Namensteile eingegeben werden. Bitte beachten Sie, dass "
@@ -422,23 +435,23 @@ msgstr ""
 "Enter given or family name of the searched person. You can also use both or "
 "part of the names. Don't use ä, ö, ü oder ß."
 
-#: includes/Metaboxes/Kontakt.php:174
+#: includes/Metaboxes/Kontakt.php:172
 msgid "Geben Sie hier die Abteilung oder Arbeitsgruppe ein."
 msgstr "Enter the department oder workgroup."
 
-#: includes/Metaboxes/Kontakt.php:164
+#: includes/Metaboxes/Kontakt.php:162
 msgid "Geben Sie hier die Organisation (Lehrstuhl oder Einrichtung) ein."
 msgstr "Enter the organization (chair or institution)."
 
-#: config/config.php:427
+#: config/config.php:450
 msgid "Groß (120 Pixel)"
 msgstr "Big (120 pixel)"
 
-#: config/config.php:441
+#: config/config.php:464
 msgid "Groß (300 Pixel)"
 msgstr "Bug (300 pixel)"
 
-#: config/config.php:434
+#: config/config.php:457
 msgid ""
 "Größe der Personen-Karten bei Nutzung des Formats <code>"
 "format=\"card\"</code>."
@@ -446,7 +459,7 @@ msgstr ""
 "Size of the contact cards by using the shortcode  <code>[kontakt id=\"\" "
 "format=\"card\"]</code>."
 
-#: config/config.php:421
+#: config/config.php:444
 msgid ""
 "Größe der Thumbnails bei der Anzeige von Kontaktlisten und Kontakt-"
 "Shortcodes, die nicht vom Format \"page\" oder \"card\" sind."
@@ -454,31 +467,35 @@ msgstr ""
 "Size of thumbnails at displaying contacts with default shortcodes. (not at "
 "format \"page\" or \"card\")."
 
-#: config/config.php:433
+#: config/config.php:456
 msgid "Größe Personen-Karten"
 msgstr "Size contact cards"
 
-#: config/config.php:420
+#: config/config.php:443
 msgid "Größe Thumbnail"
 msgstr "Size Thumbnail"
 
-#: config/config.php:284
+#: config/config.php:307
 msgid "Handynummer anzeigen"
 msgstr "Display handy number"
 
-#: config/config.php:873
+#: config/config.php:901
 msgid "HTML-Element zur Darstellung des Standortnamens"
 msgstr "HTML element, used to display the location name."
 
-#: config/config.php:533
+#. URI of the plugin
+msgid "https://github.com/RRZE-Webteam/fau-person"
+msgstr "https://github.com/RRZE-Webteam/fau-person"
+
+#: config/config.php:561
 msgid "Id-Number des Kontakteintrags"
 msgstr "Id-NUmber of contact"
 
-#: config/config.php:859
+#: config/config.php:887
 msgid "Id-Number des Standorteintrags"
 msgstr "Id-Number of the location."
 
-#: config/config.php:341
+#: config/config.php:364
 msgid ""
 "Im Sidebar-Widget werden nur dann Ansprechpartner gezeigt, wenn dieser Wert "
 "aktiviert ist oder alternativ bei dem Personeneintrag eingestellt ist, daß "
@@ -488,11 +505,11 @@ msgstr ""
 "if this field is marked true or if the contact is only reachable by "
 "connection contacts."
 
-#: includes/Data.php:204, includes/Data.php:267
+#: includes/Data.php:219 includes/Data.php:281
 msgid "Im Standort ist hierfür kein Wert hinterlegt."
-msgstr ""
+msgstr "No value has been entered for this at the site."
 
-#: config/config.php:154
+#: config/config.php:167
 msgid ""
 "In den Anzeigeoptionen kann die standardmäßige Ausgabe bei Nutzung des "
 "[kontakt] Shortcodes definiert werden. Diese kann durch Attribute wieder "
@@ -501,171 +518,175 @@ msgstr ""
 "In the display settings you can set the default view of a [kontakt] "
 "shortcode. By using attributes these settings can be overwritten."
 
-#: config/config.php:447
+#: config/config.php:470
 msgid "In der Card-Ansicht auch das Personenbild als Link setzen."
-msgstr ""
+msgstr "In the Card view, set the person's photo as a link as well."
 
-#: includes/Data.php:1585, includes/Data.php:1616, includes/Data.php:1666,
-#: includes/Data.php:1707, vendor/UnivIS/Data.php:274
+#: includes/Data.php:1579 includes/Data.php:1611 includes/Data.php:1661
+#: includes/Data.php:1702 includes/UnivIS/Data.php:230
 msgid "In UnivIS ist hierfür kein Wert hinterlegt."
 msgstr "No value in UnivIS"
 
-#: vendor/UnivIS/Data.php:268
+#: includes/UnivIS/Data.php:224
 msgid "Inhalt aus UnivIS:"
-msgstr ""
+msgstr "Content from UnivIS:"
 
-#: config/config.php:358
+#: config/config.php:381
 msgid "Internationales Nummernformat"
 msgstr "International number format"
 
-#: vendor/UnivIS/Data.php:314
+#: includes/UnivIS/Data.php:267
 msgid "Jede Woche"
 msgstr "Each week"
 
-#: config/config.php:587
+#: config/config.php:615
 msgid "Karte"
 msgstr "Map"
 
-#: config/config.php:547, config/config.php:705
+#: config/config.php:575 config/config.php:733
 msgid "Kategorie"
 msgstr "Category"
 
-#: config/config.php:664, config/config.php:817
+#: config/config.php:692 config/config.php:845
 msgid "Kein"
 msgstr "Small"
 
-#: includes/Data.php:143
+#: includes/Data.php:159
 msgid "Kein Kontakt ausgewählt."
 msgstr "Select the type of contact"
 
-#: includes/Data.php:166
+#: includes/Data.php:182
 msgid "Kein Standort ausgewählt."
 msgstr "No location selected."
 
-#: includes/Metaboxes/Kontakt.php:424
+#: includes/Metaboxes/Kontakt.php:422
 msgid "Keine"
 msgstr "NOne"
 
-#: includes/Metaboxes/Kontakt.php:105
+#: includes/Metaboxes/Kontakt.php:103
 msgid "Keine Angabe"
 msgstr "Not specified"
 
-#: includes/BackendMenu.php:86
+#: includes/BackendMenu.php:72
 msgid "keine Daten in UnivIS eingepflegt"
 msgstr "There is no data in UnivIS"
 
-#: includes/Taxonomy/Kontakt.php:46
+#: includes/Taxonomy/Kontakt.php:57
 msgid "Keine Kontakte gefunden"
 msgstr "No contacts found"
 
-#: includes/Taxonomy/Kontakt.php:47
+#: includes/Taxonomy/Kontakt.php:58
 msgid "Keine Kontakte in Papierkorb gefunden"
 msgstr "No contacts found in trash"
 
-#: includes/Taxonomy/Standort.php:39
+#: includes/Taxonomy/Standort.php:38
 msgid "Keine Standorte gefunden"
 msgstr "No locations found"
 
-#: includes/Taxonomy/Standort.php:40
+#: includes/Taxonomy/Standort.php:39
 msgid "Keine Standorte in Papierkorb gefunden"
 msgstr "No locations found in trash"
 
-#: config/config.php:439
+#: config/config.php:217
+msgid "Keine Übersichtsseite anzeigen"
+msgstr "Do not display the overview page"
+
+#: config/config.php:462
 msgid "Klein (200 Pixel)"
 msgstr "Small (200 pixel)"
 
-#: config/config.php:425
+#: config/config.php:448
 msgid "Klein (80 Pixel)"
 msgstr "Small (80 pixel)"
 
-#: config/config.php:583, config/config.php:745
+#: config/config.php:611 config/config.php:773
 msgid "Kompakt"
 msgstr "Compact"
 
-#: config/config.php:725, config/config.php:904
+#: config/config.php:753 config/config.php:932
 msgid "Komplett"
 msgstr "Complete"
 
-#: includes/Schema.php:290, includes/Taxonomy/Kontakt.php:55,
-#: includes/Taxonomy/Kontakt.php:166, includes/Widgets/kontakt-widget.php:35
+#: includes/Widgets/KontaktWidget.php:41 includes/Taxonomy/Kontakt.php:64
 msgid "Kontakt"
 msgstr "Contact"
 
-#: includes/Taxonomy/Kontakt.php:44
+#: includes/Taxonomy/Kontakt.php:55
 msgid "Kontakt aktualisieren"
 msgstr "Update contact"
 
-#: includes/Taxonomy/Kontakt.php:40
+#: includes/Taxonomy/Kontakt.php:51
 msgid "Kontakt ansehen"
 msgstr "Show contact"
 
-#: includes/Taxonomy/Kontakt.php:43
+#: includes/Taxonomy/Kontakt.php:54
 msgid "Kontakt bearbeiten"
 msgstr "Edit contact"
 
-#: includes/Metaboxes/Kontakt.php:65
+#: includes/Metaboxes/Kontakt.php:63
 msgid "Kontakt Beschreibung in Kurzform"
 msgstr "Short Contact description"
 
-#: config/config.php:138
+#: config/config.php:151
 msgid "Kontakt eingeben"
 msgstr "Add new contact"
 
-#: includes/Taxonomy/Kontakt.php:41
+#: includes/Taxonomy/Kontakt.php:52
 msgid "Kontakt hinzufügen"
 msgstr "Add Contact"
 
-#: fau-person.php:198
+#: fau-person.php:172
 msgid "Kontakt-Bearbeiter"
 msgstr "Contact-Autor"
 
-#: includes/Widgets/kontakt-widget.php:11
+#: includes/Widgets/KontaktWidget.php:16
 msgid "Kontakt-Visitenkarte"
 msgstr "Contact information"
 
-#: includes/Widgets/kontakt-widget.php:12
+#: includes/Widgets/KontaktWidget.php:17
 msgid "Kontakt-Visitenkarte anzeigen"
 msgstr "Show contact information"
 
-#: config/config.php:460
+#: config/config.php:483
 msgid "Kontakt-Übersichtsseite"
 msgstr "Contact overview"
 
-#: includes/Taxonomy/Kontakt.php:37
+#: includes/Taxonomy/Kontakt.php:48
 msgid "Kontakte"
 msgstr "Contacts"
 
-#: includes/Taxonomy/Kontakt.php:45
+#: includes/Taxonomy/Kontakt.php:56
 msgid "Kontakte suchen"
 msgstr "Search contacts"
 
-#: includes/Metaboxes/Kontakt.php:94, includes/Metaboxes/Pages.php:37,
-#: includes/Metaboxes/Posts.php:37, includes/Taxonomy/Kontakt.php:56
+#: includes/Taxonomy/Kontakt.php:65 includes/Metaboxes/Kontakt.php:92
+#: includes/Metaboxes/Pages.php:37 includes/Metaboxes/Posts.php:37
+#: includes/Metaboxes/POsts.php:38
 msgid "Kontaktinformationen"
 msgstr "Contact information"
 
-#: includes/Templates/archive-person-fau-theme.php:5,
 #: includes/Templates/archive-person.php:4
+#: includes/Templates/archive-person-fau-theme.php:10
 msgid "Kontaktliste"
 msgstr "Contact list"
 
-#: config/config.php:397
+#: config/config.php:420
 msgid "Kontaktseite"
 msgstr "Contact page"
 
-#: includes/Metaboxes/Pages.php:45, includes/Metaboxes/Posts.php:45
+#: includes/Metaboxes/Pages.php:45 includes/Metaboxes/Posts.php:45
 msgid "Kopieren"
 msgstr "Copy"
 
-#: config/config.php:319, includes/Metaboxes/Kontakt.php:71
+#: config/config.php:342 includes/Metaboxes/Kontakt.php:69
 msgid "Kurzbeschreibung"
 msgstr "Short description"
 
-#: includes/Metaboxes/Kontakt.php:79
+#: includes/Metaboxes/Kontakt.php:77
 msgid "Kurzbeschreibung (Sidebar und Kompakt)"
 msgstr "Short description (sidebar and compact contact lists)"
 
-#: includes/Metaboxes/Kontakt.php:72
+#: includes/Metaboxes/Kontakt.php:70
 msgid ""
 "Kurzform und Zusammenfassung der Kontaktbeschreibung bei Nutzung des "
 "Attributs <code>show=\"description\"</code>."
@@ -673,55 +694,55 @@ msgstr ""
 "Short description of the contact by using the attribut <code>"
 "show=\"description\"</code>.."
 
-#: config/config.php:563, config/config.php:721, config/config.php:900
+#: config/config.php:591 config/config.php:749 config/config.php:928
 msgid "Kurzliste"
 msgstr "Short list"
 
-#: includes/Metaboxes/Kontakt.php:334, includes/Metaboxes/Standort.php:64
+#: includes/Metaboxes/Standort.php:64 includes/Metaboxes/Kontakt.php:332
 msgid "Land"
 msgstr "Country"
 
-#: config/config.php:392
+#: config/config.php:415
 msgid "Link auf Kontaktname"
 msgstr "Sets link on contact name"
 
-#: config/config.php:386
+#: config/config.php:409
 msgid "Linktext für Kontaktseite"
 msgstr "Text for the link to the contact page."
 
-#: config/config.php:396
+#: config/config.php:419
 msgid "Linkziel im Kontakteintrag"
 msgstr "Target URL from contact entry"
 
-#: config/config.php:575, config/config.php:733, config/config.php:912
+#: config/config.php:603 config/config.php:761 config/config.php:940
 msgid "Liste"
 msgstr "List"
 
-#: config/config.php:737
+#: config/config.php:765
 msgid "Listeneintrag"
 msgstr "Listentry"
 
-#: includes/Taxonomy/Kontakt.php:204
+#: includes/Taxonomy/Kontakt.php:225
 msgid "Lokal"
 msgstr "Local"
 
-#: config/config.php:668, config/config.php:821
+#: config/config.php:696 config/config.php:849
 msgid "Med: Blau"
 msgstr "Med: Blue"
 
-#: config/config.php:384, config/config.php:385
+#: config/config.php:407 config/config.php:408
 msgid "Mehr"
 msgstr "More"
 
-#: config/config.php:453
+#: config/config.php:476
 msgid "Metabox Kontakte"
 msgstr "Metabox Contacts"
 
-#: includes/Metaboxes/Kontakt.php:477
+#: includes/Metaboxes/Kontakt.php:475
 msgid "Metadaten zum Kontakt"
 msgstr "Meta data for contact"
 
-#: config/config.php:147
+#: config/config.php:160
 msgid ""
 "Mit <i>Person suchen</i> erhalten Sie eine Auflistung aller möglichen "
 "Personen. Suchen Sie die richtige Person aus der Liste heraus, markieren Sie "
@@ -732,73 +753,79 @@ msgstr ""
 "person from the list, mark the UnivIS-ID, copy it with Strg + C and paste it "
 "in the field <i>UnivIS-ID</i> in the appropriate contact."
 
-#: config/config.php:426
+#: config/config.php:449
 msgid "Mittel (100 Pixel)"
 msgstr "Medium (100 pixel)"
 
-#: config/config.php:440
+#: config/config.php:463
 msgid "Mittel (250 Pixel)"
 msgstr "Medium (250 pixel)"
 
-#: includes/Metaboxes/Kontakt.php:437, vendor/UnivIS/Data.php:335
+#: includes/UnivIS/Data.php:288 includes/Metaboxes/Kontakt.php:435
 msgid "Mittwoch"
 msgstr "Wednesday"
 
-#: includes/Schema.php:352
+#: includes/Schema.php:369
 msgid "Mobil"
 msgstr "Mobile phone"
 
-#: includes/Metaboxes/Kontakt.php:230
+#: includes/Metaboxes/Kontakt.php:228
 msgid "Mobiltelefon"
 msgstr "Mobile phone"
 
-#: includes/Metaboxes/Kontakt.php:435, vendor/UnivIS/Data.php:333
+#: includes/UnivIS/Data.php:286 includes/Metaboxes/Kontakt.php:433
 msgid "Montag"
 msgstr "Monday"
 
-#: config/config.php:369
+#: config/config.php:392
 msgid "Nach den Kontaktdaten"
 msgstr "After contact data"
 
-#: config/config.php:214, config/config.php:619, config/config.php:773,
-#: includes/BackendMenu.php:112, includes/BackendMenu.php:141,
-#: includes/Metaboxes/Kontakt.php:130
+#: config/config.php:237 config/config.php:647 config/config.php:801
+#: includes/BackendMenu.php:100 includes/BackendMenu.php:128
+#: includes/Metaboxes/Kontakt.php:128
 msgid "Nachname"
 msgstr "Family name"
 
-#: config/config.php:559, config/config.php:717, config/config.php:896
+#: config/config.php:587 config/config.php:745 config/config.php:924
+#: includes/BackendMenu.php:77
 msgid "Name"
 msgstr "Name"
 
-#: includes/Metaboxes/Kontakt.php:271
+#: includes/Metaboxes/Kontakt.php:269
 msgid "Name und \"Mehr\"-Link verlinken auf Seite ..."
 msgstr "Name and \"more\"-link link to page ..."
 
-#: config/config.php:680, config/config.php:833
+#: config/config.php:708 config/config.php:861
 msgid "Nat: Meeresgrün"
 msgstr "Nat: Green"
 
-#: includes/Taxonomy/Kontakt.php:42
+#: includes/Templates/archive-person-fau-theme.php:33
+#: includes/Templates/archive-standort-fau-theme.php:30
+msgid "Navigation"
+msgstr "Navigation"
+
+#: includes/Taxonomy/Kontakt.php:53
 msgid "Neuer Kontakt"
 msgstr "Add New"
 
-#: includes/BackendMenu.php:171, includes/Taxonomy/Standort.php:35
+#: includes/BackendMenu.php:193 includes/Taxonomy/Standort.php:34
 msgid "Neuer Standort"
 msgstr "New location"
 
-#: config/config.php:399
+#: config/config.php:422
 msgid "Nicht verlinken, URL im Kontakteintrag ignorieren"
 msgstr "Do not link, ignore URL in contact entry"
 
-#: includes/Data.php:169
+#: includes/Data.php:184
 msgid "Noch kein Standort eingepflegt."
 msgstr "Add a location first."
 
-#: includes/Data.php:147
+#: includes/Data.php:163
 msgid "Noch keine Kontakte eingepflegt."
 msgstr "No contacts found"
 
-#: config/config.php:534
+#: config/config.php:562
 msgid ""
 "Nummer der Eintrags der Kontaktliste im Backend. Nicht identisch mit einer "
 "optionalen UnivIS-Nummer."
@@ -806,7 +833,7 @@ msgstr ""
 "Number of the contact id in the backend. Notice: This is not identical to "
 "the UnivIS-Id!"
 
-#: config/config.php:860
+#: config/config.php:888
 msgid "Nummer der Eintrags im Backend."
 msgstr "Id-number in backend."
 
@@ -814,7 +841,7 @@ msgstr "Id-number in backend."
 msgid "Nur 5-stellige Zahlen erlaubt."
 msgstr "Only five-digit numbers allowed."
 
-#: includes/Metaboxes/Kontakt.php:272
+#: includes/Metaboxes/Kontakt.php:270
 msgid ""
 "Optionale URL-Angabe zu einer selbst gepflegten Seite für Details zum "
 "Kontakt. Wenn diese Angabe leer gelassen wird, wird zu der automatisch "
@@ -823,147 +850,147 @@ msgstr ""
 "Optional URL for a self defined webpage of the contact. If this field stays "
 "empty, the contact link will be set to the contact page."
 
-#: config/config.php:249, includes/Metaboxes/Kontakt.php:163
+#: config/config.php:272 includes/BackendMenu.php:77
+#: includes/Metaboxes/Kontakt.php:161
 msgid "Organisation"
 msgstr "Organization"
 
-#: includes/Metaboxes/Kontakt.php:325, includes/Metaboxes/Standort.php:57
+#: includes/Metaboxes/Standort.php:57 includes/Metaboxes/Kontakt.php:323
 msgid "Ort"
 msgstr "City"
 
-#: includes/Metaboxes/Kontakt.php:485
+#: includes/Metaboxes/Kontakt.php:484
 msgid "Person (allgemein)"
 msgstr "Person (general)"
 
-#: includes/Metaboxes/Kontakt.php:486
+#: includes/Metaboxes/Kontakt.php:485
 msgid "Person (männlich)"
 msgstr "Person (male)"
 
-#: includes/Metaboxes/Kontakt.php:487
+#: includes/Metaboxes/Kontakt.php:486
 msgid "Person (weiblich)"
 msgstr "Person (female)"
 
-#: includes/BackendMenu.php:74
+#: includes/BackendMenu.php:57
 msgid "Person suchen"
 msgstr "Search person"
 
-#: config/config.php:446
+#: config/config.php:469
 msgid "Personenbild verlinken"
 msgstr "Link contact thumbnail"
 
-#: config/config.php:672, config/config.php:825
-#, fuzzy
+#: config/config.php:700 config/config.php:853
 #| msgid "Phil: Oker"
 msgid "Phil: Ocker"
 msgstr "Phil: Orange"
 
-#: config/config.php:164
+#: config/config.php:178
 msgid "Plugin Dokumentation"
 msgstr "Plugin documentation"
 
-#: fau-person.php:125
+#: fau-person.php:99
+#, php-format
 msgid "Plugins: %1$s: %2$s"
 msgstr "Plugins: %1$s: %2$s"
 
-#: config/config.php:242
+#: config/config.php:265
 msgid "Position"
 msgstr "Job title"
 
-#: config/config.php:365
+#: config/config.php:388
 msgid "Position Social Media Icons"
 msgstr "Position social media icons"
 
-#: includes/Metaboxes/Kontakt.php:153
+#: includes/Metaboxes/Kontakt.php:151
 msgid "Position/Funktion"
 msgstr "Job title"
 
-#: includes/Taxonomy/Kontakt.php:35
-msgctxt "Post Type General Name"
-msgid "Kontakte"
-msgstr "Contacts"
-
-#: includes/Taxonomy/Standort.php:28
+#: includes/Taxonomy/Standort.php:27
 msgctxt "Post Type General Name"
 msgid "Standorte"
 msgstr "Locations"
 
-#: includes/Taxonomy/Kontakt.php:36
+#: includes/Taxonomy/Kontakt.php:47
 msgctxt "Post Type Singular Name"
 msgid "Kontakt"
 msgstr "Contact"
 
-#: includes/Taxonomy/Standort.php:29
+#: includes/Taxonomy/Standort.php:28
 msgctxt "Post Type Singular Name"
 msgid "Standort"
 msgstr "Location"
 
-#: includes/Metaboxes/Kontakt.php:285
+#: includes/Metaboxes/Kontakt.php:283
 msgid "Postalische Adressdaten"
 msgstr "Postal address data"
 
-#: includes/Metaboxes/Kontakt.php:314, includes/Metaboxes/Standort.php:48
+#: includes/Metaboxes/Standort.php:48 includes/Metaboxes/Kontakt.php:312
 msgid "Postleitzahl"
 msgstr "Postal code"
 
-#: includes/Metaboxes/Kontakt.php:111
+#: includes/Metaboxes/Kontakt.php:109
 msgid "Privatdozent"
 msgstr "Privatdozent"
 
-#: includes/Metaboxes/Kontakt.php:112
+#: includes/Metaboxes/Kontakt.php:110
 msgid "Privatdozent Doktor"
 msgstr "Privatdozent Doctor"
 
-#: includes/Metaboxes/Kontakt.php:107
+#: includes/Metaboxes/Kontakt.php:105
 msgid "Professor"
 msgstr "Professor"
 
-#: includes/Metaboxes/Kontakt.php:109
+#: includes/Metaboxes/Kontakt.php:107
 msgid "Professor (Emeritus)"
-msgstr ""
+msgstr "Professor (Emeritus)"
 
-#: includes/Metaboxes/Kontakt.php:108
+#: includes/Metaboxes/Kontakt.php:106
 msgid "Professor Doktor"
 msgstr "Professor Doctor"
 
-#: includes/Metaboxes/Kontakt.php:110
+#: includes/Metaboxes/Kontakt.php:108
 msgid "Professor Doktor (Emeritus)"
-msgstr ""
+msgstr "Professor (Emeritus)"
 
-#: includes/Data.php:244
+#: includes/Data.php:258
 msgid "Profil aufrufen"
 msgstr "Load profile"
 
-#: includes/Metaboxes/Kontakt.php:489
+#: includes/Metaboxes/Kontakt.php:488
 msgid "Pseudonym"
 msgstr "Alias"
 
-#: config/config.php:270, config/config.php:376, config/config.php:377,
-#: includes/Schema.php:109, includes/Metaboxes/Kontakt.php:186,
-#: includes/Metaboxes/Kontakt.php:457, vendor/UnivIS/Data.php:357
+#: config/config.php:293 config/config.php:399 config/config.php:400
+#: includes/Schema.php:112 includes/UnivIS/Data.php:312
+#: includes/Metaboxes/Kontakt.php:184 includes/Metaboxes/Kontakt.php:455
 msgid "Raum"
 msgstr "Room"
 
-#: config/config.php:684, config/config.php:837
+#. Author of the plugin
+msgid "RRZE-Webteam"
+msgstr "RRZE-Webteam"
+
+#: config/config.php:712 config/config.php:865
 msgid "RW: Bordeaurot"
 msgstr "RW: Dark red"
 
-#: includes/Metaboxes/Kontakt.php:440, vendor/UnivIS/Data.php:338
+#: includes/UnivIS/Data.php:291 includes/Metaboxes/Kontakt.php:438
 msgid "Samstag"
 msgstr "Saturday"
 
-#: config/config.php:438
+#: config/config.php:461
 msgid "Sehr klein (150 Pixel)"
 msgstr "X-Small (150 pixel)"
 
-#: config/config.php:571
+#: config/config.php:599
 msgid "Seite"
 msgstr "Page"
 
-#: includes/Schema.php:467
+#: includes/Schema.php:491
 msgid "Seite von"
 msgstr "Page of"
 
-#: config/config.php:413
+#: config/config.php:436
 msgid ""
 "Setzt auf der Kontaktseite oder bei Nutzung des Shortcodes mit dem Attribut "
 "<code>format=\"page\"</code> das zu verwendete Bildformat."
@@ -971,7 +998,7 @@ msgstr ""
 "Sets image size format for contact pages or at shortcodes using the "
 "attribute <code>format=\"page\"</code>."
 
-#: config/config.php:352
+#: config/config.php:375
 msgid ""
 "Setzt die Telefonnummer als Link, so dass mobile Endgeräte und darauf "
 "vorbereitet Software bei einem Klick die Telefonwahlfunktion aufrufen."
@@ -979,142 +1006,143 @@ msgstr ""
 "Displays the phone numbers as link, so that mobile devices are able to call "
 "the number on click."
 
-#: config/config.php:567, config/config.php:729, config/config.php:908
+#: config/config.php:595 config/config.php:757 config/config.php:936
 msgid "Sidebar"
 msgstr "Sidebar"
 
-#: config/config.php:175
+#: config/config.php:189
 msgid "Sidebar Kontakte"
 msgstr "Sidebar Contacts"
 
-#: config/config.php:541, config/config.php:867
+#: config/config.php:569 config/config.php:895
 msgid "Slug (URI) des Kontakteintrags"
 msgstr "Slug (URI) of the contact entry."
 
-#: includes/Metaboxes/Kontakt.php:378
+#: includes/Metaboxes/Kontakt.php:376
 msgid "Social Media"
 msgstr "Social media"
 
-#: config/config.php:333
+#: config/config.php:356
 msgid "Social Media Links"
 msgstr "Social Media links"
 
-#: includes/Metaboxes/Kontakt.php:441, vendor/UnivIS/Data.php:339
+#: includes/UnivIS/Data.php:292 includes/Metaboxes/Kontakt.php:439
 msgid "Sonntag"
 msgstr "Sunday"
 
-#: includes/Metaboxes/Kontakt.php:261
+#: includes/Metaboxes/Kontakt.php:259
 msgid "Sortierfeld"
 msgstr "Sortfield"
 
-#: includes/Metaboxes/Kontakt.php:415
+#: includes/Metaboxes/Kontakt.php:413
 msgid "Sprechzeit löschen"
 msgstr "Delete office hour"
 
-#: includes/Metaboxes/Kontakt.php:413
+#: includes/Metaboxes/Kontakt.php:411
 msgid "Sprechzeit {#}"
 msgstr "Office hours {#}"
 
-#: config/config.php:312, includes/Schema.php:559,
-#: includes/Metaboxes/Kontakt.php:389, includes/Metaboxes/Kontakt.php:548
+#: config/config.php:335 includes/Schema.php:587
+#: includes/Metaboxes/Kontakt.php:387 includes/Metaboxes/Kontakt.php:547
 msgid "Sprechzeiten"
 msgstr "Office hours"
 
-#: includes/Metaboxes/Kontakt.php:402
+#: includes/Metaboxes/Kontakt.php:400
 msgid "Sprechzeiten: Allgemeines oder Anmerkungen"
 msgstr "Office hours: general remarks or comments"
 
-#: includes/Metaboxes/Kontakt.php:396
+#: includes/Metaboxes/Kontakt.php:394
 msgid "Sprechzeiten: Überschrift"
 msgstr "Office hours: headline"
 
-#: includes/Taxonomy/Standort.php:30
+#: includes/Taxonomy/Standort.php:29
 msgid "Standort"
 msgstr "Location"
 
-#: includes/Taxonomy/Standort.php:49
+#: includes/Taxonomy/Standort.php:48
 msgid "standort"
 msgstr "standort"
 
-#: includes/Taxonomy/Standort.php:37
+#: includes/Taxonomy/Standort.php:36
 msgid "Standort aktualisieren"
 msgstr "Update location"
 
-#: includes/Taxonomy/Standort.php:33
+#: includes/Taxonomy/Standort.php:32
 msgid "Standort ansehen"
 msgstr "Show location"
 
-#: includes/Taxonomy/Standort.php:36
+#: includes/Taxonomy/Standort.php:35
 msgid "Standort bearbeiten"
 msgstr "Edit location"
 
-#: includes/BackendMenu.php:171, includes/Taxonomy/Standort.php:34
+#: includes/BackendMenu.php:193 includes/Taxonomy/Standort.php:33
 msgid "Standort hinzufügen"
 msgstr "Add location"
 
-#: includes/Metaboxes/Kontakt.php:196
+#: includes/Metaboxes/Kontakt.php:194
 msgid "Standort Telefon- und Faxanschluss"
 msgstr "Location of telephone and fax connection"
 
-#: includes/Metaboxes/Kontakt.php:298
+#: includes/Metaboxes/Kontakt.php:296
 msgid "Standort-Daten für Adressanzeige nutzen"
 msgstr "Use Location data for display"
 
-#: includes/Templates/archive-standort-fau-theme.php:5
+#: includes/Templates/archive-standort-fau-theme.php:10
 msgid "Standorte"
 msgstr "Location"
 
-#: includes/Taxonomy/Standort.php:38
+#: includes/Taxonomy/Standort.php:37
 msgid "Standorte suchen"
 msgstr "Search locations"
 
-#: includes/Metaboxes/Standort.php:34, includes/Taxonomy/Standort.php:50
+#: includes/Taxonomy/Standort.php:49 includes/Metaboxes/Standort.php:34
 msgid "Standortinformationen"
 msgstr "Location information"
 
-#: includes/Metaboxes/Kontakt.php:304, includes/Metaboxes/Standort.php:41
+#: includes/Metaboxes/Standort.php:41 includes/Metaboxes/Kontakt.php:302
 msgid "Straße und Hausnummer"
 msgstr "Street address"
 
-#: includes/BackendMenu.php:46, includes/BackendMenu.php:47,
-#: includes/BackendMenu.php:68
+#: includes/BackendMenu.php:29 includes/BackendMenu.php:30
+#: includes/BackendMenu.php:51
 msgid "Suche nach UnivIS-ID"
 msgstr "Find UnivIS-ID"
 
-#: config/config.php:235
+#: config/config.php:258
 msgid "Suffix (nachgestellter Titel)"
 msgstr "Suffix"
 
-#: config/config.php:591
+#: config/config.php:619
 msgid "Tabelle"
 msgstr "Table"
 
-#: includes/Metaboxes/Kontakt.php:219, includes/Metaboxes/Kontakt.php:546
+#: includes/Metaboxes/Kontakt.php:217 includes/Metaboxes/Kontakt.php:545
 msgid "Telefax"
 msgstr "Fax number"
 
-#: includes/Schema.php:327, includes/Metaboxes/Kontakt.php:208,
-#: includes/Metaboxes/Kontakt.php:545
+#: includes/Schema.php:342 includes/Metaboxes/Kontakt.php:206
+#: includes/Metaboxes/Kontakt.php:544
 msgid "Telefon"
 msgstr "Phone number"
 
-#: config/config.php:277
+#: config/config.php:300
 msgid "Telefonnummer"
 msgstr "Phone number"
 
-#: config/config.php:351
+#: config/config.php:374
 msgid "Telefonnummer als Link"
 msgstr "Format phone number as link"
 
-#: config/config.php:885
+#: config/config.php:913
 msgid "Telefonnummer anzeigen"
 msgstr "Display phone number"
 
-#: config/config.php:676, config/config.php:829
+#: config/config.php:704 config/config.php:857
 msgid "TF: Silbern"
 msgstr "TF: SIlver"
 
-#: fau-person.php:70
+#: fau-person.php:50
+#, php-format
 msgid ""
 "The server is running PHP version %1$s. The Plugin requires at least PHP "
 "version %2$s."
@@ -1122,7 +1150,8 @@ msgstr ""
 "The server is running PHP version %1$s. The Plugin requires at least PHP "
 "version %2$s."
 
-#: fau-person.php:73
+#: fau-person.php:53
+#, php-format
 msgid ""
 "The server is running WordPress version %1$s. The Plugin requires at least "
 "WordPress version %2$s."
@@ -1130,150 +1159,156 @@ msgstr ""
 "The server is running WordPress version %1$s. The Plugin requires at least "
 "WordPress version %2$s."
 
-#: config/config.php:615, config/config.php:769,
-#: includes/Taxonomy/Kontakt.php:163, includes/Widgets/kontakt-widget.php:30
+#: config/config.php:643 config/config.php:797
+#: includes/Widgets/KontaktWidget.php:36 includes/Taxonomy/Kontakt.php:184
 msgid "Titel"
 msgstr "Academical title"
 
-#: includes/Metaboxes/Kontakt.php:101
+#: includes/Metaboxes/Kontakt.php:99
 msgid "Titel (Präfix)"
 msgstr "Honorific prefix"
 
-#: includes/Metaboxes/Kontakt.php:483
+#: includes/Metaboxes/Kontakt.php:481
 msgid "Typ des Eintrags"
 msgstr "Typ of Contact"
 
-#: vendor/UnivIS/Data.php:313
+#: includes/UnivIS/Data.php:266
 msgid "Täglich"
 msgstr "Daily"
 
-#: includes/Metaboxes/Kontakt.php:425
+#: includes/Metaboxes/Kontakt.php:423
 msgid "täglich"
 msgstr "daily"
 
-#: config/config.php:579, config/config.php:741
+#: config/config.php:607 config/config.php:769
 msgid "Unformatiert"
 msgstr "Unformated"
 
-#: includes/Metaboxes/Kontakt.php:201
+#: includes/Metaboxes/Kontakt.php:199
 msgid "Uni-intern, Standort Erlangen"
 msgstr "University-internal (Erlangen)"
 
-#: includes/Metaboxes/Kontakt.php:202
+#: includes/Metaboxes/Kontakt.php:200
 msgid "Uni-intern, Standort Nürnberg"
 msgstr "University-internal (Nuremberg)"
 
-#: includes/Taxonomy/Kontakt.php:202
+#: includes/Taxonomy/Kontakt.php:223
 msgid "UnivIS"
 msgstr "UnivIS"
 
-#: config/config.php:144
+#: includes/BackendMenu.php:77
+msgid "UnivIS Id"
+msgstr "UnivIS Id"
+
+#: config/config.php:157
 msgid "UnivIS Id suchen"
 msgstr "Search UnivIS Id"
 
-#: includes/Metaboxes/Kontakt.php:503
+#: includes/Metaboxes/Kontakt.php:502
 msgid "UnivIS-Daten verwenden"
 msgstr "Use UnivIS data"
 
-#: includes/Metaboxes/Kontakt.php:495
+#: includes/Metaboxes/Kontakt.php:494
 msgid "UnivIS-Id"
 msgstr "UnivIS-Id"
 
-#: config/config.php:398
+#: config/config.php:421
 msgid "URL aus Profil"
 msgstr "URL from profil data"
 
-#: includes/Metaboxes/Pages.php:44, includes/Metaboxes/Posts.php:44
+#: includes/Metaboxes/Pages.php:44 includes/Metaboxes/Posts.php:44
+#: includes/Metaboxes/POsts.php:45
 msgid "Verfügbare Kontakte anzeigen"
 msgstr "Show available contacts"
 
-#: includes/Metaboxes/Kontakt.php:531
+#: includes/Metaboxes/Kontakt.php:530
 msgid "Verknüpfte Kontakte auswählen"
 msgstr "Choose related contacts"
 
-#: config/config.php:228
+#. Description of the plugin
+msgid "Visitenkarten-Plugin für FAU Webauftritte"
+msgstr "Contact Card Plugin for FAU Websites"
+
+#: config/config.php:251
 msgid "Vollständiger Name"
 msgstr "Fullname"
 
-#: includes/Metaboxes/Kontakt.php:445
+#: includes/Metaboxes/Kontakt.php:443
 msgid "von"
 msgstr "from"
 
-#: config/config.php:635, config/config.php:789
+#: config/config.php:663 config/config.php:817
 msgid "Von A bis Z"
 msgstr "From A to Z"
 
-#: includes/Data.php:265
+#: includes/Data.php:279
 msgid "Von Standort angezeigter Wert:"
 msgstr "Location value"
 
-#: config/config.php:639, config/config.php:793
+#: config/config.php:667 config/config.php:821
 msgid "Von Z bis A"
 msgstr "From Z to A"
 
-#: config/config.php:221, includes/BackendMenu.php:107,
-#: includes/BackendMenu.php:140, includes/Metaboxes/Kontakt.php:119
+#: config/config.php:244 includes/BackendMenu.php:95
+#: includes/BackendMenu.php:127 includes/Metaboxes/Kontakt.php:117
 msgid "Vorname"
 msgstr "Given name"
 
-#: config/config.php:623, config/config.php:777
+#: config/config.php:651 config/config.php:805
 msgid "Vorname und Nachname"
 msgstr "First Name and Family Name"
 
-#: includes/Schema.php:418, includes/Metaboxes/Kontakt.php:251
+#: includes/Schema.php:440 includes/Metaboxes/Kontakt.php:249
 msgid "Webseite"
 msgstr "Website"
 
-#: config/config.php:305
+#: config/config.php:328
 msgid "Website"
 msgstr "Website"
 
-#: includes/Templates/archive-person-fau-theme.php:28,
-#: includes/Templates/archive-person.php:27,
-#: includes/Templates/archive-standort-fau-theme.php:26,
+#: includes/Templates/archive-person-fau-theme.php:36
+#: includes/Templates/archive-standort-fau-theme.php:33
+msgid "Weiter"
+msgstr "Continue"
+
 #: includes/Templates/archive-standort.php:21
+#: includes/Templates/archive-person.php:27
 msgid "Weiter <span class=\"meta-nav\">&raquo;</span>"
 msgstr "Next <span class=\"meta-nav\">&raquo;</span>"
 
-#: config/config.php:164
+#: config/config.php:178
 msgid "Weitere Informationen"
 msgstr "Additional information"
 
-#: includes/Metaboxes/Kontakt.php:414
+#: includes/Metaboxes/Kontakt.php:412
 msgid "Weitere Sprechzeit einfügen"
 msgstr "Add another office hour"
 
-#: includes/Metaboxes/Kontakt.php:420
+#: includes/Metaboxes/Kontakt.php:418
 msgid "Wiederholung"
 msgstr "Repetition"
 
-#: includes/Metaboxes/Kontakt.php:262
+#: includes/Metaboxes/Kontakt.php:260
 msgid ""
 "Wird für eine Sortierung verwendet, die sich weder nach Name, Titel der "
 "Kontaktseite oder Vorname richten soll. Geben SIe hier Buchstaben oder "
 "Zahlen ein, nach denen sortiert werden sollen. Zur Sortierunge der Einträge "
 "geben Sie im Shortcode das Attribut <code>sort=\"sortierfeld\"</code> ein."
 msgstr ""
+"Use this for sorting that is not based on name, contact page title, or first "
+"name. Enter the letters or numbers you want to sort by here. To sort the "
+"entries, include the attribute <code>sort=“sorting_field”</code> in the "
+"shortcode."
 
-#: includes/Metaboxes/Kontakt.php:397
+#: includes/Metaboxes/Kontakt.php:395
 msgid "Wird in Fettdruck über den Sprechzeiten ausgegeben."
 msgstr "Output in bold letters before office hours."
 
-#: includes/Metaboxes/Kontakt.php:426
+#: includes/Metaboxes/Kontakt.php:424
 msgid "wöchentlich"
 msgstr "weekly"
 
-#: config/config.php:461
-msgid ""
-"Zeige die Standard-Übersichtsseite aller Kontakte an. Bevor diese Option "
-"deaktiviert wird, muss eine eigene Seite mit der Titelform (slug) \"person\" "
-"direkt unterhalb der Hauptebene angelegt werden."
-msgstr ""
-"Show the default overview-page for all contacts. Before deactivating this "
-"option be sure to have a own page with slug \"person\" in the root of the "
-"website."
-
-#: config/config.php:405
+#: config/config.php:428
 msgid ""
 "Zeigt auf der Kontaktvisitenkarte und bei Nutzung des Shortcodes mit dem "
 "Attribut <code>format=\"page\"</code> die Bildunterschriften eines "
@@ -1282,7 +1317,7 @@ msgstr ""
 "Displays an image description on contact pages and on shortcodes with the "
 "attribute <code>format=\"page\"</code>."
 
-#: config/config.php:454
+#: config/config.php:477
 msgid ""
 "Zeigt in der Bearbeitung von Seiten und Beiträgen eine Kontakt-Box an, aus "
 "der man bequem die Liste der Kontakte ablesen kann."
@@ -1290,19 +1325,19 @@ msgstr ""
 "Displays a metabox in the page and posts editor for fast search and copy of "
 "contacts."
 
-#: config/config.php:604, config/config.php:758, config/config.php:925
+#: config/config.php:632 config/config.php:786 config/config.php:953
 msgid "Zu versteckende Felder, obige Checkboxen überschreibend"
 msgstr "Fields to hide, ignoring default display settings."
 
-#: includes/Metaboxes/Kontakt.php:291
+#: includes/Metaboxes/Kontakt.php:289
 msgid "Zugeordneter Standort"
 msgstr "Parent location"
 
-#: config/config.php:133
+#: config/config.php:146
 msgid "Zuordnung von Personen und Kontakten zu verschiedenen Kategorien"
 msgstr "Assignment of persons and contacts to various categories"
 
-#: includes/Metaboxes/Kontakt.php:403
+#: includes/Metaboxes/Kontakt.php:401
 msgid ""
 "Zur Formatierung können HTML-Befehle verwendet werden (z.B. &lt;br&gt; für "
 "Zeilenumbruch). Wird vor den Sprechzeiten ausgegeben."
@@ -1310,18 +1345,23 @@ msgstr ""
 "You can use HTML for formatting (e.g. &lt;br&gt; for line break). Output "
 "before office hours."
 
-#: includes/Taxonomy/Kontakt.php:38
+#: includes/Templates/archive-person-fau-theme.php:35
+#: includes/Templates/archive-standort-fau-theme.php:32
+msgid "Zurück"
+msgstr "Back"
+
+#: includes/Taxonomy/Kontakt.php:49
 msgid "Übergeordneter Kontakt"
 msgstr "Parent Contact"
 
-#: includes/Taxonomy/Standort.php:31
+#: includes/Taxonomy/Standort.php:30
 msgid "Übergeordneter Standort"
 msgstr "Parent location"
 
-#: config/config.php:647, config/config.php:800, config/config.php:879
+#: config/config.php:675 config/config.php:828 config/config.php:907
 msgid "Überschriftenebene der ersten Überschrift"
 msgstr "Headings Level (number from 1 to 4) for the first headline."
 
-#: config/config.php:132
+#: config/config.php:145
 msgid "Übersicht"
 msgstr "Overview"

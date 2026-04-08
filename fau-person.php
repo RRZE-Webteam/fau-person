@@ -5,13 +5,11 @@ Plugin Name:        FAU Person
 Plugin URI:         https://github.com/RRZE-Webteam/fau-person
 GitHub Plugin URI:  https://github.com/RRZE-Webteam/fau-person
 Description:        Visitenkarten-Plugin für FAU Webauftritte
-Version:            3.10.5-3
+Version:            3.10.7
 Author:             RRZE-Webteam
-Author URI:         http://blogs.fau.de/webworking/
 License:            GPLv3 or later
 Text Domain:        fau-person
 Domain Path:        /languages
-Update URI:         https://github.com/RRZE-Webteam/fau-person
 */
 
 
@@ -24,7 +22,6 @@ use FAU_Person\Main;
 
 // Laden der Konfigurationsdatei
 require_once __DIR__ . '/config/config.php';
-require_once __DIR__ . '/compatibility.php';
 
 
 // Composer autoload.
@@ -79,8 +76,7 @@ function activation() {
 /**
  * Wird durchgeführt, nachdem das Plugin deaktiviert wurde.
  */
-function deactivation()
-{
+function deactivation() {
     fau_person_remove_caps();
     remove_role('person_editor_role');
     flush_rewrite_rules();
@@ -139,8 +135,7 @@ function fau_person_remove_caps()
 }
 
 
-function fau_person_set_caps_to_roles()
-{
+function fau_person_set_caps_to_roles() {
     $roles = array('person_editor_role', 'editor', 'administrator');
     $caps_person = Config\get_fau_person_capabilities();
 
@@ -171,8 +166,7 @@ function fau_person_set_caps_to_roles()
 
 
 
-function fau_person_add_kontakteditor_role()
-{
+function fau_person_add_kontakteditor_role() {
     add_role(
         'person_editor_role',
         __('Kontakt-Bearbeiter', 'fau-person'),

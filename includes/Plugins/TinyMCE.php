@@ -25,7 +25,7 @@ class TinyMCE {
             return;
         }
 
-	add_action( 'admin_init', array( $this, 'person_shortcodes_rte_button' ) );    
+        add_action( 'admin_init', array( $this, 'person_shortcodes_rte_button' ) );    
 
     }
 

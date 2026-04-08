@@ -1,7 +1,7 @@
 <?php
 
 namespace FAU_Person;
-use RRZE\Lib\UnivIS\Data as UnivIS_Data;
+use FAU_Person\UnivIS\Data as UnivIS_Data;
 defined('ABSPATH') || exit;
 
 

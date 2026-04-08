@@ -1,6 +1,6 @@
 <?php
 
-namespace RRZE\Lib\UnivIS;
+namespace FAU_Person\UnivIS;
 
 /* 
  * Convert and sanitize data from UnivIS
@@ -8,13 +8,11 @@ namespace RRZE\Lib\UnivIS;
 
 
 defined('ABSPATH') || exit;
-class Sanitizer
-{
+class Sanitizer {
     /*
      * Normalize Phone Numbers 
      */
-    public static function correct_phone_number($phone_number, $location)
-    {
+    public static function correct_phone_number($phone_number, $location)  {
         $phone_number = filter_var($phone_number, FILTER_SANITIZE_NUMBER_INT);
 
         if ((strpos($phone_number, '+49 9131 85-') !== 0) && (strpos($phone_number, '+49 911 5302-') !== 0)) {
@@ -116,8 +114,7 @@ class Sanitizer
     /*
      * Correct Time Format of UnivIS
      */
-    public static function convert_time($time)
-    {
+    public static function convert_time($time)  {
         if (strpos($time, 'PM')) {
             $modtime = explode(':', rtrim($time, ' PM'));
             if ($modtime[0] != 12) {
@@ -131,8 +128,7 @@ class Sanitizer
         return $time;
     }
 
-    public static  function is_valid_id($id)
-    {
+    public static  function is_valid_id($id) {
         $return = ((string)$id === (string)(int)$id);
         if ($return && intval($id) < 1) {
             $return = false;

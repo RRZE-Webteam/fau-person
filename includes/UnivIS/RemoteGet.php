@@ -1,6 +1,6 @@
 <?php
 
-namespace RRZE\Lib\UnivIS;
+namespace FAU_Person\UnivIS;
 
 defined('ABSPATH') || exit;
 

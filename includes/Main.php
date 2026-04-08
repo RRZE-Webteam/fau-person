@@ -37,7 +37,7 @@ class Main {
         add_action('admin_enqueue_scripts', [$this, 'enqueueAdminScripts']);
 
         // Run Async Task
-        add_action('fau_person_data_async_task', ['\RRZE\Lib\UnivIS\Data', 'async_task']);
+        add_action('fau_person_data_async_task', ['\FAU_Person\UnivIS\Data', 'async_task']);
         add_action('save_post_person', function ($postId) {
             $univisId = get_post_meta($postId, 'fau_person_univis_id', true);
             if (!empty($univisId) && !wp_next_scheduled('fau_person_data_async_task', [$univisId])) {

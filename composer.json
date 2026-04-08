@@ -8,9 +8,7 @@
     },
     "autoload": {
         "psr-4": {
-            "FAU_Person\\": "includes/",
-            "RRZE\\Lib\\UnivIS\\": "vendor/UnivIS",
-            "RRZE\\Lib\\DIP\\": "vendor/DIP"
+            "FAU_Person\\": "includes/"
         },
         "files": [
             "vendor/cmb2/cmb2/init.php"
