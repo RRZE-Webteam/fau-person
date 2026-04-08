@@ -10,8 +10,7 @@ use RRZE\Lib\UnivIS\Sanitizer;
 
 defined('ABSPATH') || exit;
 
-class Data
-{
+class Data {
 
     // public static function getDIPDataTest($id = null)
     // {
@@ -19,8 +18,7 @@ class Data
     //     return $myData->getResponse($id);
     // }
 
-    private static function get_viewsettings($lookup = 'constants')
-    {
+    private static function get_viewsettings($lookup = 'constants') {
         $settings = new Settings(__DIR__);
         $settings->onLoaded();
         $options = $settings->options;
@@ -43,12 +41,57 @@ class Data
         return $viewopt;
     }
 
+    private static function get_nested_value($data, array $path, $default = null) {
+        $current = $data;
+
+        foreach ($path as $segment) {
+            if (is_array($current) && array_key_exists($segment, $current)) {
+                $current = $current[$segment];
+                continue;
+            }
+
+            return $default;
+        }
+
+        return $current;
+    }
+
+    private static function format_contact_list_name($postId, $name) {
+        $formattedName = $name;
+        $lastName = get_post_meta($postId, 'fau_person_familyName', true);
+
+        if ($lastName) {
+            $givenName = get_post_meta($postId, 'fau_person_givenName', true);
+
+            if ($givenName) {
+                return $lastName . ', ' . $givenName;
+            }
+
+            if (strpos($name, $lastName) !== false) {
+                return $lastName . ', ' . ltrim(str_replace($lastName, '', $name));
+            }
+
+            return $lastName;
+        }
+
+        if (strpos($name, ' ') !== false) {
+            $derivedLastName = ltrim((string) strrchr($name, ' '));
+
+            if ($derivedLastName !== '') {
+                $firstName = ltrim(str_replace($derivedLastName, '', $name));
+                $formattedName = $derivedLastName . ', ' . $firstName;
+            }
+        }
+
+        return $formattedName;
+    }
+
     // Get full list of all contacts as array
     // $filtertype defaults empty = all contacts
     // $filtertype values: realperson, realmale, realfemale, einrichtung
-
-    public static function get_contact_list($filtertype = '')
-    {
+    public static function get_contact_list($filtertype = '') {
+        $contactselect = [];
+        $temp = [];
         $args = array(
             'post_type' => 'person',
             'numberposts' => -1,
@@ -71,22 +114,7 @@ class Data
                     case 'realperson':
                     case 'realmale':
                     case 'realfemale':
-                        if (get_post_meta($personlist[$key]['ID'], 'fau_person_familyName', true)) {
-                            $lastname = get_post_meta($personlist[$key]['ID'], 'fau_person_familyName', true);
-                            if (get_post_meta($personlist[$key]['ID'], 'fau_person_givenName', true)) {
-                                $name = $lastname . ', ' . get_post_meta($personlist[$key]['ID'], 'fau_person_givenName', true);
-                            } elseif (ltrim(strpos($name, $lastname))) {
-                                $name = $lastname . ', ' . ltrim(str_replace($lastname, '', $name));
-                            } else {
-                                $name = $lastname;
-                            }
-                        } else {
-                            if (ltrim(strpos($name, ' '))) {
-                                $lastname = ltrim(strrchr($name, ' '));
-                                $firstname = ltrim(str_replace($lastname, '', $name));
-                                $name = $lastname . ', ' . $firstname;
-                            }
-                        }
+                        $name = self::format_contact_list_name($personlist[$key]['ID'], $name);
                         break;
                     default:
                         break;
@@ -102,8 +130,9 @@ class Data
         return $contactselect;
     }
 
-    public static function get_contactdata($connection = 0)
-    {
+    public static function get_contactdata($connection = 0) {
+        $contactselect = [];
+        $temp = [];
         $args = array(
             'post_type' => 'person',
             'numberposts' => -1,
@@ -120,22 +149,7 @@ class Data
                     case 'realperson':
                     case 'realmale':
                     case 'realfemale':
-                        if (get_post_meta($personlist[$key]['ID'], 'fau_person_familyName', true)) {
-                            $lastname = get_post_meta($personlist[$key]['ID'], 'fau_person_familyName', true);
-                            if (get_post_meta($personlist[$key]['ID'], 'fau_person_givenName', true)) {
-                                $name = $lastname . ', ' . get_post_meta($personlist[$key]['ID'], 'fau_person_givenName', true);
-                            } elseif (ltrim(strpos($name, $lastname))) {
-                                $name = $lastname . ', ' . ltrim(str_replace($lastname, '', $name));
-                            } else {
-                                $name = $lastname;
-                            }
-                        } else {
-                            if (ltrim(strpos($name, ' '))) {
-                                $lastname = ltrim(strrchr($name, ' '));
-                                $firstname = ltrim(str_replace($lastname, '', $name));
-                                $name = $lastname . ', ' . $firstname;
-                            }
-                        }
+                        $name = self::format_contact_list_name($personlist[$key]['ID'], $name);
                         break;
                     default:
                         break;
@@ -158,8 +172,8 @@ class Data
         return $contactselect;
     }
 
-    public static function get_standortdata()
-    {
+    public static function get_standortdata() {
+        $standortselect = [];
         $args = array(
             'post_type' => 'standort',
             'numberposts' => -1,
@@ -179,9 +193,10 @@ class Data
         return $standortselect;
     }
 
-    public static function get_default_fau_person_typ()
-    {
-        if (isset($_GET["fau_person_typ"]) && $_GET["fau_person_typ"] == 'einrichtung') {
+    public static function get_default_fau_person_typ() {
+        $personType = isset($_GET['fau_person_typ']) ? sanitize_key(wp_unslash($_GET['fau_person_typ'])) : '';
+
+        if ($personType === 'einrichtung') {
             $default_fau_person_typ = 'einrichtung';
         } else {
             $default_fau_person_typ = 'realperson';
@@ -190,8 +205,7 @@ class Data
     }
 
     //gibt die Werte des Standorts an, für Standort-Synchronisation $edfaults=1
-    public static function get_fields_standort($id, $standort_id, $defaults)
-    {
+    public static function get_fields_standort($id, $standort_id, $defaults)  {
         $standort_sync = 0;
         $fields = array();
         if ($standort_id) {
@@ -218,8 +232,7 @@ class Data
         }
         return $fields;
     }
-    public static function get_more_link($targeturl, $screenreadertext = '', $class = 'person-info-more', $withdiv = true, $linktitle = '')
-    {
+    public static function get_more_link($targeturl, $screenreadertext = '', $class = 'person-info-more', $withdiv = true, $linktitle = '')  {
         if ((!isset($targeturl)) || empty($targeturl)) {
             return;
         }
@@ -265,8 +278,7 @@ class Data
     // $standort_id = ID des Standorteintrags,
     // $fau_person_var = Bezeichnung des Feldes im Personenplugin,
     // $defaults = Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular
-    public static function sync_standort($id, $standort_id, $fau_person_var, $defaults)
-    {
+    public static function sync_standort($id, $standort_id, $fau_person_var, $defaults)  {
         $value = get_post_meta($standort_id, 'fau_person_' . $fau_person_var, true);
         //wird benötigt, falls jeder einzelne Wert abgefragt werden soll
         if ($defaults) {
@@ -298,8 +310,7 @@ class Data
     }
 
     // Sortierung eines Arrays mit Objekten (z.B. bei einer Kategorie) alphabetisch nach Titel oder Nachname, je nach Typ
-    public static function sort_person_posts($personlist, $sorttype = 'name', $order = 'asc')
-    {
+    public static function sort_person_posts($personlist, $sorttype = 'name', $order = 'asc')  {
         if (is_array($personlist)) {
             $temp = array();
             foreach ($personlist as $key => $value) {
@@ -367,8 +378,7 @@ class Data
         }
     }
 
-    public static function create_kontakt_image($id = 0, $size = 'person-thumb-page-v3', $class = '', $defaultimage = false, $showlink = false, $linkttitle = '', $showcaption = true, $linktarget = '')
-    {
+    public static function create_kontakt_image($id = 0, $size = 'person-thumb-page-v3', $class = '', $defaultimage = false, $showlink = false, $linkttitle = '', $showcaption = true, $linktarget = '') {
         if ($id == 0) {
             return;
         }
@@ -432,8 +442,7 @@ class Data
         return $res;
     }
 
-    public static function get_description($id = 0, $format = 'page', $fields = array())
-    {
+    public static function get_description($id = 0, $format = 'page', $fields = array()) {
         if ($id = 0) {
             return;
         }
@@ -486,8 +495,7 @@ class Data
         return $url;
     }
 
-    public static function fau_person_markup($id, $display = array(), $arguments = array())
-    {
+    public static function fau_person_markup($id, $display = array(), $arguments = array()) {
         if ($id == 0) {
             return;
         }
@@ -630,8 +638,7 @@ class Data
         return $content;
     }
 
-    public static function fau_person_page($id, $display = array(), $arguments = array(), $is_shortcode = false)
-    {
+    public static function fau_person_page($id, $display = array(), $arguments = array(), $is_shortcode = false) {
         $fields = self::get_kontakt_data($id);
 
         Main::enqueueForeignThemes();
@@ -827,8 +834,7 @@ class Data
         return $content;
     }
 
-    public static function fau_person_card($id = 0, $display = array(), $arguments = array())
-    {
+    public static function fau_person_card($id = 0, $display = array(), $arguments = array()) {
         if ($id == 0) {
             return;
         }
@@ -964,8 +970,7 @@ class Data
         return $content;
     }
 
-    public static function fau_person_sidebar($id, $display = array(), $arguments = array())
-    {
+    public static function fau_person_sidebar($id, $display = array(), $arguments = array()) {
         if ($id == 0) {
             return;
         }
@@ -1091,8 +1096,7 @@ class Data
         return $content;
     }
 
-    public static function fau_person_connection($connection_text, $connection_options, $connections, $hstart)
-    {
+    public static function fau_person_connection($connection_text, $connection_options, $connections, $hstart) {
         $content = '';
         $contactlist = '';
         $viewopts = self::get_viewsettings();
@@ -1262,8 +1266,7 @@ class Data
         return $res;
     }
 
-    public static function create_fau_standort($id, $showfields, $titletag = 'h2')
-    {
+    public static function create_fau_standort($id, $showfields, $titletag = 'h2') {
         if (!isset($id)) {
             return;
         }
@@ -1315,7 +1318,7 @@ class Data
 
         if (isset($showfields['content']) && ($showfields['content'])) {
             $post = get_post($id);
-            if ($post->post_content) {
+            if ($post && $post->post_content) {
                 $content .= '<div class="content">' . $post->post_content . '</div>';
             }
         }
@@ -1323,8 +1326,7 @@ class Data
         return $content;
     }
 
-    public static function create_fau_standort_plain($id, $showfields, $titletag = '')
-    {
+    public static function create_fau_standort_plain($id, $showfields, $titletag = '')  {
         if (!isset($id)) {
             return;
         }
@@ -1380,7 +1382,7 @@ class Data
 
         if (isset($showfields['content']) && ($showfields['content'])) {
             $post = get_post($id);
-            if ($post->post_content) {
+            if ($post && $post->post_content) {
                 $content .= '<div class="content">' . $post->post_content . '</div>';
             }
         }
@@ -1388,8 +1390,7 @@ class Data
     }
 
     //Legt die in UnivIS hinterlegten Werte in einem Array ab, Feldbezeichnungen
-    public static function univis_defaults($id)
-    {
+    public static function univis_defaults($id)  {
         $post = get_post($id);
         if (!is_null($post) && $post->post_type === 'person' && get_post_meta($id, 'fau_person_univis_id', true)) {
             $univis_id = get_post_meta($id, 'fau_person_univis_id', true);
@@ -1402,17 +1403,15 @@ class Data
     }
 
     // Get Data Cache
-    private static function get_data_cache()
-    {
+    private static function get_data_cache() {
         // if (isset($GLOBALS['fau_person_data_cache'])) {
         //     return $GLOBALS['fau_person_data_cache'];
         // }
-        return;
+        return $GLOBALS['fau_person_data_cache'] ?? null;
     }
 
     // Set Data Cache
-    private static function set_data_cache($id, $data)
-    {
+    private static function set_data_cache($id, $data)  {
         if ((isset($id)) && (isset($data))) {
             $GLOBALS['fau_person_data_cache'][$id] = $data;
             //    error_log( 'Save Data for id '.$id );
@@ -1423,8 +1422,7 @@ class Data
     // Zentraler Wrapper für self::get_fields(), bei dem das Ergebnis aus den
     // Datenfelder zwischengespeichert wird, damit weitere Datenbankanfragen unterbleiben
     // können
-    public static function get_kontakt_data($id)
-    {
+    public static function get_kontakt_data($id) {
         if (isset($id)) {
             $cacheddata = self::get_data_cache();
 
@@ -1434,7 +1432,7 @@ class Data
             $univis_id = get_post_meta($id, 'fau_person_univis_id', true);
             $data = self::get_fields($id, $univis_id, 0);
             $thispost = get_post($id);
-            $postContent = $thispost->post_content;
+            $postContent = $thispost ? $thispost->post_content : null;
             if (isset($postContent)) {
                 $data['content'] = $postContent;
             }
@@ -1457,10 +1455,10 @@ class Data
     //Übergabewerte: ID der Person, UnivIS-ID der Person,
     //Default-Wert 1 für Ausgabe der hinterlegten Werte im Personeneingabeformular,
     //$ignore_connection=1 wenn die verknüpften Kontakte einer Person ignoriert werden sollen (z.B. wenn die Person selbst schon eine verknüpfte Kontaktperson ist)
-    public static function get_fields($id, $univis_id, $defaults, $ignore_connection = 0, $setfields = false)
-    {
+    public static function get_fields($id, $univis_id, $defaults, $ignore_connection = 0, $setfields = false) {
         $univis_sync = 0;
         $person = array();
+        $connections = [];
         if ($univis_id) {
             $person = UnivIS_Data::get_univisdata($univis_id);
             $univis_sync = 1;
@@ -1596,8 +1594,9 @@ class Data
             $fields[$key] = $value;
         }
         foreach ($fields_univis_location as $key => $value) {
-            if ($univis_sync && array_key_exists('locations', $person) && array_key_exists('location', $person['locations'][0])) {
-                $person_location = $person['locations'][0]['location'][0];
+            $person_location = self::get_nested_value($person, ['locations', 0, 'location', 0], null);
+
+            if ($univis_sync && is_array($person_location)) {
                 if (($key == 'telephone' || $key == 'faxNumber' || $key == 'mobilePhone') && !$defaults) {
                     $phone_number = UnivIS_Data::sync_univis($id, $person_location, $key, $value, $defaults);
                     switch (get_post_meta($id, 'fau_person_telephone_select', true)) {
@@ -1644,9 +1643,9 @@ class Data
             // ist eine UnivIS-ID vorhanden?
             switch ($univis_sync) {
                 case true:
-                    if (array_key_exists('officehours', $person) && array_key_exists('officehour', $person['officehours'][0])) { // sind in UnivIS überhaupt Sprechzeiten hinterlegt?
+                    $person_officehours = self::get_nested_value($person, ['officehours', 0, 'officehour'], null);
+                    if (is_array($person_officehours)) { // sind in UnivIS überhaupt Sprechzeiten hinterlegt?
                         if (get_post_meta($id, 'fau_person_univis_sync', true) || $defaults) { // ist der Haken zur Synchronisation da bzw. werden die UnivIS-Werte für das Backend abgefragt
-                            $person_officehours = $person['officehours'][0]['officehour'];
                             $officehours = array();
                             foreach ($person_officehours as $num => $num_val) {
                                 $repeat = isset($person_officehours[$num]['repeat']) ? $person_officehours[$num]['repeat'] : 0;
@@ -1697,8 +1696,9 @@ class Data
                 $orgunit = 'orgunit';
                 $orgunits = 'orgunits';
             }
-            if (array_key_exists($orgunits, $person)) {
-                $person_orgunits = $person[$orgunits][0][$orgunit];
+            $person_orgunits = self::get_nested_value($person, [$orgunits, 0, $orgunit], null);
+
+            if (is_array($person_orgunits)) {
                 $i = count($person_orgunits);
                 if ($i > 1) {
                     $i = count($person_orgunits) - 2;
@@ -1727,7 +1727,9 @@ class Data
 
         foreach ($fields_exception as $key => $value) {
             if ($key == 'postalCode') {
-                if (get_post_meta($id, 'fau_person_univis_sync', true) && array_key_exists('locations', $person) && array_key_exists('location', $person['locations'][0]) && array_key_exists('ort', $person['locations'][0]['location'][0])) {
+                $personLocationPostal = self::get_nested_value($person, ['locations', 0, 'location', 0, 'ort'], null);
+
+                if (get_post_meta($id, 'fau_person_univis_sync', true) && $personLocationPostal !== null) {
                     $value = '';
                 } else {
                     $value = get_post_meta($id, 'fau_person_' . $key, true);
@@ -1741,6 +1743,7 @@ class Data
 
         if (!empty($connections)) {
             $connection = array();
+            $connection_fields = [];
             foreach ($connections as $ckey => $cvalue) {
                 $connection_fields[$ckey] = self::get_fields($cvalue, get_post_meta($cvalue, 'fau_person_univis_id', true), 0, 1);
                 $connection_fields[$ckey]['nr'] = $cvalue;
@@ -1766,8 +1769,7 @@ class Data
         return $fields;
     }
 
-    public static function get_default_display($format = '')
-    {
+    public static function get_default_display($format = '')  {
         $display = '';
         switch ($format) {
             case 'name':
@@ -1820,8 +1822,7 @@ class Data
         return $display;
     }
 
-    public static function get_display_field($format = '', $show = '', $hide = '')
-    {
+    public static function get_display_field($format = '', $show = '', $hide = '')  {
         $display = self::get_default_display($format);
         $showfields = self::parse_liste($display, true);
 
@@ -1839,8 +1840,7 @@ class Data
         return $showfields;
     }
 
-    public static function map_old_keys($liste)
-    {
+    public static function map_old_keys($liste) {
         $newlist = array();
         foreach ($liste as $key => $value) {
             switch ($key) {
@@ -1917,8 +1917,7 @@ class Data
         return $newlist;
     }
 
-    public static function parse_liste($liste = '', $resbool = true, $showarray = array())
-    {
+    public static function parse_liste($liste = '', $resbool = true, $showarray = array()) {
         if (!empty($liste)) {
             $showvals = explode(',', $liste);
             foreach ($showvals as $value) {

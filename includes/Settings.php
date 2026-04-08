@@ -410,7 +410,8 @@ class Settings
             $this->allTabs[] = $this->settingsPrefix . $val['id'];
         }
 
-        $this->currentTab = array_key_exists('current-tab', $_GET) && in_array($_GET['current-tab'], $this->allTabs) ? $_GET['current-tab'] : $this->defaultTab;
+        $currentTab = isset($_GET['current-tab']) ? sanitize_key(wp_unslash($_GET['current-tab'])) : '';
+        $this->currentTab = in_array($currentTab, $this->allTabs, true) ? $currentTab : $this->defaultTab;
     }
 
     /**

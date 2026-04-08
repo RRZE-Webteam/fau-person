@@ -17,7 +17,7 @@ class BackendMenu {
     }
 
 
-    public function onLoaded()  {
+    public function onLoaded() {
         add_action('admin_menu', array($this, 'person_menu_subpages'));
         add_action('admin_init', array($this, 'admin_init'));
         add_action('admin_menu', array($this, 'add_options_pages'));
@@ -77,34 +77,31 @@ class BackendMenu {
             echo '<thead><tr><td>' . esc_html__('UnivIS Id', 'fau-person') . '</td><td>' . esc_html__('Name', 'fau-person') . '</td><td>' . esc_html__('E-Mail', 'fau-person') . '</td><td>' . esc_html__('Organisation', 'fau-person') . '</td></tr></thead>';
             echo '<tbody>';
             foreach ($person as $key => $value) {
-                if (array_key_exists('locations', $person[$key]) && array_key_exists('location', $person[$key]['locations'][0]) && array_key_exists('email', $person[$key]['locations'][0]['location'][0])) {
-                    $email = $person[$key]['locations'][0]['location'][0]['email'];
-                }
-                else {
+                $location = $this->get_nested_value($person[$key], ['locations', 0, 'location', 0], null);
+
+                if (is_array($location) && array_key_exists('email', $location)) {
+                    $email = $location['email'];
+                } else {
                     $email = $no_univis_data;
                 }
                 if (array_key_exists('id', $person[$key])) {
                     $id = $person[$key]['id'];
-                }
-                else {
+                } else {
                     $id = $no_univis_data;
                 }
                 if (array_key_exists('firstname', $person[$key])) {
                     $firstname = $person[$key]['firstname'];
-                }
-                else {
+                } else {
                     $firstname = __('Vorname', 'fau-person') . ": " . $no_univis_data . ", ";
                 }
                 if (array_key_exists('lastname', $person[$key])) {
                     $lastname = $person[$key]['lastname'];
-                }
-                else {
+                } else {
                     $lastname = __('Nachname', 'fau-person') . ": " . $no_univis_data;
                 }
                 if (array_key_exists('orgname', $person[$key])) {
                     $orgname = $person[$key]['orgname'];
-                }
-                else {
+                } else {
                     $orgname = $no_univis_data;
                 }
                 echo '<tr>';
@@ -125,7 +122,7 @@ class BackendMenu {
         <?php
     }
 
-    public function admin_init()  {
+    public function admin_init() {
         add_settings_section('search_univis_id_section', __('Bitte geben Sie den Vor- und/oder Nachnamen der Person ein, von der Sie die UnivIS-ID benötigen.', 'fau-person'), '__return_false', 'search_univis_id_options');
         add_settings_field('univis_id_firstname', __('Vorname', 'fau-person'), array($this, 'univis_id_firstname'), 'search_univis_id_options', 'search_univis_id_section');
         add_settings_field('univis_id_givenname', __('Nachname', 'fau-person'), array($this, 'univis_id_givenname'), 'search_univis_id_options', 'search_univis_id_section');
@@ -172,6 +169,21 @@ class BackendMenu {
             'firstname' => is_array($transient) && isset($transient['firstname']) ? $transient['firstname'] : '',
             'givenname' => is_array($transient) && isset($transient['givenname']) ? $transient['givenname'] : '',
         ];
+    }
+
+    private function get_nested_value($data, array $path, $default = null) {
+        $current = $data;
+
+        foreach ($path as $segment) {
+            if (is_array($current) && array_key_exists($segment, $current)) {
+                $current = $current[$segment];
+                continue;
+            }
+
+            return $default;
+        }
+
+        return $current;
     }
 
 

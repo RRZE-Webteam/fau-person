@@ -5,6 +5,7 @@ use function FAU_Person\Config\getShortcodeSettings;
 use function FAU_Person\Config\getShortcodeDefaults;
 
 use FAU_Person\Data;
+use FAU_Person\Main;
 
 defined('ABSPATH') || exit;
 
@@ -115,6 +116,8 @@ class Standort extends Shortcodes {
         }
 
         if (!empty($id)) {
+            Main::enqueueForeignThemes();
+
 	    if (is_numeric($id)) {
 		return Data::create_fau_standort($id,$showfields,$titletag);
 	    }
