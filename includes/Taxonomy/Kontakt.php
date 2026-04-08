@@ -4,7 +4,7 @@ namespace FAU_Person\Taxonomy;
 
 use FAU_Person\Data;
 use FAU_Person\Schema;
-use RRZE\Lib\UnivIS\Config;
+use function FAU_Person\Config\getUnivISConfig;
 use function FAU_Person\Config\get_fau_person_capabilities;
 
 defined('ABSPATH') || exit;
@@ -197,7 +197,7 @@ class Kontakt extends Taxonomy
     {
         $univisid = get_post_meta($post_id, 'fau_person_univis_id', true);
         //$data = Data::get_fields($post_id, $univisid, 0);
-        $univisconfig = Config::get_Config();
+        $univisconfig = getUnivISConfig();
         $api_url = $univisconfig['api_url'];
 
         switch ($column) {

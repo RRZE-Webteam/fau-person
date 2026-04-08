@@ -2,31 +2,49 @@
 /* Default SVG Icons
 /*-----------------------------------------------------------------------------------*/
 
+@use 'iconlib';
 
 .fau-person {
+    // Default icon width for use in :before
+    .defaulticonplaceholder {
+	width: 1rem;
+	height: 1rem;
+	line-height: 1rem;
+	font-size: 0.6rem;
 
+	background-image: iconlib.svg-bookmark();
+	background-repeat: no-repeat;
+	display: inline-block;
+	content: ' ';
+	background-size: 100%;
+	background-position: center center;
+
+	margin-right: 0.5rem;
+    }
+    
+    
     [itemprop="telephone"]:before { 
 	@extend .defaulticonplaceholder;
-	background-image: svg-icon-phone();
+	background-image: iconlib.svg-icon-phone();
     }
     [itemprop="telephone"].mobile:before { 
 	@extend .defaulticonplaceholder;
-	background-image: svg-icon-mobile();
+	background-image: iconlib.svg-icon-mobile();
 
     }
     [itemprop="faxNumber"]:before { 
 	@extend .defaulticonplaceholder;
-	background-image: svg-icon-fax();
+	background-image: iconlib.svg-icon-fax();
 
     }
     [itemprop="email"]:before { 
 	@extend .defaulticonplaceholder;
-	background-image: svg-icon-mail();
+	background-image: iconlib.svg-icon-mail();
 
     }
     [itemprop="url"]:before { 
 	@extend .defaulticonplaceholder;
-	background-image: svg-icon-home();
+	background-image: iconlib.svg-icon-home();
 
     }
 

@@ -1,0 +1,63 @@
+/*----------------------------------------------------------------------------*/
+/* _fau-elemental 
+/* Created on : 08.04.2026, 14:43:32
+/*----------------------------------------------------------------------------*/
+.fau-elemental {
+    --container-width: 100cqw;
+    --faue_small-max-width_inline-margin: calc(var(--container-width, 100vw)/2 - var(--small-max-width)/2);
+    --faue_minimal_inline-margin: var(--Spacing-10x);
+    --faue_content_inline-margin: max(var(--faue_minimal_inline-margin),var(--faue_small-max-width_inline-margin));
+    --faue_fullbleed_inline-margin: calc(var(--faue_content_inline-margin)*-1);
+    --faue_wide-max-width_bleed_inline-margin: max(var(--faue_fullbleed_inline-margin),calc(var(--wide-max-width)*-1/2 - var(--small-max-width)*-1/2));
+    --faue_wide-max-width_bleed_minimal_inline-margin: max(calc(var(--faue_fullbleed_inline-margin) + var(--faue_minimal_inline-margin)),calc(var(--wide-max-width)*-1/2 - var(--small-max-width)*-1/2));
+    --faue_base-max-width_bleed_inline-margin: max(calc(var(--faue_fullbleed_inline-margin) + var(--faue_minimal_inline-margin)),calc(var(--base-max-width)*-1/2 - var(--small-max-width)*-1/2));
+
+   .fau-person {
+       ul.connection-list,
+	ul.socialmedia,
+	ul.contactlist {
+	    padding-left: 0;
+	}
+	ul:not(.wp-block-list):not(.list-icons) {
+	    > li {
+		margin-bottom: inherit;
+	    }
+	    > li::before {
+		height: inherit;
+		left: inherit;
+		top: inherit;
+		width: inherit;
+		position: inherit;
+	    }
+	    
+	}
+	
+   }
+
+   .fau-person.liste-person {
+       li {
+	   list-style: none;
+       }
+   }
+    .fau-person.page {
+	
+	margin-inline: var(--faue_content_inline-margin);
+	
+	figure.person-image {
+	    max-width: 400px;
+	    height: auto;
+	    
+	    img {
+		max-width: 100%;
+		height: auto;
+	    }
+	}
+	
+	figure.person-image:has(> img)::before {
+	    width: inherit;
+	    position: inherit;
+	    height: inherit;
+	}
+    }
+    
+}

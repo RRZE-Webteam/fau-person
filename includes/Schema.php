@@ -6,19 +6,16 @@ use function FAU_Person\Config\getSocialMediaList;
 defined('ABSPATH') || exit;
 
 
-class Schema
-{
+class Schema {
 	/*
 	 * Create Schema Markup for Place
 	 */
 
-	public static function get_SocialMediaList()
-	{
+	public static function get_SocialMediaList() {
 		return getSocialMediaList(); // Standard-Array für zukünftige Optionen
 	}
 
-	public static function create_Place($data, $itemprop = 'location', $class = '', $surroundingtag = 'div', $widthbreak = true, $widthaddress = true, $phoneuri = true)
-	{
+	public static function create_Place($data, $itemprop = 'location', $class = '', $surroundingtag = 'div', $widthbreak = true, $widthaddress = true, $phoneuri = true) {
 
 		if (!is_array($data)) {
 			return;

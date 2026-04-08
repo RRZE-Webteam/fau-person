@@ -20,7 +20,15 @@ function getOptionName()
 function getConstants()
 {
     $options = array(
-        'UnivIS_Transient' => 'sui_1k4fu7056Kl12a5',
+        'UnivIS_Search_Transient' => 'fau_person_univis_search',
+        'UnivIS_Cache_Transient' => 'fau_person_univis_cache',
+        'UnivIS_Cache_TTL' => 24 * HOUR_IN_SECONDS,
+        'api_url' => 'http://univis.uni-erlangen.de/prg',
+        'api_transient_expiration' => DAY_IN_SECONDS,
+        'api_timeout' => HOUR_IN_SECONDS,
+        'api_results_limit' => 100,
+        'Shortcode_Transient' => 'fau_person_shortcode',
+        'Shortcode_Cache_TTL' => 6 * HOUR_IN_SECONDS,
         'images' => [
             /* Thumb for person-type; small for sidebar - Name: person-thumb */
             'default_person_thumb_width' => 120,
@@ -173,8 +181,7 @@ function getHelpTabSidebar()
  * Gibt die Einstellungen der Optionsbereiche zurück.
  * @return array [description]
  */
-function getSections()
-{
+function getSections() {
     return [
 
         [
@@ -194,8 +201,7 @@ function getSections()
  * Gibt die Einstellungen der Optionsfelder zurück.
  * @return array [description]
  */
-function getFields()
-{
+function getFields() {
     $imagesizes = array();
     $isizes = get_all_image_sizes();
 
@@ -495,8 +501,7 @@ function getFields()
     ];
 }
 
-function get_all_image_sizes()
-{
+function get_all_image_sizes() {
 
     $image_sizes = array();
 
@@ -518,8 +523,7 @@ function get_all_image_sizes()
  * Gibt die Default-Werte eines gegebenen Feldes aus den Shortcodesettings zurück
  * @return array [description]
  */
-function getShortcodeDefaults($field = '')
-{
+function getShortcodeDefaults($field = '') {
     if (empty($field)) {
         return;
     }
@@ -541,8 +545,7 @@ function getShortcodeDefaults($field = '')
  * @return array [description]
  */
 
-function getShortcodeSettings()
-{
+function getShortcodeSettings() {
     return [
         'kontakt' => [
             'block' => [
@@ -957,8 +960,7 @@ function getShortcodeSettings()
 
 }
 
-function get_fau_person_capabilities()
-{
+function get_fau_person_capabilities() {
     return [
         'edit_post' => 'edit_person',
         'read_post' => 'read_person',
@@ -974,4 +976,182 @@ function get_fau_person_capabilities()
         'edit_private_posts' => 'edit_private_persons',
         'edit_published_posts' => 'edit_published_persons',
     ];
+}
+
+function getUnivISConfig() {
+    $constants = getConstants();
+    $options = array(
+        'api_url' => $constants['api_url'],
+        'api_transient_expiration' => $constants['api_transient_expiration'],
+        'api_timeout' => $constants['api_timeout'],
+        'api_results_limit' => $constants['api_results_limit'],
+    );
+
+    return apply_filters('univis_config', $options);
+}
+
+function getUnivISFields() {
+    return [
+        'persons'   => [
+            'department' => [
+                'keyname'   => 'orgname',
+                'default'   => '',
+                'type'        => 'string'
+            ],
+            'honorificPrefix' => [
+                'keyname'   => 'title',
+                'default'   => '',
+                'type'        => 'string'
+            ],
+            'honorificSuffix' => [
+                'keyname'   => 'atitle',
+                'default'   => '',
+                'type'        => 'string'
+            ],
+            'givenName' => [
+                'keyname'   => 'firstname',
+                'default'   => '',
+                'type'        => 'string'
+            ],
+            'familyName' => [
+                'keyname'   => 'lastname',
+                'default'   => '',
+                'type'        => 'string'
+            ],
+            'jobTitle' => [
+                'keyname'   => 'lastname',
+                'default'   => '',
+                'type'        => 'work'
+            ],
+            'lehrbeauftragter' => [
+                'keyname'   => 'lehr',
+                'default'   => '',
+                'type'        => 'boolstring'
+            ],
+            'visible' => [
+                'keyname'   => 'visible',
+                'default'   => '',
+                'type'        => 'boolstring'
+            ],
+            'public' => [
+                'keyname'   => 'pub_visible',
+                'default'   => '',
+                'type'        => 'boolstring'
+            ],
+            'restrict' => [
+                'keyname'   => 'restrict',
+                'default'   => '',
+                'type'        => 'boolstring'
+            ],
+            'idm_id' => [
+                'keyname'   => 'idm_id',
+                'default'   => '',
+                'type'        => 'loginstring'
+            ],
+            'univisid' => [
+                'keyname'   => 'id',
+                'default'   => '',
+                'type'        => 'string'
+            ],
+            'univiskey' => [
+                'keyname'   => 'key',
+                'default'   => '',
+                'type'        => 'string'
+            ],
+            'gender' => [
+                'keyname'   => 'gender',
+                'default'   => '',
+                'type'        => 'genderstring'
+            ],
+            'worksFor' => [
+                'keyname'   => 'orgunit',
+                'type'    => 'arraystring',
+            ],
+            'worksFor_en' => [
+                'keyname'   => 'orgunit_en',
+                'type'    => 'arraystring',
+            ],
+            'location' => [
+                'type'    => 'array',
+                'fields' => [
+                    'email' => [
+                        'keyname'   => 'email',
+                        'default'   => '',
+                        'type'        => 'email'
+                    ],
+                    'workLocation' => [
+                        'keyname'   => 'office',
+                        'default'   => '',
+                        'type'        => 'string'
+                    ],
+                    'faxNumber' => [
+                        'keyname'   => 'fax',
+                        'default'   => '',
+                        'type'        => 'faxnumber'
+                    ],
+                    'telephone' => [
+                        'keyname'   => 'tel',
+                        'default'   => '',
+                        'type'        => 'telnumber'
+                    ],
+                    'mobilePhone' => [
+                        'keyname'   => 'mobile',
+                        'default'   => '',
+                        'type'        => 'telnumber'
+                    ],
+                    'pgp' => [
+                        'keyname'   => 'pgp',
+                        'default'   => '',
+                        'type'        => 'string'
+                    ],
+                    'streetAddress' => [
+                        'keyname'   => 'street',
+                        'default'   => '',
+                        'type'        => 'string'
+                    ],
+                    'addressLocality' => [
+                        'keyname'   => 'ort',
+                        'default'   => '',
+                        'type'        => 'string'
+                    ],
+                    'url' => [
+                        'keyname'   => 'url',
+                        'default'   => '',
+                        'type'        => 'url'
+                    ],
+
+                ]
+
+            ],
+            'hoursAvailable_group'  => [
+                'keyname'   => 'officehours',
+                'default'   => '',
+                'type'        => 'string'
+            ]
+        ]
+    ];
+}
+
+function getUnivISKeyFields($name = 'persons') {
+    $fields_univis = getUnivISFields();
+    $res = array();
+
+    if (isset($name)) {
+        foreach ($fields_univis[$name] as $key => $value) {
+            if ($value['type'] === 'array') {
+                foreach ($fields_univis[$name][$key]['fields'] as $subkey => $subvalue) {
+                    if (isset($subvalue['default'])) {
+                        $res[$subkey] = $subvalue['default'];
+                    }
+                }
+            } elseif ($value['type'] == 'arraystring') {
+                $res[$key] = '';
+            } else {
+                if (isset($value['default'])) {
+                    $res[$key] = $value['default'];
+                }
+            }
+        }
+    }
+    return $res;
 }

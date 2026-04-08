@@ -6,9 +6,8 @@ defined('ABSPATH') || exit;
 
 use FAU_Person\Metaboxes\Kontakt;
 use FAU_Person\Metaboxes\Standort;
-use FAU_Person\Metaboxes\Pages;
 use FAU_Person\Metaboxes\Posts;
-use RRZE\Lib\UnivIS\Data as UnivIS_Data;
+use FAU_Person\UnivIS\Data as UnivIS_Data;
 
 
 class Metaboxes
@@ -23,27 +22,20 @@ class Metaboxes
         $this->settings = $settings;
     }
 
-    public function onLoaded()
-    {
+    public function onLoaded() {
         add_action('cmb2_render_text_number', array($this, 'sm_cmb_render_text_number'));
 
-
-        //	add_filter( 'cmb2_show_on', array( $this, 'mb_show_on_person' ) );
 
         $kontaktmetabox = new Kontakt($this->pluginFile,  $this->settings);
         $kontaktmetabox->onLoaded();
         $standortmetabox = new Standort($this->pluginFile,  $this->settings);
         $standortmetabox->onLoaded();
-        $pagesmb = new Pages($this->pluginFile,  $this->settings);
-        $pagesmb->onLoaded();
-        $postsmb = new Posts($this->pluginFile,  $this->settings);
-        $postsmb->onLoaded();
+
     }
 
 
 
-    function sm_cmb_render_text_number($field_args, $escaped_value, $object_id, $object_type, $field_type_object)
-    {
+    function sm_cmb_render_text_number($field_args, $escaped_value, $object_id, $object_type, $field_type_object) {
         echo $field_type_object->input(array('class' => 'cmb_text_small', 'type' => 'text'));
     }
 
@@ -72,7 +64,6 @@ class Metaboxes
         if ($str) {
             $location = get_post_meta(cmb2_Meta_Box::get_object_id(), 'fau_person_telephone_select', true);
             $str = UnivIS_Data::correct_phone_number($str, $location);
-            //   add_action( 'admin_notices', array( 'FAU_Person\Helper', 'admin_notice_phone_number' ) );
             return $str;
         }
     }

@@ -11,11 +11,6 @@ class ComposerStaticInitba667bfd30582a6c8c9783a32ba07e50
     );
 
     public static $prefixLengthsPsr4 = array (
-        'R' => 
-        array (
-            'RRZE\\Lib\\UnivIS\\' => 16,
-            'RRZE\\Lib\\DIP\\' => 13,
-        ),
         'F' => 
         array (
             'FAU_Person\\' => 11,
@@ -23,14 +18,6 @@ class ComposerStaticInitba667bfd30582a6c8c9783a32ba07e50
     );
 
     public static $prefixDirsPsr4 = array (
-        'RRZE\\Lib\\UnivIS\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/UnivIS',
-        ),
-        'RRZE\\Lib\\DIP\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/DIP',
-        ),
         'FAU_Person\\' => 
         array (
             0 => __DIR__ . '/../..' . '/includes',

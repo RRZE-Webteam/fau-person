@@ -21,6 +21,7 @@ GitHub-Repo: https://github.com/RRZE-Webteam/fau-person
 
 
 ## Autor 
+
 RRZE-Webteam , http://www.rrze.fau.de
 
 ## Copryright
@@ -36,5 +37,5 @@ Ausgabe von Kontakten auf einer Webseite.
 ## Dokumentation
 
 Eine vollständige Dokumentation mit vielen Anwendungsbeispielen findet sich auf der Seite: 
-https://www.wordpress.rrze.fau.de/plugins/fau-und-rrze-plugins/fau-person/
+https://www.wp.rrze.fau.de/plugins/inhaltsseiten-mit-funktionen-erweitern/fau-person/
 
