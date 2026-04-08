@@ -4,9 +4,7 @@ namespace FAU_Person;
 use RRZE\Lib\UnivIS\Data as UnivIS_Data;
 defined('ABSPATH') || exit;
 
-/**
- * Define Image Sizes
- */
+
 class BackendMenu {
 
     protected $pluginFile;
@@ -19,8 +17,7 @@ class BackendMenu {
     }
 
 
-    public function onLoaded()
-    {
+    public function onLoaded()  {
         add_action('admin_menu', array($this, 'person_menu_subpages'));
         add_action('admin_init', array($this, 'admin_init'));
         add_action('admin_menu', array($this, 'add_options_pages'));
@@ -33,7 +30,6 @@ class BackendMenu {
             __('Suche nach UnivIS-ID', 'fau-person'),
             'edit_persons', 'search-univis-id',
             array($this, 'search_univis_id'));
-    //    add_action('load-' . $this->search_univis_id_page, array($this, 'help_menu_search_univis_id'));
     }
 
 
@@ -129,8 +125,7 @@ class BackendMenu {
         <?php
     }
 
-    public function admin_init()
-    {
+    public function admin_init()  {
         add_settings_section('search_univis_id_section', __('Bitte geben Sie den Vor- und/oder Nachnamen der Person ein, von der Sie die UnivIS-ID benötigen.', 'fau-person'), '__return_false', 'search_univis_id_options');
         add_settings_field('univis_id_firstname', __('Vorname', 'fau-person'), array($this, 'univis_id_firstname'), 'search_univis_id_options', 'search_univis_id_section');
         add_settings_field('univis_id_givenname', __('Nachname', 'fau-person'), array($this, 'univis_id_givenname'), 'search_univis_id_options', 'search_univis_id_section');
@@ -183,13 +178,7 @@ class BackendMenu {
 
 
     public function person_menu_subpages() {
-        add_submenu_page('edit.php?post_type=person', __('Standort hinzufügen', 'fau-person'), __('Neuer Standort', 'fau-person'), 'edit_persons', 'new_standort', array($this, 'add_person_types'));
-        add_action('load-person_page_new_standort', array($this, 'standort_menu'));
-    }
-
-    public function add_person_types() {
-    //wp_redirect( admin_url( 'post-new.php?post_type=standort' ) );
-    //add_action( 'load-person_page_konakt', array( $this, 'adding_custom_meta_boxes' ));  
+        add_submenu_page('edit.php?post_type=person', __('Standort hinzufügen', 'fau-person'), __('Neuer Standort', 'fau-person'), 'edit_persons', 'new_standort', array($this, 'standort_menu'));
     }
 
 
@@ -200,7 +189,7 @@ class BackendMenu {
 
     public function standort_menu() {
         wp_redirect(admin_url('post-new.php?post_type=standort'));
-
+        exit;
     }
 
 

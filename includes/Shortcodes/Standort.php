@@ -192,7 +192,7 @@ class Standort extends Shortcodes {
         $this->settings['id']['values'] = array();
         $this->settings['id']['values'][] = ['id' => 0, 'val' => __( '-- Alle --', 'fau-person' )];
 
-        $aPerson = get_posts( array('posts_per_page'  => -1, 'post_type' => 'person', 'orderby' => 'title', 'order' => 'ASC'));
+        $aPerson = get_posts( array('posts_per_page'  => -1, 'post_type' => 'standort', 'orderby' => 'title', 'order' => 'ASC'));
         foreach ($aPerson as $person){
             $this->settings['id']['values'][] = [
                 'id' => $person->ID,

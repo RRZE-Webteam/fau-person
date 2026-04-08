@@ -5,7 +5,7 @@ Plugin Name:        FAU Person
 Plugin URI:         https://github.com/RRZE-Webteam/fau-person
 GitHub Plugin URI:  https://github.com/RRZE-Webteam/fau-person
 Description:        Visitenkarten-Plugin für FAU Webauftritte
-Version:            3.10.5-1
+Version:            3.10.5-2
 Author:             RRZE-Webteam
 Author URI:         http://blogs.fau.de/webworking/
 License:            GPLv3 or later

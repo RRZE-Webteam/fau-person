@@ -1,5 +1,5 @@
 === Plugin Name: fau-person ===
-Version: 3.10.5-1
+Version: 3.10.5-2
 Plugin URI: https://github.com/RRZE-Webteam/fau-person
 GitHub Issue URL: https://github.com/RRZE-Webteam/fau-person/issues
 Author: RRZE-Webteam <webmaster@fau.de> (https://www.rrze.fau.de)
