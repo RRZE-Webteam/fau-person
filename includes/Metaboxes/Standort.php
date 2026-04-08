@@ -32,8 +32,7 @@ class Standort extends Metaboxes {
         $meta_boxes['fau_standort_info'] = array(
             'id' => 'fau_standort_info',
             'title' => __( 'Standortinformationen', 'fau-person' ),
-            'object_types' => array('standort'), // post type
-            //'show_on' => array( 'key' => 'submenu-slug', 'value' => 'kontakt' ),        
+            'object_types' => array('standort'),  
             'context' => 'normal',
             'priority' => 'default',
             'fields' => array(
@@ -46,7 +45,6 @@ class Standort extends Metaboxes {
             ),
             array(
                 'name' => __('Postleitzahl', 'fau-person'),
-                //'desc' => 'Wenn der Ort aus UnivIS übernommen werden soll bitte leer lassen!',
                 'desc' => __('Nur 5-stellige Zahlen erlaubt.', 'fau-person'),
                 'type' => 'text_small',
                 'id' => $prefix . 'postalCode',

@@ -64,7 +64,6 @@ class Metaboxes
         if ($str) {
             $location = get_post_meta(cmb2_Meta_Box::get_object_id(), 'fau_person_telephone_select', true);
             $str = UnivIS_Data::correct_phone_number($str, $location);
-            //   add_action( 'admin_notices', array( 'FAU_Person\Helper', 'admin_notice_phone_number' ) );
             return $str;
         }
     }
