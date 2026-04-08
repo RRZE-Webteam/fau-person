@@ -20,7 +20,7 @@ function getOptionName()
 function getConstants()
 {
     $options = array(
-        'UnivIS_Transient' => 'sui_1k4fu7056Kl12a5',
+        'UnivIS_Transient' => 'fau_person_univis',
         'images' => [
             /* Thumb for person-type; small for sidebar - Name: person-thumb */
             'default_person_thumb_width' => 120,

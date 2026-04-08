@@ -131,15 +131,48 @@ function setPluginVersion(pluginRoot, pkg, newVersion) {
 			}
 		);
 
-		// define('RRZE_PLUGIN_VERSION', 'x.x.x');
-		content = content.replace(
-			/define\(\s*['"]RRZE_PLUGIN_VERSION['"]\s*,\s*['"][^'"]*['"]\s*\)\s*;/,
-			function () {
-				return "define('RRZE_PLUGIN_VERSION', '" + newVersion + "');";
-			}
-		);
-
 		return content;
+	});
+}
+
+function setPluginCompatibility(pluginRoot, pkg) {
+	if (!pkg.main || typeof pkg.main !== 'string') {
+		throw new Error('package.json has no valid "main" entry');
+	}
+
+	var compatibility = pkg.compatibility;
+	var filePath = path.join(pluginRoot, pkg.main);
+
+	if (!compatibility || typeof compatibility !== 'object') {
+		return;
+	}
+
+	if (!fs.existsSync(filePath)) {
+		throw new Error('Plugin main file not found: ' + filePath);
+	}
+
+	replaceInFile(filePath, function (content) {
+		var updated = content;
+
+		if (typeof compatibility.phprequires === 'string' && compatibility.phprequires.trim() !== '') {
+			updated = updated.replace(
+				/const\s+RRZE_PHP_VERSION\s*=\s*['"][^'"]*['"]\s*;/,
+				function () {
+					return "const RRZE_PHP_VERSION = '" + compatibility.phprequires.trim() + "';";
+				}
+			);
+		}
+
+		if (typeof compatibility.wprequires === 'string' && compatibility.wprequires.trim() !== '') {
+			updated = updated.replace(
+				/const\s+RRZE_WP_VERSION\s*=\s*['"][^'"]*['"]\s*;/,
+				function () {
+					return "const RRZE_WP_VERSION = '" + compatibility.wprequires.trim() + "';";
+				}
+			);
+		}
+
+		return updated;
 	});
 }
 
@@ -182,6 +215,7 @@ function main() {
 
 	setReadmeTxtVersion(pluginRoot, next);
 	setPluginVersion(pluginRoot, pkg, next);
+	setPluginCompatibility(pluginRoot, pkg);
 
 	console.log('Version bumped (' + mode + '): ' + current + ' -> ' + next);
 }

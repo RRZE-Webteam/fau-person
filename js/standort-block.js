@@ -1,1 +1,83 @@
-(()=>{var v=!1;function b(e){let{registerBlockType:y}=wp.blocks,{createElement:r}=wp.element,{InspectorControls:E}=wp.blockEditor,{CheckboxControl:d,RadioControl:x,SelectControl:w,TextControl:_,TextareaControl:S,ToggleControl:T}=wp.components,{serverSideRender:A}=wp;y(e.block.blocktype,{title:e.block.title,category:e.block.category,icon:e.block.icon,construct(){props.setAttributes({countit:0})},edit(p){let s=p.attributes,B=p.setAttributes;function u(c){e[this].type=="number"&&(c=parseInt(c)),B({[this]:c})}function N(c){for(var h in c)(c[h]===null||c[h]===void 0)&&delete c[h]}if(p.isSelected===!1&&v===!0)return N(s),r(A,{block:e.block.blocktype,attributes:s});var a=[];a.push(r("div",{className:"components-placeholder__label"},[r("span",{className:"editor-block-icon block-editor-block-icon dashicons-before dashicons-"+e.block.icon},null),e.block.title]));for(var t in e)switch(e[t].field_type){case"checkbox":a.push(r(d,{checked:typeof s[t]!="undefined"?s[t]:e[t].default,label:e[t].label,onChange:u.bind(t)}));break;case"radio":var l=[];for(var n in e[t].values)l.push(JSON.parse('{"value":"'+n+'", "label":"'+e[t].values[n]+'"}'));a.push(r(x,{selected:typeof s[t]!="undefined"?s[t]:e[t].default,label:e[t].label,onChange:u.bind(t),options:l}));break;case"multi_select":case"select":for(var l=[],o=0;o<e[t].values.length;o++)l.push(JSON.parse('{"value":"'+e[t].values[o].id+'", "label":"'+e[t].values[o].val+'"}'));a.push(r(w,{multiple:e[t].field_type=="multi_select"?1:0,value:s[t],label:e[t].label,type:e[t].type,onChange:u.bind(t),options:l}));break;case"text":a.push(r(_,{value:s[t],label:e[t].label,type:e[t].type,onChange:u.bind(t)}));break;case"textarea":a.push(r(S,{value:s[t],label:e[t].label,type:e[t].type,onChange:u.bind(t)}));break;case"toggle":a.push(r(T,{checked:typeof s[t]!="undefined"?s[t]:e[t].default,label:e[t].label,type:e[t].type,onChange:u.bind(t)}));break}return v=!0,r("div",{className:"components-placeholder"},a)},save(p){return null}})}b(standortConfig);})();
+(() => {
+  // src/js/lib/gutenberg.js
+  var edited = false;
+  function createBlock(blockConfig) {
+    const { registerBlockType } = wp.blocks;
+    const { createElement } = wp.element;
+    const { InspectorControls } = wp.blockEditor;
+    const { CheckboxControl, RadioControl, SelectControl, TextControl, TextareaControl, ToggleControl } = wp.components;
+    const { serverSideRender } = wp;
+    registerBlockType(blockConfig.block.blocktype, {
+      title: blockConfig.block.title,
+      category: blockConfig.block.category,
+      icon: blockConfig.block.icon,
+      construct() {
+        props.setAttributes({ countit: 0 });
+      },
+      edit(props2) {
+        const att = props2.attributes;
+        const setAtts = props2.setAttributes;
+        function changeField(val) {
+          if (blockConfig[this]["type"] == "number") {
+            val = parseInt(val);
+          }
+          setAtts({ [this]: val });
+        }
+        function clean(obj) {
+          for (var propName in obj) {
+            if (obj[propName] === null || obj[propName] === void 0) {
+              delete obj[propName];
+            }
+          }
+        }
+        if (props2["isSelected"] === false && edited === true) {
+          clean(att);
+          return createElement(serverSideRender, { block: blockConfig.block.blocktype, attributes: att });
+        } else {
+          var ret = [];
+          ret.push(createElement("div", { className: "components-placeholder__label" }, [createElement("span", { className: "editor-block-icon block-editor-block-icon dashicons-before dashicons-" + blockConfig.block.icon }, null), blockConfig.block.title]));
+          for (var fieldname in blockConfig) {
+            switch (blockConfig[fieldname]["field_type"]) {
+              case "checkbox":
+                ret.push(createElement(CheckboxControl, { checked: typeof att[fieldname] !== "undefined" ? att[fieldname] : blockConfig[fieldname]["default"], label: blockConfig[fieldname]["label"], onChange: changeField.bind(fieldname) }));
+                break;
+              case "radio":
+                var opts = [];
+                for (var v in blockConfig[fieldname]["values"]) {
+                  opts.push(JSON.parse('{"value":"' + v + '", "label":"' + blockConfig[fieldname]["values"][v] + '"}'));
+                }
+                ret.push(createElement(RadioControl, { selected: typeof att[fieldname] !== "undefined" ? att[fieldname] : blockConfig[fieldname]["default"], label: blockConfig[fieldname]["label"], onChange: changeField.bind(fieldname), options: opts }));
+                break;
+              case "multi_select":
+              case "select":
+                var opts = [];
+                for (var i = 0; i < blockConfig[fieldname]["values"].length; i++) {
+                  opts.push(JSON.parse('{"value":"' + blockConfig[fieldname]["values"][i]["id"] + '", "label":"' + blockConfig[fieldname]["values"][i]["val"] + '"}'));
+                }
+                ret.push(createElement(SelectControl, { multiple: blockConfig[fieldname]["field_type"] == "multi_select" ? 1 : 0, value: att[fieldname], label: blockConfig[fieldname]["label"], type: blockConfig[fieldname]["type"], onChange: changeField.bind(fieldname), options: opts }));
+                break;
+              case "text":
+                ret.push(createElement(TextControl, { value: att[fieldname], label: blockConfig[fieldname]["label"], type: blockConfig[fieldname]["type"], onChange: changeField.bind(fieldname) }));
+                break;
+              case "textarea":
+                ret.push(createElement(TextareaControl, { value: att[fieldname], label: blockConfig[fieldname]["label"], type: blockConfig[fieldname]["type"], onChange: changeField.bind(fieldname) }));
+                break;
+              case "toggle":
+                ret.push(createElement(ToggleControl, { checked: typeof att[fieldname] !== "undefined" ? att[fieldname] : blockConfig[fieldname]["default"], label: blockConfig[fieldname]["label"], type: blockConfig[fieldname]["type"], onChange: changeField.bind(fieldname) }));
+                break;
+            }
+          }
+          edited = true;
+          return createElement("div", { className: "components-placeholder" }, ret);
+        }
+      },
+      save(props2) {
+        return null;
+      }
+    });
+  }
+
+  // src/js/standort-block.js
+  createBlock(standortConfig);
+})();
+//# sourceMappingURL=standort-block.js.map

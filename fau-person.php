@@ -5,7 +5,7 @@ Plugin Name:        FAU Person
 Plugin URI:         https://github.com/RRZE-Webteam/fau-person
 GitHub Plugin URI:  https://github.com/RRZE-Webteam/fau-person
 Description:        Visitenkarten-Plugin für FAU Webauftritte
-Version:            3.10.5
+Version:            3.10.5-1
 Author:             RRZE-Webteam
 Author URI:         http://blogs.fau.de/webworking/
 License:            GPLv3 or later
@@ -20,12 +20,6 @@ namespace FAU_Person;
 
 defined('ABSPATH') || exit;
 
-// Define plugin constants
-define('RRZE_PLUGIN_VERSION', '3.10.5');
-define('RRZE_PLUGIN_FILE', __FILE__);
-define('RRZE_PLUGIN_PATH', plugin_dir_path(__FILE__));
-define('RRZE_PLUGIN_URL', plugin_dir_url(__FILE__));
-
 use FAU_Person\Main;
 
 // Laden der Konfigurationsdatei
@@ -36,8 +30,8 @@ require_once __DIR__ . '/compatibility.php';
 // Composer autoload.
 require_once 'vendor/autoload.php';
 
-const RRZE_PHP_VERSION = '7.2';
-const RRZE_WP_VERSION = '6.0';
+const RRZE_PHP_VERSION = '8.2';
+const RRZE_WP_VERSION = '6.7';
 
 // Load the plugin's text domain for localization.
 add_action('init', fn() => load_plugin_textdomain('fau-person', false, dirname(plugin_basename(__FILE__)) . '/languages'));

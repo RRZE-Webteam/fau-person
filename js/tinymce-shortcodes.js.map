@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../src/js/tinymce-shortcodes.js"],
+  "sourcesContent": ["(function() {\r\n\r\n    tinymce.PluginManager.add('personrteshortcodes', function( editor )\r\n    {\r\n        \r\n        editor.addMenuItem('shortcode_person', {\r\n            text: 'Person einf\u00FCgen',\r\n            context: 'tools',\r\n            onclick: function() {\r\n                editor.insertContent('[kontakt id=\"\" format=\"\" show=\"\" hide=\"\"]');\r\n            }\r\n        });\r\n        \r\n        editor.addMenuItem('shortcode_persons', {\r\n            text: 'Personengalerie einf\u00FCgen',\r\n            context: 'tools',\r\n            onclick: function() {\r\n                editor.insertContent('[kontakt category=\"\" format=\"\" show=\"\" hide=\"\"]');\r\n            }\r\n        });\r\n            });\r\n})();"],
+  "mappings": ";;AAAA,GAAC,WAAW;AAER,YAAQ,cAAc,IAAI,uBAAuB,SAAU,QAC3D;AAEI,aAAO,YAAY,oBAAoB;AAAA,QACnC,MAAM;AAAA,QACN,SAAS;AAAA,QACT,SAAS,WAAW;AAChB,iBAAO,cAAc,2CAA2C;AAAA,QACpE;AAAA,MACJ,CAAC;AAED,aAAO,YAAY,qBAAqB;AAAA,QACpC,MAAM;AAAA,QACN,SAAS;AAAA,QACT,SAAS,WAAW;AAChB,iBAAO,cAAc,iDAAiD;AAAA,QAC1E;AAAA,MACJ,CAAC;AAAA,IACG,CAAC;AAAA,EACb,GAAG;",
+  "names": []
+}
