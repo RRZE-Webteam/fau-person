@@ -22,7 +22,7 @@ use FAU_Person\Main;
 
 // Laden der Konfigurationsdatei
 require_once __DIR__ . '/config/config.php';
-
+require_once __DIR__ . '/compatibility.php';
 
 // Composer autoload.
 require_once 'vendor/autoload.php';
