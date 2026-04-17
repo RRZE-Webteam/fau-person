@@ -41,7 +41,8 @@
    }
     .fau-person.page {
 	
-	margin-inline: var(--faue_content_inline-margin);
+	// margin-inline: var(--faue_content_inline-margin);
+	margin-inline: auto;
 	
 	figure.person-image {
 	    max-width: 400px;
