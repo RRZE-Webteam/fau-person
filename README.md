@@ -1,9 +1,9 @@
-# FAU-Person
-
 [![Aktuelle Version](https://img.shields.io/github/package-json/v/rrze-webteam/fau-person/master?label=Version)](https://github.com/RRZE-Webteam/fau-person)
 [![Release Version](https://img.shields.io/github/v/release/rrze-webteam/fau-person?label=Release+Version)](https://github.com/rrze-webteam/fau-person/releases/)
 [![GitHub License](https://img.shields.io/github/license/rrze-webteam/fau-person)](https://github.com/RRZE-Webteam/fau-person)
 [![GitHub issues](https://img.shields.io/github/issues/RRZE-Webteam/fau-person)](https://github.com/RRZE-Webteam/fau-person/issues)
+
+# FAU-Person
 
 Kontakte und Visitenkarten-Plugin für FAU Webauftritte  
 
@@ -24,7 +24,7 @@ GitHub-Repo: https://github.com/RRZE-Webteam/fau-person
 
 RRZE-Webteam , http://www.rrze.fau.de
 
-## Copryright
+## Copyright
 
 GNU General Public License (GPL) Version 3
 

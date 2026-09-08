@@ -136,44 +136,39 @@ function setPluginVersion(pluginRoot, pkg, newVersion) {
 }
 
 function setPluginCompatibility(pluginRoot, pkg) {
-	if (!pkg.main || typeof pkg.main !== 'string') {
-		throw new Error('package.json has no valid "main" entry');
-	}
-
 	var compatibility = pkg.compatibility;
-	var filePath = path.join(pluginRoot, pkg.main);
+	var filePath = path.join(pluginRoot, 'config', 'config.php');
+	var content;
+	var updated;
 
 	if (!compatibility || typeof compatibility !== 'object') {
 		return;
 	}
 
 	if (!fs.existsSync(filePath)) {
-		throw new Error('Plugin main file not found: ' + filePath);
+		throw new Error('Plugin config file not found: ' + filePath);
 	}
 
-	replaceInFile(filePath, function (content) {
-		var updated = content;
+	content = fs.readFileSync(filePath, 'utf8');
+	updated = content;
 
-		if (typeof compatibility.phprequires === 'string' && compatibility.phprequires.trim() !== '') {
-			updated = updated.replace(
-				/const\s+RRZE_PHP_VERSION\s*=\s*['"][^'"]*['"]\s*;/,
-				function () {
-					return "const RRZE_PHP_VERSION = '" + compatibility.phprequires.trim() + "';";
-				}
-			);
-		}
+	if (typeof compatibility.phprequires === 'string' && compatibility.phprequires.trim() !== '') {
+		updated = updated.replace(
+			/('RRZE_PHP_VERSION'\s*=>\s*)['"][^'"]*['"]/,
+			"$1'" + compatibility.phprequires.trim() + "'"
+		);
+	}
 
-		if (typeof compatibility.wprequires === 'string' && compatibility.wprequires.trim() !== '') {
-			updated = updated.replace(
-				/const\s+RRZE_WP_VERSION\s*=\s*['"][^'"]*['"]\s*;/,
-				function () {
-					return "const RRZE_WP_VERSION = '" + compatibility.wprequires.trim() + "';";
-				}
-			);
-		}
+	if (typeof compatibility.wprequires === 'string' && compatibility.wprequires.trim() !== '') {
+		updated = updated.replace(
+			/('RRZE_WP_VERSION'\s*=>\s*)['"][^'"]*['"]/,
+			"$1'" + compatibility.wprequires.trim() + "'"
+		);
+	}
 
-		return updated;
-	});
+	if (updated !== content) {
+		fs.writeFileSync(filePath, updated, 'utf8');
+	}
 }
 
 function getNextVersion(mode, currentVersion) {

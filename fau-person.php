@@ -5,7 +5,7 @@ Plugin Name:        FAU Person
 Plugin URI:         https://github.com/RRZE-Webteam/fau-person
 GitHub Plugin URI:  https://github.com/RRZE-Webteam/fau-person
 Description:        Visitenkarten-Plugin für FAU Webauftritte
-Version:            3.10.9
+Version:            3.10.10
 Author:             RRZE-Webteam
 License:            GPLv3 or later
 Text Domain:        fau-person
@@ -19,38 +19,71 @@ namespace FAU_Person;
 defined('ABSPATH') || exit;
 
 use FAU_Person\Main;
+use function FAU_Person\Config\getConstants;
 
 // Laden der Konfigurationsdatei
 require_once __DIR__ . '/config/config.php';
 require_once __DIR__ . '/compatibility.php';
 
-// Composer autoload.
-require_once 'vendor/autoload.php';
+// CMB2 bleibt eine externe Laufzeitabhängigkeit.
+require_once __DIR__ . '/vendor/cmb2/cmb2/init.php';
 
-const RRZE_PHP_VERSION = '8.2';
-const RRZE_WP_VERSION = '6.7';
+/**
+ * SPL-Autoloader nach PSR-4 für Plugin-Klassen.
+ *
+ * @param string $class Vollqualifizierter Klassenname.
+ * @return void
+ */
+function autoload($class) {
+    $prefix = __NAMESPACE__ . '\\';
+    $baseDir = __DIR__ . '/includes/';
+    $length = strlen($prefix);
 
-// Load the plugin's text domain for localization.
-add_action('init', fn() => load_plugin_textdomain('fau-person', false, dirname(plugin_basename(__FILE__)) . '/languages'));
+    if (strncmp($prefix, $class, $length) !== 0) {
+        return;
+    }
+
+    $relativeClass = substr($class, $length);
+    $file = $baseDir . str_replace('\\', '/', $relativeClass) . '.php';
+
+    if (file_exists($file)) {
+        require $file;
+    }
+}
+
+spl_autoload_register(__NAMESPACE__ . '\\autoload');
+
+// Load the plugin's text domain before plugin components create translated strings.
+add_action('init', __NAMESPACE__ . '\loadTextdomain', 0);
 // Registriert die Plugin-Funktion, die bei Aktivierung des Plugins ausgeführt werden soll.
 register_activation_hook(__FILE__, __NAMESPACE__ . '\activation');
 // Registriert die Plugin-Funktion, die ausgeführt werden soll, wenn das Plugin deaktiviert wird.
 register_deactivation_hook(__FILE__, __NAMESPACE__ . '\deactivation');
-// Wird aufgerufen, sobald alle aktivierten Plugins geladen wurden.
-add_action('plugins_loaded', __NAMESPACE__ . '\loaded');
+// Wird ausgeführt, sobald WordPress initialisiert ist.
+add_action('init', __NAMESPACE__ . '\loaded', 0);
+
+/**
+ * Lädt die Übersetzungen des Plugins.
+ */
+function loadTextdomain() {
+    load_plugin_textdomain('fau-person', false, dirname(plugin_basename(__FILE__)) . '/languages');
+}
 
 
 /**
  * Überprüft die Systemvoraussetzungen.
  */
 function systemRequirements() {
+    $constants = getConstants();
+    $phpVersion = $constants['RRZE_PHP_VERSION'];
+    $wpVersion = $constants['RRZE_WP_VERSION'];
     $error = '';
-    if (version_compare(PHP_VERSION, RRZE_PHP_VERSION, '<')) {
+    if (version_compare(PHP_VERSION, $phpVersion, '<')) {
         /* Übersetzer: 1: aktuelle PHP-Version, 2: erforderliche PHP-Version */
-        $error = sprintf(__('The server is running PHP version %1$s. The Plugin requires at least PHP version %2$s.', 'fau-person'), PHP_VERSION, RRZE_PHP_VERSION);
-    } elseif (version_compare($GLOBALS['wp_version'], RRZE_WP_VERSION, '<')) {
+        $error = sprintf(__('The server is running PHP version %1$s. The Plugin requires at least PHP version %2$s.', 'fau-person'), PHP_VERSION, $phpVersion);
+    } elseif (version_compare($GLOBALS['wp_version'], $wpVersion, '<')) {
         /* Übersetzer: 1: aktuelle WP-Version, 2: erforderliche WP-Version */
-        $error = sprintf(__('The server is running WordPress version %1$s. The Plugin requires at least WordPress version %2$s.', 'fau-person'), $GLOBALS['wp_version'], RRZE_WP_VERSION);
+        $error = sprintf(__('The server is running WordPress version %1$s. The Plugin requires at least WordPress version %2$s.', 'fau-person'), $GLOBALS['wp_version'], $wpVersion);
     }
     return $error;
 }

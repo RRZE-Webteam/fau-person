@@ -6,14 +6,6 @@
     "require": {
         "cmb2/cmb2": "^2.10.1"
     },
-    "autoload": {
-        "psr-4": {
-            "FAU_Person\\": "includes/"
-        },
-        "files": [
-            "vendor/cmb2/cmb2/init.php"
-        ]
-    },
     "extra": {
         "installer-paths": {
             "vendor/cmb2/cmb2": [

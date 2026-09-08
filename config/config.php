@@ -20,6 +20,8 @@ function getOptionName()
 function getConstants()
 {
     $options = array(
+        'RRZE_PHP_VERSION' => '8.2',
+        'RRZE_WP_VERSION' => '6.7',
         'UnivIS_Search_Transient' => 'fau_person_univis_search',
         'UnivIS_Cache_Transient' => 'fau_person_univis_cache',
         'UnivIS_Cache_TTL' => 24 * HOUR_IN_SECONDS,

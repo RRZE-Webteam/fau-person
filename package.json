@@ -1,6 +1,6 @@
 {
   "name": "fau-person",
-  "version": "3.10.9",
+  "version": "3.10.10",
   "description": "Kontakt-Plugin für FAU Webauftritte.",
   "main": "fau-person.php",
   "textdomain": "fau-person",
@@ -23,12 +23,12 @@
   },
   "compatibility": {
     "wprequires": "6.7",
-    "wptestedup": "6.9.5",
+    "wptestedup": "7.1",
     "phprequires": "8.2"
   },
   "author": {
     "name": "RRZE-Webteam <webmaster@fau.de> (https://www.rrze.fau.de)",
-    "url": "https://www.wordpress.rrze.fau.de"
+    "url": "https://www.wp.rrze.fau.de"
   },
   "source": {
     "js": "./src/js/",
@@ -42,15 +42,15 @@
   "licenseurl": "http://www.gnu.org/licenses/gpl-3.0.html",
   "tags": "Plugin, WordPress, FAU-Person, FAU, RRZE",
   "devDependencies": {
-    "@types/node": "^24.10.1",
-    "@typescript-eslint/eslint-plugin": "^8.48.1",
-    "@typescript-eslint/parser": "^8.48.1",
-    "eslint": "^9.39.1",
+    "@types/node": "^26.5.0",
+    "@typescript-eslint/eslint-plugin": "^8.70.0",
+    "@typescript-eslint/parser": "^8.70.0",
+    "eslint": "^9.39.5",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-tsdoc": "^0.5.0",
-    "sass": "^1.94.2"
+    "sass": "^1.104.0"
   },
   "dependencies": {
-    "esbuild": "^0.27.3"
+    "esbuild": "^0.28.2"
   }
 }
