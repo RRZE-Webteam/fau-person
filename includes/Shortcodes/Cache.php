@@ -71,7 +71,7 @@ class Cache {
         $value2 = json_encode($value2);
         $value3 = json_encode($value3);
         if ($value1 && $value2 && $value3) {
-            return self::get_prefix() . md5($value1 . $value2 . $value3);
+            return self::get_prefix() . md5(get_locale() . $value1 . $value2 . $value3);
         } else {
             return false;
         }
